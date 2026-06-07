@@ -1,0 +1,69 @@
+body {
+    background-color: #01040a;
+    background-image: radial-gradient(circle, #04142c 0%, #000205 100%);
+    color: #a4c7e6;
+    font-family: 'Segoe UI', Roboto, sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+}
+
+/* El lienzo 3D se ubica en el centro exacto ocupando el fondo */
+#canvas3d-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 650px;
+    height: 650px;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* El marco principal que envuelve el HUD */
+.hud-frame {
+    width: 96vw;
+    height: 94vh;
+    border: 1px solid rgba(0, 212, 255, 0.15);
+    display: flex;
+    flex-direction: column;
+    background: rgba(1, 4, 10, 0.45); /* Capa translúcida para transparentar el 3D */
+    backdrop-filter: blur(3px);
+    border-radius: 6px;
+    padding: 12px;
+    box-sizing: border-box;
+    position: relative;
+    z-index: 2;
+}
+
+.hud-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; border-bottom: 1px solid rgba(0, 212, 255, 0.2); }
+.hud-header .main-title { font-size: 1.7rem; letter-spacing: 5px; font-weight: bold; color: #ffffff; text-shadow: 0 0 10px rgba(0, 212, 255, 0.5); }
+.hud-main-container { flex: 1; display: flex; overflow: hidden; margin-top: 12px; }
+.hud-panel { width: 230px; padding: 15px; display: flex; flex-direction: column; gap: 22px; background: rgba(2, 9, 22, 0.4); }
+.left-panel { border-right: 2px solid rgba(0, 212, 255, 0.18); }
+.right-panel { border-left: 2px solid rgba(0, 212, 255, 0.18); width: 200px; }
+.stat-row { display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 7px; }
+.cyan-text { color: #00d4ff; font-weight: bold; }
+.hud-center { flex: 1; display: flex; flex-direction: column; padding: 0 10px; background: transparent; }
+.chat-box { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 18px; padding: 10px; }
+.message-wrapper { display: flex; align-items: flex-end; width: 100%; }
+.jarvis-wrapper { justify-content: flex-start; gap: 12px; }
+.user-wrapper { justify-content: flex-end; }
+.message-avatar { width: 38px; height: 38px; border: 2px solid #00d4ff; border-radius: 50%; background: radial-gradient(circle, #ffffff, #00d4ff); flex-shrink: 0; }
+.message { padding: 12px 18px; border-radius: 10px; max-width: 68%; font-size: 0.88rem; }
+.jarvis-message { background: rgba(3, 16, 36, 0.6); border: 1px solid rgba(0, 212, 255, 0.25); color: #ffffff; border-bottom-left-radius: 0px; }
+.user-message { background: rgba(6, 31, 61, 0.7); border: 1px solid rgba(0, 212, 255, 0.35); color: #e2f3ff; border-bottom-right-radius: 0px; }
+.hud-footer { padding: 12px 0 2px 0; }
+.input-container { display: flex; background: rgba(1, 5, 12, 0.9); border: 1px solid rgba(0, 212, 255, 0.35); border-radius: 25px; padding: 5px 16px; align-items: center; }
+.input-container input { flex: 1; background: transparent; border: none; outline: none; color: #ffffff; padding: 8px; }
+.btn-send { background: transparent; border: none; cursor: pointer; }
+.btn-send svg { width: 20px; height: 20px; fill: #00d4ff; }
+.arc-section { display: flex; flex-direction: column; align-items: center; }
+.arc-container { width: 90px; height: 90px; border: 3px dashed rgba(0, 212, 255, 0.3); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 15px 0; }
+.arc-core { width: 50px; height: 50px; background: radial-gradient(circle, #fff, #00d4ff); border-radius: 50%; }
+.arc-label { font-size: 0.75rem; color: #00ffcc; font-weight: bold; }
