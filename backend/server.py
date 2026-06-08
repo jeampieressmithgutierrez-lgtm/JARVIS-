@@ -1,16 +1,26 @@
 # ============================================================================
 # STARK INDUSTRIES: NÚCLEO COGNITIVO CENTRAL (SERVER.PY)
 # ============================================================================
+
 import os
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 from jarvis_profile import obtener_respuesta_cognitiva
 
-# Inicialización del servidor Flask
-app = Flask(__name__)
+# ============================================================================
+# INICIALIZACIÓN DEL SERVIDOR
+# ============================================================================
 
-# Configuración CORS
+app = Flask(__name__)
 CORS(app)
+
+# ============================================================================
+# SERVIR INTERFAZ WEB
+# ============================================================================
+
+@app.route('/')
+def inicio():
+    return send_from_directory('.', 'index.html')
 
 # ============================================================================
 # API CHAT
@@ -18,7 +28,9 @@ CORS(app)
 
 @app.route('/api/chat', methods=['POST'])
 def procesar_comando_usuario():
+
     try:
+
         datos = request.get_json()
 
         if not datos or 'message' not in datos:
@@ -43,6 +55,7 @@ def procesar_comando_usuario():
         })
 
     except Exception as e:
+
         print(f"[CRITICAL BACKEND ERROR]: {e}")
 
         return jsonify({
@@ -50,25 +63,25 @@ def procesar_comando_usuario():
             "response": "Fallo interno del sistema central, Señor."
         }), 500
 
-
 # ============================================================================
-# RUTA DE PRUEBA
+# ESTADO DEL SISTEMA
 # ============================================================================
 
-@app.route('/')
+@app.route('/status')
 def estado():
+
     return jsonify({
         "status": "ONLINE",
         "system": "J.A.R.V.I.S",
-        "message": "Servidor operativo, Señor."
+        "message": "Todos los sistemas operativos, Señor."
     })
-
 
 # ============================================================================
 # INICIO DEL SERVIDOR
 # ============================================================================
 
 if __name__ == '__main__':
+
     print("=" * 80)
     print("J.A.R.V.I.S ONLINE")
     print("=" * 80)
