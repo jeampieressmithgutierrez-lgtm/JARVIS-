@@ -1,62 +1,81 @@
 # ============================================================================
 # STARK INDUSTRIES: NÚCLEO COGNITIVO CENTRAL (SERVER.PY)
-# Servidor de Enrutamiento Asíncrono en Flask y Gestión de Protocolos CORS
 # ============================================================================
-
 import os
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from profile import obtener_respuesta_cognitiva
+from jarvis_profile import obtener_respuesta_cognitiva
 
-# Inicialización de la infraestructura del framework web
+# Inicialización del servidor Flask
 app = Flask(__name__)
 
-# Habilitación de CORS para permitir conexiones desde el HUD del Frontend
-CORS(app, resources={r"/api/*": {"origins": "*"}})
+# Configuración CORS
+CORS(app)
 
-@app.route('/api/chat', list=['POST'])
+# ============================================================================
+# API CHAT
+# ============================================================================
+
+@app.route('/api/chat', methods=['POST'])
 def procesar_comando_usuario():
-    """
-    Punto de enlace API que recibe las órdenes del HUD, las procesa a través
-    del perfil cognitivo del asistente y retorna la respuesta en formato JSON.
-    """
     try:
         datos = request.get_json()
-        
+
         if not datos or 'message' not in datos:
             return jsonify({
                 "status": "ERROR",
-                "response": "Error de transmisión: Paquete de datos vacío o corrupto, Señor."
+                "response": "Error de transmisión: paquete de datos vacío o corrupto, Señor."
             }), 400
-            
+
         mensaje_usuario = datos['message'].strip()
-        
+
         if not mensaje_usuario:
             return jsonify({
                 "status": "ERROR",
-                "response": "Consola vacía. Por favor, introduzca una orden válida, Señor."
+                "response": "Consola vacía. Introduzca una orden válida, Señor."
             }), 400
 
-        # Interrogación al submódulo de procesamiento de lenguaje natural
         respuesta_jarvis = obtener_respuesta_cognitiva(mensaje_usuario)
 
         return jsonify({
             "status": "SUCCESS",
             "response": respuesta_jarvis
-        }), 200
+        })
 
     except Exception as e:
-        print(f"[CRITICAL BACKEND ERROR]: {str(e)}")
+        print(f"[CRITICAL BACKEND ERROR]: {e}")
+
         return jsonify({
             "status": "CRITICAL_FAILURE",
-            "response": f"Fallo en el sistema central. Error interno de ejecución: {str(e)}"
+            "response": "Fallo interno del sistema central, Señor."
         }), 500
 
+
+# ============================================================================
+# RUTA DE PRUEBA
+# ============================================================================
+
+@app.route('/')
+def estado():
+    return jsonify({
+        "status": "ONLINE",
+        "system": "J.A.R.V.I.S",
+        "message": "Servidor operativo, Señor."
+    })
+
+
+# ============================================================================
+# INICIO DEL SERVIDOR
+# ============================================================================
+
 if __name__ == '__main__':
-    print("\n" + "="*80)
-    print(" PROTOCOLO J.A.R.V.I.S: SERVIDOR DE ENLACE COGNITIVO INICIALIZADO")
-    print(" Monitoreando flujos de datos en: http://127.0.0.1:5000")
-    print("="*80 + "\n")
-    
-    # Ejecución del servidor local en modo de desarrollo estable
-    app.run(host='127.0.0.1', port=5000, debug=True)
+    print("=" * 80)
+    print("J.A.R.V.I.S ONLINE")
+    print("=" * 80)
+
+    port = int(os.environ.get("PORT", 5000))
+
+    app.run(
+        host="0.0.0.0",
+        port=port
+    )
