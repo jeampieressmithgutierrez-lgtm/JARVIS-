@@ -1,68 +1,198 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JARVIS AI - RECTOR INTERFACE</title>
+
+    <title>JARVIS AI - REACTOR INTERFACE</title>
+
     <link rel="stylesheet" href="css/styles.css">
+
+    <!-- THREE.JS -->
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <!-- POSTPROCESADO -->
+
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
+
 </head>
+
 <body>
+
+    <!-- NUCLEO 3D CENTRAL -->
+
     <div id="canvas3d-container"></div>
 
+    <!-- CAPA DE PARTICULAS -->
+
+    <div id="particle-layer"></div>
+
     <div class="hud-frame">
+
         <header class="hud-header">
-            <div class="brand">🌐 STARK INDUSTRIES</div>
-            <div class="main-title">JARVIS AI</div>
-            <div class="time-display">10:42 AM <br><span>SISTEMA ONLINE</span></div>
+
+            <div class="brand">
+                🌐 STARK INDUSTRIES
+            </div>
+
+            <div class="main-title">
+                JARVIS AI
+            </div>
+
+            <div class="time-display">
+                10:42 AM
+                <br>
+                <span>SISTEMA ONLINE</span>
+            </div>
+
         </header>
 
         <div class="hud-main-container">
+
+            <!-- PANEL IZQUIERDO -->
+
             <aside class="hud-panel left-panel">
+
                 <div class="panel-section">
-                    <h3>SISTEMA <span class="text-online">ONLINE</span></h3>
+
+                    <h3>
+                        SISTEMA
+                        <span class="text-online">ONLINE</span>
+                    </h3>
+
                 </div>
+
                 <div class="panel-section">
+
                     <h4>SISTEMAS PRINCIPALES</h4>
-                    <div class="stat-row"><span>REACTOR ARC</span><span class="cyan-text">100%</span></div>
-                    <div class="stat-row"><span>CPU CENTRAL</span><span class="cyan-text">32%</span></div>
-                    <div class="stat-row"><span>MEMORIA</span><span class="cyan-text">68%</span></div>
+
+                    <div class="stat-row">
+                        <span>REACTOR ARC</span>
+                        <span class="cyan-text">100%</span>
+                    </div>
+
+                    <div class="stat-row">
+                        <span>CPU CENTRAL</span>
+                        <span class="cyan-text">32%</span>
+                    </div>
+
+                    <div class="stat-row">
+                        <span>MEMORIA</span>
+                        <span class="cyan-text">68%</span>
+                    </div>
+
                 </div>
+
             </aside>
+
+            <!-- CENTRO -->
 
             <main class="hud-center">
+
                 <div class="chat-box" id="chatBox">
+
                     <div class="message-wrapper jarvis-wrapper">
+
                         <div class="message-avatar"></div>
+
                         <div class="message jarvis-message">
-                            <strong>JARVIS:</strong> Todos los archivos del sistema han sido purgados y reestructurados desde cero, Señor. Entorno modular completamente limpio.
+
+                            <strong>JARVIS:</strong>
+
+                            Todos los archivos del sistema han sido purgados y reestructurados desde cero, Señor. Entorno modular completamente limpio.
+
                         </div>
+
                     </div>
+
                 </div>
+
             </main>
 
+            <!-- PANEL DERECHO -->
+
             <aside class="hud-panel right-panel">
+
                 <div class="panel-section arc-section">
+
                     <h4>ESTADO GENERAL</h4>
-                    <div class="arc-container"><div class="arc-core"></div></div>
-                    <div class="arc-label">ÓPTIMO</div>
+
+                    <div class="arc-container">
+
+                        <!-- MINI ALMA DE JARVIS -->
+
+                        <div id="mini-jarvis-core"></div>
+
+                    </div>
+
+                    <div class="arc-label">
+
+                        ÓPTIMO
+
+                    </div>
+
                 </div>
+
             </aside>
+
         </div>
 
+        <!-- INPUT -->
+
         <footer class="hud-footer">
+
             <div class="input-container">
-                <input type="text" id="userInput" placeholder="Hable, Señor..." onkeypress="handleKeyPress(event)">
-                <button class="btn-send" onclick="sendMessage()">
-                    <svg viewBox="0 0 24 24"><path d="M2,21L23,12L2,3V10L17,12L2,14V21Z"/></svg>
+
+                <input
+                    type="text"
+                    id="userInput"
+                    placeholder="Hable, Señor..."
+                    onkeypress="handleKeyPress(event)"
+                >
+
+                <button
+                    class="btn-send"
+                    onclick="sendMessage()"
+                >
+
+                    <svg viewBox="0 0 24 24">
+
+                        <path d="M2,21L23,12L2,3V10L17,12L2,14V21Z" />
+
+                    </svg>
+
                 </button>
+
             </div>
+
         </footer>
+
     </div>
 
+    <!-- SCRIPTS DEL SISTEMA -->
+
     <script src="js/api.js"></script>
+
     <script src="js/chat.js"></script>
+
     <script src="js/core.js"></script>
+
     <script src="js/main.js"></script>
+
 </body>
+
 </html>
