@@ -8,19 +8,37 @@ from flask_cors import CORS
 from jarvis_profile import obtener_respuesta_cognitiva
 
 # ============================================================================
-# INICIALIZACIÓN DEL SERVIDOR
+# CONFIGURACIÓN
 # ============================================================================
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 app = Flask(__name__)
 CORS(app)
 
 # ============================================================================
-# SERVIR INTERFAZ WEB
+# ARCHIVOS WEB
 # ============================================================================
 
 @app.route('/')
 def inicio():
-    return send_from_directory('.', 'index.html')
+    return send_from_directory(BASE_DIR, 'index.html')
+
+
+@app.route('/css/<path:filename>')
+def css_files(filename):
+    return send_from_directory(
+        os.path.join(BASE_DIR, 'css'),
+        filename
+    )
+
+
+@app.route('/js/<path:filename>')
+def js_files(filename):
+    return send_from_directory(
+        os.path.join(BASE_DIR, 'js'),
+        filename
+    )
 
 # ============================================================================
 # API CHAT
@@ -60,7 +78,7 @@ def procesar_comando_usuario():
 
         return jsonify({
             "status": "CRITICAL_FAILURE",
-            "response": "Fallo interno del sistema central, Señor."
+            "response": f"Error interno: {str(e)}"
         }), 500
 
 # ============================================================================
@@ -77,14 +95,10 @@ def estado():
     })
 
 # ============================================================================
-# INICIO DEL SERVIDOR
+# INICIO
 # ============================================================================
 
 if __name__ == '__main__':
-
-    print("=" * 80)
-    print("J.A.R.V.I.S ONLINE")
-    print("=" * 80)
 
     port = int(os.environ.get("PORT", 5000))
 
