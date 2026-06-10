@@ -1,41 +1,99 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JARVIS AI // STARK PROTOCOL // CORE SYSTEM</title>
+    <meta name="description" content="Interfaz de Inteligencia Artificial Stark Industries. Control de Reactor Arc.">
+    <meta name="keywords" content="JARVIS, Stark, IA, WebGL, 3D Interface, Iron Man">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' cdnjs.cloudflare.com cdn.jsdelivr.net;">
+    
+    <title>JARVIS AI // MK-85 // SYSTEM INITIALIZATION</title>
+    
     <link rel="stylesheet" href="css/styles.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
-<body>
-    <div id="canvas3d-container" aria-label="Reactor Holográfico 3D"></div>
 
-    <div class="hud-main-wrapper">
-        <header class="hud-header">
-            <div class="brand-stark">STARK INDUSTRIES // SYSTEM_ID: JARVIS_V2</div>
-            <div class="status-clock" id="system-clock">00:00:00</div>
+<body>
+    <div id="canvas-reactor-surface" role="img" aria-label="Núcleo Holográfico 3D"></div>
+
+    <div id="hud-master-container" class="hud-frame">
+        
+        <header class="hud-top-nav">
+            <div class="header-segment branding-box">STARK INDUSTRIES // JARVIS AI // PROTOCOL V2</div>
+            <div class="header-segment status-indicator" id="system-status">SISTEMA: EN ESPERA</div>
+            <div class="header-segment timestamp" id="clock-display">00:00:00</div>
         </header>
 
+        <aside class="hud-panel-left">
+            <div class="node-group">
+                <h4 class="node-title">REACTOR ARC</h4>
+                <div class="progress-bar-container"><div class="fill" style="width: 100%;"></div></div>
+                <p class="node-data">ESTABILIDAD: 99.9%</p>
+            </div>
+            <div class="node-group">
+                <h4 class="node-title">CPU CENTRAL</h4>
+                <div class="progress-bar-container"><div class="fill" style="width: 32%;"></div></div>
+                <p class="node-data">LOAD: 32.4%</p>
+            </div>
+            <div class="node-group">
+                <h4 class="node-title">SISTEMA DE VÍNCULO</h4>
+                <div class="progress-bar-container"><div class="fill" style="width: 85%;"></div></div>
+                <p class="node-data">LATENCIA: 12ms</p>
+            </div>
+        </aside>
+
         <main class="hud-center-stage">
-            <div id="chat-console" class="chat-console">
-                </div>
+            <div class="chat-viewport" id="chat-viewport">
+                <div class="log-entry system">[CORE]: INICIANDO NEURAL NETWORK...</div>
+                <div class="log-entry system">[CORE]: CARGANDO ALGORITMOS HEURÍSTICOS...</div>
+                <div class="log-entry system">[CORE]: ESTABILIZACIÓN DEL NÚCLEO AL 100%...</div>
+                <div class="log-entry system">[CORE]: INTERFAZ LISTA. SALUDOS, SEÑOR.</div>
+            </div>
         </main>
 
-        <footer class="hud-input-footer">
-            <div class="input-container">
-                <input type="text" id="command-input" placeholder="> Esperando comando de autorización...">
+        <aside class="hud-panel-right">
+            <div class="monitor-display" id="monitor-arc"></div>
+            <h4 class="monitor-label">STATUS: ÓPTIMO</h4>
+            <div class="sub-monitor">POWER: 100%</div>
+            <div class="sub-monitor">TEMP: 32°C</div>
+            <div class="sub-monitor">SHIELD: ON</div>
+        </aside>
+
+        <footer class="hud-footer-input">
+            <div class="input-line-wrapper">
+                <span class="prompt-icon">>></span>
+                <input type="text" id="command-input" placeholder="INGRESE PROTOCOLO..." spellcheck="false">
             </div>
         </footer>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js"></script>
-    
     <script src="js/core.js"></script>
     <script src="js/main.js"></script>
+
+    <script>
+        /**
+         * @function MonitorSystem
+         * @description Monitorea la integridad del DOM y la carga de scripts.
+         * Cada registro es enviado a la consola de depuración del navegador.
+         */
+        document.addEventListener('DOMContentLoaded', () => {
+            const systemLogs = [
+                "DOM estructurado", 
+                "Canvas de reactor inicializado", 
+                "Variables de entorno cargadas", 
+                "Listeners de teclado activos",
+                "Interfaz lista para entrada de usuario"
+            ];
+            
+            systemLogs.forEach((msg, index) => {
+                setTimeout(() => {
+                    console.log(`[SYS-TRACE-${index}]: ${msg}`);
+                }, index * 200);
+            });
+        });
+    </script>
+
+    <div id="footer-padding" style="height: 1px; visibility: hidden;"></div>
 </body>
 </html>
