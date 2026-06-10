@@ -1,123 +1,239 @@
 /* ==========================================================================
-   ARQUITECTURA DE ESTILOS: JARVIS MK-85 INDUSTRIAL INTERFACE
-   PROYECTO: STARK INDUSTRIES AI // V.2.5.0
-   ESTRUCTURA: MODULAR / 200+ LÍNEAS DE CONTROL
+   ARQUITECTURA DE DISEÑO: INTERFAZ VECTORIAL INDUSTRIAL J.A.R.V.I.S.
+   ESQUEMA DE COLOR: ARMADURA MARK 85 (ROJO CARMESÍ METÁLICO Y ORO)
+   SISTEMA DE DISEÑO: COMPOSICIÓN DE CUADRÍCULA DENSIDAD +200 LÍNEAS
    ========================================================================== */
 
-/* 1. RESET Y CONFIGURACIÓN GLOBAL */
-* { margin: 0; padding: 0; box-sizing: border-box; }
+/* 1. RESETEO Y VARIABLES DE NÚCLEO INDUSTRIAL */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    user-select: none;
+}
+
 :root {
     --gold: #FFD700;
-    --metallic-red: #8B0000;
-    --dark-metal: #0A0A0A;
-    --glass-bg: rgba(20, 0, 0, 0.85);
-    --system-blue: #00d4ff;
+    --gold-dim: rgba(255, 215, 0, 0.4);
+    --gold-glow: rgba(255, 215, 0, 0.25);
+    --crimson-metallic: #5A0004;
+    --crimson-border: #8B0000;
+    --dark-bg: #030001;
+    --hud-cyan: #00d4ff;
+    --hud-cyan-dim: rgba(0, 212, 255, 0.3);
+    --glass-background: rgba(15, 2, 3, 0.75);
+    --font-stack: 'Courier New', Courier, monospace;
 }
 
 body {
-    background-color: var(--dark-metal);
+    background-color: var(--dark-bg);
     color: var(--gold);
-    font-family: 'Courier New', Courier, monospace;
+    font-family: var(--font-stack);
     overflow: hidden;
     width: 100vw;
     height: 100vh;
 }
 
-/* 2. MOTOR 3D: CAPA DE FONDO */
+/* 2. CAPA DE RENDIMIENTO GRÁFICO (WEBGL) */
 #canvas-reactor-surface {
     position: fixed !important;
     top: 0 !important;
     left: 0 !important;
     width: 100vw !important;
     height: 100vh !important;
-    z-index: -1 !important;
+    z-index: 1 !important;
     pointer-events: none;
 }
 
-/* 3. ARQUITECTURA HUD: ESTRUCTURA GRID */
-.hud-frame {
+/* 3. ARQUITECTURA GENERAL GRID DEL HUD DE ALTA DEFINICIÓN */
+.hud-grid-container {
     position: relative;
     z-index: 10;
     width: 100vw;
     height: 100vh;
     display: grid;
-    grid-template-columns: 300px 1fr 300px;
-    grid-template-rows: 80px 1fr 80px;
-    padding: 25px;
-    box-sizing: border-box;
+    grid-template-columns: 320px 1fr 320px;
+    grid-template-rows: 90px 1fr 100px;
+    padding: 20px;
+    gap: 15px;
     pointer-events: none;
 }
 
-/* 4. CABECERA Y TELEMETRÍA */
-.hud-top-nav { grid-column: 1 / span 3; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--gold); }
-.branding-box { font-size: 1.5rem; letter-spacing: 3px; text-shadow: 0 0 10px var(--gold); }
-
-/* 5. PANELES DE DIAGNÓSTICO (ESTRUCTURA MÓDULO) */
-.hud-panel-left, .hud-panel-right {
-    background: var(--glass-bg);
-    border: 2px solid var(--gold);
-    padding: 20px;
+/* Permitir clics en elementos activos del HUD */
+.hud-header-bar, .hud-sidebar-left, .hud-center-workspace, .hud-sidebar-right, .hud-footer-input-bar {
     pointer-events: auto;
+}
+
+/* 4. CABECERA: AJUSTES Y TELEMETRÍA DE ALTA RESOLUCIÓN */
+.hud-header-bar {
+    grid-column: 1 / span 3;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--gold-dim);
+    padding-bottom: 10px;
+}
+
+.brand-block { font-size: 0.9rem; font-weight: bold; letter-spacing: 2px; color: var(--hud-cyan); }
+.system-title-block h1 { font-size: 1.8rem; font-weight: 900; letter-spacing: 4px; text-shadow: 0 0 10px var(--gold-glow); text-align: center; }
+.sub-title-system { font-size: 0.7rem; color: var(--gold-dim); display: block; text-align: center; margin-top: 3px; }
+.telemetry-time-block { text-align: right; }
+.digital-clock { font-size: 1.4rem; font-weight: bold; color: var(--gold); }
+.date-stamp { font-size: 0.7rem; color: var(--gold-dim); margin-top: 2px; }
+
+/* 5. DISEÑO DE PANELES DE CONTROL LATERAL INDUSTRIAL */
+.panel-section {
+    background: var(--glass-background);
+    border: 1px solid var(--crimson-border);
+    border-left: 3px solid var(--gold);
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+    box-shadow: inset 0 0 15px rgba(139, 0, 0, 0.2);
+}
+
+.panel-section h3 {
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    color: var(--gold);
+    margin-bottom: 12px;
+    border-bottom: 1px dashed var(--crimson-border);
+    padding-bottom: 5px;
+}
+
+/* Barras de datos y progreso */
+.telemetry-row { margin-bottom: 10px; }
+.row-meta { display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 4px; }
+.bar-track { width: 100%; height: 4px; background: rgba(0, 0, 0, 0.5); border: 1px solid var(--crimson-border); }
+.bar-fill { height: 100%; background: var(--gold); box-shadow: 0 0 8px var(--gold); }
+.bar-fill.color-cyan { background: var(--hud-cyan); box-shadow: 0 0 8px var(--hud-cyan); }
+.color-cyan { color: var(--hud-cyan) !important; }
+
+/* GRID DE STATUS LINK */
+.grid-status-link { display: flex; flex-direction: column; gap: 8px; }
+.link-item { font-size: 0.75rem; display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.3); padding: 6px; border: 1px solid rgba(255,215,0,0.1); }
+.tag-status { font-size: 0.65rem; padding: 2px 6px; border-radius: 2px; }
+.tag-status.positive { background: rgba(0, 212, 255, 0.15); color: var(--hud-cyan); border: 1px solid var(--hud-cyan); }
+.tag-status.neutral { background: rgba(255, 215, 0, 0.1); color: var(--gold); border: 1px solid var(--gold); }
+
+/* 6. CONSOLA DE CHAT (REPRODUCCIÓN IMAGEN ORIGINAL) */
+.hud-center-workspace {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    justify-content: flex-end;
+    padding: 10px;
 }
 
-.node-group { border-bottom: 1px solid var(--metallic-red); padding-bottom: 10px; }
-.node-title { color: var(--system-blue); font-size: 0.9rem; margin-bottom: 5px; }
-.progress-bar-container { width: 100%; height: 8px; background: #000; border: 1px solid var(--gold); }
-.fill { height: 100%; background: var(--gold); box-shadow: 0 0 10px var(--gold); }
-
-/* 6. CONSOLA CENTRAL (CHAT INDUSTRIAL) */
-.hud-center-stage { pointer-events: none; display: flex; align-items: flex-end; padding: 0 20px; }
-.chat-viewport {
-    width: 100%;
-    height: 400px;
-    background: rgba(10, 5, 5, 0.7);
-    border: 3px solid var(--gold);
-    border-radius: 10px;
-    padding: 20px;
-    pointer-events: auto;
+.chat-viewport-stream {
+    max-height: 100%;
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding-right: 5px;
 }
 
-.log-entry { color: var(--system-blue); margin-bottom: 10px; font-size: 1rem; }
+/* Ocultar barra de Scroll estándar */
+.chat-viewport-stream::-webkit-scrollbar { width: 4px; }
+.chat-viewport-stream::-webkit-scrollbar-thumb { background: var(--crimson-border); }
 
-/* 7. FOOTER Y ENTRADA DE COMANDOS */
-.hud-footer-input {
-    grid-column: 1 / span 3;
-    pointer-events: auto;
-    background: rgba(0,0,0,0.8);
-    border: 2px solid var(--gold);
+/* Burbujas de Comunicación */
+.chat-bubble {
+    background: rgba(10, 2, 3, 0.85);
+    border: 1px solid var(--crimson-border);
     padding: 15px;
+    border-radius: 8px;
+    max-width: 85%;
+    line-height: 1.5;
+    font-size: 0.85rem;
 }
 
-#command-input {
-    width: 100%;
+.bubble-jarvis {
+    border-left: 4px solid var(--hud-cyan);
+    color: #ffffff;
+    align-self: flex-start;
+}
+
+.bubble-user {
+    border-right: 4px solid var(--gold);
+    color: #ffffff;
+    align-self: flex-end;
+    background: rgba(255, 215, 0, 0.03);
+}
+
+.bubble-meta {
+    font-size: 0.7rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: flex;
+    gap: 10px;
+}
+
+.bubble-jarvis .bubble-meta { color: var(--hud-cyan); }
+.bubble-user .bubble-meta { color: var(--gold); }
+.time-meta { color: rgba(255, 255, 255, 0.4); font-weight: normal; }
+
+/* 7. ENTRADA DE INTERFAZ TERMINAL (FOOTER) */
+.hud-footer-input-bar {
+    grid-column: 1 / span 3;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.input-console-wrapper {
+    display: flex;
+    background: rgba(0, 0, 0, 0.8);
+    border: 1px solid var(--crimson-border);
+    border-radius: 25px;
+    padding: 8px 20px;
+    align-items: center;
+}
+
+#terminal-command-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #ffffff;
+    font-family: var(--font-stack);
+    font-size: 1rem;
+}
+
+.action-buttons-group { display: flex; gap: 10px; }
+.hud-btn {
     background: transparent;
     border: none;
     color: var(--gold);
-    font-size: 1.5rem;
-    font-family: inherit;
-    outline: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: transform 0.2s;
+}
+.hud-btn:hover { transform: scale(1.1); }
+.footer-sub-branding { font-size: 0.6rem; color: var(--gold-dim); text-align: center; letter-spacing: 2px; margin-top: 5px; }
+
+/* 8. REACTOR CIRCULAR SECUNDARIO */
+.circular-reactor-container {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    margin: 15px auto;
+    border: 2px dashed var(--crimson-border);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-/* 8. ANIMACIONES Y ESTADOS DE SISTEMA (PARA DENSIDAD DE CÓDIGO) */
-@keyframes pulse {
-    0% { opacity: 0.5; }
-    50% { opacity: 1; }
-    100% { opacity: 0.5; }
+.arc-ring-hologram {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    border: 2px solid var(--gold);
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spin 4s linear infinite;
 }
 
-.status-indicator { animation: pulse 2s infinite; }
-
-/* 9. EXTENSIÓN DE CONTROL DE SEGURIDAD (MANTENIBILIDAD INDUSTRIAL) */
-.sub-monitor { font-size: 0.8rem; color: #aaa; margin-top: 10px; }
-.monitor-display { width: 50px; height: 50px; border: 2px solid var(--gold); border-radius: 50%; margin-bottom: 10px; }
-
-/* [Añada aquí más clases de utilidad, estados de error y configuraciones responsive 
-    que el sistema requiera para mantener la integridad técnica a largo plazo.
-    Este archivo CSS actúa como el lenguaje de diseño maestro de la suite Stark.
-    Cualquier modificación debe ser validada bajo el protocolo de seguridad.] */
-
-/* ... (Bloques adicionales para completar la estructura de alta densidad exigida) ... */
+@keyframes spin { 100% { transform: rotate(360deg); } }
+.reactor-center-node { width: 20px; height: 20px; background: var(--gold); border-radius: 50%; box-shadow: 0 0 15px var(--gold); }
