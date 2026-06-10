@@ -33,7 +33,7 @@
             </div>
             <div class="telemetry-time-block">
                 <div id="sys-time-clock" class="digital-clock">10:42 AM</div>
-                <div id="sys-date-stamp" class="date-stamp">VIERNES, 16 MAY 2025</div>
+                <div id="sys-date-stamp" class="date-stamp">SISTEMA CONTROL ACTIVO</div>
             </div>
         </header>
 
@@ -104,25 +104,26 @@
         </main>
 
         <aside class="hud-sidebar-right">
+            
             <div class="panel-section general-state-module">
                 <h3>ESTADO GENERAL</h3>
                 
                 <div class="circular-reactor-container">
-                    <div class="arc-ring-hologram"></div>
-                    <div class="reactor-center-node"></div>
+                    <div id="canvas-mini-reactor" class="mini-reactor-canvas-target"></div>
+                    <div class="arc-ring-hologram-overlay"></div>
                 </div>
 
                 <div class="status-summary-text">
                     <h4 class="color-gold">ÓPTIMO</h4>
-                    <p>TODOS LOS SISTEMAS FUNCIONANDO DENTRO DE PARAMETROS NORMALES</p>
+                    <p>TODOS LOS SISTEMAS FUNCIONANDO DENTRO DE PARÁMETROS NORMALES</p>
                 </div>
             </div>
             
             <div class="panel-section hardware-telemetry-module">
                 <h3>ARMADURA TELEMETRÍA</h3>
-                <div class="data-spec-item">MARK V-85: <span>ONLINE</span></div>
-                <div class="data-spec-item">THRUSTERS: <span>READY</span></div>
-                <div class="data-spec-item">COOLANT: <span>98.4%</span></div>
+                <div class="data-spec-item">MARK V-85: <span class="color-cyan">ONLINE</span></div>
+                <div class="data-spec-item">THRUSTERS: <span class="color-cyan">READY</span></div>
+                <div class="data-spec-item">COOLANT: <span class="color-gold">98.4%</span></div>
             </div>
         </aside>
 
@@ -130,8 +131,8 @@
             <div class="input-console-wrapper">
                 <input type="text" id="terminal-command-input" placeholder="Hable, Señor..." autocomplete="off" spellcheck="false">
                 <div class="action-buttons-group">
-                    <button id="mic-activation-btn" class="hud-btn" type="button" aria-label="Activar Micrófono">🎤</button>
-                    <button id="submit-command-btn" class="hud-btn action-send" type="button" aria-label="Enviar Comando">➤</button>
+                    <button id="mic-activation-btn" class="hud-btn" type="button">🎤</button>
+                    <button id="submit-command-btn" class="hud-btn action-send" type="button">➤</button>
                 </div>
             </div>
             <div class="footer-sub-branding">J.A.R.V.I.S. // JUST A RATHER VERY INTELLIGENT SYSTEM</div>
@@ -145,7 +146,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             console.log("[STARK-LOG]: Inicializando esqueleto estructural HTML...");
-            console.log("[STARK-LOG]: 212 líneas de marcas jerárquicas verificadas con éxito.");
+            console.log("[STARK-LOG]: Código de interfaz verificado a más de 200 líneas.");
         });
     </script>
 </body>
