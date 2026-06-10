@@ -1,109 +1,48 @@
-// ============================================================================
-// STARK PROTOCOLO: CORE VECTORIAL GRÁFICO (ALMA DE J.A.R.V.I.S - BLOOM EDITION)
-// ============================================================================
-
-let scene, camera, renderer, composer, jarvisSoul, coreMesh, midMesh, orbit1, orbit2, brightCenter;
-let isThinking = false;
-let clock = new THREE.Clock();
-
-function initCore() {
-    const container = document.getElementById('canvas3d-container');
-    if (!container) return;
-
-    // ESCENA
-    scene = new THREE.Scene();
-
-    // CÁMARA
-    camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 1000);
-    camera.position.z = 5.5;
-
-    // RENDERER
-    renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-    renderer.setSize(container.clientWidth, container.clientHeight);
-    renderer.setPixelRatio(window.devicePixelRatio);
-    container.appendChild(renderer.domElement);
-
-    // =====================================================
-    // CONFIGURACIÓN DE POST-PROCESADO (BLOOM PROFESIONAL)
-    // =====================================================
-    const renderScene = new THREE.RenderPass(scene, camera);
-    const bloomPass = new THREE.UnrealBloomPass(
-        new THREE.Vector2(container.clientWidth, container.clientHeight), 
-        1.5, // Intensidad del brillo
-        0.4, // Radio
-        0.85 // Threshold (umbral de luz)
-    );
-    
-    composer = new THREE.EffectComposer(renderer);
-    composer.addPass(renderScene);
-    composer.addPass(bloomPass);
-
-    // LUCES (Mantenidas de tu original)
-    scene.add(new THREE.PointLight(0x00d4ff, 5));
-    scene.add(new THREE.PointLight(0xffffff, 3));
-    scene.add(new THREE.AmbientLight(0xffffff, 0.8));
-
-    // GRUPO PRINCIPAL
-    jarvisSoul = new THREE.Group();
-    scene.add(jarvisSoul);
-
-    // MATERIALES (El secreto del brillo es el color Emissive)
-    const holoMaterial = new THREE.MeshPhongMaterial({
-        color: 0x00d4ff,
-        wireframe: true,
-        emissive: 0x005577, // Emisividad para que el Bloom lo detecte
-        shininess: 150,
-        transparent: true,
-        opacity: 0.65
-    });
-
-    // GEOMETRÍAS (Idénticas a las tuyas)
-    coreMesh = new THREE.Mesh(new THREE.IcosahedronGeometry(1.0, 3), holoMaterial);
-    midMesh = new THREE.Mesh(new THREE.SphereGeometry(1.6, 24, 24), new THREE.MeshPhongMaterial({ color: 0x00a2ff, wireframe: true, emissive: 0x002244, transparent: true, opacity: 0.20 }));
-    
-    // ANILLOS
-    function createSolidRing(radius, rotX, rotY) {
-        const mesh = new THREE.Mesh(new THREE.TorusGeometry(radius, 0.03, 12, 64), holoMaterial);
-        mesh.rotation.set(rotX, rotY, 0);
-        return mesh;
+/**
+ * CLASE: StarkReactorEngine
+ * Controla la física de las partículas, la proyección de la cámara y el renderizado.
+ */
+class StarkReactorEngine {
+    constructor() {
+        this.container = document.getElementById('canvas3d-container');
+        this.initScene();
+        this.initPostProcessing();
+        this.generateParticles(5000); // Genera la masa crítica de datos
+        this.renderLoop();
     }
-    orbit1 = createSolidRing(2.1, Math.PI / 3, Math.PI / 4);
-    orbit2 = createSolidRing(1.8, -Math.PI / 4, Math.PI / 6);
 
-    // NÚCLEO CENTRAL BRILLANTE
-    brightCenter = new THREE.Mesh(new THREE.SphereGeometry(0.28, 32, 32), new THREE.MeshPhongMaterial({ color: 0xffffff, emissive: 0x00d4ff, shininess: 300 }));
+    initScene() {
+        this.scene = new THREE.Scene();
+        this.camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+        this.camera.position.z = 10;
+        this.renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        this.container.appendChild(this.renderer.domElement);
+    }
 
-    jarvisSoul.add(coreMesh, midMesh, orbit1, orbit2, brightCenter);
+    initPostProcessing() {
+        this.composer = new THREE.EffectComposer(this.renderer);
+        this.composer.addPass(new THREE.RenderPass(this.scene, this.camera));
+        this.composer.addPass(new THREE.UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 3.0, 0.5, 0.2));
+    }
 
-    animateCore();
-    window.addEventListener('resize', onWindowResize);
+    generateParticles(count) {
+        const geometry = new THREE.BufferGeometry();
+        const positions = new Float32Array(count * 3);
+        // Lógica de generación volumétrica de partículas
+        for(let i = 0; i < count * 3; i++) {
+            positions[i] = (Math.random() - 0.5) * 5;
+        }
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        const material = new THREE.PointsMaterial({ color: 0x00d4ff, size: 0.03 });
+        this.particles = new THREE.Points(geometry, material);
+        this.scene.add(this.particles);
+    }
+
+    renderLoop() {
+        requestAnimationFrame(() => this.renderLoop());
+        this.particles.rotation.y += 0.002; // Rotación lenta de la nube de datos
+        this.composer.render();
+    }
 }
-
-function animateCore() {
-    requestAnimationFrame(animateCore);
-    const t = clock.getElapsedTime();
-
-    // Animaciones
-    coreMesh.rotation.set(t * 0.22, t * 0.4, 0);
-    midMesh.rotation.y = -t * 0.15;
-    orbit1.rotation.z = t * 0.25;
-    orbit2.rotation.z = -t * 0.35;
-    jarvisSoul.rotation.set(Math.cos(t * 0.25) * 0.08, Math.sin(t * 0.35) * 0.12, 0);
-
-    // Lógica de pulso
-    const pulse = isThinking ? 1.0 + Math.sin(t * 30.0) * 0.07 : 1.0 + Math.sin(t * 2.5) * 0.04;
-    coreMesh.scale.setScalar(pulse * (isThinking ? 1.08 : 1.0));
-    brightCenter.scale.setScalar(1.0 + Math.sin(t * (isThinking ? 30.0 : 5.0)) * (isThinking ? 0.15 : 0.04));
-
-    // Renderizado a través del compositor (BLOOM)
-    composer.render();
-}
-
-function onWindowResize() {
-    const container = document.getElementById('canvas3d-container');
-    if (!container) return;
-    camera.aspect = container.clientWidth / container.clientHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(container.clientWidth, container.clientHeight);
-    composer.setSize(container.clientWidth, container.clientHeight);
-}
+new StarkReactorEngine();
