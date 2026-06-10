@@ -34,7 +34,7 @@ body {
     height: 100vh;
 }
 
-/* 2. CAPA DE RENDIMIENTO GRÁFICO (WEBGL) */
+/* 2. CAPA DE RENDIMIENTO GRÁFICO (WEBGL MAESTRO) */
 #canvas-reactor-surface {
     position: fixed !important;
     top: 0 !important;
@@ -108,6 +108,7 @@ body {
 .bar-fill { height: 100%; background: var(--gold); box-shadow: 0 0 8px var(--gold); }
 .bar-fill.color-cyan { background: var(--hud-cyan); box-shadow: 0 0 8px var(--hud-cyan); }
 .color-cyan { color: var(--hud-cyan) !important; }
+.color-gold { color: var(--gold) !important; }
 
 /* GRID DE STATUS LINK */
 .grid-status-link { display: flex; flex-direction: column; gap: 8px; }
@@ -116,7 +117,7 @@ body {
 .tag-status.positive { background: rgba(0, 212, 255, 0.15); color: var(--hud-cyan); border: 1px solid var(--hud-cyan); }
 .tag-status.neutral { background: rgba(255, 215, 0, 0.1); color: var(--gold); border: 1px solid var(--gold); }
 
-/* 6. CONSOLA DE CHAT (REPRODUCCIÓN IMAGEN ORIGINAL) */
+/* 6. CONSOLA DE CHAT MODULAR */
 .hud-center-workspace {
     display: flex;
     flex-direction: column;
@@ -125,7 +126,7 @@ body {
 }
 
 .chat-viewport-stream {
-    max-height: 100%;
+    max-height: 480px;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
@@ -172,6 +173,7 @@ body {
 .bubble-jarvis .bubble-meta { color: var(--hud-cyan); }
 .bubble-user .bubble-meta { color: var(--gold); }
 .time-meta { color: rgba(255, 255, 255, 0.4); font-weight: normal; }
+.data-spec-item { font-size: 0.8rem; margin-bottom: 8px; display: flex; justify-content: space-between; }
 
 /* 7. ENTRADA DE INTERFAZ TERMINAL (FOOTER) */
 .hud-footer-input-bar {
@@ -212,28 +214,44 @@ body {
 .hud-btn:hover { transform: scale(1.1); }
 .footer-sub-branding { font-size: 0.6rem; color: var(--gold-dim); text-align: center; letter-spacing: 2px; margin-top: 5px; }
 
-/* 8. REACTOR CIRCULAR SECUNDARIO */
+/* 8. SUBSISTEMA DE RENDERIZACIÓN PARA MINI REACTOR DE TELEMETRÍA */
 .circular-reactor-container {
     position: relative;
-    width: 100px;
-    height: 100px;
+    width: 120px;
+    height: 120px;
     margin: 15px auto;
-    border: 2px dashed var(--crimson-border);
+    border: 1px dashed var(--crimson-border);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 15px rgba(255, 122, 0, 0.1);
 }
 
-.arc-ring-hologram {
+#canvas-mini-reactor {
+    width: 100% !important;
+    height: 100% !important;
     position: absolute;
-    width: 80px;
-    height: 80px;
-    border: 2px solid var(--gold);
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+.arc-ring-hologram-overlay {
+    position: absolute;
+    width: 108px;
+    height: 108px;
+    border: 1px double var(--gold-dim);
     border-radius: 50%;
     border-top-color: transparent;
-    animation: spin 4s linear infinite;
+    border-bottom-color: transparent;
+    animation: spin 8s linear infinite;
+    pointer-events: none;
 }
 
 @keyframes spin { 100% { transform: rotate(360deg); } }
-.reactor-center-node { width: 20px; height: 20px; background: var(--gold); border-radius: 50%; box-shadow: 0 0 15px var(--gold); }
+.status-summary-text { text-align: center; font-size: 0.75rem; line-height: 1.3; }
+.pulse-indicator-row { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--hud-cyan); }
+.pulse-dot { width: 8px; height: 8px; background: var(--hud-cyan); border-radius: 50%; box-shadow: 0 0 8px var(--hud-cyan); }
