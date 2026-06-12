@@ -1,6 +1,6 @@
-,/* ==========================================================================
-   STARK INDUSTRIES COMPONENT STYLE SHEET - VERSION 3.1
-   DISEÑO METÁLICO INTERACTIVO PARA TEXTOS, SCROLLBARS Y ALMA CENTRAL
+/* ==========================================================================
+   STARK INDUSTRIES COMPONENT STYLE SHEET - PRODUCTION V3.2
+   DISEÑO CRÍTICO: CORRECCIÓN DE RECORTE, TEXTO FORJADO 3D Y SCROLLBAR FORZADO
    ========================================================================== */
 
 * {
@@ -13,12 +13,12 @@
 :root {
     --gold: #FFD700;
     --gold-dim: rgba(255, 215, 0, 0.35);
-    --gold-glow: rgba(255, 215, 0, 0.4);
+    --gold-glow: rgba(255, 215, 0, 0.6);
     --crimson-metallic: #5A0004;
     --crimson-border: #8B0000;
-    --dark-bg: #030002;
+    --dark-bg: #020001;
     --hud-cyan: #00d4ff;
-    --glass-background: rgba(12, 2, 3, 0.88);
+    --glass-background: rgba(10, 1, 2, 0.9);
     --font-stack: 'Courier New', Courier, monospace;
 }
 
@@ -37,11 +37,11 @@ body {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: radial-gradient(circle at center, rgba(35, 3, 5, 0.25) 0%, rgba(2, 0, 1, 1) 100%);
+    background: radial-gradient(circle at center, rgba(40, 4, 6, 0.25) 0%, rgba(2, 0, 1, 1) 100%);
     z-index: 1;
 }
 
-/* DISTRIBUCIÓN GENERAL DE ELEMENTOS */
+/* DISTRIBUCIÓN GRID RECALIBRADA */
 .hud-grid-reorganized {
     position: relative;
     z-index: 10;
@@ -49,38 +49,74 @@ body {
     height: 100vh;
     display: grid;
     grid-template-columns: 350px 1fr;
-    grid-template-rows: 80px 1fr 110px;
+    grid-template-rows: 90px 1fr 110px; /* Incrementado para evitar recortes superiores */
     padding: 20px;
     gap: 20px;
 }
 
-/* TRATAMIENTO TEXTO METÁLICO AVANZADO 3D */
+/* ==========================================
+   EFECTO CROMO / METÁLICO MULTICAPA 3D
+   ========================================== */
 .metallic-text {
-    background: linear-gradient(180deg, #ffffff 0%, #ffd700 45%, #b39200 70%, #ffffff 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.9)) drop-shadow(0px 0px 8px var(--gold-glow));
     font-weight: 900 !important;
     letter-spacing: 6px;
+    color: #FFFFFF;
+    /* Efecto de extrusión metálica industrial mediante sombreado síncrono */
+    text-shadow: 
+        0px 1px 0px #B39200,
+        0px 2px 0px #997D00,
+        0px 3px 0px #806800,
+        0px 4px 0px #665300,
+        0px 5px 1px rgba(0,0,0,0.8),
+        0px 0px 10px var(--gold-glow),
+        0px 0px 20px rgba(255, 215, 0, 0.3);
 }
 
+/* CABECERA CORREGIDA SIN DESBORDAMIENTO */
 .hud-header-bar {
     grid-column: 1 / span 2;
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-bottom: 2px solid var(--crimson-border);
-    padding-bottom: 10px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    padding-bottom: 12px;
 }
 
-.brand-block { font-size: 0.85rem; font-weight: bold; color: var(--hud-cyan); text-shadow: 0 0 5px rgba(0,212,255,0.5); }
-.system-title-block h1 { font-size: 2.5rem; }
-.telemetry-time-block { text-align: right; }
-.digital-clock { font-size: 1.6rem; letter-spacing: 2px; }
-.date-stamp { font-size: 0.7rem; color: var(--gold-dim); margin-top: 4px; }
+.brand-block { 
+    flex: 1;
+    font-size: 0.85rem; 
+    font-weight: bold; 
+    color: var(--hud-cyan); 
+    text-shadow: 0 0 5px rgba(0,212,255,0.4); 
+}
 
-/* RECUADROS DE PANELES ESTILO HOLOGRÁFICO */
+.system-title-block {
+    flex: 2;
+    text-align: center;
+}
+.system-title-block h1 { 
+    font-size: 2.8rem; 
+    margin: 0;
+}
+
+.telemetry-time-block { 
+    flex: 1;
+    text-align: right; 
+    min-width: 250px; /* Evita de forma absoluta que el reloj colapse o se mutile */
+}
+.digital-clock { 
+    font-size: 1.7rem; 
+    letter-spacing: 2px;
+    display: inline-block;
+}
+.date-stamp { 
+    font-size: 0.7rem; 
+    color: var(--gold-dim); 
+    margin-top: 4px; 
+    letter-spacing: 1px;
+}
+
+/* PANELES LATERALES */
 .panel-section {
     background: var(--glass-background);
     border: 1px solid var(--crimson-border);
@@ -100,28 +136,38 @@ body {
     padding-bottom: 5px;
 }
 
-/* CONFIGURACIÓN Y VISUALIZACIÓN DE LAS BARRAS DE SCROLL EN EL HUD */
+/* ==========================================
+   SISTEMA DE DESPLAZAMIENTO / SCROLLBAR FORZADO
+   ========================================== */
 .scrollable-hud-area {
-    overflow-y: scroll !important; /* Forzado de visualización de barras */
-    padding-right: 8px;
+    overflow-y: scroll !important; /* Fuerza la barra visible permanentemente */
+    padding-right: 12px;
 }
 
-/* Estilización Avanzada de la Barra de Desplazamiento */
+/* Estilos de scrollbar para Chrome, Edge y Safari */
 .scrollable-hud-area::-webkit-scrollbar {
-    width: 6px;
+    width: 10px !important; /* Ensanchado para facilitar interacción con el mouse */
+    display: block !important;
 }
 .scrollable-hud-area::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.5);
-    border: 1px solid var(--crimson-border);
-    border-radius: 3px;
+    background: rgba(15, 2, 4, 0.8) !important;
+    border: 1px solid var(--crimson-border) !important;
+    border-radius: 4px;
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.6);
 }
 .scrollable-hud-area::-webkit-scrollbar-thumb {
-    background: linear-gradient(180deg, var(--crimson-border) 0%, var(--gold) 50%, var(--crimson-border) 100%);
-    border-radius: 3px;
-    box-shadow: 0 0 6px var(--gold-glow);
+    background: linear-gradient(180deg, var(--crimson-border) 0%, var(--gold) 50%, var(--crimson-border) 100%) !important;
+    border: 1px solid #000000;
+    border-radius: 4px;
+    box-shadow: 0 0 8px var(--gold-glow);
+}
+/* Compatibilidad para Firefox */
+.scrollable-hud-area {
+    scrollbar-width: thin;
+    scrollbar-color: var(--gold) rgba(15, 2, 4, 0.8);
 }
 
-/* ELEMENTOS DE TELEMETRÍA */
+/* TELEMETRÍA INTERNA */
 .telemetry-row { margin-bottom: 10px; }
 .row-meta { display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 4px; }
 .bar-track { width: 100%; height: 6px; background: rgba(0, 0, 0, 0.7); border: 1px solid var(--crimson-border); }
@@ -129,12 +175,12 @@ body {
 .bar-fill.color-cyan { background: var(--hud-cyan); box-shadow: 0 0 8px var(--hud-cyan); }
 .color-cyan { color: var(--hud-cyan) !important; }
 
-/* INTERACTIVIDAD DEL HISTORIAL DE CHATS */
+/* HISTORIAL INTERACTIVO */
 .history-list-container {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    max-height: 220px;
+    max-height: 200px;
 }
 
 .history-item {
@@ -146,19 +192,19 @@ body {
     border: 1px solid rgba(139, 0, 0, 0.5);
     border-radius: 4px;
     cursor: pointer;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.2s ease;
 }
 
 .history-item:hover {
     background: rgba(255, 215, 0, 0.04);
-    border-color: var(--gold-dim);
-    transform: translateX(3px);
+    border-color: var(--gold);
+    transform: translateX(4px);
 }
 
 .history-item.active {
     background: rgba(255, 215, 0, 0.08);
     border-color: var(--gold);
-    box-shadow: 0 0 10px rgba(255,215,0,0.15);
+    box-shadow: 0 0 12px rgba(255, 215, 0, 0.2);
 }
 
 .history-icon { font-size: 1.1rem; }
@@ -166,16 +212,17 @@ body {
 .history-title { font-size: 0.75rem; color: #ffffff; font-weight: bold; }
 .history-time { font-size: 0.65rem; color: var(--gold-dim); }
 
-/* WORKSPACE DE CONVERSACIONES DERECHO */
+/* CONTENEDOR DERECHO DE CONVERSACIÓN */
 .hud-center-workspace {
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    background: rgba(5, 1, 2, 0.4);
-    border: 1px solid rgba(139, 0, 0, 0.2);
+    background: rgba(5, 1, 2, 0.3);
+    border: 1px solid rgba(139, 0, 0, 0.15);
     border-radius: 6px;
     padding: 15px;
     height: 100%;
+    overflow: hidden;
 }
 
 .chat-viewport-stream {
@@ -190,22 +237,20 @@ body {
     border: 1px solid var(--crimson-border);
     padding: 15px;
     border-radius: 8px;
-    max-width: 80%;
+    max-width: 85%;
     line-height: 1.6;
     font-size: 0.88rem;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-    animation: fadeIn 0.3s ease-out;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
 }
 
-@keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 .bubble-jarvis { border-left: 4px solid var(--hud-cyan); color: #e5f7ff; align-self: flex-start; }
 .bubble-user { border-right: 4px solid var(--gold); color: #fffdf5; align-self: flex-end; background: rgba(255, 215, 0, 0.02); }
 .bubble-meta { font-size: 0.7rem; font-weight: bold; margin-bottom: 6px; display: flex; gap: 10px; }
 .bubble-jarvis .bubble-meta { color: var(--hud-cyan); }
 .bubble-user .bubble-meta { color: var(--gold); }
-.time-meta { color: rgba(255, 255, 255, 0.35); font-weight: normal; }
+.time-meta { color: rgba(255, 255, 255, 0.35); }
 
-/* PIE DE CONSOLA: MINI REACTOR IMPRESCINDIBLE Y CAJA DE ENTRADA */
+/* CONSOLA INFERIOR */
 .hud-footer-console-area {
     grid-column: 1 / span 2;
     display: flex;
@@ -215,7 +260,6 @@ body {
     border-top: 2px solid var(--crimson-border);
 }
 
-/* REPOSICIONAMIENTO ABSOLUTO FORZADO DEL ALMA DE JARVIS */
 .footer-mini-reactor-dock {
     display: flex;
     flex-direction: column;
@@ -232,7 +276,6 @@ body {
     border: 2px solid var(--crimson-border);
     border-radius: 50%;
     background: #000000;
-    box-shadow: 0 0 15px rgba(255, 122, 0, 0.2);
 }
 
 #canvas-mini-reactor {
@@ -241,7 +284,7 @@ body {
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 5; /* Asegura posicionamiento sobre el fondo */
+    z-index: 5;
 }
 
 .arc-ring-hologram-overlay {
@@ -256,13 +299,11 @@ body {
     border-bottom-color: transparent;
     animation: spin-clockwise 5s linear infinite;
     z-index: 10;
-    pointer-events: none;
 }
 
 @keyframes spin-clockwise { 100% { transform: rotate(360deg); } }
-.dock-label { font-size: 0.6rem; color: var(--hud-cyan); letter-spacing: 1.5px; font-weight: bold; text-shadow: 0 0 4px rgba(0,212,255,0.4); }
+.dock-label { font-size: 0.6rem; color: var(--hud-cyan); letter-spacing: 1.5px; font-weight: bold; }
 
-/* CONTENEDOR DE LA CAJA DE COMANDOS */
 .input-console-wrapper {
     flex: 1;
     display: flex;
@@ -271,7 +312,6 @@ body {
     border-radius: 4px;
     padding: 14px 20px;
     align-items: center;
-    box-shadow: inset 0 0 10px rgba(139,0,0,0.2);
 }
 
 #terminal-command-input {
@@ -282,9 +322,7 @@ body {
     color: #ffffff;
     font-family: var(--font-stack);
     font-size: 1rem;
-    letter-spacing: 0.5px;
 }
 
 .action-buttons-group { display: flex; gap: 15px; }
-.hud-btn { background: transparent; border: none; color: var(--gold); cursor: pointer; font-size: 1.2rem; transition: transform 0.2s; }
-.hud-btn:hover { transform: scale(1.15); color: #ffffff; }
+.hud-btn { background: transparent; border: none; color: var(--gold); cursor: pointer; font-size: 1.2rem; }
