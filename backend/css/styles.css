@@ -1,7 +1,6 @@
-/* ==========================================================================
-   ARQUITECTURA DE DISEÑO: INTERFAZ VECTORIAL INDUSTRIAL REORGANIZADA
-   ESQUEMA DE COLOR: ARMADURA MARK 85 (ROJO CARMESÍ METÁLICO Y ORO)
-   SISTEMA DE DISEÑO: COMPOSICIÓN GRID SIN RENDERING CENTRAL DE FONDO
+,/* ==========================================================================
+   STARK INDUSTRIES COMPONENT STYLE SHEET - VERSION 3.1
+   DISEÑO METÁLICO INTERACTIVO PARA TEXTOS, SCROLLBARS Y ALMA CENTRAL
    ========================================================================== */
 
 * {
@@ -13,14 +12,13 @@
 
 :root {
     --gold: #FFD700;
-    --gold-dim: rgba(255, 215, 0, 0.4);
-    --gold-glow: rgba(255, 215, 0, 0.25);
+    --gold-dim: rgba(255, 215, 0, 0.35);
+    --gold-glow: rgba(255, 215, 0, 0.4);
     --crimson-metallic: #5A0004;
     --crimson-border: #8B0000;
-    --dark-bg: #030001;
+    --dark-bg: #030002;
     --hud-cyan: #00d4ff;
-    --hud-cyan-dim: rgba(0, 212, 255, 0.3);
-    --glass-background: rgba(14, 2, 4, 0.85);
+    --glass-background: rgba(12, 2, 3, 0.88);
     --font-stack: 'Courier New', Courier, monospace;
 }
 
@@ -39,48 +37,58 @@ body {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: radial-gradient(circle at center, rgba(30, 2, 5, 0.2) 0%, rgba(3, 0, 1, 1) 100%);
+    background: radial-gradient(circle at center, rgba(35, 3, 5, 0.25) 0%, rgba(2, 0, 1, 1) 100%);
     z-index: 1;
 }
 
-/* NUEVA DISTRIBUCIÓN GRID REORGANIZADA */
+/* DISTRIBUCIÓN GENERAL DE ELEMENTOS */
 .hud-grid-reorganized {
     position: relative;
     z-index: 10;
     width: 100vw;
     height: 100vh;
     display: grid;
-    grid-template-columns: 340px 1fr;
-    grid-template-rows: 70px 1fr auto;
+    grid-template-columns: 350px 1fr;
+    grid-template-rows: 80px 1fr 110px;
     padding: 20px;
     gap: 20px;
 }
 
-/* CABECERA MINIMALISTA COMPLETA */
+/* TRATAMIENTO TEXTO METÁLICO AVANZADO 3D */
+.metallic-text {
+    background: linear-gradient(180deg, #ffffff 0%, #ffd700 45%, #b39200 70%, #ffffff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.9)) drop-shadow(0px 0px 8px var(--gold-glow));
+    font-weight: 900 !important;
+    letter-spacing: 6px;
+}
+
 .hud-header-bar {
     grid-column: 1 / span 2;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid var(--gold-dim);
-    padding-bottom: 8px;
+    border-bottom: 2px solid var(--crimson-border);
+    padding-bottom: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
 }
 
-.brand-block { font-size: 0.85rem; font-weight: bold; letter-spacing: 2px; color: var(--hud-cyan); }
-.system-title-block h1 { font-size: 2.2rem; font-weight: 900; letter-spacing: 6px; text-shadow: 0 0 15px var(--gold-glow); text-align: center; }
+.brand-block { font-size: 0.85rem; font-weight: bold; color: var(--hud-cyan); text-shadow: 0 0 5px rgba(0,212,255,0.5); }
+.system-title-block h1 { font-size: 2.5rem; }
 .telemetry-time-block { text-align: right; }
-.digital-clock { font-size: 1.4rem; font-weight: bold; color: var(--gold); letter-spacing: 1px; }
-.date-stamp { font-size: 0.75rem; color: var(--gold-dim); margin-top: 2px; text-transform: uppercase; }
+.digital-clock { font-size: 1.6rem; letter-spacing: 2px; }
+.date-stamp { font-size: 0.7rem; color: var(--gold-dim); margin-top: 4px; }
 
-/* RECUADROS LATERALES */
+/* RECUADROS DE PANELES ESTILO HOLOGRÁFICO */
 .panel-section {
     background: var(--glass-background);
     border: 1px solid var(--crimson-border);
-    border-left: 3px solid var(--gold);
+    border-left: 4px solid var(--gold);
     padding: 15px;
     margin-bottom: 15px;
     border-radius: 4px;
-    box-shadow: inset 0 0 15px rgba(139, 0, 0, 0.15);
+    box-shadow: inset 0 0 20px rgba(139, 0, 0, 0.25);
 }
 
 .panel-section h3 {
@@ -92,109 +100,139 @@ body {
     padding-bottom: 5px;
 }
 
-/* TELEMETRÍA COMPACTA */
-.telemetry-row { margin-bottom: 12px; }
-.row-meta { display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 4px; letter-spacing: 1px; }
-.bar-track { width: 100%; height: 5px; background: rgba(0, 0, 0, 0.6); border: 1px solid var(--crimson-border); }
+/* CONFIGURACIÓN Y VISUALIZACIÓN DE LAS BARRAS DE SCROLL EN EL HUD */
+.scrollable-hud-area {
+    overflow-y: scroll !important; /* Forzado de visualización de barras */
+    padding-right: 8px;
+}
+
+/* Estilización Avanzada de la Barra de Desplazamiento */
+.scrollable-hud-area::-webkit-scrollbar {
+    width: 6px;
+}
+.scrollable-hud-area::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--crimson-border);
+    border-radius: 3px;
+}
+.scrollable-hud-area::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--crimson-border) 0%, var(--gold) 50%, var(--crimson-border) 100%);
+    border-radius: 3px;
+    box-shadow: 0 0 6px var(--gold-glow);
+}
+
+/* ELEMENTOS DE TELEMETRÍA */
+.telemetry-row { margin-bottom: 10px; }
+.row-meta { display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 4px; }
+.bar-track { width: 100%; height: 6px; background: rgba(0, 0, 0, 0.7); border: 1px solid var(--crimson-border); }
 .bar-fill { height: 100%; background: var(--gold); box-shadow: 0 0 8px var(--gold); }
 .bar-fill.color-cyan { background: var(--hud-cyan); box-shadow: 0 0 8px var(--hud-cyan); }
 .color-cyan { color: var(--hud-cyan) !important; }
 
-/* NUEVO HISTORIAL DE CHATS ESTILO IDE */
+/* INTERACTIVIDAD DEL HISTORIAL DE CHATS */
 .history-list-container {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    max-height: 250px;
-    overflow-y: auto;
+    gap: 10px;
+    max-height: 220px;
 }
 
 .history-item {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 10px;
-    background: rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(139, 0, 0, 0.4);
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(139, 0, 0, 0.5);
     border-radius: 4px;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.history-item:hover, .history-item.active {
-    background: rgba(255, 215, 0, 0.05);
+.history-item:hover {
+    background: rgba(255, 215, 0, 0.04);
+    border-color: var(--gold-dim);
+    transform: translateX(3px);
+}
+
+.history-item.active {
+    background: rgba(255, 215, 0, 0.08);
     border-color: var(--gold);
+    box-shadow: 0 0 10px rgba(255,215,0,0.15);
 }
 
 .history-icon { font-size: 1.1rem; }
-.history-details { display: flex; flex-direction: column; gap: 2px; }
+.history-details { display: flex; flex-direction: column; gap: 2px; pointer-events: none; }
 .history-title { font-size: 0.75rem; color: #ffffff; font-weight: bold; }
 .history-time { font-size: 0.65rem; color: var(--gold-dim); }
 
-/* CONTENEDOR CENTRAL DE CHATS (MUDADO A LA DERECHA) */
+/* WORKSPACE DE CONVERSACIONES DERECHO */
 .hud-center-workspace {
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    padding: 10px 10px 10px 5px;
+    background: rgba(5, 1, 2, 0.4);
+    border: 1px solid rgba(139, 0, 0, 0.2);
+    border-radius: 6px;
+    padding: 15px;
+    height: 100%;
 }
 
 .chat-viewport-stream {
     max-height: 100%;
-    overflow-y: auto;
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
 
-.chat-viewport-stream::-webkit-scrollbar { width: 4px; }
-.chat-viewport-stream::-webkit-scrollbar-thumb { background: var(--crimson-border); }
-
-/* BURBUJAS DE TEXTO */
 .chat-bubble {
     background: var(--glass-background);
     border: 1px solid var(--crimson-border);
     padding: 15px;
     border-radius: 8px;
     max-width: 80%;
-    line-height: 1.5;
-    font-size: 0.85rem;
+    line-height: 1.6;
+    font-size: 0.88rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    animation: fadeIn 0.3s ease-out;
 }
 
-.bubble-jarvis { border-left: 4px solid var(--hud-cyan); color: #ffffff; align-self: flex-start; }
-.bubble-user { border-right: 4px solid var(--gold); color: #ffffff; align-self: flex-end; background: rgba(255, 215, 0, 0.02); }
-.bubble-meta { font-size: 0.7rem; font-weight: bold; margin-bottom: 5px; display: flex; gap: 10px; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+.bubble-jarvis { border-left: 4px solid var(--hud-cyan); color: #e5f7ff; align-self: flex-start; }
+.bubble-user { border-right: 4px solid var(--gold); color: #fffdf5; align-self: flex-end; background: rgba(255, 215, 0, 0.02); }
+.bubble-meta { font-size: 0.7rem; font-weight: bold; margin-bottom: 6px; display: flex; gap: 10px; }
 .bubble-jarvis .bubble-meta { color: var(--hud-cyan); }
 .bubble-user .bubble-meta { color: var(--gold); }
-.time-meta { color: rgba(255, 255, 255, 0.4); font-weight: normal; }
+.time-meta { color: rgba(255, 255, 255, 0.35); font-weight: normal; }
 
-/* NUEVA CONSOLA DE ENTRADA INFERIOR (CON MINI-REACTOR INCLUIDO) */
+/* PIE DE CONSOLA: MINI REACTOR IMPRESCINDIBLE Y CAJA DE ENTRADA */
 .hud-footer-console-area {
     grid-column: 1 / span 2;
     display: flex;
     align-items: center;
-    gap: 20px;
-    padding-top: 10px;
-    border-top: 1px solid rgba(255, 215, 0, 0.1);
+    gap: 25px;
+    padding-top: 15px;
+    border-top: 2px solid var(--crimson-border);
 }
 
-/* ACOPLAMIENTO DEL MINI REACTOR EN LA ESQUINA INFERIOR IZQUIERDA */
+/* REPOSICIONAMIENTO ABSOLUTO FORZADO DEL ALMA DE JARVIS */
 .footer-mini-reactor-dock {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 4px;
+    gap: 6px;
     width: 100px;
+    flex-shrink: 0;
 }
 
 .mini-reactor-wrapper {
     position: relative;
-    width: 75px;
-    height: 75px;
-    border: 1px dashed var(--crimson-border);
+    width: 80px;
+    height: 80px;
+    border: 2px solid var(--crimson-border);
     border-radius: 50%;
-    overflow: hidden;
     background: #000000;
+    box-shadow: 0 0 15px rgba(255, 122, 0, 0.2);
 }
 
 #canvas-mini-reactor {
@@ -203,32 +241,37 @@ body {
     position: absolute;
     top: 0;
     left: 0;
+    z-index: 5; /* Asegura posicionamiento sobre el fondo */
 }
 
 .arc-ring-hologram-overlay {
     position: absolute;
-    width: 67px;
-    height: 67px;
-    top: 3px;
-    left: 3px;
-    border: 1px double var(--gold-dim);
+    width: 72px;
+    height: 72px;
+    top: 2px;
+    left: 2px;
+    border: 2px dashed var(--gold-dim);
     border-radius: 50%;
     border-top-color: transparent;
     border-bottom-color: transparent;
-    animation: spin 6s linear infinite;
+    animation: spin-clockwise 5s linear infinite;
+    z-index: 10;
+    pointer-events: none;
 }
 
-.dock-label { font-size: 0.55rem; color: var(--hud-cyan); letter-spacing: 1px; font-weight: bold; }
+@keyframes spin-clockwise { 100% { transform: rotate(360deg); } }
+.dock-label { font-size: 0.6rem; color: var(--hud-cyan); letter-spacing: 1.5px; font-weight: bold; text-shadow: 0 0 4px rgba(0,212,255,0.4); }
 
-/* BARRA DE ESCRITURA EXTENDIDA */
+/* CONTENEDOR DE LA CAJA DE COMANDOS */
 .input-console-wrapper {
     flex: 1;
     display: flex;
-    background: rgba(0, 0, 0, 0.9);
+    background: rgba(0, 0, 0, 0.85);
     border: 1px solid var(--crimson-border);
-    border-radius: 6px;
-    padding: 12px 20px;
+    border-radius: 4px;
+    padding: 14px 20px;
     align-items: center;
+    box-shadow: inset 0 0 10px rgba(139,0,0,0.2);
 }
 
 #terminal-command-input {
@@ -238,8 +281,10 @@ body {
     outline: none;
     color: #ffffff;
     font-family: var(--font-stack);
-    font-size: 0.95rem;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
 }
 
 .action-buttons-group { display: flex; gap: 15px; }
-.hud-btn { background: transparent; border: none; color: var(--gold); cursor: pointer; font-size: 1.1rem; }
+.hud-btn { background: transparent; border: none; color: var(--gold); cursor: pointer; font-size: 1.2rem; transition: transform 0.2s; }
+.hud-btn:hover { transform: scale(1.15); color: #ffffff; }
