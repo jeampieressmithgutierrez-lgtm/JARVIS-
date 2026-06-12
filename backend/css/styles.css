@@ -1,5 +1,5 @@
 /* ==========================================================================
-   STARK INDUSTRIES INTERFACE SYSTEM - VERSION BOCETO REALINEADO 4.0
+   STARK INDUSTRIES INTERFACE SYSTEM — REALIGNED ARCHITECTURE V5.0
    ========================================================================== */
 
 * {
@@ -11,15 +11,15 @@
 
 :root {
     --amber-gold: #FFB300;
-    --amber-glow: rgba(255, 179, 0, 0.4);
+    --amber-glow: rgba(255, 179, 0, 0.35);
     --hud-cyan: #00d4ff;
-    --crimson-dark: #3A0003;
+    --hud-cyan-glow: rgba(0, 212, 255, 0.4);
     --border-steel: #8B0000;
-    --bg-dark: #020001;
+    --bg-black: #030102;
 }
 
 body {
-    background-color: var(--bg-dark);
+    background-color: var(--bg-black);
     color: #FFFFFF;
     width: 100vw;
     height: 100vh;
@@ -28,112 +28,264 @@ body {
 
 #hud-dark-background {
     position: fixed;
+    top: 0;
+    left: 0;
     width: 100vw;
     height: 100vh;
-    background: radial-gradient(circle at center, rgba(35, 3, 5, 0.2) 0%, #000 100%);
+    background: radial-gradient(circle at center, rgba(30, 5, 5, 0.15) 0%, #000000 100%);
     z-index: 1;
 }
 
-/* ARQUITECTURA DE REJILLA BASADA EN EL BOCETO */
-.hud-sketch-grid {
+/* MARCO MAESTRO: AJUSTE DE COLUMNAS DE DERECHA A IZQUIERDA */
+.hud-aligned-layout {
     position: relative;
     z-index: 10;
     width: 100vw;
     height: 100vh;
     display: grid;
-    grid-template-columns: 1fr 340px; /* Espacio mayoritario a la izquierda */
-    grid-template-rows: 1fr 80px;      /* Barra de comandos corrida en la base */
+    grid-template-columns: 320px 1fr; /* REQUISITO 2: Panel lateral izquierdo fijo de 320px */
+    grid-template-rows: 90px 1fr 70px; /* Cabecera superior, cuerpo central y consola base */
     padding: 15px;
     gap: 15px;
 }
 
-/* ==========================================
-   EFECTO DE TEXTO METÁLICO Y 3D INDUSTRIAL
-   ========================================== */
+/* ===================================================================
+   REQUISITO 1: CABECERA INTEGRAL CON EL NOMBRE FIJADO EN EL CENTRO
+   =================================================================== */
+.hud-top-header-node {
+    grid-column: 1 / span 2; /* Cruza toda la pantalla horizontalmente */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(139, 0, 0, 0.3);
+    padding: 0 10px;
+}
+
+.central-ia-branding {
+    text-align: center;
+}
+
 .metallic-text {
-    font-size: 2.5rem;
+    font-size: 2.2rem;
     font-weight: 900;
     color: #FFFFFF;
-    letter-spacing: 5px;
-    text-align: center;
+    letter-spacing: 6px;
     text-shadow: 
         0px 1px 0px #B39200,
-        0px 2px 0px #997D00,
-        0px 3px 0px #806800,
-        0px 4px 1px rgba(0,0,0,0.8),
-        0px 0px 12px var(--amber-glow);
+        0px 2px 0px #806800,
+        0px 0px 15px var(--amber-glow);
 }
 
-.metallic-text-time {
-    font-size: 1.6rem;
-    font-weight: bold;
+.sub-system-tag {
+    font-size: 0.65rem;
     color: var(--amber-gold);
-    text-shadow: 0px 1px 0px #665300, 0px 2px 3px rgba(0,0,0,0.9);
+    letter-spacing: 3px;
+    margin-top: 2px;
 }
 
-/* SECTOR IZQUIERDO: DINÁMICA DE CONVERSACIÓN */
-.hud-conversation-area {
-    background: rgba(5, 1, 2, 0.4);
-    border: 1px solid rgba(139, 0, 0, 0.2);
-    border-radius: 6px;
+.stark-left-tag, .stark-right-tag {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.4);
+    letter-spacing: 1px;
+}
+
+/* ===================================================================
+   REQUISITO 2: CONFIGURACIÓN ESTRUCTURAL DE PANELES IZQUIERDOS
+   =================================================================== */
+.hud-sidebar-left-panels {
+    grid-column: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.stark-panel-blueprint {
+    background: rgba(10, 2, 3, 0.85);
+    border: 1px solid var(--border-steel);
+    border-radius: 4px;
+    padding: 12px;
+    box-shadow: inset 0 0 10px rgba(139, 0, 0, 0.15);
+}
+
+.panel-header-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px dashed rgba(255, 179, 0, 0.25);
+    padding-bottom: 6px;
+    margin-bottom: 10px;
+}
+
+.panel-header-title h3 {
+    font-size: 0.75rem;
+    color: var(--amber-gold);
+    letter-spacing: 1.5px;
+}
+
+.pulse-cyan-dot {
+    width: 6px;
+    height: 6px;
+    background-color: var(--hud-cyan);
+    border-radius: 50%;
+    box-shadow: 0 0 6px var(--hud-cyan);
+}
+
+/* Elementos de Monitoreo Interno */
+.blueprint-content-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.metric-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.72rem;
+}
+
+.cyan-text { color: var(--hud-cyan); }
+
+.blueprint-progress-track {
+    flex: 1;
+    height: 4px;
+    background: #000000;
+    margin: 0 10px;
+    border: 1px solid rgba(139, 0, 0, 0.4);
+    border-radius: 2px;
+}
+
+.blueprint-progress-fill {
+    height: 100%;
+    background: var(--hud-cyan);
+}
+.blueprint-progress-fill.amber-fill {
+    background: var(--amber-gold);
+}
+
+/* Caja de Búsqueda */
+.search-flex-container {
+    display: flex;
+    align-items: center;
+    background: #000000;
+    border: 1px solid var(--border-steel);
+    padding: 6px 10px;
+    border-radius: 4px;
+}
+
+#sidebar-search-field {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #FFFFFF;
+    width: 100%;
+    font-size: 0.75rem;
+}
+
+.search-trigger-icon {
+    cursor: pointer;
+    font-size: 0.75rem;
+}
+
+/* Lista del Historial de Chats */
+.blueprint-scroll-container {
+    max-height: 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.chat-history-node {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.chat-history-node.active {
+    background: rgba(255, 179, 0, 0.05);
+    border-color: var(--amber-gold);
+}
+
+.node-bullet {
+    color: var(--border-steel);
+    font-size: 0.65rem;
+}
+.chat-history-node.active .node-bullet {
+    color: var(--amber-gold);
+}
+
+.node-meta-group { display: flex; flex-direction: column; }
+.node-title { font-size: 0.75rem; color: #FFFFFF; }
+.node-subtitle { font-size: 0.65rem; color: rgba(255, 255, 255, 0.4); }
+
+/* ===================================================================
+   ZONA CENTRAL DE CONVERSACIÓN (FLUJO DINÁMICO DERECHO)
+   =================================================================== */
+.hud-workspace-right-stream {
+    grid-column: 2;
+    background: rgba(5, 1, 2, 0.3);
+    border: 1px solid rgba(139, 0, 0, 0.15);
+    border-radius: 4px;
     padding: 20px;
     overflow: hidden;
 }
 
-.chat-viewport-stream {
+.conversation-viewport {
     height: 100%;
     display: flex;
     flex-direction: column;
     gap: 25px;
 }
 
-/* CONFIGURACIÓN DE ALINEACIÓN DE BURBUJAS SEGÚN DIBUJO */
 .chat-bubble {
     display: flex;
     gap: 15px;
-    max-width: 75%;
+    max-width: 80%;
     align-items: flex-start;
 }
 
-/* Burbuja JARVIS: Arriba a la Derecha */
-.bubble-jarvis-sketch {
+/* Burbuja JARVIS: Alineada a la Derecha de la ventana */
+.layout-jarvis {
     align-self: flex-end;
-    flex-direction: row-reverse; /* Avatar al extremo derecho */
+    flex-direction: row-reverse;
 }
 
-/* Burbuja TÚ: Abajo a la Izquierda */
-.bubble-user-sketch {
+/* Burbuja USUARIO (TÚ): Alineada a la Izquierda de la ventana */
+.layout-user {
     align-self: flex-start;
 }
 
-.bubble-content-box {
-    background: rgba(15, 2, 4, 0.85);
+.speech-bubble-envelope {
+    background: rgba(12, 2, 3, 0.9);
     border: 1px solid var(--border-steel);
     padding: 15px;
-    border-radius: 8px;
-    box-shadow: inset 0 0 15px rgba(139, 0, 0, 0.2);
+    border-radius: 6px;
+    box-shadow: inset 0 0 12px rgba(139, 0, 0, 0.15);
 }
 
-.bubble-meta {
-    font-size: 0.75rem;
+.envelope-meta {
+    font-size: 0.7rem;
     font-weight: bold;
     margin-bottom: 6px;
     letter-spacing: 1px;
 }
+.layout-jarvis .envelope-meta { color: var(--hud-cyan); }
+.layout-user .envelope-meta { color: var(--amber-gold); }
+.envelope-body { font-size: 0.85rem; line-height: 1.5; color: #E5E5E5; }
 
-.bubble-jarvis-sketch .bubble-meta { color: var(--hud-cyan); }
-.bubble-user-sketch .bubble-meta { color: var(--amber-gold); }
-.bubble-text { font-size: 0.88rem; line-height: 1.5; color: #E0E0E0; }
-
-/* AVATARES CIRCULARES */
-.profile-avatar-holder {
-    width: 60px;
-    height: 60px;
+/* ESFERAS HOLOGRÁFICAS DE AVATAR */
+.hologram-avatar-sphere {
+    width: 55px;
+    height: 55px;
     position: relative;
     flex-shrink: 0;
-    border-radius: 50%;
-    background: #000;
+    background: #000000;
     border: 1px solid var(--border-steel);
+    border-radius: 50%;
 }
 
 #canvas-mini-reactor {
@@ -143,117 +295,70 @@ body {
     border-radius: 50%;
 }
 
-.avatar-ring {
+.rotating-hud-perimeter-ring {
     position: absolute;
     width: 100%;
     height: 100%;
-    border: 2px dashed var(--hud-cyan);
+    border: 1.5px dashed var(--hud-cyan);
     border-radius: 50%;
-    animation: rotar 8s linear infinite;
+    animation: spinPerimeter 10s linear infinite;
 }
 
-.user-avatar {
-    background: var(--crimson-dark);
+.user-sphere {
+    background: rgba(58, 0, 3, 0.7);
+    border-color: var(--amber-gold);
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid var(--amber-gold);
 }
+.user-initials-tag { font-size: 0.75rem; font-weight: bold; color: var(--amber-gold); }
 
-.avatar-text { font-size: 0.75rem; font-weight: bold; color: var(--amber-gold); }
-
-/* SECTOR DERECHO: PANELES EN COLUMNA */
-.hud-sidebar-right-sketch {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.brand-title-container {
-    padding: 10px 0;
-    border-bottom: 1px double var(--border-steel);
-}
-
-.sketch-panel-box {
-    background: rgba(10, 1, 2, 0.9);
-    border: 1px solid var(--border-steel);
-    border-radius: 4px;
-    padding: 12px;
-}
-
-.panel-tag {
-    font-size: 0.7rem;
-    font-weight: bold;
-    color: var(--amber-gold);
-    letter-spacing: 2px;
-    margin-bottom: 8px;
-    border-bottom: 1px dashed rgba(255, 179, 0, 0.3);
-    padding-bottom: 3px;
-}
-
-/* Telemetría Sistema */
-.telemetry-data-list { display: flex; flex-direction: column; gap: 8px; }
-.data-item { display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; }
-.mini-bar { flex: 1; height: 5px; background: #000; margin: 0 10px; border: 1px solid rgba(139,0,0,0.5); }
-.mini-bar .fill { height: 100%; background: var(--hud-cyan); }
-.mini-bar .fill.gold-fill { background: var(--amber-gold); }
-
-.status-indicator-dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
-.cyan-glow { background: var(--hud-cyan); box-shadow: 0 0 6px var(--hud-cyan); }
-
-/* Buscador */
-.search-input-wrapper { display: flex; background: #000; border: 1px solid var(--border-steel); padding: 6px 10px; border-radius: 4px; }
-#hud-sidebar-search { background: transparent; border: none; outline: none; color: #FFF; width: 100%; font-size: 0.8rem; }
-.search-icon-btn { cursor: pointer; font-size: 0.8rem; }
-
-/* Historial de Chats */
-.history-list-sketch-container { max-height: 180px; display: flex; flex-direction: column; gap: 6px; }
-.history-row-item { display: flex; gap: 8px; align-items: center; padding: 6px; border: 1px solid transparent; cursor: pointer; }
-.history-row-item.active { background: rgba(255, 179, 0, 0.05); border-color: var(--amber-gold); }
-.bullet { color: var(--border-steel); font-size: 0.6rem; }
-.history-row-item.active .bullet { color: var(--amber-gold); }
-.h-info { display: flex; flex-direction: column; }
-.h-title { font-size: 0.75rem; color: #FFF; }
-.h-time { font-size: 0.65rem; color: rgba(255,255,255,0.4); }
-
-/* ==========================================
-   SISTEMA DE SCROLLBAR VISIBLE OBLIGATORIO
-   ========================================== */
-.scrollable-hud-area {
+/* ===================================================================
+   SISTEMA DE BARRAS DE DESPLAZAMIENTO (SCROLLBARS VISIBLES)
+   =================================================================== */
+.custom-scrollbar {
     overflow-y: scroll !important;
-    padding-right: 5px;
 }
-.scrollable-hud-area::-webkit-scrollbar { width: 6px !important; display: block !important; }
-.scrollable-hud-area::-webkit-scrollbar-track { background: rgba(0,0,0,0.5); }
-.scrollable-hud-area::-webkit-scrollbar-thumb { background: var(--amber-gold); border-radius: 3px; }
+.custom-scrollbar::-webkit-scrollbar {
+    width: 5px !important;
+    display: block !important;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.6);
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--amber-gold);
+    border-radius: 3px;
+}
 
-/* CONSOLA INFERIOR CORRIDA */
-.hud-bottom-console-sketch {
+/* CONSOLA DE BASE CORRIDA */
+.hud-bottom-command-bar {
     grid-column: 1 / span 2;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-top: 1px solid var(--border-steel);
-    padding-top: 12px;
+    border-top: 1px solid rgba(139, 0, 0, 0.3);
+    padding-top: 10px;
     gap: 20px;
 }
 
-.console-input-dock {
+.interactive-terminal-wrapper {
     flex: 1;
     display: flex;
-    background: #000;
+    background: #000000;
     border: 1px solid var(--border-steel);
-    padding: 12px 15px;
+    padding: 10px 15px;
     align-items: center;
     border-radius: 4px;
 }
 
-.terminal-arrow { color: var(--amber-gold); font-weight: bold; margin-right: 12px; font-size: 0.9rem; }
-#terminal-command-input { background: transparent; border: none; outline: none; color: #FFF; flex: 1; font-size: 0.95rem; }
-.console-mic-btn { background: transparent; border: none; color: var(--amber-gold); cursor: pointer; font-size: 1.1rem; }
+.terminal-indicator { color: var(--amber-gold); margin-right: 12px; font-weight: bold; font-size: 0.85rem; }
+#terminal-command-input { background: transparent; border: none; outline: none; color: #FFFFFF; flex: 1; font-size: 0.9rem; }
+.terminal-action-icon { background: transparent; border: none; color: var(--amber-gold); cursor: pointer; font-size: 1rem; }
 
-.console-time-dock { display: flex; align-items: center; gap: 10px; min-width: 150px; justify-content: flex-end; }
-.pulse-amber-dot { width: 8px; height: 8px; background: var(--amber-gold); border-radius: 50%; box-shadow: 0 0 8px var(--amber-gold); animation: pulso 2s infinite; }
+.realtime-clock-display { display: flex; align-items: center; gap: 10px; min-width: 140px; justify-content: flex-end; }
+.clock-pulse-amber { width: 6px; height: 6px; background: var(--amber-gold); border-radius: 50%; box-shadow: 0 0 6px var(--amber-gold); animation: pulseDot 2s infinite; }
+.digital-time-string { font-size: 1.1rem; font-weight: bold; color: var(--amber-gold); text-shadow: 0px 1px 2px rgba(0,0,0,0.8); }
 
-@keyframes rotar { 100% { transform: rotate(360deg); } }
-@keyframes pulso { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+@keyframes spinPerimeter { 100% { transform: rotate(360deg); } }
+@keyframes pulseDot { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
