@@ -1,21 +1,12 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <!-- ========================================================================
-        STARK INDUSTRIES SYSTEM DISTRIBUTION
-        SISTEMA: J·A·R·V·I.S. INTERFACE CORE - REORGANIZACIÓN V3
-        ARQUITECTURA: MARK LXXXV (ROJO, ORO Y ÁMBAR)
-        MÓDULO: INDEX FRONTEND BASE COMPLETO
-        ======================================================================== -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>J·A·R·V·I·S</title>
     
-    <!-- Enlace a los Estilos Optimizados -->
     <link rel="stylesheet" href="css/styles.css">
     
-    <!-- CDN del Motor Gráfico Three.js y Procesamiento de Post-Efectos -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
@@ -26,34 +17,25 @@
 </head>
 <body>
 
-    <!-- Capa limpia para el fondo de la interfaz (sin el núcleo gigante que estorbaba) -->
     <div id="hud-dark-background"></div>
 
-    <!-- CONTENEDOR MAESTRO DEL REORGANIZADO HUD -->
     <div id="hud-master-frame" class="hud-grid-reorganized">
         
-        <!-- ==========================================
-             CABECERA REESTRUCTURADA (MINIMALISTA)
-             ========================================== -->
         <header class="hud-header-bar">
             <div class="brand-block">
                 <span class="icon-geo">🌐</span> STARK INDUSTRIES
             </div>
             <div class="system-title-block">
-                <h1>J·A·R·V·I·S</h1>
+                <h1 class="metallic-text">J·A·R·V·I·S</h1>
             </div>
             <div class="telemetry-time-block">
-                <div id="sys-time-clock" class="digital-clock">--:--:--</div>
-                <div id="sys-date-stamp" class="date-stamp">SINCRONIZANDO...</div>
+                <div id="sys-time-clock" class="digital-clock metallic-text">--:--:--</div>
+                <div id="sys-date-stamp" class="date-stamp">CONECTANDO CORE...</div>
             </div>
         </header>
 
-        <!-- ==========================================
-             COLUMNA IZQUIERDA: TELEMETRÍA Y LOGS
-             ========================================== -->
         <aside class="hud-sidebar-left">
             
-            <!-- Bloque Único y Compacto de Sistemas Principales -->
             <div class="panel-section subsystems-module">
                 <h3>MONITOREO DE SISTEMA</h3>
                 
@@ -88,26 +70,25 @@
                 </div>
             </div>
 
-            <!-- NUEVO BLOQUE: HISTORIAL DE CHATS -->
             <div class="panel-section history-module">
                 <h3>HISTORIAL DE CHATS</h3>
-                <div id="chat-history-list" class="history-list-container">
-                    <div class="history-item active">
+                <div id="chat-history-list" class="history-list-container scrollable-hud-area">
+                    <div class="history-item active" data-session="diagnostic">
                         <span class="history-icon">💬</span>
                         <div class="history-details">
                             <span class="history-title">Sesión de Diagnóstico</span>
-                            <span class="history-time">Hoy - 10:42 AM</span>
+                            <span class="history-time">Hoy - Realtime</span>
                         </div>
                     </div>
-                    <div class="history-item">
-                        <span class="history-icon">💬</span>
+                    <div class="history-item" data-session="mark85">
+                        <span class="history-icon">⚙️</span>
                         <div class="history-details">
                             <span class="history-title">Ajustes del Traje Mark 85</span>
                             <span class="history-time">Ayer - 06:15 PM</span>
                         </div>
                     </div>
-                    <div class="history-item">
-                        <span class="history-icon">📁</span>
+                    <div class="history-item" data-session="network">
+                        <span class="history-icon">🛡️</span>
                         <div class="history-details">
                             <span class="history-title">Limpieza de Registros de Red</span>
                             <span class="history-time">08 Jun 2026</span>
@@ -117,53 +98,40 @@
             </div>
         </aside>
 
-        <!-- ==========================================
-             ÁREA DERECHA CENTRALIZADA: FLUJO DEL CHAT
-             ========================================== -->
         <main class="hud-center-workspace">
-            <div id="chat-conversation-stream" class="chat-viewport-stream">
-                
+            <div id="chat-conversation-stream" class="chat-viewport-stream scrollable-hud-area">
                 <div class="chat-bubble bubble-jarvis">
-                    <div class="bubble-meta">JARVIS <span class="time-meta">10:42 AM</span></div>
+                    <div class="bubble-meta">JARVIS <span class="time-meta">SISTEMA ONLINE</span></div>
                     <p class="bubble-text">Buenos días, Señor. Me alegra verlo de nuevo. El sistema está funcionando dentro de parámetros normales. ¿Tiene algún asunto específico que desee abordar hoy o prefiere que yo inicie la sesión revisando los eventos pendientes?</p>
                 </div>
-
                 <div class="chat-bubble bubble-user">
-                    <div class="bubble-meta">TÚ <span class="time-meta">10:42 AM</span></div>
+                    <div class="bubble-meta">TÚ <span class="time-meta">SISTEMA ONLINE</span></div>
                     <p class="bubble-text">Un saludo informal, pero bienvenido, Señor. Parece que no hay nada urgente en su agenda. Mi recomendación sería revisar sus comunicaciones y notificaciones. ¿Le gustaría que le resuma los temas importantes en las últimas 24 horas?</p>
                 </div>
-
             </div>
         </main>
 
-        <!-- ==========================================
-             ZONA INFERIOR: MINI REACTOR (IZQUIERDA) Y BARRA CHAT
-             ========================================== -->
         <footer class="hud-footer-console-area">
             
-            <!-- El Mini Núcleo de Energía reubicado abajo a la izquierda -->
             <div class="footer-mini-reactor-dock">
                 <div class="mini-reactor-wrapper">
                     <div id="canvas-mini-reactor"></div>
                     <div class="arc-ring-hologram-overlay"></div>
                 </div>
-                <div class="dock-label">CORE·STABLE</div>
+                <div class="dock-label">CORE · AMBER</div>
             </div>
 
-            <!-- Caja de entrada de texto alineada al lado del mini core -->
             <div class="input-console-wrapper">
-                <input type="text" id="terminal-command-input" placeholder="Hable o escriba un comando, Señor..." autocomplete="off" spellcheck="false">
+                <input type="text" id="terminal-command-input" placeholder="Escriba un comando o mensaje para J.A.R.V.I.S..." autocomplete="off" spellcheck="false">
                 <div class="action-buttons-group">
                     <button id="mic-activation-btn" class="hud-btn" type="button">🎤</button>
                     <button id="submit-command-btn" class="hud-btn action-send" type="button">➤</button>
                 </div>
             </div>
-        </footer >
+        </footer>
 
     </div>
 
-    <!-- Scripts de Control -->
     <script src="js/core.js"></script>
-    <script src="js/main.js"></script>
 </body>
 </html>
