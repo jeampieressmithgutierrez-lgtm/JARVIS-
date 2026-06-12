@@ -1,14 +1,21 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <!-- ========================================================================
+        STARK INDUSTRIES SYSTEM DISTRIBUTION
+        SISTEMA: J·A·R·V·I.S. INTERFACE CORE - REORGANIZACIÓN V3
+        ARQUITECTURA: MARK LXXXV (ROJO, ORO Y ÁMBAR)
+        MÓDULO: INDEX FRONTEND BASE COMPLETO
+        ======================================================================== -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="system-status" content="ARMOR-INTEGRATION-ACTIVE">
-    <title>J.A.R.V.I.S. // STARK PROTOCOLS // CORE INITIALIZATION</title>
+    <title>J·A·R·V·I·S</title>
     
+    <!-- Enlace a los Estilos Optimizados -->
     <link rel="stylesheet" href="css/styles.css">
     
+    <!-- CDN del Motor Gráfico Three.js y Procesamiento de Post-Efectos -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
@@ -19,37 +26,42 @@
 </head>
 <body>
 
-    <div id="canvas-reactor-surface" aria-label="Alma de la Inteligencia Artificial"></div>
+    <!-- Capa limpia para el fondo de la interfaz (sin el núcleo gigante que estorbaba) -->
+    <div id="hud-dark-background"></div>
 
-    <div id="hud-master-frame" class="hud-grid-container">
+    <!-- CONTENEDOR MAESTRO DEL REORGANIZADO HUD -->
+    <div id="hud-master-frame" class="hud-grid-reorganized">
         
+        <!-- ==========================================
+             CABECERA REESTRUCTURADA (MINIMALISTA)
+             ========================================== -->
         <header class="hud-header-bar">
             <div class="brand-block">
                 <span class="icon-geo">🌐</span> STARK INDUSTRIES
             </div>
             <div class="system-title-block">
-                <h1>J.A.R.V.I.S. AI</h1>
-                <span class="sub-title-system">SYSTEM ONLINE // CORE_v2.5</span>
+                <h1>J·A·R·V·I·S</h1>
             </div>
             <div class="telemetry-time-block">
-                <div id="sys-time-clock" class="digital-clock">10:42 AM</div>
-                <div id="sys-date-stamp" class="date-stamp">SISTEMA CONTROL ACTIVO</div>
+                <div id="sys-time-clock" class="digital-clock">--:--:--</div>
+                <div id="sys-date-stamp" class="date-stamp">SINCRONIZANDO...</div>
             </div>
         </header>
 
+        <!-- ==========================================
+             COLUMNA IZQUIERDA: TELEMETRÍA Y LOGS
+             ========================================== -->
         <aside class="hud-sidebar-left">
             
-            <div class="panel-section status-module">
-                <h3>SISTEMA</h3>
-                <div class="pulse-indicator-row">
-                    <span class="pulse-dot"></span>
-                    <span class="pulse-text-status">ONLINE</span>
-                </div>
-            </div>
-
+            <!-- Bloque Único y Compacto de Sistemas Principales -->
             <div class="panel-section subsystems-module">
-                <h3>SISTEMAS PRINCIPALES</h3>
+                <h3>MONITOREO DE SISTEMA</h3>
                 
+                <div class="telemetry-row">
+                    <div class="row-meta"><span>SISTEMA INTERFAZ</span><span class="val color-cyan">ONLINE</span></div>
+                    <div class="bar-track"><div class="bar-fill color-cyan" style="width: 100%;"></div></div>
+                </div>
+
                 <div class="telemetry-row">
                     <div class="row-meta"><span>REACTOR ARC</span><span class="val">100%</span></div>
                     <div class="bar-track"><div class="bar-fill" style="width: 100%;"></div></div>
@@ -66,7 +78,7 @@
                 </div>
 
                 <div class="telemetry-row">
-                    <div class="row-meta"><span>MEMORIA</span><span class="val">68%</span></div>
+                    <div class="row-meta"><span>MEMORIA RAM</span><span class="val">68%</span></div>
                     <div class="bar-track"><div class="bar-fill" style="width: 68%;"></div></div>
                 </div>
 
@@ -76,17 +88,38 @@
                 </div>
             </div>
 
-            <div class="panel-section protocols-module">
-                <h3>PROTOCOLOS</h3>
-                <div class="grid-status-link">
-                    <div class="link-item">DEFENSA <span class="tag-status positive">ACTIVO</span></div>
-                    <div class="link-item">VIGILANCIA <span class="tag-status positive">ACTIVO</span></div>
-                    <div class="link-item">COMUNICACIONES <span class="tag-status positive">ACTIVO</span></div>
-                    <div class="link-item">DIAGNÓSTICOS <span class="tag-status neutral">SIN PROBLEMAS</span></div>
+            <!-- NUEVO BLOQUE: HISTORIAL DE CHATS -->
+            <div class="panel-section history-module">
+                <h3>HISTORIAL DE CHATS</h3>
+                <div id="chat-history-list" class="history-list-container">
+                    <div class="history-item active">
+                        <span class="history-icon">💬</span>
+                        <div class="history-details">
+                            <span class="history-title">Sesión de Diagnóstico</span>
+                            <span class="history-time">Hoy - 10:42 AM</span>
+                        </div>
+                    </div>
+                    <div class="history-item">
+                        <span class="history-icon">💬</span>
+                        <div class="history-details">
+                            <span class="history-title">Ajustes del Traje Mark 85</span>
+                            <span class="history-time">Ayer - 06:15 PM</span>
+                        </div>
+                    </div>
+                    <div class="history-item">
+                        <span class="history-icon">📁</span>
+                        <div class="history-details">
+                            <span class="history-title">Limpieza de Registros de Red</span>
+                            <span class="history-time">08 Jun 2026</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </aside>
 
+        <!-- ==========================================
+             ÁREA DERECHA CENTRALIZADA: FLUJO DEL CHAT
+             ========================================== -->
         <main class="hud-center-workspace">
             <div id="chat-conversation-stream" class="chat-viewport-stream">
                 
@@ -97,57 +130,40 @@
 
                 <div class="chat-bubble bubble-user">
                     <div class="bubble-meta">TÚ <span class="time-meta">10:42 AM</span></div>
-                    <p class="bubble-text">Un saludo informal, pero bienvenido, Señor. Parece que no hay nada urgente en su agenda. Mi recomendación sería revisar sus comunicaciones y notificaciones. ¿Le gustaría que le resuma los temas importantes en las últimas 24 horas mientras toma su café?</p>
+                    <p class="bubble-text">Un saludo informal, pero bienvenido, Señor. Parece que no hay nada urgente en su agenda. Mi recomendación sería revisar sus comunicaciones y notificaciones. ¿Le gustaría que le resuma los temas importantes en las últimas 24 horas?</p>
                 </div>
 
             </div>
         </main>
 
-        <aside class="hud-sidebar-right">
+        <!-- ==========================================
+             ZONA INFERIOR: MINI REACTOR (IZQUIERDA) Y BARRA CHAT
+             ========================================== -->
+        <footer class="hud-footer-console-area">
             
-            <div class="panel-section general-state-module">
-                <h3>ESTADO GENERAL</h3>
-                
-                <div class="circular-reactor-container">
-                    <div id="canvas-mini-reactor" class="mini-reactor-canvas-target"></div>
+            <!-- El Mini Núcleo de Energía reubicado abajo a la izquierda -->
+            <div class="footer-mini-reactor-dock">
+                <div class="mini-reactor-wrapper">
+                    <div id="canvas-mini-reactor"></div>
                     <div class="arc-ring-hologram-overlay"></div>
                 </div>
-
-                <div class="status-summary-text">
-                    <h4 class="color-gold">ÓPTIMO</h4>
-                    <p>TODOS LOS SISTEMAS FUNCIONANDO DENTRO DE PARÁMETROS NORMALES</p>
-                </div>
+                <div class="dock-label">CORE·STABLE</div>
             </div>
-            
-            <div class="panel-section hardware-telemetry-module">
-                <h3>ARMADURA TELEMETRÍA</h3>
-                <div class="data-spec-item">MARK V-85: <span class="color-cyan">ONLINE</span></div>
-                <div class="data-spec-item">THRUSTERS: <span class="color-cyan">READY</span></div>
-                <div class="data-spec-item">COOLANT: <span class="color-gold">98.4%</span></div>
-            </div>
-        </aside>
 
-        <footer class="hud-footer-input-bar">
+            <!-- Caja de entrada de texto alineada al lado del mini core -->
             <div class="input-console-wrapper">
-                <input type="text" id="terminal-command-input" placeholder="Hable, Señor..." autocomplete="off" spellcheck="false">
+                <input type="text" id="terminal-command-input" placeholder="Hable o escriba un comando, Señor..." autocomplete="off" spellcheck="false">
                 <div class="action-buttons-group">
                     <button id="mic-activation-btn" class="hud-btn" type="button">🎤</button>
                     <button id="submit-command-btn" class="hud-btn action-send" type="button">➤</button>
                 </div>
             </div>
-            <div class="footer-sub-branding">J.A.R.V.I.S. // JUST A RATHER VERY INTELLIGENT SYSTEM</div>
-        </footer>
+        </footer >
 
     </div>
 
+    <!-- Scripts de Control -->
     <script src="js/core.js"></script>
     <script src="js/main.js"></script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            console.log("[STARK-LOG]: Inicializando esqueleto estructural HTML...");
-            console.log("[STARK-LOG]: Código de interfaz verificado a más de 200 líneas.");
-        });
-    </script>
 </body>
 </html>
