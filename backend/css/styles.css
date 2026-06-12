@@ -1,10 +1,9 @@
 /* ==========================================================================
-   ARQUITECTURA DE DISEÑO: INTERFAZ VECTORIAL INDUSTRIAL J.A.R.V.I.S.
+   ARQUITECTURA DE DISEÑO: INTERFAZ VECTORIAL INDUSTRIAL REORGANIZADA
    ESQUEMA DE COLOR: ARMADURA MARK 85 (ROJO CARMESÍ METÁLICO Y ORO)
-   SISTEMA DE DISEÑO: COMPOSICIÓN DE CUADRÍCULA DENSIDAD +200 LÍNEAS
+   SISTEMA DE DISEÑO: COMPOSICIÓN GRID SIN RENDERING CENTRAL DE FONDO
    ========================================================================== */
 
-/* 1. RESETEO Y VARIABLES DE NÚCLEO INDUSTRIAL */
 * {
     margin: 0;
     padding: 0;
@@ -21,7 +20,7 @@
     --dark-bg: #030001;
     --hud-cyan: #00d4ff;
     --hud-cyan-dim: rgba(0, 212, 255, 0.3);
-    --glass-background: rgba(15, 2, 3, 0.75);
+    --glass-background: rgba(14, 2, 4, 0.85);
     --font-stack: 'Courier New', Courier, monospace;
 }
 
@@ -34,54 +33,46 @@ body {
     height: 100vh;
 }
 
-/* 2. CAPA DE RENDIMIENTO GRÁFICO (WEBGL MAESTRO) */
-#canvas-reactor-surface {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100vw !important;
-    height: 100vh !important;
-    z-index: 1 !important;
-    pointer-events: none;
+#hud-dark-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: radial-gradient(circle at center, rgba(30, 2, 5, 0.2) 0%, rgba(3, 0, 1, 1) 100%);
+    z-index: 1;
 }
 
-/* 3. ARQUITECTURA GENERAL GRID DEL HUD DE ALTA DEFINICIÓN */
-.hud-grid-container {
+/* NUEVA DISTRIBUCIÓN GRID REORGANIZADA */
+.hud-grid-reorganized {
     position: relative;
     z-index: 10;
     width: 100vw;
     height: 100vh;
     display: grid;
-    grid-template-columns: 320px 1fr 320px;
-    grid-template-rows: 90px 1fr 100px;
+    grid-template-columns: 340px 1fr;
+    grid-template-rows: 70px 1fr auto;
     padding: 20px;
-    gap: 15px;
-    pointer-events: none;
+    gap: 20px;
 }
 
-/* Permitir clics en elementos activos del HUD */
-.hud-header-bar, .hud-sidebar-left, .hud-center-workspace, .hud-sidebar-right, .hud-footer-input-bar {
-    pointer-events: auto;
-}
-
-/* 4. CABECERA: AJUSTES Y TELEMETRÍA DE ALTA RESOLUCIÓN */
+/* CABECERA MINIMALISTA COMPLETA */
 .hud-header-bar {
-    grid-column: 1 / span 3;
+    grid-column: 1 / span 2;
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid var(--gold-dim);
-    padding-bottom: 10px;
+    padding-bottom: 8px;
 }
 
-.brand-block { font-size: 0.9rem; font-weight: bold; letter-spacing: 2px; color: var(--hud-cyan); }
-.system-title-block h1 { font-size: 1.8rem; font-weight: 900; letter-spacing: 4px; text-shadow: 0 0 10px var(--gold-glow); text-align: center; }
-.sub-title-system { font-size: 0.7rem; color: var(--gold-dim); display: block; text-align: center; margin-top: 3px; }
+.brand-block { font-size: 0.85rem; font-weight: bold; letter-spacing: 2px; color: var(--hud-cyan); }
+.system-title-block h1 { font-size: 2.2rem; font-weight: 900; letter-spacing: 6px; text-shadow: 0 0 15px var(--gold-glow); text-align: center; }
 .telemetry-time-block { text-align: right; }
-.digital-clock { font-size: 1.4rem; font-weight: bold; color: var(--gold); }
-.date-stamp { font-size: 0.7rem; color: var(--gold-dim); margin-top: 2px; }
+.digital-clock { font-size: 1.4rem; font-weight: bold; color: var(--gold); letter-spacing: 1px; }
+.date-stamp { font-size: 0.75rem; color: var(--gold-dim); margin-top: 2px; text-transform: uppercase; }
 
-/* 5. DISEÑO DE PANELES DE CONTROL LATERAL INDUSTRIAL */
+/* RECUADROS LATERALES */
 .panel-section {
     background: var(--glass-background);
     border: 1px solid var(--crimson-border);
@@ -89,7 +80,7 @@ body {
     padding: 15px;
     margin-bottom: 15px;
     border-radius: 4px;
-    box-shadow: inset 0 0 15px rgba(139, 0, 0, 0.2);
+    box-shadow: inset 0 0 15px rgba(139, 0, 0, 0.15);
 }
 
 .panel-section h3 {
@@ -101,94 +92,142 @@ body {
     padding-bottom: 5px;
 }
 
-/* Barras de datos y progreso */
-.telemetry-row { margin-bottom: 10px; }
-.row-meta { display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 4px; }
-.bar-track { width: 100%; height: 4px; background: rgba(0, 0, 0, 0.5); border: 1px solid var(--crimson-border); }
+/* TELEMETRÍA COMPACTA */
+.telemetry-row { margin-bottom: 12px; }
+.row-meta { display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 4px; letter-spacing: 1px; }
+.bar-track { width: 100%; height: 5px; background: rgba(0, 0, 0, 0.6); border: 1px solid var(--crimson-border); }
 .bar-fill { height: 100%; background: var(--gold); box-shadow: 0 0 8px var(--gold); }
 .bar-fill.color-cyan { background: var(--hud-cyan); box-shadow: 0 0 8px var(--hud-cyan); }
 .color-cyan { color: var(--hud-cyan) !important; }
-.color-gold { color: var(--gold) !important; }
 
-/* GRID DE STATUS LINK */
-.grid-status-link { display: flex; flex-direction: column; gap: 8px; }
-.link-item { font-size: 0.75rem; display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.3); padding: 6px; border: 1px solid rgba(255,215,0,0.1); }
-.tag-status { font-size: 0.65rem; padding: 2px 6px; border-radius: 2px; }
-.tag-status.positive { background: rgba(0, 212, 255, 0.15); color: var(--hud-cyan); border: 1px solid var(--hud-cyan); }
-.tag-status.neutral { background: rgba(255, 215, 0, 0.1); color: var(--gold); border: 1px solid var(--gold); }
+/* NUEVO HISTORIAL DE CHATS ESTILO IDE */
+.history-list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 250px;
+    overflow-y: auto;
+}
 
-/* 6. CONSOLA DE CHAT MODULAR */
+.history-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(139, 0, 0, 0.4);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.history-item:hover, .history-item.active {
+    background: rgba(255, 215, 0, 0.05);
+    border-color: var(--gold);
+}
+
+.history-icon { font-size: 1.1rem; }
+.history-details { display: flex; flex-direction: column; gap: 2px; }
+.history-title { font-size: 0.75rem; color: #ffffff; font-weight: bold; }
+.history-time { font-size: 0.65rem; color: var(--gold-dim); }
+
+/* CONTENEDOR CENTRAL DE CHATS (MUDADO A LA DERECHA) */
 .hud-center-workspace {
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    padding: 10px;
+    padding: 10px 10px 10px 5px;
 }
 
 .chat-viewport-stream {
-    max-height: 480px;
+    max-height: 100%;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
     gap: 15px;
-    padding-right: 5px;
 }
 
-/* Ocultar barra de Scroll estándar */
 .chat-viewport-stream::-webkit-scrollbar { width: 4px; }
 .chat-viewport-stream::-webkit-scrollbar-thumb { background: var(--crimson-border); }
 
-/* Burbujas de Comunicación */
+/* BURBUJAS DE TEXTO */
 .chat-bubble {
-    background: rgba(10, 2, 3, 0.85);
+    background: var(--glass-background);
     border: 1px solid var(--crimson-border);
     padding: 15px;
     border-radius: 8px;
-    max-width: 85%;
+    max-width: 80%;
     line-height: 1.5;
     font-size: 0.85rem;
 }
 
-.bubble-jarvis {
-    border-left: 4px solid var(--hud-cyan);
-    color: #ffffff;
-    align-self: flex-start;
-}
-
-.bubble-user {
-    border-right: 4px solid var(--gold);
-    color: #ffffff;
-    align-self: flex-end;
-    background: rgba(255, 215, 0, 0.03);
-}
-
-.bubble-meta {
-    font-size: 0.7rem;
-    font-weight: bold;
-    margin-bottom: 5px;
-    display: flex;
-    gap: 10px;
-}
-
+.bubble-jarvis { border-left: 4px solid var(--hud-cyan); color: #ffffff; align-self: flex-start; }
+.bubble-user { border-right: 4px solid var(--gold); color: #ffffff; align-self: flex-end; background: rgba(255, 215, 0, 0.02); }
+.bubble-meta { font-size: 0.7rem; font-weight: bold; margin-bottom: 5px; display: flex; gap: 10px; }
 .bubble-jarvis .bubble-meta { color: var(--hud-cyan); }
 .bubble-user .bubble-meta { color: var(--gold); }
 .time-meta { color: rgba(255, 255, 255, 0.4); font-weight: normal; }
-.data-spec-item { font-size: 0.8rem; margin-bottom: 8px; display: flex; justify-content: space-between; }
 
-/* 7. ENTRADA DE INTERFAZ TERMINAL (FOOTER) */
-.hud-footer-input-bar {
-    grid-column: 1 / span 3;
+/* NUEVA CONSOLA DE ENTRADA INFERIOR (CON MINI-REACTOR INCLUIDO) */
+.hud-footer-console-area {
+    grid-column: 1 / span 2;
     display: flex;
-    flex-direction: column;
-    gap: 5px;
+    align-items: center;
+    gap: 20px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 215, 0, 0.1);
 }
 
-.input-console-wrapper {
+/* ACOPLAMIENTO DEL MINI REACTOR EN LA ESQUINA INFERIOR IZQUIERDA */
+.footer-mini-reactor-dock {
     display: flex;
-    background: rgba(0, 0, 0, 0.8);
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    width: 100px;
+}
+
+.mini-reactor-wrapper {
+    position: relative;
+    width: 75px;
+    height: 75px;
+    border: 1px dashed var(--crimson-border);
+    border-radius: 50%;
+    overflow: hidden;
+    background: #000000;
+}
+
+#canvas-mini-reactor {
+    width: 100% !important;
+    height: 100% !important;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.arc-ring-hologram-overlay {
+    position: absolute;
+    width: 67px;
+    height: 67px;
+    top: 3px;
+    left: 3px;
+    border: 1px double var(--gold-dim);
+    border-radius: 50%;
+    border-top-color: transparent;
+    border-bottom-color: transparent;
+    animation: spin 6s linear infinite;
+}
+
+.dock-label { font-size: 0.55rem; color: var(--hud-cyan); letter-spacing: 1px; font-weight: bold; }
+
+/* BARRA DE ESCRITURA EXTENDIDA */
+.input-console-wrapper {
+    flex: 1;
+    display: flex;
+    background: rgba(0, 0, 0, 0.9);
     border: 1px solid var(--crimson-border);
-    border-radius: 25px;
-    padding: 8px 20px;
+    border-radius: 6px;
+    padding: 12px 20px;
     align-items: center;
 }
 
@@ -199,59 +238,8 @@ body {
     outline: none;
     color: #ffffff;
     font-family: var(--font-stack);
-    font-size: 1rem;
+    font-size: 0.95rem;
 }
 
-.action-buttons-group { display: flex; gap: 10px; }
-.hud-btn {
-    background: transparent;
-    border: none;
-    color: var(--gold);
-    cursor: pointer;
-    font-size: 1.1rem;
-    transition: transform 0.2s;
-}
-.hud-btn:hover { transform: scale(1.1); }
-.footer-sub-branding { font-size: 0.6rem; color: var(--gold-dim); text-align: center; letter-spacing: 2px; margin-top: 5px; }
-
-/* 8. SUBSISTEMA DE RENDERIZACIÓN PARA MINI REACTOR DE TELEMETRÍA */
-.circular-reactor-container {
-    position: relative;
-    width: 120px;
-    height: 120px;
-    margin: 15px auto;
-    border: 1px dashed var(--crimson-border);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    background: rgba(0, 0, 0, 0.4);
-    box-shadow: 0 0 15px rgba(255, 122, 0, 0.1);
-}
-
-#canvas-mini-reactor {
-    width: 100% !important;
-    height: 100% !important;
-    position: absolute;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-}
-
-.arc-ring-hologram-overlay {
-    position: absolute;
-    width: 108px;
-    height: 108px;
-    border: 1px double var(--gold-dim);
-    border-radius: 50%;
-    border-top-color: transparent;
-    border-bottom-color: transparent;
-    animation: spin 8s linear infinite;
-    pointer-events: none;
-}
-
-@keyframes spin { 100% { transform: rotate(360deg); } }
-.status-summary-text { text-align: center; font-size: 0.75rem; line-height: 1.3; }
-.pulse-indicator-row { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--hud-cyan); }
-.pulse-dot { width: 8px; height: 8px; background: var(--hud-cyan); border-radius: 50%; box-shadow: 0 0 8px var(--hud-cyan); }
+.action-buttons-group { display: flex; gap: 15px; }
+.hud-btn { background: transparent; border: none; color: var(--gold); cursor: pointer; font-size: 1.1rem; }
