@@ -362,3 +362,118 @@ body {
 
 @keyframes spinPerimeter { 100% { transform: rotate(360deg); } }
 @keyframes pulseDot { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+
+
+/* ==========================================================================
+   NUEVA SECCIÓN EXCLUSIVA PARA CELULARES - AISLADA TOTALMENTE DE LA PC
+   ========================================================================== */
+@media screen and (max-width: 768px) {
+    
+    /* El contenedor maestro de la cuadrícula pasa de dos columnas horizontales a una sola línea vertical */
+    .hud-aligned-layout {
+        grid-template-columns: 1fr !important;
+        grid-template-rows: auto 1fr auto !important;
+        padding: 8px !important;
+        gap: 8px !important;
+        height: 100dvh !important; /* Ajuste reactivo para evitar solapamientos con el teclado táctil */
+        width: 100vw !important;
+        overflow: hidden !important;
+    }
+
+    /* Reducción simétrica y centrado estricto de la cabecera superior */
+    .hud-top-header-node {
+        grid-column: 1 !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        align-items: center !important;
+        padding: 6px 0 !important;
+    }
+
+    /* Remoción visual de las etiquetas laterales secundarias para evitar acumulaciones de texto */
+    .stark-left-tag, .stark-right-tag {
+        display: none !important;
+    }
+
+    .metallic-text {
+        font-size: 1.5rem !important; /* Fuente compacta equilibrada para smartphones */
+        letter-spacing: 3px !important;
+    }
+
+    .sub-system-tag {
+        font-size: 0.55rem !important;
+    }
+
+    /* SOLUCIÓN AL DESBORDAMIENTO: Ocultar los paneles izquierdos de Monitoreo e Historial en celulares */
+    .hud-sidebar-left-panels {
+        display: none !important; 
+    }
+
+    /* El chat toma ahora el control del espacio completo del viewport móvil */
+    .hud-workspace-right-stream {
+        grid-column: 1 !important;
+        width: 100% !important;
+        padding: 4px !important;
+        background: transparent !important;
+        border: none !important;
+        overflow-y: auto !important;
+    }
+
+    .conversation-viewport {
+        width: 100% !important;
+        gap: 14px !important;
+        padding-bottom: 15px !important;
+    }
+
+    /* Las burbujas se reajustan dinámicamente al ancho disponible en el dispositivo */
+    .chat-bubble {
+        max-width: 100% !important;
+        width: 100% !important;
+        gap: 8px !important;
+    }
+
+    /* El contenedor del mensaje se flexibiliza para no empujar la pantalla hacia la derecha */
+    .speech-bubble-envelope {
+        flex: 1 !important;
+        padding: 10px !important;
+        background: rgba(12, 2, 3, 0.95) !important;
+        word-break: break-word !important; /* Fragmentación segura de texto continuo */
+    }
+
+    .envelope-body {
+        font-size: 0.85rem !important;
+        line-height: 1.4 !important;
+    }
+
+    /* Ajuste dimensional de los avatares perimetrales */
+    .hologram-avatar-sphere {
+        width: 40px !important;
+        height: 40px !important;
+    }
+
+    /* Consola operativa inferior adaptada a entradas táctiles */
+    .hud-bottom-command-bar {
+        grid-column: 1 !important;
+        flex-direction: column !important;
+        gap: 4px !important;
+        padding-top: 4px !important;
+    }
+
+    .interactive-terminal-wrapper {
+        width: 100% !important;
+        padding: 8px 12px !important;
+    }
+
+    #terminal-command-input {
+        font-size: 0.85rem !important;
+    }
+
+    /* Centrado perimetral del cronómetro del sistema en la base del terminal */
+    .realtime-clock-display {
+        width: 100% !important;
+        justify-content: center !important;
+    }
+
+    .digital-time-string {
+        font-size: 0.8rem !important;
+    }
+}
