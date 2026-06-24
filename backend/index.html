@@ -2,146 +2,161 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>J·A·R·V·I·S — STARK INDUSTRIES</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>J.A.R.V.I.S. AI // STARK INDUSTRIES</title>
     <link rel="stylesheet" href="css/styles.css">
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-    <div id="hud-dark-background"></div>
+    <div id="hud-environment-container">
+        <div class="holographic-grid"></div>
+        <canvas id="particles-canvas"></canvas>
+        <div class="vignette-scanlines"></div>
+    </div>
 
-    <div id="hud-master-frame" class="hud-aligned-layout">
+    <main class="stark-hud-layout">
         
-        <header class="hud-top-header-node">
-            <div class="stark-left-tag">STARK INDUSTRIES // PROTOCOL V2</div>
-            
-            <div class="central-ia-branding">
-                <h1 class="metallic-text">J·A·R·V·I·S · AI</h1>
-                <div class="sub-system-tag">SYSTEM ONLINE // CORE_v2.5</div>
+        <header class="hud-header-node">
+            <div class="header-left-meta">
+                <span class="stark-branding"><i class="fa-solid fa-cube"></i> STARK INDUSTRIES</span>
+                <span class="system-protocol-tag">CORE_v2.5 // PROTOCOL_ONLINE</span>
             </div>
-            
-            <div class="stark-right-tag">SECURITY: EN ESPERA</div>
+            <div class="header-center-title">
+                <h1 class="hologram-text">J.A.R.V.I.S.</h1>
+                <div class="sub-status-bar">
+                    <span class="pulse-cyan-glow"></span> AI SYSTEM ONLINE
+                </div>
+            </div>
+            <div class="header-right-meta">
+                <div class="connection-status">
+                    <span class="stat-label">NET:</span>
+                    <span class="stat-value cian-glow">CONNECTED</span>
+                </div>
+                <div class="time-display">
+                    <i class="fa-regular fa-clock"></i> <span id="hud-live-clock">00:00:00 PM</span>
+                </div>
+            </div>
         </header>
 
-        <aside class="hud-sidebar-left-panels">
+        <section class="hud-sidebar-telemetry" id="sidebar-panel">
             
-            <section class="stark-panel-blueprint system-hardware-widget">
-                <div class="panel-header-title">
-                    <span class="pulse-cyan-dot"></span>
-                    <h3>MONITOREO DE SISTEMA</h3>
+            <div class="stark-glass-panel">
+                <div class="panel-header">
+                    <h3><i class="fa-solid fa-heart-pulse"></i> SYSTEM STATUS</h3>
+                    <span class="panel-tag">OPTIMAL</span>
                 </div>
-                <div class="blueprint-content-inner">
-                    <div class="metric-row">
-                        <span class="m-label">SISTEMA INTERFAZ</span>
-                        <span class="m-val cyan-text">ONLINE</span>
+                <div class="panel-body metrics-grid">
+                    <div class="metric-node">
+                        <span class="label">REACTOR ARC</span>
+                        <div class="progress-bar"><div class="fill fill-cyan" style="width: 100%;"></div></div>
+                        <span class="value">100%</span>
                     </div>
-                    <div class="metric-row">
-                        <span class="m-label">REACTOR ARC</span>
-                        <span class="m-val">100%</span>
+                    <div class="metric-node">
+                        <span class="label">CPU USAGE</span>
+                        <div class="progress-bar"><div class="fill fill-cyan" style="width: 32%;"></div></div>
+                        <span class="value">32%</span>
                     </div>
-                    <div class="metric-row">
-                        <span class="m-label">RED GLOBAL</span>
-                        <span class="m-val cyan-text">CONECTADO</span>
+                    <div class="metric-node">
+                        <span class="label">MEMORY RAM</span>
+                        <div class="progress-bar"><div class="fill fill-amber" style="width: 63%;"></div></div>
+                        <span class="value">63%</span>
                     </div>
-                    <div class="metric-row">
-                        <span class="m-label">CPU CENTRAL</span>
-                        <div class="blueprint-progress-track">
-                            <div class="blueprint-progress-fill" style="width: 32%;"></div>
-                        </div>
-                        <span class="m-val">32%</span>
-                    </div>
-                    <div class="metric-row">
-                        <span class="m-label">MEMORIA RAM</span>
-                        <div class="blueprint-progress-track">
-                            <div class="blueprint-progress-fill amber-fill" style="width: 68%;"></div>
-                        </div>
-                        <span class="m-val">68%</span>
+                    <div class="metric-node">
+                        <span class="label">AI CORE</span>
+                        <div class="progress-bar"><div class="fill fill-cyan" style="width: 99%;"></div></div>
+                        <span class="value">99.9%</span>
                     </div>
                 </div>
-            </section>
+            </div>
 
-            <section class="stark-panel-blueprint search-filter-widget">
-                <div class="search-flex-container">
-                    <input type="text" id="sidebar-search-field" placeholder="Buscar registros..." autocomplete="off">
-                    <span class="search-trigger-icon">🔍</span>
+            <div class="stark-glass-panel expand-flex">
+                <div class="panel-header">
+                    <h3><i class="fa-solid fa-folder-open"></i> CHAT LOGS</h3>
+                    <span class="panel-tag">SECURE</span>
                 </div>
-            </section>
-
-            <section class="stark-panel-blueprint system-chats-widget">
-                <div class="panel-header-title">
-                    <span class="pulse-cyan-dot"></span>
-                    <h3>HISTORIAL DE CHATS</h3>
-                </div>
-                <div id="chat-history-list" class="blueprint-scroll-container custom-scrollbar">
-                    <div class="chat-history-node active">
-                        <span class="node-bullet">❖</span>
-                        <div class="node-meta-group">
-                            <span class="node-title">Sesión de Diagnóstico</span>
-                            <span class="node-subtitle">Hoy — Realtime</span>
+                <div class="panel-body custom-scrollbar scrollable-logs">
+                    <div class="log-item active">
+                        <i class="fa-solid fa-message log-icon"></i>
+                        <div class="log-meta">
+                            <span class="log-title">Sesión de Diagnóstico</span>
+                            <span class="log-time">Hoy - Realtime</span>
                         </div>
                     </div>
-                    <div class="chat-history-node">
-                        <span class="node-bullet">❖</span>
-                        <div class="node-meta-group">
-                            <span class="node-title">Ajustes del Traje Mark 85</span>
-                            <span class="node-subtitle">Ayer — 06:15 PM</span>
+                    <div class="log-item">
+                        <i class="fa-solid fa-shield-halved log-icon"></i>
+                        <div class="log-meta">
+                            <span class="log-title">Ajustes del Traje Mark 85</span>
+                            <span class="log-time">Ayer - 06:48 PM</span>
                         </div>
                     </div>
-                    <div class="chat-history-node">
-                        <span class="node-bullet">❖</span>
-                        <div class="node-meta-group">
-                            <span class="node-title">Limpieza Registros de Red</span>
-                            <span class="node-subtitle">08 Jun 2026</span>
+                    <div class="log-item">
+                        <i class="fa-solid fa-server log-icon"></i>
+                        <div class="log-meta">
+                            <span class="log-title">Limpieza de Registros</span>
+                            <span class="log-time">08 Jun 2026</span>
                         </div>
                     </div>
                 </div>
-            </section>
+            </div>
+        </section>
 
-        </aside>
-
-        <main class="hud-workspace-right-stream">
-            <div id="chat-conversation-stream" class="conversation-viewport custom-scrollbar">
+        <section class="hud-center-viewport">
+            <div class="chat-stream-container custom-scrollbar" id="chat-messages-viewport">
                 
-                <article class="chat-bubble layout-jarvis">
-                    <div class="hologram-avatar-sphere">
-                        <div id="canvas-mini-reactor"></div>
-                        <div class="rotating-hud-perimeter-ring"></div>
+                <div class="message-row jarvis-alignment">
+                    <div class="avatar-wrapper">
+                        <div class="hologram-sphere-container">
+                            <div class="rotating-ring ring-1"></div>
+                            <div class="rotating-ring ring-2"></div>
+                            <div id="canvas-three-jarvis-core"></div>
+                        </div>
                     </div>
-                    <div class="speech-bubble-envelope">
-                        <div class="envelope-meta">JARVIS // SYSTEM_RESP</div>
-                        <p class="envelope-body">Buenos días, Señor. Me alegra verlo de nuevo. El sistema está funcionando dentro de parámetros normales. ¿Tiene algún asunto específico que desee abordar hoy o prefiere que yo inicie la sesión revisando los eventos pendientes?</p>
+                    <div class="speech-glass-bubble">
+                        <div class="bubble-header">JARVIS // SYSTEM_RESP <span class="timestamp">06:48 PM</span></div>
+                        <div class="bubble-body">
+                            Buenos días, Señor. Me alegra verlo de nuevo. El sistema está funcionando dentro de parámetros normales. ¿Tiene algún asunto específico que desee abordar hoy o prefiere que yo inicie la sesión revisando los eventos pendientes?
+                        </div>
                     </div>
-                </article>
+                </div>
 
-                <article class="chat-bubble layout-user">
-                    <div class="speech-bubble-envelope">
-                        <div class="envelope-meta">TÚ // CENTRAL_DIRECTOR</div>
-                        <p class="envelope-body">Un saludo informal, pero bienvenido, Señor. Parece que no hay nada urgente en su agenda. Mi recomendación sería revisar sus comunicaciones y notificaciones de la red en Render.</p>
+                <div class="message-row user-alignment">
+                    <div class="avatar-wrapper">
+                        <div class="user-arc-avatar">
+                            <div class="inner-arc-design"></div>
+                            <span class="user-txt">YO</span>
+                        </div>
                     </div>
-                    <div class="hologram-avatar-sphere user-sphere">
-                        <span class="user-initials-tag">YO</span>
+                    <div class="speech-glass-bubble">
+                        <div class="bubble-header">TÚ // CENTRAL_DIRECTOR <span class="timestamp">06:48 PM</span></div>
+                        <div class="bubble-body">
+                            Un saludo informal, pero bienvenido, Señor. Parece que no hay nada urgente en su agenda. Mi recomendación sería revisar sus comunicaciones y notificaciones de la red en Render.
+                        </div>
                     </div>
-                </article>
+                </div>
 
             </div>
-        </main>
+        </section>
 
-        <footer class="hud-bottom-command-bar">
-            <div class="interactive-terminal-wrapper">
-                <div class="terminal-indicator">STARK_SYS_></div>
-                <input type="text" id="terminal-command-input" placeholder="Hable o introduzca una instrucción secuencial, Señor..." autocomplete="off" spellcheck="false">
-                <button type="button" id="mic-activation-btn" class="terminal-action-icon">🎤</button>
-            </div>
-            <div class="realtime-clock-display">
-                <div class="clock-pulse-amber"></div>
-                <div id="sys-time-clock" class="digital-time-string">08:20:02 PM</div>
+        <footer class="hud-footer-console">
+            <div class="console-input-wrapper">
+                <span class="terminal-prompt">STARK_SYS_></span>
+                <input type="text" id="terminal-command-input" placeholder="Hable o introduzca una instrucción secuencial..." autocomplete="off">
+                <div class="console-actions">
+                    <button id="mic-trigger-btn" class="action-btn" title="Activar Entrada de Voz">
+                        <i class="fa-solid fa-microphone"></i>
+                    </button>
+                    <button id="send-command-btn" class="action-btn send-active" title="Transmitir Comando">
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                </div>
             </div>
         </footer>
 
-    </div>
+    </main>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="js/core.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>
