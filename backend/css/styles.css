@@ -1,479 +1,376 @@
 /* ==========================================================================
-   STARK INDUSTRIES INTERFACE SYSTEM — REALIGNED ARCHITECTURE V5.0
+   STARK INDUSTRIES HUD SYSTEM - ARCHITECTURE V6.0 PREMIUM
    ========================================================================== */
+
+:root {
+    --electric-blue: #0072ff;
+    --hologram-cyan: #00d4ff;
+    --cyan-glow: rgba(0, 212, 255, 0.25);
+    --cyan-glow-intense: rgba(0, 212, 255, 0.6);
+    --gold-amber: #ffb300;
+    --gold-glow: rgba(255, 179, 0, 0.3);
+    --stark-white: #f0faff;
+    --bg-dark-void: #02060d;
+    --glass-bg: rgba(4, 14, 26, 0.45);
+    --glass-border: rgba(0, 212, 255, 0.2);
+    --font-stark: 'Courier New', Courier, monospace;
+}
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Courier New', Courier, monospace;
-}
-
-:root {
-    --amber-gold: #FFB300;
-    --amber-glow: rgba(255, 179, 0, 0.35);
-    --hud-cyan: #00d4ff;
-    --hud-cyan-glow: rgba(0, 212, 255, 0.4);
-    --border-steel: #8B0000;
-    --bg-black: #030102;
+    font-family: var(--font-stark);
+    -webkit-font-smoothing: antialiased;
 }
 
 body {
-    background-color: var(--bg-black);
-    color: #FFFFFF;
+    background-color: var(--bg-dark-void);
+    color: var(--stark-white);
     width: 100vw;
     height: 100vh;
     overflow: hidden;
 }
 
-#hud-dark-background {
+/* ==========================================================================
+   AMBIENTE TRIDIMENSIONAL Y SCANNERS DE FONDO
+   ========================================================================== */
+#hud-environment-container {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: radial-gradient(circle at center, rgba(30, 5, 5, 0.15) 0%, #000000 100%);
     z-index: 1;
+    pointer-events: none;
 }
 
-/* MARCO MAESTRO: AJUSTE DE COLUMNAS DE DERECHA A IZQUIERDA */
-.hud-aligned-layout {
+.holographic-grid {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    background-position: center;
+    perspective: 500px;
+}
+
+#particles-canvas {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.vignette-scanlines {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at center, transparent 30%, rgba(1, 4, 10, 0.8) 100%),
+        linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0));
+    background-size: 100% 100%, 100% 4px, 6px 100%;
+}
+
+/* ==========================================================================
+   LAYOUT DEL MAESTRO HUD GRID (DISTRIBUCIÓN CINEMATOGRÁFICA)
+   ========================================================================== */
+.stark-hud-layout {
     position: relative;
     z-index: 10;
     width: 100vw;
     height: 100vh;
     display: grid;
-    grid-template-columns: 320px 1fr; /* REQUISITO 2: Panel lateral izquierdo fijo de 320px */
-    grid-template-rows: 90px 1fr 70px; /* Cabecera superior, cuerpo central y consola base */
-    padding: 15px;
-    gap: 15px;
+    grid-template-columns: 350px 1fr;
+    grid-template-rows: 80px 1fr 85px;
+    padding: 20px;
+    gap: 20px;
 }
 
-/* ===================================================================
-   REQUISITO 1: CABECERA INTEGRAL CON EL NOMBRE FIJADO EN EL CENTRO
-   =================================================================== */
-.hud-top-header-node {
-    grid-column: 1 / span 2; /* Cruza toda la pantalla horizontalmente */
+/* ==========================================================================
+   ENCABEZADO / HEADER SUPERIOR
+   ========================================================================== */
+.hud-header-node {
+    grid-column: 1 / span 2;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid rgba(139, 0, 0, 0.3);
-    padding: 0 10px;
+    border-bottom: 1px solid var(--glass-border);
+    background: rgba(2, 8, 15, 0.6);
+    backdrop-filter: blur(10px);
+    padding: 0 20px;
+    border-radius: 6px;
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.05);
 }
 
-.central-ia-branding {
-    text-align: center;
-}
+.header-left-meta { display: flex; flex-direction: column; gap: 4px; }
+.stark-branding { font-size: 0.95rem; font-weight: bold; color: var(--stark-white); letter-spacing: 2px; }
+.system-protocol-tag { font-size: 0.65rem; color: var(--hologram-cyan); opacity: 0.8; }
 
-.metallic-text {
+.header-center-title { text-align: center; }
+.hologram-text {
     font-size: 2.2rem;
     font-weight: 900;
-    color: #FFFFFF;
-    letter-spacing: 6px;
-    text-shadow: 
-        0px 1px 0px #B39200,
-        0px 2px 0px #806800,
-        0px 0px 15px var(--amber-glow);
+    letter-spacing: 12px;
+    color: #ffffff;
+    text-shadow: 0 0 10px var(--cyan-glow-intense), 0 0 20px rgba(0, 114, 255, 0.5);
+    margin-right: -12px;
 }
+.sub-status-bar { font-size: 0.65rem; letter-spacing: 4px; color: var(--hologram-cyan); display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 4px;}
+.pulse-cyan-glow { width: 6px; height: 6px; background: var(--hologram-cyan); border-radius: 50%; box-shadow: 0 0 8px var(--hologram-cyan); animation: pulse 2s infinite; }
 
-.sub-system-tag {
-    font-size: 0.65rem;
-    color: var(--amber-gold);
-    letter-spacing: 3px;
-    margin-top: 2px;
-}
+.header-right-meta { display: flex; align-items: center; gap: 30px; }
+.connection-status { font-size: 0.75rem; }
+.stat-label { color: rgba(255,255,255,0.4); }
+.stat-value.cian-glow { color: var(--hologram-cyan); text-shadow: 0 0 5px var(--cyan-glow-intense); font-weight: bold; }
+.time-display { font-size: 1rem; color: var(--gold-amber); text-shadow: 0 0 5px var(--gold-glow); font-weight: bold; }
 
-.stark-left-tag, .stark-right-tag {
-    font-size: 0.7rem;
-    color: rgba(255, 255, 255, 0.4);
-    letter-spacing: 1px;
-}
-
-/* ===================================================================
-   REQUISITO 2: CONFIGURACIÓN ESTRUCTURAL DE PANELES IZQUIERDOS
-   =================================================================== */
-.hud-sidebar-left-panels {
+/* ==========================================================================
+   PANEL LATERAL IZQUIERDO (GLASSMORPHISM INTEGRAL)
+   ========================================================================== */
+.hud-sidebar-telemetry {
     grid-column: 1;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 20px;
 }
 
-.stark-panel-blueprint {
-    background: rgba(10, 2, 3, 0.85);
-    border: 1px solid var(--border-steel);
-    border-radius: 4px;
-    padding: 12px;
-    box-shadow: inset 0 0 10px rgba(139, 0, 0, 0.15);
-}
-
-.panel-header-title {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    border-bottom: 1px dashed rgba(255, 179, 0, 0.25);
-    padding-bottom: 6px;
-    margin-bottom: 10px;
-}
-
-.panel-header-title h3 {
-    font-size: 0.75rem;
-    color: var(--amber-gold);
-    letter-spacing: 1.5px;
-}
-
-.pulse-cyan-dot {
-    width: 6px;
-    height: 6px;
-    background-color: var(--hud-cyan);
-    border-radius: 50%;
-    box-shadow: 0 0 6px var(--hud-cyan);
-}
-
-/* Elementos de Monitoreo Interno */
-.blueprint-content-inner {
+.stark-glass-panel {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 6px;
+    padding: 16px;
+    backdrop-filter: blur(12px);
+    box-shadow: inset 0 0 15px rgba(0, 212, 255, 0.05), 0 4px 20px rgba(0,0,0,0.5);
     display: flex;
     flex-direction: column;
-    gap: 8px;
 }
+.stark-glass-panel.expand-flex { flex: 1; overflow: hidden; }
 
-.metric-row {
+.panel-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: 0.72rem;
+    border-bottom: 1px dashed rgba(0, 212, 255, 0.2);
+    padding-bottom: 8px;
+    margin-bottom: 15px;
 }
+.panel-header h3 { font-size: 0.8rem; color: var(--hologram-cyan); letter-spacing: 2px; }
+.panel-tag { font-size: 0.6rem; background: rgba(0, 212, 255, 0.1); padding: 2px 6px; border-radius: 3px; border: 1px solid var(--glass-border); color: var(--hologram-cyan); }
 
-.cyan-text { color: var(--hud-cyan); }
+/* Métricas del Sistema */
+.metrics-grid { display: flex; flex-direction: column; gap: 12px; }
+.metric-node { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 0.7rem; }
+.metric-node .label { width: 85px; color: rgba(255,255,255,0.6); }
+.metric-node .value { width: 40px; text-align: right; font-weight: bold; color: var(--hologram-cyan); }
+.progress-bar { flex: 1; height: 5px; background: rgba(0,0,0,0.4); border-radius: 2px; border: 1px solid rgba(0, 212, 255, 0.1); overflow: hidden; }
+.progress-bar .fill { height: 100%; box-shadow: 0 0 5px rgba(0, 212, 255, 0.5); }
+.progress-bar .fill-cyan { background: var(--hologram-cyan); }
+.progress-bar .fill-amber { background: var(--gold-amber); box-shadow: 0 0 5px var(--gold-glow); }
 
-.blueprint-progress-track {
-    flex: 1;
-    height: 4px;
-    background: #000000;
-    margin: 0 10px;
-    border: 1px solid rgba(139, 0, 0, 0.4);
-    border-radius: 2px;
-}
-
-.blueprint-progress-fill {
-    height: 100%;
-    background: var(--hud-cyan);
-}
-.blueprint-progress-fill.amber-fill {
-    background: var(--amber-gold);
-}
-
-/* Caja de Búsqueda */
-.search-flex-container {
+/* Historial Log Items */
+.scrollable-logs { flex: 1; display: flex; flex-direction: column; gap: 8px; padding-right: 4px; }
+.log-item {
     display: flex;
     align-items: center;
-    background: #000000;
-    border: 1px solid var(--border-steel);
-    padding: 6px 10px;
+    gap: 12px;
+    padding: 10px;
     border-radius: 4px;
-}
-
-#sidebar-search-field {
-    background: transparent;
-    border: none;
-    outline: none;
-    color: #FFFFFF;
-    width: 100%;
-    font-size: 0.75rem;
-}
-
-.search-trigger-icon {
-    cursor: pointer;
-    font-size: 0.75rem;
-}
-
-/* Lista del Historial de Chats */
-.blueprint-scroll-container {
-    max-height: 200px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.chat-history-node {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 6px;
     border: 1px solid transparent;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: all 0.25s ease;
 }
-
-.chat-history-node.active {
-    background: rgba(255, 179, 0, 0.05);
-    border-color: var(--amber-gold);
+.log-item:hover, .log-item.active {
+    background: rgba(0, 114, 255, 0.1);
+    border-color: rgba(0, 212, 255, 0.3);
 }
+.log-icon { font-size: 0.85rem; color: var(--hologram-cyan); }
+.log-meta { display: flex; flex-direction: column; gap: 2px; }
+.log-title { font-size: 0.75rem; color: #ffffff; }
+.log-time { font-size: 0.6rem; color: rgba(255,255,255,0.4); }
 
-.node-bullet {
-    color: var(--border-steel);
-    font-size: 0.65rem;
-}
-.chat-history-node.active .node-bullet {
-    color: var(--amber-gold);
-}
-
-.node-meta-group { display: flex; flex-direction: column; }
-.node-title { font-size: 0.75rem; color: #FFFFFF; }
-.node-subtitle { font-size: 0.65rem; color: rgba(255, 255, 255, 0.4); }
-
-/* ===================================================================
-   ZONA CENTRAL DE CONVERSACIÓN (FLUJO DINÁMICO DERECHO)
-   =================================================================== */
-.hud-workspace-right-stream {
+/* ==========================================================================
+   VIEWPORT CENTRAL: FLUJO DE MENSAJES DE CONVERSACIÓN
+   ========================================================================== */
+.hud-center-viewport {
     grid-column: 2;
-    background: rgba(5, 1, 2, 0.3);
-    border: 1px solid rgba(139, 0, 0, 0.15);
-    border-radius: 4px;
+    background: rgba(2, 6, 12, 0.3);
+    border: 1px solid rgba(0, 212, 255, 0.08);
+    border-radius: 6px;
     padding: 20px;
     overflow: hidden;
 }
 
-.conversation-viewport {
+.chat-stream-container {
     height: 100%;
     display: flex;
     flex-direction: column;
     gap: 25px;
 }
 
-.chat-bubble {
+.message-row {
     display: flex;
-    gap: 15px;
-    max-width: 80%;
+    gap: 16px;
+    max-width: 82%;
     align-items: flex-start;
 }
+.jarvis-alignment { align-self: flex-start; }
+.user-alignment { align-self: flex-end; flex-direction: row-reverse; }
 
-/* Burbuja JARVIS: Alineada a la Derecha de la ventana */
-.layout-jarvis {
-    align-self: flex-end;
-    flex-direction: row-reverse;
+/* Burbujas Glassmorphic */
+.speech-glass-bubble {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    padding: 16px;
+    border-radius: 8px;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3), inset 0 0 10px rgba(0, 212, 255, 0.03);
+    transition: border-color 0.3s;
+}
+.message-row:hover .speech-glass-bubble {
+    border-color: rgba(0, 212, 255, 0.4);
+    box-shadow: 0 0 12px rgba(0, 212, 255, 0.15), inset 0 0 10px rgba(0, 212, 255, 0.05);
 }
 
-/* Burbuja USUARIO (TÚ): Alineada a la Izquierda de la ventana */
-.layout-user {
-    align-self: flex-start;
-}
+.bubble-header { font-size: 0.7rem; font-weight: bold; margin-bottom: 8px; letter-spacing: 1px; display: flex; justify-content: space-between; gap: 15px; }
+.jarvis-alignment .bubble-header { color: var(--hologram-cyan); }
+.user-alignment .bubble-header { color: var(--gold-amber); }
+.timestamp { color: rgba(255,255,255,0.3); font-weight: normal; }
+.bubble-body { font-size: 0.88rem; line-height: 1.6; color: rgba(240, 250, 255, 0.9); }
 
-.speech-bubble-envelope {
-    background: rgba(12, 2, 3, 0.9);
-    border: 1px solid var(--border-steel);
-    padding: 15px;
-    border-radius: 6px;
-    box-shadow: inset 0 0 12px rgba(139, 0, 0, 0.15);
-}
+/* ==========================================================================
+   AVATARES AVANZADOS DE RED DESIGN
+   ========================================================================== */
+.avatar-wrapper { flex-shrink: 0; }
 
-.envelope-meta {
-    font-size: 0.7rem;
-    font-weight: bold;
-    margin-bottom: 6px;
-    letter-spacing: 1px;
-}
-.layout-jarvis .envelope-meta { color: var(--hud-cyan); }
-.layout-user .envelope-meta { color: var(--amber-gold); }
-.envelope-body { font-size: 0.85rem; line-height: 1.5; color: #E5E5E5; }
-
-/* ESFERAS HOLOGRÁFICAS DE AVATAR */
-.hologram-avatar-sphere {
-    width: 55px;
-    height: 55px;
+/* Avatar Holográfico de J.A.R.V.I.S. */
+.hologram-sphere-container {
+    width: 50px;
+    height: 50px;
     position: relative;
-    flex-shrink: 0;
-    background: #000000;
-    border: 1px solid var(--border-steel);
+    background: rgba(0,0,0,0.5);
     border-radius: 50%;
+    border: 1px solid rgba(0, 212, 255, 0.2);
 }
-
-#canvas-mini-reactor {
-    width: 100%;
-    height: 100%;
+#canvas-three-jarvis-core { width: 100%; height: 100%; position: absolute; border-radius: 50%; overflow: hidden;}
+.rotating-ring {
     position: absolute;
+    top: -3px; left: -3px; right: -3px; bottom: -3px;
+    border: 1px dashed var(--hologram-cyan);
     border-radius: 50%;
+    opacity: 0.4;
 }
+.ring-1 { animation: spin 12s linear infinite; }
+.ring-2 { top: -6px; left: -6px; right: -6px; bottom: -6px; border: 1px dotted var(--electric-blue); animation: spin-reverse 8s linear infinite; opacity: 0.2; }
 
-.rotating-hud-perimeter-ring {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border: 1.5px dashed var(--hud-cyan);
+/* Avatar del Usuario: Estilo Reactor Arc */
+.user-arc-avatar {
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
-    animation: spinPerimeter 10s linear infinite;
-}
-
-.user-sphere {
-    background: rgba(58, 0, 3, 0.7);
-    border-color: var(--amber-gold);
+    border: 2px solid var(--gold-amber);
+    background: rgba(40, 25, 2, 0.4);
+    box-shadow: 0 0 10px var(--gold-glow);
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
 }
-.user-initials-tag { font-size: 0.75rem; font-weight: bold; color: var(--amber-gold); }
+.inner-arc-design {
+    position: absolute;
+    width: 82%;
+    height: 82%;
+    border: 1px dashed rgba(255, 179, 0, 0.5);
+    border-radius: 50%;
+    animation: spin 20s linear infinite;
+}
+.user-txt { font-size: 0.75rem; font-weight: 900; color: var(--gold-amber); z-index: 2; letter-spacing: 0.5px; }
 
-/* ===================================================================
-   SISTEMA DE BARRAS DE DESPLAZAMIENTO (SCROLLBARS VISIBLES)
-   =================================================================== */
-.custom-scrollbar {
-    overflow-y: scroll !important;
-}
-.custom-scrollbar::-webkit-scrollbar {
-    width: 5px !important;
-    display: block !important;
-}
-.custom-scrollbar::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.6);
-}
-.custom-scrollbar::-webkit-scrollbar-thumb {
-    background: var(--amber-gold);
-    border-radius: 3px;
-}
-
-/* CONSOLA DE BASE CORRIDA */
-.hud-bottom-command-bar {
+/* ==========================================================================
+   CONSOLA DE ENTRADA INFERIOR (COMMAND LINE)
+   ========================================================================== */
+.hud-footer-console {
     grid-column: 1 / span 2;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    border-top: 1px solid rgba(139, 0, 0, 0.3);
-    padding-top: 10px;
-    gap: 20px;
 }
 
-.interactive-terminal-wrapper {
-    flex: 1;
+.console-input-wrapper {
+    width: 100%;
     display: flex;
-    background: #000000;
-    border: 1px solid var(--border-steel);
-    padding: 10px 15px;
     align-items: center;
-    border-radius: 4px;
+    background: rgba(1, 6, 13, 0.8);
+    border: 1px solid var(--glass-border);
+    padding: 12px 20px;
+    border-radius: 6px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.05);
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+.console-input-wrapper:focus-within {
+    border-color: rgba(0, 212, 255, 0.5);
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.15);
 }
 
-.terminal-indicator { color: var(--amber-gold); margin-right: 12px; font-weight: bold; font-size: 0.85rem; }
-#terminal-command-input { background: transparent; border: none; outline: none; color: #FFFFFF; flex: 1; font-size: 0.9rem; }
-.terminal-action-icon { background: transparent; border: none; color: var(--amber-gold); cursor: pointer; font-size: 1rem; }
+.terminal-prompt { color: var(--gold-amber); font-weight: bold; font-size: 0.85rem; margin-right: 15px; letter-spacing: 1px; }
+#terminal-command-input { flex: 1; background: transparent; border: none; outline: none; color: #ffffff; font-size: 0.95rem; letter-spacing: 0.5px; }
+#terminal-command-input::placeholder { color: rgba(240, 250, 255, 0.3); }
 
-.realtime-clock-display { display: flex; align-items: center; gap: 10px; min-width: 140px; justify-content: flex-end; }
-.clock-pulse-amber { width: 6px; height: 6px; background: var(--amber-gold); border-radius: 50%; box-shadow: 0 0 6px var(--amber-gold); animation: pulseDot 2s infinite; }
-.digital-time-string { font-size: 1.1rem; font-weight: bold; color: var(--amber-gold); text-shadow: 0px 1px 2px rgba(0,0,0,0.8); }
-
-@keyframes spinPerimeter { 100% { transform: rotate(360deg); } }
-@keyframes pulseDot { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
-
+.console-actions { display: flex; gap: 12px; align-items: center; }
+.action-btn { background: transparent; border: none; color: rgba(255,255,255,0.4); font-size: 1.1rem; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; cursor: pointer; border-radius: 4px; transition: all 0.2s; }
+.action-btn:hover { color: var(--hologram-cyan); background: rgba(0, 212, 255, 0.08); }
+.action-btn.send-active { color: var(--hologram-cyan); text-shadow: 0 0 8px var(--cyan-glow-intense); }
 
 /* ==========================================================================
-   NUEVA SECCIÓN EXCLUSIVA PARA CELULARES - AISLADA TOTALMENTE DE LA PC
+   SCROLLBAR REOPTIMIZADO
    ========================================================================== */
-@media screen and (max-width: 768px) {
+.custom-scrollbar { overflow-y: auto; }
+.custom-scrollbar::-webkit-scrollbar { width: 4px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(0, 212, 255, 0.2); border-radius: 2px; }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: var(--hologram-cyan); }
+
+/* ==========================================================================
+   ANIMACIONES CORE
+   ========================================================================== */
+@keyframes spin { 100% { transform: rotate(360deg); } }
+@keyframes spin-reverse { 100% { transform: rotate(-360deg); } }
+@keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+
+/* ==========================================================================
+   ARQUITECTURA DE ADAPTACIÓN RESPONSIVA (MOBILE PROTOCOL)
+   ========================================================================== */
+@media screen and (max-width: 900px) {
+    .stark-hud-layout {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr auto;
+        padding: 10px;
+        gap: 12px;
+    }
     
-    /* El contenedor maestro de la cuadrícula pasa de dos columnas horizontales a una sola línea vertical */
-    .hud-aligned-layout {
-        grid-template-columns: 1fr !important;
-        grid-template-rows: auto 1fr auto !important;
-        padding: 8px !important;
-        gap: 8px !important;
-        height: 100dvh !important; /* Ajuste reactivo para evitar solapamientos con el teclado táctil */
-        width: 100vw !important;
-        overflow: hidden !important;
+    .hud-header-node {
+        grid-column: 1;
+        padding: 10px;
     }
+    .header-left-meta, .header-right-meta .connection-status { display: none; }
+    .hologram-text { font-size: 1.6rem; letter-spacing: 6px; }
 
-    /* Reducción simétrica y centrado estricto de la cabecera superior */
-    .hud-top-header-node {
-        grid-column: 1 !important;
-        flex-direction: column !important;
-        justify-content: center !important;
-        align-items: center !important;
-        padding: 6px 0 !important;
+    /* Ocultar el panel lateral izquierdo por completo en móvil */
+    .hud-sidebar-telemetry { display: none; }
+    
+    .hud-center-viewport {
+        grid-column: 1;
+        padding: 12px;
+        background: transparent;
+        border: none;
     }
-
-    /* Remoción visual de las etiquetas laterales secundarias para evitar acumulaciones de texto */
-    .stark-left-tag, .stark-right-tag {
-        display: none !important;
-    }
-
-    .metallic-text {
-        font-size: 1.5rem !important; /* Fuente compacta equilibrada para smartphones */
-        letter-spacing: 3px !important;
-    }
-
-    .sub-system-tag {
-        font-size: 0.55rem !important;
-    }
-
-    /* SOLUCIÓN AL DESBORDAMIENTO: Ocultar los paneles izquierdos de Monitoreo e Historial en celulares */
-    .hud-sidebar-left-panels {
-        display: none !important; 
-    }
-
-    /* El chat toma ahora el control del espacio completo del viewport móvil */
-    .hud-workspace-right-stream {
-        grid-column: 1 !important;
-        width: 100% !important;
-        padding: 4px !important;
-        background: transparent !important;
-        border: none !important;
-        overflow-y: auto !important;
-    }
-
-    .conversation-viewport {
-        width: 100% !important;
-        gap: 14px !important;
-        padding-bottom: 15px !important;
-    }
-
-    /* Las burbujas se reajustan dinámicamente al ancho disponible en el dispositivo */
-    .chat-bubble {
-        max-width: 100% !important;
-        width: 100% !important;
-        gap: 8px !important;
-    }
-
-    /* El contenedor del mensaje se flexibiliza para no empujar la pantalla hacia la derecha */
-    .speech-bubble-envelope {
-        flex: 1 !important;
-        padding: 10px !important;
-        background: rgba(12, 2, 3, 0.95) !important;
-        word-break: break-word !important; /* Fragmentación segura de texto continuo */
-    }
-
-    .envelope-body {
-        font-size: 0.85rem !important;
-        line-height: 1.4 !important;
-    }
-
-    /* Ajuste dimensional de los avatares perimetrales */
-    .hologram-avatar-sphere {
-        width: 40px !important;
-        height: 40px !important;
-    }
-
-    /* Consola operativa inferior adaptada a entradas táctiles */
-    .hud-bottom-command-bar {
-        grid-column: 1 !important;
-        flex-direction: column !important;
-        gap: 4px !important;
-        padding-top: 4px !important;
-    }
-
-    .interactive-terminal-wrapper {
-        width: 100% !important;
-        padding: 8px 12px !important;
-    }
-
-    #terminal-command-input {
-        font-size: 0.85rem !important;
-    }
-
-    /* Centrado perimetral del cronómetro del sistema en la base del terminal */
-    .realtime-clock-display {
-        width: 100% !important;
-        justify-content: center !important;
-    }
-
-    .digital-time-string {
-        font-size: 0.8rem !important;
-    }
-}
+    .message-row { max-width: 100%; width: 100%; }
+    .speech-glass-bubble { padding: 12px; }
+    
+    .hud-footer-console { grid-column: 1; }
+    .console-input-wrapper { padding: 10px 14px; }
+    .terminal-prompt { font-size: 0.75rem; margin-right: 8px; }
+    #terminal-command-input { font-size: 0.85rem; }
+       }
+             
