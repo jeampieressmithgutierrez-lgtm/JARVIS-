@@ -1,117 +1,77 @@
-/**
- * =========================================================================
- * STARK INDUSTRIES CORE LOGIC
- * SUBSISTEMA: GESTOR DE COMUNICACIONES TERMINAL INTERACTIVA
- * PROYECTO: J.A.R.V.I.S. AI LÓGICA MÓDULO
- * COMPLEJIDAD: +200 LÍNEAS BASADAS EN GESTIÓN DE EVENTOS DE ENTRADA Y SALIDA
- * =========================================================================
- */
+/* ==========================================================================
+   STARK INDUSTRIES AVATAR CORE — THREE.JS GRAPHICS ENGINE
+   ========================================================================== */
 
-class JarvisSystemController {
-    constructor() {
-        this.inputField = document.getElementById('terminal-command-input');
-        this.sendButton = document.getElementById('submit-command-btn');
-        this.chatStream = document.getElementById('chat-conversation-stream');
-        this.systemStatusText = document.getElementById('system-status');
-        
-        this.initSystemListeners();
-        this.triggerSystemWelcomeTrace();
-    }
+document.addEventListener("DOMContentLoaded", () => {
+    initJarvisThreeCore();
+    scrollToLatestMessage();
+});
 
-    initSystemListeners() {
-        if (!this.inputField || !this.sendButton) return;
+// CONTROLADOR GRÁFICO 3D EN TIEMPO REAL
+function initJarvisThreeCore() {
+    const container = document.getElementById("canvas-three-jarvis-core");
+    if (!container) return;
 
-        // Captura de envío por pulsación de teclado Enter
-        this.inputField.addEventListener('keydown', (event) => {
-            if (event.key === 'Enter') {
-                this.handleUserCommandTransmission();
-            }
-        });
+    // Configuración Base de Escena Táctica
+    const scene = new THREE.Scene();
+    
+    // Cámara
+    const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 100);
+    camera.position.z = 2.5;
 
-        // Captura por clic físico en el botón de transmisión vectorial
-        this.sendButton.addEventListener('click', () => {
-            this.handleUserCommandTransmission();
-        });
-    }
+    // Renderizador Ultraligero con Transparencia Estricta
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    container.appendChild(renderer.domElement);
 
-    triggerSystemWelcomeTrace() {
-        console.log("[JARVIS-CORE]: Vinculación neural establecida.");
-        this.updateSystemHUDIndicator("OPERATIVO", "positive");
-    }
+    // Geometría Esférica de Alta Densidad Metálica
+    const geometry = new THREE.IcosahedronGeometry(1, 2);
+    
+    // Material de Alambre Táctico Cian con Brillo Propio
+    const material = new THREE.MeshBasicMaterial({
+        color: 0x00d4ff,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.65
+    });
 
-    handleUserCommandTransmission() {
-        const rawQuery = this.inputField.value;
-        if (rawQuery.trim() === "") return;
+    const coreMesh = new THREE.Mesh(geometry, material);
+    scene.add(coreMesh);
 
-        // Despliegue inmediato del mensaje del usuario en el HUD
-        this.injectMessageToHUD("TÚ", rawQuery, "user");
-        this.inputField.value = "";
-        
-        this.updateSystemHUDIndicator("PROCESANDO...", "neutral");
+    // Bucle de Animación de Rotación Cinemática
+    const animateCore = () => {
+        requestAnimationFrame(animateCore);
 
-        // Simulación de latencia de red heurística para la respuesta de la IA
-        setTimeout(() => {
-            this.executeHeuristicAIAnalysis(rawQuery);
-        }, 1000);
-    }
+        // Rotación multiaxial constante
+        coreMesh.rotation.x += 0.006;
+        coreMesh.rotation.y += 0.009;
 
-    executeHeuristicAIAnalysis(query) {
-        let responseText = "Comando no reconocido en la base de datos central Stark. Analizando vectores alternativos, Señor.";
-        const clearQuery = query.toLowerCase();
+        // Microescala pulsante sutil simulando actividad neuronal
+        const time = Date.now() * 0.002;
+        const scaleFactor = 1 + Math.sin(time) * 0.04;
+        coreMesh.scale.set(scaleFactor, scaleFactor, scaleFactor);
 
-        // Respuestas del Sistema Integrado
-        if (clearQuery.includes('hola') || clearQuery.includes('buenos dias')) {
-            responseText = "Hola de nuevo, Señor. Todos los sistemas del traje y los servidores en la nube están estables. ¿Desea ejecutar algún protocolo defensivo o de diagnóstico?";
-        } else if (clearQuery.includes('status') || clearQuery.includes('estado')) {
-            responseText = "El Reactor Arc reporta 100% de carga. La temperatura de los núcleos es de 32 grados Celsius. Todo en orden.";
-        } else if (clearQuery.includes('limpia') || clearQuery.includes('clear')) {
-            this.chatStream.innerHTML = "";
-            responseText = "Consola de comunicación purgada con éxito, Señor.";
-        }
+        renderer.render(scene, camera);
+    };
 
-        this.injectMessageToHUD("JARVIS", responseText, "jarvis");
-        this.updateSystemHUDIndicator("ONLINE", "positive");
-    }
+    animateCore();
 
-    injectMessageToHUD(senderName, messageText, senderType) {
-        if (!this.chatStream) return;
-
-        const date = new Date();
-        const timeString = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-        const bubbleContainer = document.createElement('div');
-        bubbleContainer.className = `chat-bubble bubble-${senderType}`;
-
-        const metaDiv = document.createElement('div');
-        metaDiv.className = "bubble-meta";
-        metaDiv.innerHTML = `${senderName} <span class="time-meta">${timeString}</span>`;
-
-        const paragraphText = document.createElement('p');
-        paragraphText.className = "bubble-text";
-        paragraphText.innerText = messageText;
-
-        bubbleContainer.appendChild(metaDiv);
-        bubbleContainer.appendChild(paragraphText);
-        
-        this.chatStream.appendChild(bubbleContainer);
-
-        // Desplazamiento automático vertical para simular el scroll infinito de la foto
-        this.chatStream.scrollTop = this.chatStream.scrollHeight;
-    }
-
-    updateSystemHUDIndicator(statusText, stateType) {
-        if (!this.systemStatusText) return;
-        this.systemStatusText.innerText = `SISTEMA: ${statusText}`;
-        
-        if (stateType === "positive") {
-            this.systemStatusText.style.color = "#00d4ff";
-        } else {
-            this.systemStatusText.style.color = "#FFD700";
-        }
-    }
+    // Resize Observer para garantizar responsividad del Avatar
+    const resizeObserver = new ResizeObserver(() => {
+        const width = container.clientWidth;
+        const height = container.clientHeight;
+        renderer.setSize(width, height);
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+    });
+    resizeObserver.observe(container);
 }
 
-// Carga e inicialización global
-window.addEventListener('DOMContentLoaded', () => {
-    window.JarvisControllerInstance = new JarvisSystemController();
-});
+// Asegurar scroll automático hacia el último mensaje transmitido
+function scrollToLatestMessage() {
+    const viewport = document.getElementById("chat-messages-viewport");
+    if (viewport) {
+        viewport.scrollTop = viewport.scrollHeight;
+    }
+}
