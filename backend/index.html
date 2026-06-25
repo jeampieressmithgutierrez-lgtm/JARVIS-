@@ -2,161 +2,312 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>J.A.R.V.I.S. AI // STARK INDUSTRIES</title>
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STARK INDUSTRIES // JARVIS AI // PROTOCOL V2</title>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --stark-cyan: #00f0ff;
+            --stark-blue-dark: #0a1118;
+            --stark-blue-panel: rgba(10, 25, 40, 0.65);
+            --stark-amber: #ff8c00;
+            --stark-gold: #ffb300;
+            --stark-border: rgba(0, 240, 255, 0.25);
+            --stark-amber-border: rgba(255, 140, 0, 0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--stark-blue-dark);
+            color: var(--stark-cyan);
+            font-family: 'Share Tech Mono', monospace;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* HEADER DE PROTOCOLO */
+        header {
+            border-bottom: 2px solid var(--stark-border);
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(180deg, rgba(0,240,255,0.05) 0%, rgba(0,0,0,0) 100%);
+        }
+
+        .brand {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            letter-spacing: 4px;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+        }
+
+        .system-status {
+            font-size: 1rem;
+            color: var(--stark-gold);
+            text-shadow: 0 0 8px rgba(255, 179, 0, 0.4);
+        }
+
+        /* CONTENEDOR PRINCIPAL */
+        .main-container {
+            display: flex;
+            flex: 1;
+            padding: 20px;
+            gap: 20px;
+            overflow: hidden;
+        }
+
+        /* PANELES LATERALES (IZQUIERDO Y DERECHO) */
+        .side-panel {
+            width: 320px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .stark-panel {
+            background: var(--stark-blue-panel);
+            border: 1px solid var(--stark-border);
+            border-radius: 6px;
+            padding: 15px;
+            box-shadow: inset 0 0 15px rgba(0, 240, 255, 0.1);
+        }
+
+        .panel-header {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 1px solid var(--stark-border);
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+            color: #ffffff;
+        }
+
+        /* MONITOREO TÁCTICO */
+        .metric-group {
+            margin-bottom: 12px;
+        }
+        .metric-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            margin-bottom: 4px;
+        }
+        .progress-bar-bg {
+            background: rgba(0, 240, 255, 0.1);
+            height: 6px;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            background: var(--stark-cyan);
+            height: 100%;
+            box-shadow: 0 0 8px var(--stark-cyan);
+        }
+
+        /* HISTORIAL DE CHATS */
+        .chat-history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .history-item {
+            padding: 10px;
+            border: 1px solid rgba(0, 240, 255, 0.15);
+            background: rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+        .history-item:hover, .history-item.active {
+            border-color: var(--stark-cyan);
+            background: rgba(0, 240, 255, 0.08);
+        }
+        .history-item h4 { font-size: 0.9rem; color: #fff; }
+        .history-item span { font-size: 0.75rem; color: rgba(0, 240, 255, 0.6); }
+
+        /* CONTENEDOR CENTRAL (NÚCLEO + CHAT) */
+        .center-workspace {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            overflow: hidden;
+        }
+
+        /* VISTA DEL NÚCLEO HOLOGRÁFICO ÁMBAR */
+        .hologram-viewport-container {
+            height: 40%;
+            min-height: 220px;
+            background: radial-gradient(circle, rgba(255,140,0,0.08) 0%, rgba(0,0,0,0.3) 70%);
+            border: 1px solid var(--stark-amber-border);
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Div Crítico donde se inyecta WebGL/Three.js */
+        #canvas-three-jarvis-core {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        .hologram-overlay-text {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 0.8rem;
+            color: var(--stark-gold);
+            letter-spacing: 2px;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* ÁREA DE INTERFACES DE CHAT */
+        .chat-interface-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--stark-border);
+            background: rgba(5, 15, 25, 0.8);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        /* Viewport crítico para scroll automático */
+        #chat-messages-viewport {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        /* Estilos de burbujas basados en las capturas de pantalla */
+        .msg-row {
+            display: flex;
+            width: 100%;
+        }
+        .msg-row.jarvis-row { justify-content: flex-start; }
+        .msg-row.user-row { justify-content: flex-end; }
+
+        .msg-box {
+            max-width: 75%;
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+        .jarvis-row .msg-box {
+            background: rgba(0, 240, 255, 0.06);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            color: #e0f7fc;
+        }
+        .user-row .msg-box {
+            background: rgba(255, 179, 0, 0.06);
+            border: 1px solid rgba(255, 179, 0, 0.3);
+            color: #fff3e0;
+        }
+        .msg-meta {
+            font-size: 0.75rem;
+            margin-bottom: 4px;
+            opacity: 0.7;
+            display: block;
+        }
+
+        /* PANEL DE ENTRADA / COMANDOS */
+        .input-command-bar {
+            padding: 15px;
+            border-top: 1px solid var(--stark-border);
+            display: flex;
+            gap: 12px;
+            background: rgba(0,0,0,0.4);
+        }
+
+        .input-command-bar input {
+            flex: 1;
+            background: rgba(0, 240, 255, 0.05);
+            border: 1px solid var(--stark-border);
+            padding: 12px 16px;
+            color: #fff;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1rem;
+            border-radius: 4px;
+            outline: none;
+        }
+        .input-command-bar input:focus {
+            border-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+        }
+
+        .stark-btn {
+            background: transparent;
+            border: 1px solid var(--stark-border);
+            color: var(--stark-cyan);
+            padding: 0 20px;
+            font-family: 'Share Tech Mono', monospace;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+        .stark-btn:hover {
+            background: var(--stark-cyan);
+            color: var(--stark-blue-dark);
+            box-shadow: 0 0 12px var(--stark-cyan);
+        }
+
+        /* Scrollbar Personalizado */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--stark-border); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--stark-cyan); }
+    </style>
 </head>
 <body>
 
-    <div id="hud-environment-container">
-        <div class="holographic-grid"></div>
-        <canvas id="particles-canvas"></canvas>
-        <div class="vignette-scanlines"></div>
-    </div>
+    <header>
+        <div class="brand">STARK INDUSTRIES // J.A.R.V.I.S. AI</div>
+        <div class="system-status">SYSTEM ONLINE // CORE_v2.5</div>
+    </header>
 
-    <main class="stark-hud-layout">
+    <div class="main-container">
         
-        <header class="hud-header-node">
-            <div class="header-left-meta">
-                <span class="stark-branding"><i class="fa-solid fa-cube"></i> STARK INDUSTRIES</span>
-                <span class="system-protocol-tag">CORE_v2.5 // PROTOCOL_ONLINE</span>
-            </div>
-            <div class="header-center-title">
-                <h1 class="hologram-text">J.A.R.V.I.S.</h1>
-                <div class="sub-status-bar">
-                    <span class="pulse-cyan-glow"></span> AI SYSTEM ONLINE
+        <div class="side-panel">
+            <div class="stark-panel">
+                <div class="panel-header">Monitoreo de Sistema</div>
+                <div class="metric-group">
+                    <div class="metric-label"><span>SISTEMA INTERFAZ</span><span style="color:var(--stark-cyan)">ONLINE</span></div>
+                    <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 100%"></div></div>
                 </div>
-            </div>
-            <div class="header-right-meta">
-                <div class="connection-status">
-                    <span class="stat-label">NET:</span>
-                    <span class="stat-value cian-glow">CONNECTED</span>
+                <div class="metric-group">
+                    <div class="metric-label"><span>REACTOR ARC</span><span>100%</span></div>
+                    <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 100%; background: var(--stark-gold); box-shadow: 0 0 8px var(--stark-gold);"></div></div>
                 </div>
-                <div class="time-display">
-                    <i class="fa-regular fa-clock"></i> <span id="hud-live-clock">00:00:00 PM</span>
+                <div class="metric-group">
+                    <div class="metric-label"><span>RED GLOBAL</span><span style="color:var(--stark-cyan)">CONECTADO</span></div>
+                    <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 100%"></div></div>
                 </div>
-            </div>
-        </header>
-
-        <section class="hud-sidebar-telemetry" id="sidebar-panel">
-            
-            <div class="stark-glass-panel">
-                <div class="panel-header">
-                    <h3><i class="fa-solid fa-heart-pulse"></i> SYSTEM STATUS</h3>
-                    <span class="panel-tag">OPTIMAL</span>
+                <div class="metric-group">
+                    <div class="metric-label"><span>CPU CENTRAL</span><span>32%</span></div>
+                    <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 32%"></div></div>
                 </div>
-                <div class="panel-body metrics-grid">
-                    <div class="metric-node">
-                        <span class="label">REACTOR ARC</span>
-                        <div class="progress-bar"><div class="fill fill-cyan" style="width: 100%;"></div></div>
-                        <span class="value">100%</span>
-                    </div>
-                    <div class="metric-node">
-                        <span class="label">CPU USAGE</span>
-                        <div class="progress-bar"><div class="fill fill-cyan" style="width: 32%;"></div></div>
-                        <span class="value">32%</span>
-                    </div>
-                    <div class="metric-node">
-                        <span class="label">MEMORY RAM</span>
-                        <div class="progress-bar"><div class="fill fill-amber" style="width: 63%;"></div></div>
-                        <span class="value">63%</span>
-                    </div>
-                    <div class="metric-node">
-                        <span class="label">AI CORE</span>
-                        <div class="progress-bar"><div class="fill fill-cyan" style="width: 99%;"></div></div>
-                        <span class="value">99.9%</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="stark-glass-panel expand-flex">
-                <div class="panel-header">
-                    <h3><i class="fa-solid fa-folder-open"></i> CHAT LOGS</h3>
-                    <span class="panel-tag">SECURE</span>
-                </div>
-                <div class="panel-body custom-scrollbar scrollable-logs">
-                    <div class="log-item active">
-                        <i class="fa-solid fa-message log-icon"></i>
-                        <div class="log-meta">
-                            <span class="log-title">Sesión de Diagnóstico</span>
-                            <span class="log-time">Hoy - Realtime</span>
-                        </div>
-                    </div>
-                    <div class="log-item">
-                        <i class="fa-solid fa-shield-halved log-icon"></i>
-                        <div class="log-meta">
-                            <span class="log-title">Ajustes del Traje Mark 85</span>
-                            <span class="log-time">Ayer - 06:48 PM</span>
-                        </div>
-                    </div>
-                    <div class="log-item">
-                        <i class="fa-solid fa-server log-icon"></i>
-                        <div class="log-meta">
-                            <span class="log-title">Limpieza de Registros</span>
-                            <span class="log-time">08 Jun 2026</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="hud-center-viewport">
-            <div class="chat-stream-container custom-scrollbar" id="chat-messages-viewport">
-                
-                <div class="message-row jarvis-alignment">
-                    <div class="avatar-wrapper">
-                        <div class="hologram-sphere-container">
-                            <div class="rotating-ring ring-1"></div>
-                            <div class="rotating-ring ring-2"></div>
-                            <div id="canvas-three-jarvis-core"></div>
-                        </div>
-                    </div>
-                    <div class="speech-glass-bubble">
-                        <div class="bubble-header">JARVIS // SYSTEM_RESP <span class="timestamp">06:48 PM</span></div>
-                        <div class="bubble-body">
-                            Buenos días, Señor. Me alegra verlo de nuevo. El sistema está funcionando dentro de parámetros normales. ¿Tiene algún asunto específico que desee abordar hoy o prefiere que yo inicie la sesión revisando los eventos pendientes?
-                        </div>
-                    </div>
-                </div>
-
-                <div class="message-row user-alignment">
-                    <div class="avatar-wrapper">
-                        <div class="user-arc-avatar">
-                            <div class="inner-arc-design"></div>
-                            <span class="user-txt">YO</span>
-                        </div>
-                    </div>
-                    <div class="speech-glass-bubble">
-                        <div class="bubble-header">TÚ // CENTRAL_DIRECTOR <span class="timestamp">06:48 PM</span></div>
-                        <div class="bubble-body">
-                            Un saludo informal, pero bienvenido, Señor. Parece que no hay nada urgente en su agenda. Mi recomendación sería revisar sus comunicaciones y notificaciones de la red en Render.
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-        <footer class="hud-footer-console">
-            <div class="console-input-wrapper">
-                <span class="terminal-prompt">STARK_SYS_></span>
-                <input type="text" id="terminal-command-input" placeholder="Hable o introduzca una instrucción secuencial..." autocomplete="off">
-                <div class="console-actions">
-                    <button id="mic-trigger-btn" class="action-btn" title="Activar Entrada de Voz">
-                        <i class="fa-solid fa-microphone"></i>
-                    </button>
-                    <button id="send-command-btn" class="action-btn send-active" title="Transmitir Comando">
-                        <i class="fa-solid fa-paper-plane"></i>
-                    </button>
-                </div>
-            </div>
-        </footer>
-
-    </main>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="js/core.js"></script>
-    <script src="js/main.js"></script>
-</body>
-</html>
+                <div class="metric-group">
+                    <div class="metric-label"><span>MEMORIA RAM</span><span>68%</span></div>
+                    <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 68%"></div>
+    
