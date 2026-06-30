@@ -1,313 +1,572 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>STARK INDUSTRIES // JARVIS AI // PROTOCOL V2</title>
-    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --stark-cyan: #00f0ff;
-            --stark-blue-dark: #0a1118;
-            --stark-blue-panel: rgba(10, 25, 40, 0.65);
-            --stark-amber: #ff8c00;
-            --stark-gold: #ffb300;
-            --stark-border: rgba(0, 240, 255, 0.25);
-            --stark-amber-border: rgba(255, 140, 0, 0.3);
-        }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+<meta charset="UTF-8">
 
-        body {
-            background-color: var(--stark-blue-dark);
-            color: var(--stark-cyan);
-            font-family: 'Share Tech Mono', monospace;
-            height: 100vh;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-        /* HEADER DE PROTOCOLO */
-        header {
-            border-bottom: 2px solid var(--stark-border);
-            padding: 15px 25px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: linear-gradient(180deg, rgba(0,240,255,0.05) 0%, rgba(0,0,0,0) 100%);
-        }
+<title>STARK INDUSTRIES // J.A.R.V.I.S AI</title>
 
-        .brand {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.3rem;
-            letter-spacing: 4px;
-            font-weight: 700;
-            text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
-        }
+<link
+href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800&family=Share+Tech+Mono&display=swap"
+rel="stylesheet">
 
-        .system-status {
-            font-size: 1rem;
-            color: var(--stark-gold);
-            text-shadow: 0 0 8px rgba(255, 179, 0, 0.4);
-        }
+<style>
 
-        /* CONTENEDOR PRINCIPAL */
-        .main-container {
-            display: flex;
-            flex: 1;
-            padding: 20px;
-            gap: 20px;
-            overflow: hidden;
-        }
+:root{
 
-        /* PANELES LATERALES (IZQUIERDO Y DERECHO) */
-        .side-panel {
-            width: 320px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
+--cyan:#00eaff;
+--cyan2:#00aaff;
+--gold:#ffb300;
+--bg:#02060d;
+--panel:rgba(5,18,30,.70);
+--border:rgba(0,234,255,.25);
+--text:#ecffff;
 
-        .stark-panel {
-            background: var(--stark-blue-panel);
-            border: 1px solid var(--stark-border);
-            border-radius: 6px;
-            padding: 15px;
-            box-shadow: inset 0 0 15px rgba(0, 240, 255, 0.1);
-        }
+}
 
-        .panel-header {
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            border-bottom: 1px solid var(--stark-border);
-            padding-bottom: 8px;
-            margin-bottom: 12px;
-            color: #ffffff;
-        }
+*{
 
-        /* MONITOREO TÁCTICO */
-        .metric-group {
-            margin-bottom: 12px;
-        }
-        .metric-label {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.85rem;
-            margin-bottom: 4px;
-        }
-        .progress-bar-bg {
-            background: rgba(0, 240, 255, 0.1);
-            height: 6px;
-            border-radius: 3px;
-            overflow: hidden;
-        }
-        .progress-bar-fill {
-            background: var(--stark-cyan);
-            height: 100%;
-            box-shadow: 0 0 8px var(--stark-cyan);
-        }
+margin:0;
+padding:0;
+box-sizing:border-box;
 
-        /* HISTORIAL DE CHATS */
-        .chat-history-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        .history-item {
-            padding: 10px;
-            border: 1px solid rgba(0, 240, 255, 0.15);
-            background: rgba(0, 0, 0, 0.2);
-            cursor: pointer;
-            border-radius: 4px;
-            transition: all 0.2s ease;
-        }
-        .history-item:hover, .history-item.active {
-            border-color: var(--stark-cyan);
-            background: rgba(0, 240, 255, 0.08);
-        }
-        .history-item h4 { font-size: 0.9rem; color: #fff; }
-        .history-item span { font-size: 0.75rem; color: rgba(0, 240, 255, 0.6); }
+}
 
-        /* CONTENEDOR CENTRAL (NÚCLEO + CHAT) */
-        .center-workspace {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            overflow: hidden;
-        }
+body{
 
-        /* VISTA DEL NÚCLEO HOLOGRÁFICO ÁMBAR */
-        .hologram-viewport-container {
-            height: 40%;
-            min-height: 220px;
-            background: radial-gradient(circle, rgba(255,140,0,0.08) 0%, rgba(0,0,0,0.3) 70%);
-            border: 1px solid var(--stark-amber-border);
-            border-radius: 8px;
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+background:
+radial-gradient(circle at center,#071321 0%,#02060d 70%);
+color:var(--text);
+font-family:'Share Tech Mono',monospace;
+height:100vh;
+overflow:hidden;
 
-        /* Div Crítico donde se inyecta WebGL/Three.js */
-        #canvas-three-jarvis-core {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 1;
-        }
+}
 
-        .hologram-overlay-text {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            font-size: 0.8rem;
-            color: var(--stark-gold);
-            letter-spacing: 2px;
-            z-index: 2;
-            pointer-events: none;
-        }
+header{
 
-        /* ÁREA DE INTERFACES DE CHAT */
-        .chat-interface-panel {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            border: 1px solid var(--stark-border);
-            background: rgba(5, 15, 25, 0.8);
-            border-radius: 8px;
-            overflow: hidden;
-        }
+height:70px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 30px;
+border-bottom:1px solid var(--border);
+background:rgba(0,0,0,.25);
+backdrop-filter:blur(10px);
 
-        /* Viewport crítico para scroll automático */
-        #chat-messages-viewport {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
+}
 
-        /* Estilos de burbujas basados en las capturas de pantalla */
-        .msg-row {
-            display: flex;
-            width: 100%;
-        }
-        .msg-row.jarvis-row { justify-content: flex-start; }
-        .msg-row.user-row { justify-content: flex-end; }
+.logo{
 
-        .msg-box {
-            max-width: 75%;
-            padding: 12px 16px;
-            border-radius: 6px;
-            font-size: 0.95rem;
-            line-height: 1.4;
-        }
-        .jarvis-row .msg-box {
-            background: rgba(0, 240, 255, 0.06);
-            border: 1px solid rgba(0, 240, 255, 0.3);
-            color: #e0f7fc;
-        }
-        .user-row .msg-box {
-            background: rgba(255, 179, 0, 0.06);
-            border: 1px solid rgba(255, 179, 0, 0.3);
-            color: #fff3e0;
-        }
-        .msg-meta {
-            font-size: 0.75rem;
-            margin-bottom: 4px;
-            opacity: 0.7;
-            display: block;
-        }
+font-family:'Orbitron',sans-serif;
+font-size:26px;
+font-weight:700;
+letter-spacing:6px;
+color:var(--cyan);
+text-shadow:0 0 18px var(--cyan);
 
-        /* PANEL DE ENTRADA / COMANDOS */
-        .input-command-bar {
-            padding: 15px;
-            border-top: 1px solid var(--stark-border);
-            display: flex;
-            gap: 12px;
-            background: rgba(0,0,0,0.4);
-        }
+}
 
-        .input-command-bar input {
-            flex: 1;
-            background: rgba(0, 240, 255, 0.05);
-            border: 1px solid var(--stark-border);
-            padding: 12px 16px;
-            color: #fff;
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 1rem;
-            border-radius: 4px;
-            outline: none;
-        }
-        .input-command-bar input:focus {
-            border-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
-        }
+.status{
 
-        .stark-btn {
-            background: transparent;
-            border: 1px solid var(--stark-border);
-            color: var(--stark-cyan);
-            padding: 0 20px;
-            font-family: 'Share Tech Mono', monospace;
-            cursor: pointer;
-            border-radius: 4px;
-            transition: all 0.2s;
-        }
-        .stark-btn:hover {
-            background: var(--stark-cyan);
-            color: var(--stark-blue-dark);
-            box-shadow: 0 0 12px var(--stark-cyan);
-        }
+color:var(--gold);
+font-size:14px;
 
-        /* Scrollbar Personalizado */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: var(--stark-border); border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--stark-cyan); }
-    </style>
+}
+
+.main{
+
+display:grid;
+grid-template-columns:320px 1fr;
+height:calc(100vh - 70px);
+
+}
+
+.sidebar{
+
+padding:20px;
+border-right:1px solid var(--border);
+background:rgba(0,0,0,.20);
+overflow:auto;
+
+}
+
+.panel{
+
+background:var(--panel);
+border:1px solid var(--border);
+border-radius:12px;
+padding:18px;
+margin-bottom:20px;
+box-shadow:
+0 0 25px rgba(0,234,255,.08);
+
+}
+
+.panel h3{
+
+font-family:'Orbitron';
+font-size:15px;
+letter-spacing:2px;
+margin-bottom:18px;
+color:var(--cyan);
+
+}
+
+.metric{
+
+margin-bottom:18px;
+
+}
+
+.metric label{
+
+display:flex;
+justify-content:space-between;
+font-size:13px;
+
+}
+    .progress{
+
+height:8px;
+background:rgba(255,255,255,.08);
+border-radius:10px;
+margin-top:6px;
+overflow:hidden;
+
+}
+
+.progress span{
+
+display:block;
+height:100%;
+background:linear-gradient(90deg,var(--cyan),var(--cyan2));
+box-shadow:0 0 12px var(--cyan);
+
+}
+
+.workspace{
+
+display:flex;
+flex-direction:column;
+height:100%;
+
+}
+
+.core-area{
+
+height:300px;
+margin:20px;
+border:1px solid var(--border);
+border-radius:14px;
+background:
+radial-gradient(circle at center,
+rgba(0,180,255,.12),
+rgba(0,0,0,.2));
+position:relative;
+overflow:hidden;
+
+}
+
+#canvas3d-container{
+
+position:absolute;
+width:100%;
+height:100%;
+top:0;
+left:0;
+
+}
+
+.core-title{
+
+position:absolute;
+top:15px;
+left:20px;
+font-size:13px;
+letter-spacing:2px;
+color:var(--gold);
+z-index:5;
+
+}
+
+.chat{
+
+flex:1;
+margin:0 20px 20px;
+display:flex;
+flex-direction:column;
+border:1px solid var(--border);
+border-radius:14px;
+background:rgba(0,0,0,.25);
+overflow:hidden;
+
+}
+
+#chatBox{
+
+flex:1;
+padding:20px;
+overflow-y:auto;
+display:flex;
+flex-direction:column;
+gap:18px;
+
+}
+
+.message-wrapper{
+
+display:flex;
+width:100%;
+
+}
+
+.user-wrapper{
+
+justify-content:flex-end;
+
+}
+
+.jarvis-wrapper{
+
+justify-content:flex-start;
+
+}
+
+.message{
+
+max-width:70%;
+padding:14px;
+border-radius:12px;
+line-height:1.5;
+font-size:15px;
+
+}
+
+.user-message{
+
+background:rgba(255,179,0,.08);
+border:1px solid rgba(255,179,0,.35);
+color:#fff;
+
+}
+
+.jarvis-message{
+
+background:rgba(0,234,255,.08);
+border:1px solid rgba(0,234,255,.30);
+color:#eaffff;
+
+}
+
+.input-area{
+
+display:flex;
+padding:15px;
+gap:15px;
+border-top:1px solid var(--border);
+
+}
+
+#userInput{
+
+flex:1;
+padding:14px;
+background:#06131f;
+border:1px solid var(--border);
+color:white;
+font-size:15px;
+outline:none;
+border-radius:10px;
+
+}
+
+#userInput:focus{
+
+box-shadow:0 0 12px rgba(0,234,255,.25);
+
+}
+
+button{
+
+width:120px;
+background:transparent;
+border:1px solid var(--cyan);
+color:var(--cyan);
+font-family:'Orbitron';
+cursor:pointer;
+border-radius:10px;
+transition:.3s;
+
+}
+
+button:hover{
+
+background:var(--cyan);
+color:black;
+
+}
+
+::-webkit-scrollbar{
+
+width:8px;
+
+}
+
+::-webkit-scrollbar-track{
+
+background:#03101b;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+background:var(--cyan);
+border-radius:20px;
+
+}
+
+::-webkit-scrollbar-thumb:hover{
+
+background:#4ff6ff;
+
+}
+
+.fade-in{
+
+animation:fadeIn .5s ease;
+
+}
+
+@keyframes fadeIn{
+
+from{
+
+opacity:0;
+transform:translateY(15px);
+
+}
+
+to{
+
+opacity:1;
+transform:translateY(0);
+
+}
+
+}
+
+.glow{
+
+animation:glow 2s infinite alternate;
+
+}
+
+@keyframes glow{
+
+from{
+
+filter:drop-shadow(0 0 5px var(--cyan));
+
+}
+
+to{
+
+filter:drop-shadow(0 0 25px var(--cyan));
+
+}
+
+}
+
+</style>
+
 </head>
+
 <body>
 
-    <header>
-        <div class="brand">STARK INDUSTRIES // J.A.R.V.I.S. AI</div>
-        <div class="system-status">SYSTEM ONLINE // CORE_v2.5</div>
-    </header>
+<header>
 
-    <div class="main-container">
-        
-        <div class="side-panel">
-            <div class="stark-panel">
-                <div class="panel-header">Monitoreo de Sistema</div>
-                <div class="metric-group">
-                    <div class="metric-label"><span>SISTEMA INTERFAZ</span><span style="color:var(--stark-cyan)">ONLINE</span></div>
-                    <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 100%"></div></div>
-                </div>
-                <div class="metric-group">
-                    <div class="metric-label"><span>REACTOR ARC</span><span>100%</span></div>
-                    <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 100%; background: var(--stark-gold); box-shadow: 0 0 8px var(--stark-gold);"></div></div>
-                </div>
-                <div class="metric-group">
-                    <div class="metric-label"><span>RED GLOBAL</span><span style="color:var(--stark-cyan)">CONECTADO</span></div>
-                    <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 100%"></div></div>
-                </div>
-                <div class="metric-group">
-                    <div class="metric-label"><span>CPU CENTRAL</span><span>32%</span></div>
-                    <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 32%"></div></div>
-                </div>
-                <div class="metric-group">
-                    <div class="metric-label"><span>MEMORIA RAM</span><span>68%</span></div>
-                    <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 68%"></div>
-    
+<div class="logo">
+
+STARK INDUSTRIES // J.A.R.V.I.S AI
+
+</div>
+
+<div class="status">
+
+SYSTEM ONLINE // CORE v3.0
+
+</div>
+
+</header>
+
+<div class="main">
+
+<div class="sidebar">
+
+<div class="panel">
+
+<h3>MONITOREO DE SISTEMA</h3>
+
+<div class="metric">
+
+<label>
+
+<span>CPU CENTRAL</span>
+
+<span id="cpuValue">28%</span>
+
+</label>
+
+<div class="progress">
+
+<span style="width:28%"></span>
+
+</div>
+
+</div>
+
+<div class="metric">
+
+<label>
+
+<span>MEMORIA RAM</span>
+
+<span id="ramValue">64%</span>
+
+</label>
+
+<div class="progress">
+
+<span style="width:64%"></span>
+
+</div>
+
+</div>
+
+<div class="metric">
+
+<label>
+
+<span>RED GLOBAL</span>
+
+<span>ONLINE</span>
+
+</label>
+
+<div class="progress">
+
+<span style="width:100%"></span>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="panel">
+
+<h3>CONVERSACIONES</h3>
+
+<div id="historyList">
+
+</div>
+
+</div>
+
+</div>
+
+<div class="workspace">
+
+<div class="core-area">
+
+<div class="core-title">
+
+JARVIS CORE • QUANTUM PROCESSOR
+
+</div>
+
+<div id="canvas3d-container">
+
+</div>
+
+</div>    
+    <div class="chat">
+
+<div id="chatBox">
+
+<div class="message-wrapper jarvis-wrapper fade-in">
+
+<div class="message jarvis-message">
+
+<strong>J.A.R.V.I.S.</strong><br><br>
+
+Buenos días, Señor.
+
+Todos los sistemas se encuentran operativos.
+
+Esperando instrucciones.
+
+</div>
+
+</div>
+
+</div>
+
+<div class="input-area">
+
+<input
+
+type="text"
+
+id="userInput"
+
+placeholder="Escriba una orden para J.A.R.V.I.S..."
+
+onkeypress="handleKeyPress(event)"
+
+autocomplete="off"
+
+>
+
+<button onclick="sendMessage()">
+
+ENVIAR
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script src="js/api.js"></script>
+
+<script src="js/chat.js"></script>
+
+<script src="js/core.js"></script>
+
+<script>
+
+document.addEventListener("DOMContentLoaded",()=>{
+
+if(typeof initChat==="function"){
+
+initChat();
+
+}
+
+});
+
+</script>
+
+</body>
+
+</html>
