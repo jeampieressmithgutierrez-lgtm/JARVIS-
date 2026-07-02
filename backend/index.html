@@ -36,6 +36,13 @@ box-sizing:border-box;
 
 }
 
+html{
+
+height:100%;
+scroll-behavior:smooth;
+
+}
+
 body{
 
 background:
@@ -57,6 +64,7 @@ padding:0 30px;
 border-bottom:1px solid var(--border);
 background:rgba(0,0,0,.25);
 backdrop-filter:blur(10px);
+box-shadow:0 0 20px rgba(0,234,255,.08);
 
 }
 
@@ -75,6 +83,7 @@ text-shadow:0 0 18px var(--cyan);
 
 color:var(--gold);
 font-size:14px;
+letter-spacing:2px;
 
 }
 
@@ -91,7 +100,7 @@ height:calc(100vh - 70px);
 padding:20px;
 border-right:1px solid var(--border);
 background:rgba(0,0,0,.20);
-overflow:auto;
+overflow-y:auto;
 
 }
 
@@ -102,12 +111,10 @@ border:1px solid var(--border);
 border-radius:12px;
 padding:18px;
 margin-bottom:20px;
-box-shadow:
-0 0 25px rgba(0,234,255,.08);
+box-shadow:0 0 25px rgba(0,234,255,.08);
 
 }
-
-.panel h3{
+    .panel h3{
 
 font-family:'Orbitron';
 font-size:15px;
@@ -130,7 +137,8 @@ justify-content:space-between;
 font-size:13px;
 
 }
-    .progress{
+
+.progress{
 
 height:8px;
 background:rgba(255,255,255,.08);
@@ -154,6 +162,7 @@ box-shadow:0 0 12px var(--cyan);
 display:flex;
 flex-direction:column;
 height:100%;
+overflow:hidden;
 
 }
 
@@ -166,7 +175,7 @@ border-radius:14px;
 background:
 radial-gradient(circle at center,
 rgba(0,180,255,.12),
-rgba(0,0,0,.2));
+rgba(0,0,0,.20));
 position:relative;
 overflow:hidden;
 
@@ -212,16 +221,62 @@ overflow:hidden;
 flex:1;
 padding:20px;
 overflow-y:auto;
+overflow-x:hidden;
+scroll-behavior:smooth;
 display:flex;
 flex-direction:column;
 gap:18px;
 
 }
 
-.message-wrapper{
+/* ===== SCROLLBAR J.A.R.V.I.S ===== */
+
+#chatBox::-webkit-scrollbar{
+
+width:14px;
+
+}
+
+#chatBox::-webkit-scrollbar-track{
+
+background:rgba(0,15,25,.85);
+border-left:1px solid rgba(0,234,255,.15);
+
+}
+
+#chatBox::-webkit-scrollbar-thumb{
+
+background:linear-gradient(
+180deg,
+#00f0ff,
+#0099ff
+);
+
+border-radius:20px;
+border:2px solid rgba(0,0,0,.25);
+box-shadow:
+0 0 15px #00eaff,
+inset 0 0 8px white;
+
+}
+
+#chatBox::-webkit-scrollbar-thumb:hover{
+
+background:linear-gradient(
+180deg,
+#6cf8ff,
+#00d9ff
+);
+
+box-shadow:
+0 0 25px #00eaff;
+
+}
+  .message-wrapper{
 
 display:flex;
 width:100%;
+animation:fadeIn .35s ease;
 
 }
 
@@ -239,11 +294,13 @@ justify-content:flex-start;
 
 .message{
 
-max-width:70%;
-padding:14px;
+max-width:72%;
+padding:14px 18px;
 border-radius:12px;
-line-height:1.5;
+line-height:1.6;
 font-size:15px;
+word-wrap:break-word;
+backdrop-filter:blur(10px);
 
 }
 
@@ -251,7 +308,8 @@ font-size:15px;
 
 background:rgba(255,179,0,.08);
 border:1px solid rgba(255,179,0,.35);
-color:#fff;
+color:#ffffff;
+box-shadow:0 0 18px rgba(255,179,0,.10);
 
 }
 
@@ -260,85 +318,117 @@ color:#fff;
 background:rgba(0,234,255,.08);
 border:1px solid rgba(0,234,255,.30);
 color:#eaffff;
+box-shadow:0 0 18px rgba(0,234,255,.10);
 
 }
 
 .input-area{
 
 display:flex;
-padding:15px;
+align-items:center;
 gap:15px;
+padding:16px;
 border-top:1px solid var(--border);
+background:rgba(0,10,18,.70);
 
 }
 
 #userInput{
 
 flex:1;
-padding:14px;
+padding:14px 18px;
 background:#06131f;
 border:1px solid var(--border);
-color:white;
-font-size:15px;
+border-radius:12px;
 outline:none;
-border-radius:10px;
+font-size:15px;
+color:white;
+transition:.30s;
 
 }
 
 #userInput:focus{
 
-box-shadow:0 0 12px rgba(0,234,255,.25);
+border-color:var(--cyan);
+box-shadow:
+0 0 18px rgba(0,234,255,.25);
 
 }
 
 button{
 
-width:120px;
+width:130px;
+height:48px;
 background:transparent;
 border:1px solid var(--cyan);
+border-radius:12px;
 color:var(--cyan);
-font-family:'Orbitron';
+font-family:'Orbitron',sans-serif;
+font-size:14px;
 cursor:pointer;
-border-radius:10px;
-transition:.3s;
+transition:.30s;
 
 }
 
 button:hover{
 
 background:var(--cyan);
-color:black;
+color:#000;
+box-shadow:0 0 20px var(--cyan);
 
 }
 
+button:active{
+
+transform:scale(.97);
+
+}
+
+/* ===== SCROLL GENERAL ===== */
+
 ::-webkit-scrollbar{
 
-width:8px;
+width:12px;
 
 }
 
 ::-webkit-scrollbar-track{
 
-background:#03101b;
+background:#04111d;
 
 }
 
 ::-webkit-scrollbar-thumb{
 
-background:var(--cyan);
-border-radius:20px;
+background:linear-gradient(
+180deg,
+#00f0ff,
+#0094ff
+);
+
+border-radius:30px;
+border:2px solid #04111d;
+box-shadow:
+0 0 12px #00eaff;
 
 }
 
 ::-webkit-scrollbar-thumb:hover{
 
-background:#4ff6ff;
+background:linear-gradient(
+180deg,
+#7ffcff,
+#00d5ff
+);
+
+box-shadow:
+0 0 20px #00f0ff;
 
 }
 
 .fade-in{
 
-animation:fadeIn .5s ease;
+animation:fadeIn .45s ease;
 
 }
 
@@ -347,7 +437,7 @@ animation:fadeIn .5s ease;
 from{
 
 opacity:0;
-transform:translateY(15px);
+transform:translateY(18px);
 
 }
 
@@ -376,7 +466,7 @@ filter:drop-shadow(0 0 5px var(--cyan));
 
 to{
 
-filter:drop-shadow(0 0 25px var(--cyan));
+filter:drop-shadow(0 0 22px var(--cyan));
 
 }
 
@@ -411,8 +501,7 @@ SYSTEM ONLINE // CORE v3.0
 <div class="panel">
 
 <h3>MONITOREO DE SISTEMA</h3>
-
-<div class="metric">
+    <div class="metric">
 
 <label>
 
@@ -452,9 +541,45 @@ SYSTEM ONLINE // CORE v3.0
 
 <label>
 
+<span>GPU</span>
+
+<span id="gpuValue">41%</span>
+
+</label>
+
+<div class="progress">
+
+<span style="width:41%"></span>
+
+</div>
+
+</div>
+
+<div class="metric">
+
+<label>
+
 <span>RED GLOBAL</span>
 
 <span>ONLINE</span>
+
+</label>
+
+<div class="progress">
+
+<span style="width:100%"></span>
+
+</div>
+
+</div>
+
+<div class="metric">
+
+<label>
+
+<span>SEGURIDAD</span>
+
+<span>100%</span>
 
 </label>
 
@@ -474,6 +599,24 @@ SYSTEM ONLINE // CORE v3.0
 
 <div id="historyList">
 
+<div class="history-item">
+
+J.A.R.V.I.S iniciado
+
+</div>
+
+<div class="history-item">
+
+Sistema operativo
+
+</div>
+
+<div class="history-item">
+
+Esperando órdenes...
+
+</div>
+
 </div>
 
 </div>
@@ -486,7 +629,7 @@ SYSTEM ONLINE // CORE v3.0
 
 <div class="core-title">
 
-JARVIS CORE • QUANTUM PROCESSOR
+J.A.R.V.I.S CORE • QUANTUM PROCESSOR
 
 </div>
 
@@ -494,8 +637,9 @@ JARVIS CORE • QUANTUM PROCESSOR
 
 </div>
 
-</div>    
-    <div class="chat">
+</div>
+
+<div class="chat">
 
 <div id="chatBox">
 
@@ -503,11 +647,21 @@ JARVIS CORE • QUANTUM PROCESSOR
 
 <div class="message jarvis-message">
 
-<strong>J.A.R.V.I.S.</strong><br><br>
+<strong>J.A.R.V.I.S.</strong>
+
+<br><br>
 
 Buenos días, Señor.
 
-Todos los sistemas se encuentran operativos.
+<br><br>
+
+Todos los sistemas están operativos.
+
+<br>
+
+Conexión con Groq establecida.
+
+<br>
 
 Esperando instrucciones.
 
@@ -527,9 +681,9 @@ id="userInput"
 
 placeholder="Escriba una orden para J.A.R.V.I.S..."
 
-onkeypress="handleKeyPress(event)"
-
 autocomplete="off"
+
+onkeypress="handleKeyPress(event)"
 
 >
 
