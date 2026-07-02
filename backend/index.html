@@ -166,21 +166,6 @@ overflow:hidden;
 
 }
 
-.core-area{
-
-height:300px;
-margin:20px;
-border:1px solid var(--border);
-border-radius:14px;
-background:
-radial-gradient(circle at center,
-rgba(0,180,255,.12),
-rgba(0,0,0,.20));
-position:relative;
-overflow:hidden;
-
-}
-
 #canvas3d-container{
 
 position:absolute;
@@ -205,30 +190,30 @@ z-index:5;
 
 .chat{
 
-flex:1;
-margin:0 20px 20px;
+height:calc(100vh - 120px);
+margin:20px;
 display:flex;
 flex-direction:column;
 border:1px solid var(--border);
 border-radius:14px;
 background:rgba(0,0,0,.25);
 overflow:hidden;
+box-shadow:0 0 25px rgba(0,234,255,.08);
 
 }
 
 #chatBox{
 
 flex:1;
-padding:20px;
+padding:25px;
 overflow-y:auto;
-overflow-x:hidden;
-scroll-behavior:smooth;
 display:flex;
 flex-direction:column;
-gap:18px;
+gap:20px;
+scroll-behavior:smooth;
 
 }
-
+    
 /* ===== SCROLLBAR J.A.R.V.I.S ===== */
 
 #chatBox::-webkit-scrollbar{
@@ -624,20 +609,6 @@ Esperando órdenes...
 </div>
 
 <div class="workspace">
-
-<div class="core-area">
-
-<div class="core-title">
-
-J.A.R.V.I.S CORE • QUANTUM PROCESSOR
-
-</div>
-
-<div id="canvas3d-container">
-
-</div>
-
-</div>
 
 <div class="chat">
 
