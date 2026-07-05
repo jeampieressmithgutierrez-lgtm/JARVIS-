@@ -1,1 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
 
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>J.A.R.V.I.S. • Stark Industries</title>
+
+<!-- Fuentes -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+<!-- CSS -->
+
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/hud.css">
+<link rel="stylesheet" href="css/chat.css">
+<link rel="stylesheet" href="css/animations.css">
+<link rel="stylesheet" href="css/responsive.css">
+
+</head>
+
+<body>
+
+<!-- Fondo -->
+
+<div id="background-container">
+
+<canvas id="particles-canvas"></canvas>
+
+<div id="grid-overlay"></div>
+
+<div id="scan-overlay"></div>
+
+</div>
+
+<!-- HUD -->
+
+<div id="hud">
+
+<!-- Encabezado -->
+
+<header id="topbar">
+
+<div class="logo">
+
+<h1>STARK INDUSTRIES</h1>
+
+<p>J.A.R.V.I.S. Artificial Intelligence</p>
+
+</div>
+
+<div class="system-status">
+
+<span id="clock">00:00</span>
+
+<span id="status-light"></span>
+
+</div>
+
+</header>
+
+<!-- Contenido -->
+
+<div id="main-layout">
+
+<!-- Panel izquierdo -->
+
+<aside id="sidebar">
+
+<section class="panel">
+
+<h2>Sistema</h2>
+
+<div id="cpu"></div>
+
+<div id="ram"></div>
+
+<div id="gpu"></div>
+
+<div id="ssd"></div>
+
+</section>
+
+<section class="panel">
+
+<h2>Usuario</h2>
+
+<div id="user-name">
+
+Invitado
+
+</div>
+
+</section>
+
+<section class="panel">
+
+<h2>Estado</h2>
+
+<div id="network">
+
+ONLINE
+
+</div>
+
+</section>
+
+</aside>
+
+<!-- Chat -->
+
+<main id="chat-container">
+
+<div id="messages">
+
+<!-- Aquí aparecerán los mensajes -->
+
+</div>
+
+</main>
+
+</div>
+
+<!-- Consola -->
+
+<footer id="console">
+
+<input
+
+type="text"
+
+id="messageInput"
+
+placeholder="Escriba una instrucción..."
+
+autocomplete="off"
+
+>
+
+<button id="sendButton">
+
+Enviar
+
+</button>
+
+</footer>
+
+</div>
+
+<!-- JavaScript -->
+
+<script src="js/core.js"></script>
+
+<script src="js/background.js"></script>
+
+<script src="js/particles.js"></script>
+
+<script src="js/effects.js"></script>
+
+<script src="js/ui.js"></script>
+
+<script src="js/chat.js"></script>
+
+<script src="js/api.js"></script>
+
+<script src="js/main.js"></script>
+
+</body>
+
+</html>
