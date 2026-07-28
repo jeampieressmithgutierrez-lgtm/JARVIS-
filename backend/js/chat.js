@@ -50,8 +50,19 @@ async function sendMessage() {
     }
 }
 
-function handleKeyPress(event) {
+
+        function handleKeyPress(event) {
     if (event.key === "Enter") {
         sendMessage();
     }
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const button = document.getElementById("sendButton");
+
+    if (button) {
+        button.addEventListener("click", sendMessage);
+    }
+
+});
