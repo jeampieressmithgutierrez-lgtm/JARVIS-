@@ -4,8 +4,10 @@ function initChat() {
 
 async function sendMessage() {
 
-    const input = document.getElementById("userInput");
-    const chatBox = document.getElementById("chatBox");
+  const input =
+      document.getElementById("messageInput")
+    const chatBox =
+        document.getElementById("messages")
 
     const mensaje = input.value.trim();
 
