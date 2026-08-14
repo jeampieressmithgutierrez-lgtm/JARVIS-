@@ -38,7 +38,7 @@ def obtener_respuesta_cognitiva(entrada_usuario: str) -> str:
                     "content": entrada_usuario
                 }
             ],
-            model="llama3-8b-8192", # Modelo optimizado para respuestas conversacionales ultra rápidas
+            model="openai/gpt-oss-120b", # Modelo optimizado para respuestas conversacionales ultra rápidas
             temperature=0.7,         # Nivel de creatividad equilibrado para el sarcasmo británico
             max_tokens=1024          # Límite de longitud estructural de la respuesta
         )
