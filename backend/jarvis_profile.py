@@ -237,7 +237,7 @@ def obtener_respuesta_cognitiva(entrada_usuario: str) -> str:
     ],
     model="openai/gpt-oss-120b",
     temperature=0.6,
-    max_completion_tokens=1024,
+    max_tokens=1024,
     reasoning_effort="medium",
     include_reasoning=False
 )
