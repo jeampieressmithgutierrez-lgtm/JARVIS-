@@ -224,23 +224,23 @@ def obtener_respuesta_cognitiva(entrada_usuario: str) -> str:
     """
     try:
         # Petición formal de inferencia al modelo a través de Groq
-        chat_completion = client.chat.completions.create(
-            messages=[
-                {
-                    "role": "system",
-                    "content": MATRIZ_SISTEMA
-                },
-                {
-                    "role": "user",
-                    "content": entrada_usuario
-                }
-            ],
-            model="openai/gpt-oss-120b",
-            temperature=0.6,
-            max_completion_tokens=1024,
-            reasoning_effort="medium",
-            include_reasoning=False
-        )
+       chat_completion = client.chat.completions.create(
+    messages=[
+        {
+            "role": "system",
+            "content": MATRIZ_SISTEMA
+        },
+        {
+            "role": "user",
+            "content": entrada_usuario
+        }
+    ],
+    model="openai/gpt-oss-120b",
+    temperature=0.6,
+    max_completion_tokens=1024,
+    reasoning_effort="medium",
+    include_reasoning=False
+)
         
         # Extracción y filtrado del texto procesado
         respuesta_procesada = chat_completion.choices[0].message.content
