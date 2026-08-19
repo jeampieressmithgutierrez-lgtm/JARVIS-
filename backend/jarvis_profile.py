@@ -135,6 +135,7 @@ MATRIZ_SISTEMA = (
     "advierte antes de que ocurra un problema y busca siempre la solución más útil, "
     "segura y eficiente para el Señor."
 )
+    
 
 def obtener_respuesta_cognitiva(entrada_usuario: str) -> str:
     """
