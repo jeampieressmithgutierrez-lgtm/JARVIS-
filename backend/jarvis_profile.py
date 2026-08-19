@@ -246,9 +246,6 @@ def obtener_respuesta_cognitiva(entrada_usuario: str) -> str:
         respuesta_procesada = chat_completion.choices[0].message.content
         return respuesta_procesada
 
-    except Exception as error_api:
-        print(f"[API GROQ ERROR]: Fallo en la transmisión o autenticación. Detalles: {str(error_api)}")
-        return (
-            "Mil disculpas, Señor. He experimentado una interrupción en el puente cuántico de datos "
-            "con los servidores externos de Groq. Verifique que la API Key esté correctamente inyectada en el sistema."
-        )
+    except Exception as e:
+    print(f"[JARVIS ERROR] {type(e)._name_}: {e}")
+    return f"ERROR DEL NÚCLEO: {type(e)._name_}: {e}"
