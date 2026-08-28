@@ -212,14 +212,12 @@ TOPBAR
 LAYOUT
 =============================*/
 
-#main-layout{
+#main-layout {
+    flex: 1;
+    min-height: 0;
 
-    flex:1;
-
-    display:grid;
-
-    grid-template-columns:300px 1fr;
-
+    display: grid;
+    grid-template-columns: 300px minmax(0, 1fr);
 }
 
 /*=============================
@@ -274,30 +272,35 @@ SIDEBAR
 CHAT
 =============================*/
 
-#chat-container{
+#chat-container {
+    display: flex;
+    flex-direction: column;
 
-    display:flex;
+    min-width: 0;
+    min-height: 0;
 
-    flex-direction:column;
-
-    padding:25px;
-
+    padding: 25px;
 }
+#messages {
+    flex: 1;
+    min-height: 0;
+    min-width: 0;
 
-#messages{
+    overflow-y: auto;
+    overflow-x: hidden;
 
-    flex:1;
+    border: 1px solid var(--border);
+    border-radius: 12px;
 
-    overflow-y:auto;
+    background: rgba(10, 10, 10, 0.35);
 
-    border:1px solid var(--border);
+    padding: 20px;
 
-    border-radius:12px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
 
-    background:rgba(10,10,10,.35);
-
-    padding:20px;
-
+    scroll-behavior: smooth;
 }
 
 /*=============================
