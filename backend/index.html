@@ -73,46 +73,63 @@
 
 <aside id="sidebar">
 
-<section class="panel">
+    <!-- SISTEMA -->
+    <section class="panel system-panel">
 
-<h2>Sistema</h2>
+        <h2>Sistema</h2>
 
-<div id="cpu"></div>
+        <div class="system-item">
+            <span>J.A.R.V.I.S. CORE</span>
+            <strong class="status-online">● ACTIVO</strong>
+        </div>
 
-<div id="ram"></div>
+        <div class="system-item">
+            <span>GROQ</span>
+            <strong class="status-online">● CONECTADO</strong>
+        </div>
 
-<div id="gpu"></div>
+        <div class="system-item">
+            <span>RENDER</span>
+            <strong class="status-online">● ACTIVO</strong>
+        </div>
 
-<div id="ssd"></div>
+        <div class="system-item">
+            <span>GITHUB</span>
+            <strong class="status-online">● CONECTADO</strong>
+        </div>
 
-</section>
+    </section>
 
-<section class="panel">
 
-<h2>Usuario</h2>
+    <!-- USUARIO -->
+    <section class="panel user-panel">
 
-<div id="user-name">
+        <h2>Usuario</h2>
 
-Invitado
+        <div id="user-name">
+            Invitado
+        </div>
 
-</div>
+    </section>
 
-</section>
 
-<section class="panel">
+    <!-- HISTORIAL -->
+    <section class="panel history-panel">
 
-<h2>Estado</h2>
+        <h2>Historial</h2>
 
-<div id="network">
+        <div id="chat-history">
 
-ONLINE
+            <div class="history-item active">
+                <span class="history-dot">●</span>
+                <span>Conversación actual</span>
+            </div>
 
-</div>
+        </div>
 
-</section>
+    </section>
 
 </aside>
-
 <!-- Chat -->
 
 <main id="chat-container">
