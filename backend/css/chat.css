@@ -263,3 +263,85 @@
     }
 
 }
+/* =====================================================
+   HISTORIAL — CONTROLES DE CONVERSACIÓN
+===================================================== */
+
+.history-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+
+#newChatButton {
+    width: 30px;
+    height: 30px;
+
+    border: 1px solid rgba(255, 255, 255, 0.25);
+
+    background: transparent;
+
+    color: inherit;
+
+    font-family: "Orbitron", sans-serif;
+
+    font-size: 20px;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease;
+}
+
+
+#newChatButton:hover {
+    transform: scale(1.08);
+}
+
+
+.history-item {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    cursor: pointer;
+}
+
+
+.history-title {
+    flex: 1;
+
+    overflow: hidden;
+
+    white-space: nowrap;
+
+    text-overflow: ellipsis;
+}
+
+
+.history-delete {
+    border: none;
+
+    background: transparent;
+
+    color: inherit;
+
+    opacity: 0.55;
+
+    cursor: pointer;
+
+    font-size: 18px;
+
+    line-height: 1;
+
+    padding: 2px 5px;
+}
+
+
+.history-delete:hover {
+    opacity: 1;
+}
