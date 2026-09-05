@@ -4,107 +4,216 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
 <title>J.A.R.V.I.S. • Stark Industries</title>
 
-<!-- Fuentes -->
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- =====================================================
+     FUENTES
+===================================================== -->
 
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+>
 
-<!-- CSS -->
+<link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+>
 
-<link rel="stylesheet" href="css/styles.css">
-<link rel="stylesheet" href="css/hud.css">
-<link rel="stylesheet" href="css/chat.css">
-<link rel="stylesheet" href="css/animations.css">
-<link rel="stylesheet" href="css/responsive.css">
+<link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800&family=Share+Tech+Mono&display=swap"
+    rel="stylesheet"
+>
+
+
+<!-- =====================================================
+     CSS
+===================================================== -->
+
+<link
+    rel="stylesheet"
+    href="css/styles.css"
+>
+
+<link
+    rel="stylesheet"
+    href="css/hud.css"
+>
+
+<link
+    rel="stylesheet"
+    href="css/chat.css"
+>
+
+<link
+    rel="stylesheet"
+    href="css/animations.css"
+>
+
+<link
+    rel="stylesheet"
+    href="css/responsive.css"
+>
 
 </head>
 
+
 <body>
 
-<!-- Fondo -->
+
+<!-- =====================================================
+     FONDO
+===================================================== -->
 
 <div id="background-container">
 
-<canvas id="particles-canvas"></canvas>
+    <canvas
+        id="particles-canvas"
+    ></canvas>
 
-<div id="grid-overlay"></div>
+    <div id="grid-overlay"></div>
 
-<div id="scan-overlay"></div>
+    <div id="scan-overlay"></div>
 
 </div>
 
-<!-- HUD -->
+
+<!-- =====================================================
+     HUD
+===================================================== -->
 
 <div id="hud">
 
-<!-- Encabezado -->
+
+<!-- =====================================================
+     ENCABEZADO
+===================================================== -->
 
 <header id="topbar">
 
-<div class="logo">
+    <div class="logo">
 
-<h1>STARK INDUSTRIES</h1>
+        <h1>
+            STARK INDUSTRIES
+        </h1>
 
-<p>J.A.R.V.I.S. Artificial Intelligence</p>
+        <p>
+            J.A.R.V.I.S. Artificial Intelligence
+        </p>
 
-</div>
+    </div>
 
-<div class="system-status">
 
-<span id="clock">00:00</span>
+    <div class="system-status">
 
-<span id="status-light"></span>
+        <span id="clock">
+            00:00
+        </span>
 
-</div>
+        <span id="status-light"></span>
+
+    </div>
 
 </header>
 
-<!-- Contenido -->
+
+<!-- =====================================================
+     CONTENIDO PRINCIPAL
+===================================================== -->
 
 <div id="main-layout">
 
-<!-- Panel izquierdo -->
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
 
 <aside id="sidebar">
 
-    <!-- SISTEMA -->
-    <section class="panel system-panel">
 
-        <h2>Sistema</h2>
+<!-- =====================================================
+     SISTEMA
+===================================================== -->
 
-        <div class="system-item">
-            <span>J.A.R.V.I.S. CORE</span>
-            <strong class="status-online">● ACTIVO</strong>
-        </div>
+<section class="panel system-panel">
 
-        <div class="system-item">
-            <span>GROQ</span>
-            <strong class="status-online">● CONECTADO</strong>
-        </div>
-
-        <div class="system-item">
-            <span>RENDER</span>
-            <strong class="status-online">● ACTIVO</strong>
-        </div>
-
-        <div class="system-item">
-            <span>GITHUB</span>
-            <strong class="status-online">● CONECTADO</strong>
-        </div>
-
-    </section>
+    <h2>
+        Sistema
+    </h2>
 
 
-<!-- USUARIO -->
+    <div class="system-item">
+
+        <span>
+            J.A.R.V.I.S. CORE
+        </span>
+
+        <strong class="status-online">
+            ● ACTIVO
+        </strong>
+
+    </div>
+
+
+    <div class="system-item">
+
+        <span>
+            GROQ
+        </span>
+
+        <strong class="status-online">
+            ● CONECTADO
+        </strong>
+
+    </div>
+
+
+    <div class="system-item">
+
+        <span>
+            RENDER
+        </span>
+
+        <strong class="status-online">
+            ● ACTIVO
+        </strong>
+
+    </div>
+
+
+    <div class="system-item">
+
+        <span>
+            GITHUB
+        </span>
+
+        <strong class="status-online">
+            ● CONECTADO
+        </strong>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     USUARIO
+===================================================== -->
+
 <section class="panel user-panel">
 
-    <h2>Usuario</h2>
+    <h2>
+        Usuario
+    </h2>
+
 
     <div id="user-info">
 
@@ -112,7 +221,11 @@
             Invitado
         </div>
 
-        <a href="/auth/google" id="google-login">
+
+        <a
+            href="/auth/google"
+            id="google-login"
+        >
             🔵 Iniciar sesión con Google
         </a>
 
@@ -121,64 +234,103 @@
 </section>
 
 
-    <!-- HISTORIAL -->
-    <section class="panel history-panel">
+<!-- =====================================================
+     HISTORIAL
+===================================================== -->
 
-        <h2>Historial</h2>
+<section class="panel history-panel">
 
-        <div id="chat-history">
+    <div class="history-header">
 
-            <div class="history-item active">
-                <span class="history-dot">●</span>
-                <span>Conversación actual</span>
-            </div>
+        <h2>
+            Historial
+        </h2>
 
-        </div>
 
-    </section>
+        <button
+            id="newChatButton"
+            type="button"
+            title="Crear nueva conversación"
+        >
+            +
+        </button>
+
+    </div>
+
+
+    <div id="chat-history">
+
+        <!--
+            Los chats serán generados
+            dinámicamente por chat.js.
+        -->
+
+    </div>
+
+</section>
+
 
 </aside>
-<!-- Chat -->
+
+
+<!-- =====================================================
+     CHAT
+===================================================== -->
 
 <main id="chat-container">
 
-<div id="messages">
+    <div id="messages">
 
-<!-- Aquí aparecerán los mensajes -->
+        <!--
+            Los mensajes serán generados
+            dinámicamente por chat.js.
+        -->
 
-</div>
+    </div>
 
 </main>
 
+
 </div>
 
-<!-- Consola -->
+
+<!-- =====================================================
+     CONSOLA
+===================================================== -->
 
 <footer id="console">
 
-<input
+    <input
 
-type="text"
+        type="text"
 
-id="messageInput"
+        id="messageInput"
 
-placeholder="Escriba una instrucción..."
+        placeholder="Escriba una instrucción..."
 
-autocomplete="off"
+        autocomplete="off"
 
->
+    >
 
-<button id="sendButton">
 
-Enviar
+    <button
+        id="sendButton"
+        type="button"
+    >
 
-</button>
+        Enviar
+
+    </button>
 
 </footer>
 
+
 </div>
 
-<!-- JavaScript -->
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
 
 <script src="js/core.js"></script>
 
@@ -195,6 +347,7 @@ Enviar
 <script src="js/api.js"></script>
 
 <script src="js/main.js"></script>
+
 
 </body>
 
