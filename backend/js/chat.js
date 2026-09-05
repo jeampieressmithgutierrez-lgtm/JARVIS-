@@ -8,17 +8,14 @@
    CONFIGURACIÓN
 ========================================================= */
 
-const STORAGE_KEY =
-    "jarvis_guest_memory_v2";
-
+const STORAGE_KEY = "jarvis_guest_memory_v2";
 
 let memoriaSesion = {
-
     currentChatId: null,
-
     chats: []
-
 };
+
+let enviandoMensaje = false;
 
 
 /* =========================================================
@@ -387,7 +384,7 @@ function generarTituloChat(texto) {
 
 
     return (
-        limpio.substring(0, 28) +
+        limpio.substring(0, 28).trim() +
         "..."
     );
 
@@ -466,10 +463,9 @@ function construirContextoMemoria() {
     const bloques = [];
 
 
-    /*
-       Primero damos prioridad
-       al chat actual.
-    */
+    /* =====================================================
+       CHAT ACTUAL
+    ===================================================== */
 
     if (
         chatActual &&
@@ -504,10 +500,9 @@ function construirContextoMemoria() {
     }
 
 
-    /*
-       Después añadimos contexto
-       de otros chats.
-    */
+    /* =====================================================
+       OTROS CHATS
+    ===================================================== */
 
     if (otrosChats.length) {
 
@@ -522,7 +517,9 @@ function construirContextoMemoria() {
 
 
                     if (!mensajes.length) {
+
                         return "";
+
                     }
 
 
@@ -571,12 +568,6 @@ function construirContextoMemoria() {
     }
 
 
-    /*
-       Limitamos el tamaño para
-       no enviar una memoria infinita
-       al modelo.
-    */
-
     let contexto =
         bloques.join("\n\n");
 
@@ -603,7 +594,7 @@ function construirContextoMemoria() {
 
 
 /* =========================================================
-   RENDERIZAR CHAT
+   RENDERIZAR CHAT ACTUAL
 ========================================================= */
 
 function renderizarChatActual() {
@@ -695,7 +686,6 @@ function renderizarHistorial(
 
     chats.forEach(chat => {
 
-
         const item =
             document.createElement(
                 "div"
@@ -730,7 +720,8 @@ function renderizarHistorial(
         dot.className =
             "history-dot";
 
-        dot.textContent = "●";
+        dot.textContent =
+            "●";
 
 
         const title =
@@ -1113,10 +1104,17 @@ function desplazarChat() {
 
 
 /* =========================================================
-   ENVIAR
+   ENVIAR MENSAJE
 ========================================================= */
 
 async function sendMessage() {
+
+    if (enviandoMensaje) {
+
+        return;
+
+    }
+
 
     const input =
         document.getElementById(
@@ -1124,15 +1122,47 @@ async function sendMessage() {
         );
 
 
-    if (!input) return;
+    if (!input) {
+
+        console.error(
+            "[CHAT ERROR] No se encontró #messageInput."
+        );
+
+        return;
+
+    }
 
 
     const mensaje =
         input.value.trim();
 
 
-    if (!mensaje) return;
+    if (!mensaje) {
 
+        return;
+
+    }
+
+
+    enviandoMensaje = true;
+
+
+    const boton =
+        document.getElementById(
+            "sendButton"
+        );
+
+
+    if (boton) {
+
+        boton.disabled = true;
+
+    }
+
+
+    /* =====================================================
+       GUARDAR MENSAJE DEL SEÑOR
+    ===================================================== */
 
     agregarMensajeUsuario(
         mensaje
@@ -1142,17 +1172,18 @@ async function sendMessage() {
     input.value = "";
 
 
-    input.focus();
-
-
     mostrarProcesando();
 
 
+    /* =====================================================
+       CONSTRUIR MEMORIA
+    ===================================================== */
+
+    const contexto =
+        construirContextoMemoria();
+
+
     try {
-
-        const contexto =
-            construirContextoMemoria();
-
 
         const respuesta =
             await enviarMensajeAPI(
@@ -1171,7 +1202,7 @@ async function sendMessage() {
         ) {
 
             agregarMensajeJarvis(
-                "He recibido una respuesta inesperada del núcleo cognitivo."
+                "He recibido una respuesta inesperada del núcleo cognitivo, Señor."
             );
 
             return;
@@ -1180,7 +1211,9 @@ async function sendMessage() {
 
 
         agregarMensajeJarvis(
-            respuesta.response
+            String(
+                respuesta.response
+            )
         );
 
 
@@ -1196,8 +1229,22 @@ async function sendMessage() {
 
 
         agregarMensajeJarvis(
-            "Se ha producido un error de comunicación con el núcleo cognitivo."
+            "Se ha producido un error de comunicación con el núcleo cognitivo, Señor."
         );
+
+    } finally {
+
+        enviandoMensaje = false;
+
+
+        if (boton) {
+
+            boton.disabled = false;
+
+        }
+
+
+        input.focus();
 
     }
 
@@ -1211,7 +1258,8 @@ async function sendMessage() {
 function handleKeyPress(event) {
 
     if (
-        event.key === "Enter"
+        event.key === "Enter" &&
+        !event.shiftKey
     ) {
 
         event.preventDefault();
@@ -1224,7 +1272,7 @@ function handleKeyPress(event) {
 
 
 /* =========================================================
-   VOZ
+   ENTRADA DE VOZ
 ========================================================= */
 
 function iniciarEntradaVoz() {
@@ -1238,6 +1286,29 @@ function iniciarEntradaVoz() {
 
         agregarMensajeJarvis(
             "La entrada de voz no está disponible en este navegador, Señor."
+        );
+
+        return;
+
+    }
+
+
+    const input =
+        document.getElementById(
+            "messageInput"
+        );
+
+
+    const button =
+        document.getElementById(
+            "voiceButton"
+        );
+
+
+    if (!input) {
+
+        console.error(
+            "[VOICE ERROR] No se encontró #messageInput."
         );
 
         return;
@@ -1261,10 +1332,8 @@ function iniciarEntradaVoz() {
         false;
 
 
-    const button =
-        document.getElementById(
-            "voiceButton"
-        );
+    recognition.maxAlternatives =
+        1;
 
 
     if (button) {
@@ -1273,10 +1342,37 @@ function iniciarEntradaVoz() {
             "recording"
         );
 
+        button.disabled =
+            true;
+
     }
 
 
-    recognition.start();
+    try {
+
+        recognition.start();
+
+    } catch (error) {
+
+        console.error(
+            "[VOICE START ERROR]",
+            error
+        );
+
+        if (button) {
+
+            button.classList.remove(
+                "recording"
+            );
+
+            button.disabled =
+                false;
+
+        }
+
+        return;
+
+    }
 
 
     recognition.onresult =
@@ -1285,7 +1381,232 @@ function iniciarEntradaVoz() {
             const texto =
                 event
                     .results[0][0]
-                    .transcript;
+                    .transcript
+                    .trim();
 
 
-            const input =
+            if (texto) {
+
+                input.value =
+                    texto;
+
+                input.focus();
+
+            }
+
+        };
+
+
+    recognition.onerror =
+        event => {
+
+            console.error(
+                "[VOICE ERROR]",
+                event.error
+            );
+
+
+            if (
+                event.error ===
+                "not-allowed"
+            ) {
+
+                agregarMensajeJarvis(
+                    "El navegador ha bloqueado el acceso al micrófono, Señor."
+                );
+
+            } else if (
+                event.error ===
+                "no-speech"
+            ) {
+
+                agregarMensajeJarvis(
+                    "No he detectado ninguna orden de voz, Señor."
+                );
+
+            }
+
+        };
+
+
+    recognition.onend =
+        () => {
+
+            if (button) {
+
+                button.classList.remove(
+                    "recording"
+                );
+
+                button.disabled =
+                    false;
+
+            }
+
+        };
+
+}
+
+
+/* =========================================================
+   BOTÓN DE VOZ
+========================================================= */
+
+function configurarBotonVoz() {
+
+    const button =
+        document.getElementById(
+            "voiceButton"
+        );
+
+
+    if (!button) {
+
+        return;
+
+    }
+
+
+    button.addEventListener(
+        "click",
+        iniciarEntradaVoz
+    );
+
+}
+
+
+/* =========================================================
+   BÚSQUEDA DE CHATS
+========================================================= */
+
+function configurarBusquedaChats() {
+
+    const buscador =
+        document.getElementById(
+            "chatSearch"
+        );
+
+
+    if (!buscador) {
+
+        return;
+
+    }
+
+
+    buscador.addEventListener(
+        "input",
+        () => {
+
+            renderizarHistorial(
+                buscador.value
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   BOTÓN NUEVO CHAT
+========================================================= */
+
+function configurarNuevoChat() {
+
+    const boton =
+        document.getElementById(
+            "newChatButton"
+        );
+
+
+    if (!boton) {
+
+        return;
+
+    }
+
+
+    boton.addEventListener(
+        "click",
+        nuevoChat
+    );
+
+}
+
+
+/* =========================================================
+   INICIALIZAR CHAT
+========================================================= */
+
+function initChat() {
+
+    console.log(
+        "[CHAT] Sistema conversacional iniciado."
+    );
+
+
+    cargarMemoriaSesion();
+
+
+    renderizarHistorial();
+
+
+    renderizarChatActual();
+
+
+    configurarBusquedaChats();
+
+
+    configurarNuevoChat();
+
+
+    configurarBotonVoz();
+
+}
+
+
+/* =========================================================
+   INICIALIZACIÓN
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        const button =
+            document.getElementById(
+                "sendButton"
+            );
+
+
+        const input =
+            document.getElementById(
+                "messageInput"
+            );
+
+
+        if (button) {
+
+            button.addEventListener(
+                "click",
+                sendMessage
+            );
+
+        }
+
+
+        if (input) {
+
+            input.addEventListener(
+                "keydown",
+                handleKeyPress
+            );
+
+        }
+
+
+        initChat();
+
+    }
+);
