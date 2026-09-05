@@ -1,34 +1,40 @@
-/* =====================================================
-   J.A.R.V.I.S. — API
-===================================================== */
+/* =========================================================
+   J.A.R.V.I.S.
+   API COMMUNICATION
+========================================================= */
 
 
-/* =====================================================
-   ENVIAR MENSAJE
-===================================================== */
+/* =========================================================
+   ENVIAR MENSAJE AL NÚCLEO
+========================================================= */
 
-async function enviarMensajeAPI(mensaje, contextoMemoria = "") {
+async function enviarMensajeAPI(
+    mensaje,
+    contextoMemoria = ""
+) {
 
-    const respuesta = await fetch("/api/chat", {
+    const respuesta = await fetch(
+        "/api/chat",
+        {
+            method: "POST",
 
-        method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
 
-        headers: {
-            "Content-Type": "application/json"
-        },
+            body: JSON.stringify({
 
-        body: JSON.stringify({
+                message: mensaje,
 
-            message: mensaje,
+                memory_context: contextoMemoria
 
-            memory_context: contextoMemoria
-
-        })
-
-    });
+            })
+        }
+    );
 
 
     let datos;
+
 
     try {
 
@@ -54,4 +60,5 @@ async function enviarMensajeAPI(mensaje, contextoMemoria = "") {
 
 
     return datos;
+
 }
