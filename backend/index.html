@@ -3,65 +3,46 @@
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-<title>J.A.R.V.I.S. • Stark Industries</title>
+    <title>J.A.R.V.I.S. • Stark Industries</title>
 
+    <!-- =====================================================
+         FUENTES
+    ====================================================== -->
 
-<!-- =====================================================
-     FUENTES
-===================================================== -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
 
-<link
-    rel="preconnect"
-    href="https://fonts.googleapis.com"
->
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
 
-<link
-    rel="preconnect"
-    href="https://fonts.gstatic.com"
-    crossorigin
->
-
-<link
-    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800&family=Share+Tech+Mono&display=swap"
-    rel="stylesheet"
->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Share+Tech+Mono&display=swap"
+        rel="stylesheet"
+    >
 
 
-<!-- =====================================================
-     CSS
-===================================================== -->
+    <!-- =====================================================
+         CSS
+    ====================================================== -->
 
-<link
-    rel="stylesheet"
-    href="css/styles.css"
->
+    <link rel="stylesheet" href="css/styles.css">
 
-<link
-    rel="stylesheet"
-    href="css/hud.css"
->
+    <link rel="stylesheet" href="css/hud.css">
 
-<link
-    rel="stylesheet"
-    href="css/chat.css"
->
+    <link rel="stylesheet" href="css/chat.css">
 
-<link
-    rel="stylesheet"
-    href="css/animations.css"
->
+    <link rel="stylesheet" href="css/animations.css">
 
-<link
-    rel="stylesheet"
-    href="css/responsive.css"
->
+    <link rel="stylesheet" href="css/responsive.css">
 
 </head>
 
@@ -69,15 +50,13 @@
 <body>
 
 
-<!-- =====================================================
+<!-- =========================================================
      FONDO
-===================================================== -->
+========================================================== -->
 
 <div id="background-container">
 
-    <canvas
-        id="particles-canvas"
-    ></canvas>
+    <canvas id="particles-canvas"></canvas>
 
     <div id="grid-overlay"></div>
 
@@ -86,251 +65,391 @@
 </div>
 
 
-<!-- =====================================================
-     HUD
-===================================================== -->
+
+<!-- =========================================================
+     HUD PRINCIPAL
+========================================================== -->
 
 <div id="hud">
 
 
-<!-- =====================================================
-     ENCABEZADO
-===================================================== -->
+    <!-- =====================================================
+         BARRA SUPERIOR
+    ====================================================== -->
 
-<header id="topbar">
-
-    <div class="logo">
-
-        <h1>
-            STARK INDUSTRIES
-        </h1>
-
-        <p>
-            J.A.R.V.I.S. Artificial Intelligence
-        </p>
-
-    </div>
+    <header id="topbar">
 
 
-    <div class="system-status">
+        <!-- IZQUIERDA -->
 
-        <span id="clock">
-            00:00
-        </span>
+        <div class="top-brand">
 
-        <span id="status-light"></span>
+            <div class="jarvis-title">
+                J.A.R.V.I.S.
+            </div>
 
-    </div>
+            <div class="jarvis-subtitle">
+                ARTIFICIAL INTELLIGENCE
+            </div>
 
-</header>
-
-
-<!-- =====================================================
-     CONTENIDO PRINCIPAL
-===================================================== -->
-
-<div id="main-layout">
-
-
-<!-- =====================================================
-     SIDEBAR
-===================================================== -->
-
-<aside id="sidebar">
-
-
-<!-- =====================================================
-     SISTEMA
-===================================================== -->
-
-<section class="panel system-panel">
-
-    <h2>
-        Sistema
-    </h2>
-
-
-    <div class="system-item">
-
-        <span>
-            J.A.R.V.I.S. CORE
-        </span>
-
-        <strong class="status-online">
-            ● ACTIVO
-        </strong>
-
-    </div>
-
-
-    <div class="system-item">
-
-        <span>
-            GROQ
-        </span>
-
-        <strong class="status-online">
-            ● CONECTADO
-        </strong>
-
-    </div>
-
-
-    <div class="system-item">
-
-        <span>
-            RENDER
-        </span>
-
-        <strong class="status-online">
-            ● ACTIVO
-        </strong>
-
-    </div>
-
-
-    <div class="system-item">
-
-        <span>
-            GITHUB
-        </span>
-
-        <strong class="status-online">
-            ● CONECTADO
-        </strong>
-
-    </div>
-
-</section>
-
-
-<!-- =====================================================
-     USUARIO
-===================================================== -->
-
-<section class="panel user-panel">
-
-    <h2>
-        Usuario
-    </h2>
-
-
-    <div id="user-info">
-
-        <div id="user-name">
-            Invitado
         </div>
 
 
-        <a
-            href="/auth/google"
-            id="google-login"
-        >
-            🔵 Iniciar sesión con Google
-        </a>
+        <!-- CENTRO -->
+
+        <div class="top-center">
+
+            <div id="clock">
+                00:00:00
+            </div>
+
+            <div class="system-line"></div>
+
+        </div>
+
+
+        <!-- DERECHA -->
+
+        <div class="stark-brand">
+
+            <div class="stark-logo">
+                STARK INDUSTRIES
+            </div>
+
+            <div class="system-state">
+
+                <span id="status-light"></span>
+
+                <span>ONLINE</span>
+
+            </div>
+
+        </div>
+
+
+    </header>
+
+
+
+    <!-- =====================================================
+         CUERPO
+    ====================================================== -->
+
+    <div id="main-layout">
+
+
+        <!-- =================================================
+             SIDEBAR
+        ================================================== -->
+
+        <aside id="sidebar">
+
+
+            <!-- USUARIO -->
+
+            <section class="sidebar-section user-section">
+
+                <div class="section-label">
+                    USUARIO
+                </div>
+
+
+                <div class="user-account">
+
+                    <div class="user-avatar">
+                        ◉
+                    </div>
+
+
+                    <div class="user-info">
+
+                        <div
+                            id="user-name"
+                            class="user-name"
+                        >
+                            Invitado
+                        </div>
+
+                        <div class="user-status">
+                            SESIÓN TEMPORAL
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <a
+                    href="/auth/google"
+                    id="google-login"
+                    class="google-login"
+                >
+                    <span>●</span>
+                    INICIAR CON GOOGLE
+                </a>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 HISTORIAL
+            ================================================== -->
+
+            <section class="sidebar-section history-section">
+
+
+                <div class="history-header">
+
+                    <div class="section-label">
+                        HISTORIAL
+                    </div>
+
+
+                    <button
+                        id="newChatButton"
+                        type="button"
+                        aria-label="Nueva conversación"
+                        title="Nueva conversación"
+                    >
+                        +
+                    </button>
+
+                </div>
+
+
+                <!-- BUSCADOR -->
+
+                <div class="chat-search">
+
+                    <span>
+                        ⌕
+                    </span>
+
+                    <input
+                        id="chatSearchInput"
+                        type="text"
+                        placeholder="Buscar chats..."
+                        autocomplete="off"
+                    >
+
+                </div>
+
+
+                <!-- HISTORIAL -->
+
+                <div id="chat-history">
+
+                    <!-- JS inserta los chats -->
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 ESTADO DEL SISTEMA
+            ================================================== -->
+
+            <section class="sidebar-section system-section">
+
+
+                <div class="section-label">
+                    SISTEMA
+                </div>
+
+
+                <div class="system-item">
+
+                    <span>
+                        CORE
+                    </span>
+
+                    <strong>
+                        ACTIVO
+                    </strong>
+
+                </div>
+
+
+                <div class="system-item">
+
+                    <span>
+                        GROQ
+                    </span>
+
+                    <strong>
+                        CONECTADO
+                    </strong>
+
+                </div>
+
+
+                <div class="system-item">
+
+                    <span>
+                        RENDER
+                    </span>
+
+                    <strong>
+                        ONLINE
+                    </strong>
+
+                </div>
+
+
+                <div class="system-item">
+
+                    <span>
+                        GITHUB
+                    </span>
+
+                    <strong>
+                        CONECTADO
+                    </strong>
+
+                </div>
+
+            </section>
+
+
+        </aside>
+
+
+
+        <!-- =================================================
+             ÁREA CENTRAL
+        ================================================== -->
+
+        <main id="chat-container">
+
+
+            <!-- =================================================
+                 BLOB / NÚCLEO JARVIS
+            ================================================== -->
+
+            <div id="jarvis-interface">
+
+
+                <div class="jarvis-blob">
+
+                    <div class="blob-ring ring-outer"></div>
+
+                    <div class="blob-ring ring-middle"></div>
+
+                    <div class="blob-ring ring-inner"></div>
+
+
+                    <div class="blob-core">
+
+                        <span>
+                            J
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="interface-status">
+
+                    <span class="status-dot"></span>
+
+                    <span>
+                        J.A.R.V.I.S. CORE
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- =================================================
+                 MENSAJES
+            ================================================== -->
+
+            <div id="messages">
+
+                <!-- Los mensajes aparecen aquí -->
+
+            </div>
+
+
+        </main>
 
     </div>
 
-</section>
 
 
-<!-- =====================================================
-     HISTORIAL
-===================================================== -->
+    <!-- =====================================================
+         CONSOLA
+    ====================================================== -->
 
-<section class="panel history-panel">
-
-    <div class="history-header">
-
-        <h2>
-            Historial
-        </h2>
+    <footer id="console">
 
 
-        <button
-            id="newChatButton"
-            type="button"
-            title="Crear nueva conversación"
-        >
-            +
-        </button>
-
-    </div>
+        <div class="console-wrapper">
 
 
-    <div id="chat-history">
+            <!-- MICRÓFONO -->
 
-        <!--
-            Los chats serán generados
-            dinámicamente por chat.js.
-        -->
-
-    </div>
-
-</section>
-
-
-</aside>
+            <button
+                id="voiceButton"
+                class="console-icon-button"
+                type="button"
+                aria-label="Entrada de voz"
+                title="Entrada de voz"
+            >
+                🎙
+            </button>
 
 
-<!-- =====================================================
-     CHAT
-===================================================== -->
+            <!-- INPUT -->
 
-<main id="chat-container">
+            <input
+                type="text"
+                id="messageInput"
+                placeholder="Escriba una instrucción..."
+                autocomplete="off"
+            >
 
-    <div id="messages">
 
-        <!--
-            Los mensajes serán generados
-            dinámicamente por chat.js.
-        -->
+            <!-- ESTADO -->
 
-    </div>
+            <div class="console-status">
 
-</main>
+                <span></span>
+
+                READY
+
+            </div>
+
+
+            <!-- ENVIAR -->
+
+            <button
+                id="sendButton"
+                type="button"
+            >
+                ENVIAR
+            </button>
+
+        </div>
+
+
+    </footer>
 
 
 </div>
 
 
-<!-- =====================================================
-     CONSOLA
-===================================================== -->
 
-<footer id="console">
-
-    <input
-
-        type="text"
-
-        id="messageInput"
-
-        placeholder="Escriba una instrucción..."
-
-        autocomplete="off"
-
-    >
-
-
-    <button
-        id="sendButton"
-        type="button"
-    >
-
-        Enviar
-
-    </button>
-
-</footer>
-
-
-</div>
-
-
-<!-- =====================================================
+<!-- =========================================================
      JAVASCRIPT
-===================================================== -->
+========================================================== -->
 
 <script src="js/core.js"></script>
 
