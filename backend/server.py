@@ -1,5 +1,6 @@
 # ============================================================================
-# STARK INDUSTRIES: NÚCLEO COGNITIVO CENTRAL (SERVER.PY)
+# STARK INDUSTRIES: NÚCLEO COGNITIVO CENTRAL
+# J.A.R.V.I.S. — SERVER.PY
 # ============================================================================
 
 import os
@@ -30,7 +31,6 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 app = Flask(__name__)
 
-# Clave secreta de Flask almacenada en Render
 app.secret_key = os.environ.get("FLASK_SECRET_KEY")
 
 if not app.secret_key:
@@ -40,11 +40,14 @@ if not app.secret_key:
 
 CORS(app)
 
-# Configuración de cookies de sesión
+
+# ============================================================================
+# CONFIGURACIÓN DE SESIÓN
+# ============================================================================
+
 app.config["SESSION_COOKIE_HTTPONLY"] = True
 app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
 
-# En producción, Render utiliza HTTPS
 if os.environ.get("RENDER") == "true":
     app.config["SESSION_COOKIE_SECURE"] = True
 
@@ -56,6 +59,7 @@ if os.environ.get("RENDER") == "true":
 GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID")
 GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET")
 GOOGLE_REDIRECT_URI = os.environ.get("GOOGLE_REDIRECT_URI")
+
 
 if not GOOGLE_CLIENT_ID:
     raise RuntimeError(
@@ -168,6 +172,7 @@ def google_callback():
         state = session.get("google_oauth_state")
 
         if not state:
+
             return """
             <h2>Error de autenticación</h2>
             <p>La sesión de autenticación expiró. Intente nuevamente.</p>
@@ -198,7 +203,6 @@ def google_callback():
 
         userinfo = userinfo_response.json()
 
-        # Guardamos solamente información básica del usuario
         session["user"] = {
             "google_id": userinfo.get("sub"),
             "name": userinfo.get("name"),
@@ -273,7 +277,9 @@ def procesar_comando_usuario():
                     "Error de transmisión: paquete de datos vacío o corrupto, Señor."
             }), 400
 
+
         mensaje_usuario = datos["message"].strip()
+
 
         if not mensaje_usuario:
 
@@ -283,22 +289,52 @@ def procesar_comando_usuario():
                     "Consola vacía. Introduzca una orden válida, Señor."
             }), 400
 
-        respuesta_jarvis = obtener_respuesta_cognitiva(
-            mensaje_usuario
+
+        # ------------------------------------------------------------
+        # CONTEXTO TEMPORAL DE MEMORIA
+        # ------------------------------------------------------------
+
+        contexto_memoria = datos.get(
+            "memory_context",
+            ""
         )
+
+
+        # Seguridad básica: limitar tamaño del contexto recibido.
+        if not isinstance(contexto_memoria, str):
+
+            contexto_memoria = ""
+
+        contexto_memoria = contexto_memoria[:18000]
+
+
+        # ------------------------------------------------------------
+        # PROCESAMIENTO COGNITIVO
+        # ------------------------------------------------------------
+
+        respuesta_jarvis = obtener_respuesta_cognitiva(
+            mensaje_usuario,
+            contexto_memoria
+        )
+
 
         return jsonify({
             "status": "SUCCESS",
             "response": respuesta_jarvis
         })
 
+
     except Exception as e:
 
-        print(f"[CRITICAL BACKEND ERROR]: {e}")
+        print(
+            f"[CRITICAL BACKEND ERROR]: "
+            f"{type(e).__name__}: {e}"
+        )
 
         return jsonify({
             "status": "CRITICAL_FAILURE",
-            "response": f"Error interno: {str(e)}"
+            "response":
+                "Se ha producido un fallo interno del núcleo cognitivo, Señor."
         }), 500
 
 
