@@ -1,1 +1,259 @@
+/* =========================================================
+   J.A.R.V.I.S. — HUD
+========================================================= */
 
+
+/* =========================================================
+   CONTENEDOR CENTRAL
+========================================================= */
+
+#chat-container {
+
+    position: relative;
+
+    display: flex;
+
+    flex-direction: column;
+
+    min-width: 0;
+
+    min-height: 0;
+
+    overflow: hidden;
+
+}
+
+
+/* =========================================================
+   INTERFAZ DEL NÚCLEO
+========================================================= */
+
+#jarvis-interface {
+
+    position: relative;
+
+    flex-shrink: 0;
+
+    height: 150px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    pointer-events: none;
+
+}
+
+
+/* =========================================================
+   BLOB
+========================================================= */
+
+.jarvis-blob {
+
+    position: relative;
+
+    width: 92px;
+
+    height: 92px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+}
+
+
+/* =========================================================
+   ANILLOS
+========================================================= */
+
+.blob-ring {
+
+    position: absolute;
+
+    border: 1px solid rgba(255, 180, 0, 0.45);
+
+    border-radius: 50%;
+
+}
+
+
+.ring-outer {
+
+    width: 92px;
+
+    height: 92px;
+
+    border-style: dashed;
+
+    animation:
+        hudRotate 18s linear infinite;
+
+}
+
+
+.ring-middle {
+
+    width: 68px;
+
+    height: 68px;
+
+    border-color:
+        rgba(255, 180, 0, 0.28);
+
+    animation:
+        hudRotateReverse 12s linear infinite;
+
+}
+
+
+.ring-inner {
+
+    width: 46px;
+
+    height: 46px;
+
+    border-color:
+        rgba(255, 212, 90, 0.55);
+
+    box-shadow:
+        0 0 14px
+        rgba(255, 180, 0, 0.12);
+
+}
+
+
+/* =========================================================
+   NÚCLEO
+========================================================= */
+
+.blob-core {
+
+    position: relative;
+
+    width: 25px;
+
+    height: 25px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border:
+        1px solid
+        rgba(255, 212, 90, 0.85);
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            #fff 0%,
+            #ffd45a 15%,
+            #ffb400 38%,
+            #5d3d00 65%,
+            #080a0d 100%
+        );
+
+    color: #fff;
+
+    font-family:
+        "Orbitron",
+        sans-serif;
+
+    font-size: 8px;
+
+    font-weight: 800;
+
+    box-shadow:
+
+        0 0 12px
+        rgba(255, 180, 0, 0.55),
+
+        0 0 28px
+        rgba(255, 180, 0, 0.14);
+
+}
+
+
+/* =========================================================
+   ESTADO
+========================================================= */
+
+.interface-status {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    margin-top: 7px;
+
+    color: #686f78;
+
+    font-family:
+        "Share Tech Mono",
+        monospace;
+
+    font-size: 8px;
+
+    letter-spacing: 1.5px;
+
+}
+
+
+.status-dot {
+
+    width: 5px;
+
+    height: 5px;
+
+    border-radius: 50%;
+
+    background: var(--gold);
+
+    box-shadow:
+        0 0 7px
+        rgba(255, 180, 0, 0.75);
+
+}
+
+
+/* =========================================================
+   ANIMACIONES HUD
+========================================================= */
+
+@keyframes hudRotate {
+
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+
+}
+
+
+@keyframes hudRotateReverse {
+
+    from {
+        transform: rotate(360deg);
+    }
+
+    to {
+        transform: rotate(0deg);
+    }
+
+}
