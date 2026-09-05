@@ -1,318 +1,361 @@
-/* =====================================================
-   J.A.R.V.I.S. — SISTEMA DE CHAT
-===================================================== */
+/* =========================================================
+   J.A.R.V.I.S.
+   CHAT SYSTEM
+========================================================= */
+
+
+/* =========================================================
+   MENSAJES
+========================================================= */
 
 #messages {
+
     display: flex;
+
     flex-direction: column;
-    gap: 18px;
+
+    gap: 16px;
+
+    flex: 1;
+
+    min-height: 0;
 
     overflow-y: auto;
+
     overflow-x: hidden;
 
-    padding: 25px;
+    padding: 12px 24px 24px;
 
     scroll-behavior: smooth;
-}
 
-/* Scrollbar del chat */
-#messages::-webkit-scrollbar {
-    width: 8px;
-}
-
-#messages::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.25);
-}
-
-#messages::-webkit-scrollbar-thumb {
-    background: rgba(255, 180, 0, 0.45);
-    border-radius: 10px;
-}
-
-#messages::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 180, 0, 0.75);
 }
 
 
-/* =====================================================
-   CONTENEDOR DE MENSAJE
-===================================================== */
+/* =========================================================
+   MENSAJE GENERAL
+========================================================= */
 
 .message-wrapper {
+
     display: flex;
+
     width: 100%;
+
+    animation:
+        messageAppear 0.28s ease-out;
+
 }
 
 
-/* =====================================================
-   MENSAJE DEL USUARIO
-===================================================== */
+/* =========================================================
+   USUARIO
+========================================================= */
 
 .user-wrapper {
+
     justify-content: flex-end;
+
 }
+
 
 .user-message {
-    max-width: 70%;
 
-    padding: 13px 18px;
+    max-width: 65%;
 
-    background: linear-gradient(
-        135deg,
-        rgba(255, 180, 0, 0.20),
-        rgba(255, 140, 0, 0.10)
-    );
+    padding: 11px 15px;
 
-    border: 1px solid rgba(255, 180, 0, 0.45);
+    border:
 
-    border-radius: 18px 18px 4px 18px;
+        1px solid
+        rgba(255, 180, 0, 0.30);
 
-    color: #ffffff;
+    border-radius:
+        12px
+        12px
+        3px
+        12px;
 
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 15px;
+    background:
 
-    line-height: 1.5;
+        linear-gradient(
+            135deg,
+            rgba(255, 180, 0, 0.12),
+            rgba(255, 140, 0, 0.045)
+        );
 
-    word-wrap: break-word;
+    color: #eeeeee;
+
+    font-family:
+        "Share Tech Mono",
+        monospace;
+
+    font-size: 12px;
+
+    line-height: 1.55;
+
+    word-break: break-word;
 
     box-shadow:
-        0 0 12px rgba(255, 180, 0, 0.08);
+        0 0 16px
+        rgba(255, 180, 0, 0.035);
+
 }
 
 
-/* =====================================================
-   MENSAJE DE JARVIS
-===================================================== */
+/* =========================================================
+   JARVIS
+========================================================= */
 
 .jarvis-wrapper {
+
     justify-content: flex-start;
 
     align-items: flex-start;
 
     gap: 10px;
+
 }
 
 
-/* Pequeño núcleo/avatar de JARVIS */
-
 .message-avatar {
-    width: 34px;
-    height: 34px;
 
-    min-width: 34px;
+    position: relative;
 
-    margin-top: 4px;
+    width: 30px;
+
+    height: 30px;
+
+    min-width: 30px;
+
+    margin-top: 3px;
+
+    border:
+        1px solid
+        rgba(255, 180, 0, 0.65);
 
     border-radius: 50%;
 
-    border: 1px solid rgba(255, 180, 0, 0.7);
-
     background:
+
         radial-gradient(
             circle,
-            #ffffff 0%,
-            #ffb400 25%,
-            #8a5700 55%,
-            #111 70%
+            #fff 0%,
+            #ffd45a 12%,
+            #ffb400 27%,
+            #563800 53%,
+            #090b0f 70%
         );
 
     box-shadow:
-        0 0 10px rgba(255, 180, 0, 0.5);
+        0 0 12px
+        rgba(255, 180, 0, 0.35);
+
 }
 
 
-/* Burbuja JARVIS */
+.message-avatar::after {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 6px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.45);
+
+    border-radius: 50%;
+
+}
+
 
 .jarvis-message {
-    max-width: 75%;
 
-    padding: 14px 18px;
+    max-width: 76%;
 
-    background: rgba(13, 17, 24, 0.92);
+    padding: 12px 16px;
 
-    border: 1px solid rgba(255, 180, 0, 0.30);
+    border:
+        1px solid
+        rgba(255, 180, 0, 0.18);
 
-    border-radius: 4px 18px 18px 18px;
+    border-radius:
+        3px
+        12px
+        12px
+        12px;
 
-    color: #eeeeee;
+    background:
 
-    font-family: 'Share Tech Mono', monospace;
+        linear-gradient(
+            145deg,
+            rgba(13, 17, 24, 0.92),
+            rgba(7, 10, 15, 0.86)
+        );
 
-    font-size: 15px;
+    color: #dedede;
 
-    line-height: 1.55;
+    font-family:
+        "Share Tech Mono",
+        monospace;
 
-    word-wrap: break-word;
+    font-size: 12px;
+
+    line-height: 1.6;
+
+    word-break: break-word;
 
     box-shadow:
-        0 0 15px rgba(255, 180, 0, 0.05);
+        0 0 20px
+        rgba(255, 180, 0, 0.025);
+
 }
 
 
-/* Nombre JARVIS */
+/* =========================================================
+   NOMBRE
+========================================================= */
 
 .jarvis-name {
+
     display: block;
 
     margin-bottom: 6px;
 
-    color: #ffb400;
+    color: var(--gold);
 
-    font-family: 'Orbitron', sans-serif;
+    font-family:
+        "Orbitron",
+        sans-serif;
 
-    font-size: 12px;
+    font-size: 9px;
 
-    letter-spacing: 1px;
-}
+    font-weight: 600;
 
-
-/* =====================================================
-   ANIMACIÓN DE ENTRADA
-===================================================== */
-
-.message-wrapper {
-    animation: messageAppear 0.25s ease-out;
-}
-
-@keyframes messageAppear {
-
-    from {
-        opacity: 0;
-        transform: translateY(8px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    letter-spacing: 1.5px;
 
 }
 
 
-/* =====================================================
-   ESTADO "PROCESANDO"
-===================================================== */
+/* =========================================================
+   INDICADOR DE PROCESAMIENTO
+========================================================= */
 
 .typing-indicator {
+
     display: flex;
 
     align-items: center;
 
     gap: 5px;
 
-    padding: 5px 0;
+    min-height: 20px;
+
 }
 
-.typing-indicator span {
-    width: 6px;
-    height: 6px;
 
-    background: #ffb400;
+.typing-indicator span {
+
+    width: 5px;
+
+    height: 5px;
 
     border-radius: 50%;
 
-    animation: typing 1.2s infinite ease-in-out;
+    background: var(--gold);
+
+    box-shadow:
+        0 0 6px
+        rgba(255, 180, 0, 0.5);
+
+    animation:
+        typing 1.2s
+        infinite
+        ease-in-out;
+
 }
+
 
 .typing-indicator span:nth-child(2) {
+
     animation-delay: 0.15s;
+
 }
 
+
 .typing-indicator span:nth-child(3) {
+
     animation-delay: 0.30s;
+
 }
+
+
+/* =========================================================
+   ANIMACIONES
+========================================================= */
+
+@keyframes messageAppear {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            translateY(7px);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateY(0);
+
+    }
+
+}
+
 
 @keyframes typing {
 
-    0%, 60%, 100% {
+    0%,
+    60%,
+    100% {
+
         opacity: 0.25;
-        transform: translateY(0);
+
+        transform:
+            translateY(0);
+
     }
 
     30% {
+
         opacity: 1;
-        transform: translateY(-4px);
+
+        transform:
+            translateY(-3px);
+
     }
 
 }
 
 
-/* =====================================================
-   MÓVIL
-===================================================== */
-
-@media (max-width: 700px) {
-
-    #messages {
-        padding: 15px;
-        gap: 14px;
-    }
-
-    .user-message,
-    .jarvis-message {
-        max-width: 88%;
-        font-size: 14px;
-    }
-
-    .message-avatar {
-        width: 28px;
-        height: 28px;
-
-        min-width: 28px;
-    }
-
-}
-/* =====================================================
-   HISTORIAL — CONTROLES DE CONVERSACIÓN
-===================================================== */
-
-.history-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-}
-
-
-#newChatButton {
-    width: 30px;
-    height: 30px;
-
-    border: 1px solid rgba(255, 255, 255, 0.25);
-
-    background: transparent;
-
-    color: inherit;
-
-    font-family: "Orbitron", sans-serif;
-
-    font-size: 20px;
-
-    cursor: pointer;
-
-    transition:
-        transform 0.2s ease,
-        background 0.2s ease;
-}
-
-
-#newChatButton:hover {
-    transform: scale(1.08);
-}
-
+/* =========================================================
+   HISTORIAL
+========================================================= */
 
 .history-item {
-    display: flex;
-    align-items: center;
 
-    gap: 8px;
+    position: relative;
 
-    cursor: pointer;
 }
 
 
 .history-title {
+
     flex: 1;
 
     overflow: hidden;
@@ -320,28 +363,72 @@
     white-space: nowrap;
 
     text-overflow: ellipsis;
+
 }
 
 
 .history-delete {
+
     border: none;
 
     background: transparent;
 
-    color: inherit;
-
-    opacity: 0.55;
+    color: #626870;
 
     cursor: pointer;
 
-    font-size: 18px;
+    opacity: 0.7;
 
-    line-height: 1;
+    font-size: 15px;
 
-    padding: 2px 5px;
 }
 
 
 .history-delete:hover {
+
+    color: var(--gold);
+
     opacity: 1;
+
+}
+
+
+/* =========================================================
+   MÓVIL
+========================================================= */
+
+@media (max-width: 700px) {
+
+    #messages {
+
+        padding:
+            10px
+            12px
+            18px;
+
+        gap: 12px;
+
+    }
+
+
+    .user-message,
+    .jarvis-message {
+
+        max-width: 88%;
+
+        font-size: 11px;
+
+    }
+
+
+    .message-avatar {
+
+        width: 27px;
+
+        height: 27px;
+
+        min-width: 27px;
+
+    }
+
 }
