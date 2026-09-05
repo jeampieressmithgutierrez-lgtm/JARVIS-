@@ -1,595 +1,1192 @@
-/* ===================================================
-   STARK INDUSTRIES - J.A.R.V.I.S.
-   styles.css
-=================================================== */
+/* =========================================================
+   STARK INDUSTRIES
+   J.A.R.V.I.S. — CORE INTERFACE
+========================================================= */
 
-:root{
+:root {
 
-    --bg:#05070b;
-    --panel:#0d1118;
-    --panel2:#141a22;
+    --bg: #05070b;
 
-    --gold:#ffb400;
-    --red:#b91d1d;
-    --white:#f5f5f5;
-    --gray:#9ca3af;
+    --bg-soft: #080b10;
 
-    --border:#2b2f36;
+    --panel: rgba(8, 11, 16, 0.78);
 
-    --radius:12px;
+    --panel-soft: rgba(14, 18, 25, 0.64);
 
-}
+    --gold: #ffb400;
 
-*{
+    --gold-light: #ffd45a;
 
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+    --gold-dark: #a96e00;
 
-}
+    --orange: #ff8c00;
 
-html{
+    --red: #b91d1d;
 
-    width:100%;
-    height:100%;
+    --white: #f5f5f5;
 
-}
+    --gray: #9ca3af;
 
-body{
+    --muted: #626873;
 
-    width:100%;
-    height:100vh;
+    --border: rgba(255, 180, 0, 0.18);
 
-    background:#05070b;
+    --border-soft: rgba(255, 255, 255, 0.08);
 
-    color:var(--white);
-
-    font-family:'Orbitron',sans-serif;
-
-    overflow:hidden;
+    --radius: 12px;
 
 }
 
-/*=============================
-FONDO
-=============================*/
 
-#background-container{
+/* =========================================================
+   RESET
+========================================================= */
 
-    position:fixed;
+* {
 
-    inset:0;
+    margin: 0;
 
-    z-index:0;
+    padding: 0;
+
+    box-sizing: border-box;
+
+}
+
+
+html,
+body {
+
+    width: 100%;
+
+    height: 100%;
+
+}
+
+
+body {
+
+    min-height: 100vh;
+
+    overflow: hidden;
 
     background:
-    radial-gradient(circle at center,#191919 0%,#05070b 70%);
+
+        radial-gradient(
+            circle at 50% 45%,
+            rgba(255, 180, 0, 0.035),
+            transparent 35%
+        ),
+
+        #05070b;
+
+    color: var(--white);
+
+    font-family: "Orbitron", sans-serif;
 
 }
 
-#particles-canvas{
 
-    position:absolute;
+/* =========================================================
+   FONDO
+========================================================= */
 
-    inset:0;
+#background-container {
 
-    width:100%;
-    height:100%;
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 0;
+
+    overflow: hidden;
+
+    background:
+
+        radial-gradient(
+            ellipse at center,
+            #11161d 0%,
+            #080b10 38%,
+            #05070b 75%
+        );
 
 }
 
-#grid-overlay{
 
-    position:absolute;
+#particles-canvas {
 
-    inset:0;
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+
+    height: 100%;
+
+    pointer-events: none;
+
+}
+
+
+#grid-overlay {
+
+    position: absolute;
+
+    inset: 0;
+
+    pointer-events: none;
+
+    opacity: 0.55;
 
     background-image:
 
-    linear-gradient(rgba(255,180,0,.05) 1px,transparent 1px),
+        linear-gradient(
+            rgba(255, 180, 0, 0.035) 1px,
+            transparent 1px
+        ),
 
-    linear-gradient(90deg,rgba(255,180,0,.05) 1px,transparent 1px);
+        linear-gradient(
+            90deg,
+            rgba(255, 180, 0, 0.035) 1px,
+            transparent 1px
+        );
 
-    background-size:45px 45px;
-
-}
-
-#scan-overlay{
-
-    position:absolute;
-
-    inset:0;
-
-    background:linear-gradient(
-
-        transparent 50%,
-
-        rgba(255,255,255,.015) 51%
-
-    );
-
-    background-size:100% 4px;
+    background-size: 44px 44px;
 
 }
 
-/*=============================
-HUD
-=============================*/
 
-#hud{
+#scan-overlay {
 
-    position:relative;
+    position: absolute;
 
-    z-index:5;
+    inset: 0;
 
-    width:100%;
+    pointer-events: none;
 
-    height:100vh;
+    opacity: 0.18;
 
-    display:flex;
+    background:
 
-    flex-direction:column;
-
-}
-
-/*=============================
-TOPBAR
-=============================*/
-
-#topbar{
-
-    height:85px;
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    padding:20px 35px;
-
-    border-bottom:1px solid var(--border);
-
-    background:rgba(0,0,0,.35);
-
-    backdrop-filter:blur(10px);
+        repeating-linear-gradient(
+            to bottom,
+            transparent 0,
+            transparent 3px,
+            rgba(255, 255, 255, 0.018) 4px
+        );
 
 }
 
-.logo h1{
 
-    color:var(--gold);
+/* =========================================================
+   HUD
+========================================================= */
 
-    font-size:32px;
+#hud {
 
-    letter-spacing:3px;
+    position: relative;
 
-}
+    z-index: 5;
 
-.logo p{
+    width: 100%;
 
-    color:#cccccc;
+    height: 100vh;
 
-    margin-top:5px;
+    display: flex;
 
-    font-size:13px;
-
-}
-
-.system-status{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:20px;
+    flex-direction: column;
 
 }
 
-#clock{
 
-    color:var(--gold);
+/* =========================================================
+   TOPBAR
+========================================================= */
 
-    font-size:22px;
+#topbar {
+
+    position: relative;
+
+    height: 86px;
+
+    flex-shrink: 0;
+
+    display: grid;
+
+    grid-template-columns: 1fr auto 1fr;
+
+    align-items: center;
+
+    padding: 0 34px;
+
+    background:
+
+        linear-gradient(
+            180deg,
+            rgba(0, 0, 0, 0.58),
+            rgba(0, 0, 0, 0.28)
+        );
+
+    backdrop-filter: blur(12px);
 
 }
 
-#status-light{
 
-    width:14px;
+/* Línea superior tecnológica */
 
-    height:14px;
+#topbar::after {
 
-    background:#00ff55;
+    content: "";
 
-    border-radius:50%;
+    position: absolute;
 
-    box-shadow:0 0 15px #00ff55;
+    left: 0;
+
+    right: 0;
+
+    bottom: 0;
+
+    height: 1px;
+
+    background:
+
+        linear-gradient(
+            90deg,
+            transparent 0%,
+            rgba(255, 180, 0, 0.15) 10%,
+            var(--gold) 25%,
+            rgba(255, 180, 0, 0.25) 50%,
+            var(--gold) 75%,
+            rgba(255, 180, 0, 0.15) 90%,
+            transparent 100%
+        );
+
+    box-shadow:
+        0 0 10px rgba(255, 180, 0, 0.35);
 
 }
 
-/*=============================
-LAYOUT
-=============================*/
+
+/* =========================================================
+   JARVIS
+========================================================= */
+
+.top-brand {
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+}
+
+
+.jarvis-title {
+
+    color: var(--gold);
+
+    font-size: 25px;
+
+    font-weight: 700;
+
+    letter-spacing: 4px;
+
+}
+
+
+.jarvis-subtitle {
+
+    margin-top: 4px;
+
+    color: #747b85;
+
+    font-family: "Share Tech Mono", monospace;
+
+    font-size: 10px;
+
+    letter-spacing: 2px;
+
+}
+
+
+/* =========================================================
+   CENTRO / RELOJ
+========================================================= */
+
+.top-center {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 6px;
+
+}
+
+
+#clock {
+
+    color: var(--gold-light);
+
+    font-family: "Share Tech Mono", monospace;
+
+    font-size: 18px;
+
+    letter-spacing: 2px;
+
+    text-shadow:
+        0 0 8px rgba(255, 180, 0, 0.35);
+
+}
+
+
+.system-line {
+
+    width: 75px;
+
+    height: 1px;
+
+    background: var(--gold);
+
+    opacity: 0.5;
+
+}
+
+
+/* =========================================================
+   STARK INDUSTRIES
+========================================================= */
+
+.stark-brand {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-end;
+
+    justify-content: center;
+
+}
+
+
+.stark-logo {
+
+    color: #11151b;
+
+    font-size: 21px;
+
+    font-weight: 800;
+
+    letter-spacing: 3px;
+
+    text-shadow:
+        0 0 1px rgba(255, 180, 0, 0.7);
+
+    filter:
+        drop-shadow(
+            0 1px 0 rgba(255, 180, 0, 0.4)
+        );
+
+}
+
+
+.system-state {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    margin-top: 4px;
+
+    color: #737b84;
+
+    font-family: "Share Tech Mono", monospace;
+
+    font-size: 9px;
+
+    letter-spacing: 1.5px;
+
+}
+
+
+#status-light {
+
+    width: 7px;
+
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: #4cff78;
+
+    box-shadow:
+        0 0 8px rgba(76, 255, 120, 0.8);
+
+}
+
+
+/* =========================================================
+   LAYOUT
+========================================================= */
 
 #main-layout {
+
     flex: 1;
+
     min-height: 0;
 
     display: grid;
-    grid-template-columns: 300px minmax(0, 1fr);
-}
 
-/*=============================
-SIDEBAR
-=============================*/
-
-#sidebar{
-
-    padding:20px;
-
-    border-right:1px solid var(--border);
-
-    overflow:auto;
-
-    background:rgba(0,0,0,.18);
+    grid-template-columns: 275px minmax(0, 1fr);
 
 }
 
-.panel{
 
-    background:var(--panel);
+/* =========================================================
+   SIDEBAR
+========================================================= */
 
-    border:1px solid var(--border);
+#sidebar {
 
-    border-radius:12px;
-
-    padding:18px;
-
-    margin-bottom:20px;
-
-}
-
-.panel h2{
-
-    color:var(--gold);
-
-    margin-bottom:15px;
-
-    font-size:18px;
-
-}
-
-.panel div{
-
-    margin-bottom:10px;
-
-    color:#dddddd;
-
-}
-
-/*=============================
-CHAT
-=============================*/
-
-#chat-container {
-    display: flex;
-    flex-direction: column;
-
-    min-width: 0;
     min-height: 0;
-
-    padding: 25px;
-}
-#messages {
-    flex: 1;
-    min-height: 0;
-    min-width: 0;
 
     overflow-y: auto;
+
     overflow-x: hidden;
 
-    border: 1px solid var(--border);
-    border-radius: 12px;
+    padding: 22px 18px;
 
-    background: rgba(10, 10, 10, 0.35);
+    border-right: 1px solid var(--border-soft);
 
-    padding: 20px;
+    background:
 
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
+        linear-gradient(
+            180deg,
+            rgba(3, 5, 8, 0.82),
+            rgba(5, 7, 11, 0.52)
+        );
 
-    scroll-behavior: smooth;
-}
-
-/*=============================
-CONSOLA
-=============================*/
-
-#console{
-
-    height:90px;
-
-    display:flex;
-
-    align-items:center;
-
-    gap:15px;
-
-    padding:20px;
-
-    border-top:1px solid var(--border);
-
-    background:#0b0f15;
+    backdrop-filter: blur(10px);
 
 }
 
-#messageInput{
 
-    flex:1;
+.sidebar-section {
 
-    height:50px;
+    position: relative;
 
-    border:none;
+    padding: 16px 12px;
 
-    outline:none;
+    margin-bottom: 18px;
 
-    border-radius:10px;
-
-    background:#151b23;
-
-    color:white;
-
-    padding:0 18px;
-
-    font-size:16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.055);
 
 }
 
-#sendButton{
 
-    width:140px;
+.section-label {
 
-    height:50px;
+    margin-bottom: 14px;
 
-    border:none;
+    color: var(--gold);
 
-    border-radius:10px;
+    font-size: 11px;
 
-    cursor:pointer;
+    font-weight: 600;
 
-    background:linear-gradient(
-
-        135deg,
-
-        var(--gold),
-
-        #ff8c00
-
-    );
-
-    color:black;
-
-    font-weight:bold;
-
-    font-size:16px;
-
-    transition:.25s;
+    letter-spacing: 2px;
 
 }
 
-#sendButton:hover{
 
-    transform:scale(1.05);
-
-} 
-/* =========================================
+/* =========================================================
    USUARIO
-========================================= */
+========================================================= */
 
 .user-account {
+
     display: flex;
+
     align-items: center;
-    gap: 12px;
+
+    gap: 10px;
+
     margin-bottom: 14px;
+
 }
 
+
 .user-avatar {
-    width: 38px;
-    height: 38px;
+
+    width: 37px;
+
+    height: 37px;
 
     display: flex;
+
     align-items: center;
+
     justify-content: center;
 
-    border: 1px solid var(--gold);
+    border: 1px solid rgba(255, 180, 0, 0.5);
+
     border-radius: 50%;
+
+    color: var(--gold);
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255, 180, 0, 0.16),
+            rgba(255, 180, 0, 0.025)
+        );
+
+    font-size: 14px;
+
+}
+
+
+.user-info {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 4px;
+
+    min-width: 0;
+
+}
+
+
+.user-name {
+
+    color: #e9e9e9;
+
+    font-size: 13px;
+
+}
+
+
+.user-status {
+
+    color: var(--muted);
+
+    font-family: "Share Tech Mono", monospace;
+
+    font-size: 9px;
+
+    letter-spacing: 1px;
+
+}
+
+
+/* =========================================================
+   GOOGLE
+========================================================= */
+
+.google-login {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    width: 100%;
+
+    height: 36px;
+
+    border: 1px solid rgba(255, 180, 0, 0.22);
+
+    border-radius: 5px;
+
+    background: rgba(255, 180, 0, 0.035);
+
+    color: #aeb4bb;
+
+    text-decoration: none;
+
+    font-family: "Share Tech Mono", monospace;
+
+    font-size: 9px;
+
+    letter-spacing: 0.8px;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease;
+
+}
+
+
+.google-login span {
+
+    color: var(--gold);
+
+}
+
+
+.google-login:hover {
 
     background: rgba(255, 180, 0, 0.08);
 
-    font-size: 18px;
-}
+    border-color: rgba(255, 180, 0, 0.55);
 
-.user-info {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.user-name {
     color: white;
-    font-size: 14px;
-}
 
-.user-status {
-    color: #8d949c;
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 10px;
 }
 
 
-/* =========================================
-   GOOGLE
-========================================= */
+/* =========================================================
+   HISTORIAL
+========================================================= */
 
-.google-login {
-    width: 100%;
-    height: 38px;
+.history-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 13px;
+
+}
+
+
+.history-header .section-label {
+
+    margin-bottom: 0;
+
+}
+
+
+#newChatButton {
+
+    width: 27px;
+
+    height: 27px;
 
     border: 1px solid rgba(255, 180, 0, 0.35);
-    border-radius: 7px;
 
-    background: rgba(255, 180, 0, 0.07);
+    border-radius: 5px;
 
-    color: #dddddd;
+    background: rgba(255, 180, 0, 0.04);
 
-    font-family: 'Orbitron', sans-serif;
-    font-size: 10px;
+    color: var(--gold);
+
+    font-family: "Orbitron", sans-serif;
+
+    font-size: 17px;
 
     cursor: pointer;
 
-    transition: 0.25s;
-}
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
 
-.google-login:hover {
-    background: rgba(255, 180, 0, 0.15);
-    border-color: var(--gold);
-    color: white;
 }
 
 
-/* =========================================
-   BUSCADOR DE CHATS
-========================================= */
+#newChatButton:hover {
+
+    background: rgba(255, 180, 0, 0.12);
+
+    transform: scale(1.05);
+
+}
+
+
+/* =========================================================
+   BUSCADOR
+========================================================= */
 
 .chat-search {
+
     display: flex;
+
     align-items: center;
+
     gap: 8px;
 
-    height: 40px;
+    height: 35px;
 
-    padding: 0 10px;
+    margin-bottom: 10px;
 
-    border: 1px solid var(--border);
-    border-radius: 8px;
+    padding: 0 9px;
 
-    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+
+    border-radius: 5px;
+
+    background: rgba(0, 0, 0, 0.22);
+
 }
+
 
 .chat-search span {
+
     color: var(--gold);
-    font-size: 20px;
+
+    font-size: 17px;
+
 }
 
+
 .chat-search input {
+
     width: 100%;
 
     border: none;
+
     outline: none;
 
     background: transparent;
 
     color: white;
 
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 11px;
+    font-family: "Share Tech Mono", monospace;
+
+    font-size: 10px;
+
 }
+
 
 .chat-search input::placeholder {
-    color: #737980;
+
+    color: #555c65;
+
 }
 
 
-/* =========================================
-   HISTORIAL
-========================================= */
+/* =========================================================
+   HISTORIAL ITEMS
+========================================================= */
 
 #chat-history {
+
     display: flex;
+
     flex-direction: column;
-    gap: 7px;
+
+    gap: 5px;
 
     max-height: 300px;
+
     overflow-y: auto;
+
 }
 
+
 .history-item {
+
     display: flex;
+
     align-items: center;
-    gap: 8px;
 
-    padding: 10px;
+    gap: 7px;
 
-    border-radius: 7px;
+    min-height: 35px;
 
-    color: #c7c7c7;
+    padding: 7px 8px;
 
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 11px;
+    border-left: 2px solid transparent;
+
+    border-radius: 4px;
+
+    color: #9ca2a9;
+
+    font-family: "Share Tech Mono", monospace;
+
+    font-size: 10px;
 
     cursor: pointer;
 
-    transition: 0.2s;
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease;
+
 }
+
 
 .history-item:hover {
-    background: rgba(255, 180, 0, 0.08);
+
+    background: rgba(255, 180, 0, 0.045);
+
     color: white;
+
 }
+
 
 .history-item.active {
-    background: rgba(255, 180, 0, 0.12);
 
-    border-left: 2px solid var(--gold);
+    border-left-color: var(--gold);
+
+    background: rgba(255, 180, 0, 0.075);
 
     color: white;
+
 }
+
 
 .history-dot {
+
     color: var(--gold);
-    font-size: 8px;
+
+    font-size: 7px;
+
 }
 
 
-/* =========================================
-   BARRAS DE DESPLAZAMIENTO J.A.R.V.I.S.
-========================================= */
+.history-title {
 
-/* Firefox */
+    flex: 1;
+
+    min-width: 0;
+
+    overflow: hidden;
+
+    white-space: nowrap;
+
+    text-overflow: ellipsis;
+
+}
+
+
+.history-delete {
+
+    border: none;
+
+    background: transparent;
+
+    color: #626870;
+
+    cursor: pointer;
+
+    font-size: 14px;
+
+}
+
+
+.history-delete:hover {
+
+    color: var(--gold);
+
+}
+
+
+/* =========================================================
+   SISTEMA
+========================================================= */
+
+.system-item {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 7px 0;
+
+    color: #777e87;
+
+    font-family: "Share Tech Mono", monospace;
+
+    font-size: 9px;
+
+    letter-spacing: 0.5px;
+
+}
+
+
+.system-item strong {
+
+    color: #6fbe83;
+
+    font-size: 8px;
+
+    font-weight: 400;
+
+}
+
+
+/* =========================================================
+   SCROLLBARS
+========================================================= */
 
 #sidebar,
 #messages,
 #chat-history {
+
     scrollbar-width: thin;
-    scrollbar-color: var(--gold) transparent;
+
+    scrollbar-color:
+        rgba(255, 180, 0, 0.45)
+        transparent;
+
 }
 
-
-/* Chrome / Edge / navegadores Chromium */
 
 #sidebar::-webkit-scrollbar,
 #messages::-webkit-scrollbar,
 #chat-history::-webkit-scrollbar {
-    width: 7px;
+
+    width: 5px;
+
 }
+
 
 #sidebar::-webkit-scrollbar-track,
 #messages::-webkit-scrollbar-track,
 #chat-history::-webkit-scrollbar-track {
+
     background: transparent;
+
 }
+
 
 #sidebar::-webkit-scrollbar-thumb,
 #messages::-webkit-scrollbar-thumb,
 #chat-history::-webkit-scrollbar-thumb {
-    background: var(--gold);
+
+    background: rgba(255, 180, 0, 0.42);
+
     border-radius: 10px;
+
 }
 
-#sidebar::-webkit-scrollbar-thumb:hover,
-#messages::-webkit-scrollbar-thumb:hover,
-#chat-history::-webkit-scrollbar-thumb:hover {
-    background: #ffc933;
+
+/* =========================================================
+   CONSOLA
+========================================================= */
+
+#console {
+
+    flex-shrink: 0;
+
+    height: 78px;
+
+    padding: 12px 22px;
+
+    border-top: 1px solid rgba(255, 180, 0, 0.14);
+
+    background:
+
+        linear-gradient(
+            180deg,
+            rgba(7, 10, 15, 0.94),
+            rgba(3, 5, 8, 0.98)
+        );
+
+}
+
+
+.console-wrapper {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    width: 100%;
+
+    height: 100%;
+
+    padding: 7px 8px;
+
+    border: 1px solid rgba(255, 180, 0, 0.16);
+
+    border-radius: 8px;
+
+    background: rgba(255, 255, 255, 0.018);
+
+}
+
+
+/* =========================================================
+   VOICE
+========================================================= */
+
+.console-icon-button {
+
+    width: 38px;
+
+    height: 38px;
+
+    flex-shrink: 0;
+
+    border: 1px solid rgba(255, 180, 0, 0.24);
+
+    border-radius: 6px;
+
+    background: rgba(255, 180, 0, 0.035);
+
+    color: var(--gold);
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+
+}
+
+
+.console-icon-button:hover {
+
+    background: rgba(255, 180, 0, 0.10);
+
+    box-shadow:
+        0 0 12px rgba(255, 180, 0, 0.12);
+
+}
+
+
+.console-icon-button.recording {
+
+    background: rgba(185, 29, 29, 0.22);
+
+    border-color: rgba(255, 80, 60, 0.65);
+
+}
+
+
+/* =========================================================
+   INPUT
+========================================================= */
+
+#messageInput {
+
+    flex: 1;
+
+    min-width: 0;
+
+    height: 38px;
+
+    border: none;
+
+    outline: none;
+
+    background: transparent;
+
+    color: white;
+
+    padding: 0 5px;
+
+    font-family: "Share Tech Mono", monospace;
+
+    font-size: 13px;
+
+}
+
+
+#messageInput::placeholder {
+
+    color: #555d67;
+
+}
+
+
+/* =========================================================
+   ESTADO CONSOLA
+========================================================= */
+
+.console-status {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    color: #626a73;
+
+    font-family: "Share Tech Mono", monospace;
+
+    font-size: 8px;
+
+    letter-spacing: 1px;
+
+}
+
+
+.console-status span {
+
+    width: 5px;
+
+    height: 5px;
+
+    border-radius: 50%;
+
+    background: #52d879;
+
+    box-shadow:
+        0 0 6px rgba(82, 216, 121, 0.7);
+
+}
+
+
+/* =========================================================
+   BOTÓN ENVIAR
+========================================================= */
+
+#sendButton {
+
+    width: 105px;
+
+    height: 38px;
+
+    border: 1px solid rgba(255, 180, 0, 0.75);
+
+    border-radius: 5px;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            #ffc72c,
+            #ff9d00
+        );
+
+    color: #18110a;
+
+    font-family: "Orbitron", sans-serif;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: 1px;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 0 15px rgba(255, 180, 0, 0.08);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+
+}
+
+
+#sendButton:hover {
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 0 20px rgba(255, 180, 0, 0.22);
+
 }
