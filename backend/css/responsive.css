@@ -1,1 +1,237 @@
+/* =========================================================
+   J.A.R.V.I.S. — RESPONSIVE
+========================================================= */
 
+
+/* =========================================================
+   TABLETS
+========================================================= */
+
+@media (max-width: 950px) {
+
+    #main-layout {
+
+        grid-template-columns:
+            225px
+            minmax(0, 1fr);
+
+    }
+
+
+    #topbar {
+
+        padding:
+            0 20px;
+
+    }
+
+
+    .jarvis-title {
+
+        font-size: 20px;
+
+    }
+
+
+    .stark-logo {
+
+        font-size: 16px;
+
+    }
+
+
+    #sidebar {
+
+        padding:
+            15px 10px;
+
+    }
+
+
+    .user-message {
+
+        max-width: 72%;
+
+    }
+
+
+    .jarvis-message {
+
+        max-width: 80%;
+
+    }
+
+}
+
+
+/* =========================================================
+   MÓVILES
+========================================================= */
+
+@media (max-width: 700px) {
+
+    #topbar {
+
+        height: 70px;
+
+        grid-template-columns:
+            1fr
+            auto;
+
+        padding:
+            0 14px;
+
+    }
+
+
+    .top-center {
+
+        display: none;
+
+    }
+
+
+    .jarvis-title {
+
+        font-size: 18px;
+
+        letter-spacing: 2px;
+
+    }
+
+
+    .jarvis-subtitle {
+
+        font-size: 8px;
+
+    }
+
+
+    .stark-logo {
+
+        font-size: 12px;
+
+        letter-spacing: 1px;
+
+    }
+
+
+    .system-state {
+
+        font-size: 7px;
+
+    }
+
+
+    #main-layout {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    #sidebar {
+
+        display: none;
+
+    }
+
+
+    #jarvis-interface {
+
+        height: 105px;
+
+    }
+
+
+    .jarvis-blob {
+
+        transform:
+            scale(0.75);
+
+    }
+
+
+    .interface-status {
+
+        margin-top: 0;
+
+    }
+
+
+    #console {
+
+        height: 70px;
+
+        padding:
+            8px;
+
+    }
+
+
+    .console-status {
+
+        display: none;
+
+    }
+
+
+    .console-wrapper {
+
+        gap: 6px;
+
+    }
+
+
+    .console-icon-button {
+
+        width: 36px;
+
+    }
+
+
+    #sendButton {
+
+        width: 75px;
+
+        font-size: 8px;
+
+    }
+
+
+    #messageInput {
+
+        font-size: 11px;
+
+    }
+
+}
+
+
+/* =========================================================
+   TELÉFONOS PEQUEÑOS
+========================================================= */
+
+@media (max-width: 420px) {
+
+    .stark-logo {
+
+        font-size: 10px;
+
+    }
+
+
+    .jarvis-title {
+
+        font-size: 16px;
+
+    }
+
+
+    #sendButton {
+
+        width: 62px;
+
+    }
+
+}
