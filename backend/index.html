@@ -2,7 +2,6 @@
 <html lang="es">
 
 <head>
-
     <meta charset="UTF-8">
 
     <meta
@@ -10,7 +9,18 @@
         content="width=device-width, initial-scale=1.0"
     >
 
+    <meta
+        name="theme-color"
+        content="#05070b"
+    >
+
+    <meta
+        name="description"
+        content="J.A.R.V.I.S. — Stark Industries"
+    >
+
     <title>J.A.R.V.I.S. • Stark Industries</title>
+
 
     <!-- =====================================================
          FUENTES
@@ -34,15 +44,30 @@
          CSS
     ====================================================== -->
 
-    <link rel="stylesheet" href="css/styles.css">
+    <link
+        rel="stylesheet"
+        href="css/styles.css"
+    >
 
-    <link rel="stylesheet" href="css/hud.css">
+    <link
+        rel="stylesheet"
+        href="css/hud.css"
+    >
 
-    <link rel="stylesheet" href="css/chat.css">
+    <link
+        rel="stylesheet"
+        href="css/chat.css"
+    >
 
-    <link rel="stylesheet" href="css/animations.css">
+    <link
+        rel="stylesheet"
+        href="css/animations.css"
+    >
 
-    <link rel="stylesheet" href="css/responsive.css">
+    <link
+        rel="stylesheet"
+        href="css/responsive.css"
+    >
 
 </head>
 
@@ -80,26 +105,87 @@
     <header id="topbar">
 
 
-        <!-- IZQUIERDA -->
+        <!-- =================================================
+             J.A.R.V.I.S.
+        ================================================== -->
 
-      <div class="top-brand jarvis-3d-brand">
+        <div class="top-brand jarvis-3d-brand">
 
-    <div
-        id="jarvis3d-stage"
-        aria-label="J.A.R.V.I.S. Artificial Intelligence">
-    </div>
+            <div class="jarvis-3d-logo">
 
-    <div class="jarvis3d-accessibility">
-        J.A.R.V.I.S. — ARTIFICIAL INTELLIGENCE
-    </div>
+                <div class="jarvis-depth depth-12">
+                    J.A.R.V.I.S.
+                </div>
 
-</div>
+                <div class="jarvis-depth depth-11">
+                    J.A.R.V.I.S.
+                </div>
 
-        <!-- CENTRO -->
+                <div class="jarvis-depth depth-10">
+                    J.A.R.V.I.S.
+                </div>
+
+                <div class="jarvis-depth depth-9">
+                    J.A.R.V.I.S.
+                </div>
+
+                <div class="jarvis-depth depth-8">
+                    J.A.R.V.I.S.
+                </div>
+
+                <div class="jarvis-depth depth-7">
+                    J.A.R.V.I.S.
+                </div>
+
+                <div class="jarvis-depth depth-6">
+                    J.A.R.V.I.S.
+                </div>
+
+                <div class="jarvis-depth depth-5">
+                    J.A.R.V.I.S.
+                </div>
+
+                <div class="jarvis-depth depth-4">
+                    J.A.R.V.I.S.
+                </div>
+
+                <div class="jarvis-depth depth-3">
+                    J.A.R.V.I.S.
+                </div>
+
+                <div class="jarvis-depth depth-2">
+                    J.A.R.V.I.S.
+                </div>
+
+                <div class="jarvis-depth depth-1">
+                    J.A.R.V.I.S.
+                </div>
+
+                <div class="jarvis-front">
+                    J.A.R.V.I.S.
+                </div>
+
+            </div>
+
+
+            <div class="jarvis-subtitle-3d">
+                ARTIFICIAL INTELLIGENCE
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             RELOJ CENTRAL
+        ================================================== -->
 
         <div class="top-center">
 
-            <div id="clock">
+            <div
+                id="clock"
+                aria-label="Hora del sistema"
+            >
                 00:00:00
             </div>
 
@@ -108,7 +194,10 @@
         </div>
 
 
-        <!-- DERECHA -->
+
+        <!-- =================================================
+             STARK INDUSTRIES
+        ================================================== -->
 
         <div class="stark-brand">
 
@@ -132,7 +221,7 @@
 
 
     <!-- =====================================================
-         CUERPO
+         CUERPO PRINCIPAL
     ====================================================== -->
 
     <div id="main-layout">
@@ -145,7 +234,9 @@
         <aside id="sidebar">
 
 
-            <!-- USUARIO -->
+            <!-- =============================================
+                 USUARIO
+            ============================================== -->
 
             <section class="sidebar-section user-section">
 
@@ -156,7 +247,10 @@
 
                 <div class="user-account">
 
-                    <div class="user-avatar">
+                    <div
+                        class="user-avatar"
+                        aria-hidden="true"
+                    >
                         ◉
                     </div>
 
@@ -184,17 +278,22 @@
                     id="google-login"
                     class="google-login"
                 >
-                    <span>●</span>
+
+                    <span aria-hidden="true">
+                        ●
+                    </span>
+
                     INICIAR CON GOOGLE
+
                 </a>
 
             </section>
 
 
 
-            <!-- =================================================
+            <!-- =============================================
                  HISTORIAL
-            ================================================== -->
+            ============================================== -->
 
             <section class="sidebar-section history-section">
 
@@ -218,98 +317,39 @@
                 </div>
 
 
+
                 <!-- BUSCADOR -->
 
                 <div class="chat-search">
 
-                    <span>
+                    <span aria-hidden="true">
                         ⌕
                     </span>
+
 
                     <input
                         id="chatSearchInput"
                         type="text"
-                        placeholder="Buscar chats..."
+                        placeholder="Buscar conversaciones..."
                         autocomplete="off"
+                        aria-label="Buscar conversaciones"
                     >
 
                 </div>
 
 
-                <!-- HISTORIAL -->
+
+                <!-- LISTA DE CONVERSACIONES -->
 
                 <div id="chat-history">
 
-                    <!-- JS inserta los chats -->
+                    <!--
+                        Las conversaciones son
+                        generadas por chat.js
+                    -->
 
                 </div>
 
-            </section>
-
-
-
-            <!-- =================================================
-                 ESTADO DEL SISTEMA
-            ================================================== -->
-
-            <section class="sidebar-section system-section">
-
-
-                <div class="section-label">
-                    SISTEMA
-                </div>
-
-
-                <div class="system-item">
-
-                    <span>
-                        CORE
-                    </span>
-
-                    <strong>
-                        ACTIVO
-                    </strong>
-
-                </div>
-
-
-                <div class="system-item">
-
-                    <span>
-                        GROQ
-                    </span>
-
-                    <strong>
-                        CONECTADO
-                    </strong>
-
-                </div>
-
-
-                <div class="system-item">
-
-                    <span>
-                        RENDER
-                    </span>
-
-                    <strong>
-                        ONLINE
-                    </strong>
-
-                </div>
-
-
-                <div class="system-item">
-
-                    <span>
-                        GITHUB
-                    </span>
-
-                    <strong>
-                        CONECTADO
-                    </strong>
-
-                </div>
 
             </section>
 
@@ -322,56 +362,21 @@
              ÁREA CENTRAL
         ================================================== -->
 
-        <main id="chat-container">
+        <main
+            id="chat-container"
+            aria-label="Consola de J.A.R.V.I.S."
+        >
 
 
-            <!-- =================================================
-                 BLOB / NÚCLEO JARVIS
-            ================================================== -->
-
-            <div id="jarvis-interface">
-
-
-                <div class="jarvis-blob">
-
-                    <div class="blob-ring ring-outer"></div>
-
-                    <div class="blob-ring ring-middle"></div>
-
-                    <div class="blob-ring ring-inner"></div>
-
-
-                    <div class="blob-core">
-
-                        <span>
-                            J
-                        </span>
-
-                    </div>
-
-                </div>
-
-
-                <div class="interface-status">
-
-                    <span class="status-dot"></span>
-
-                    <span>
-                        J.A.R.V.I.S. CORE
-                    </span>
-
-                </div>
-
-
-            </div>
-
-
-
-            <!-- =================================================
+            <!-- =============================================
                  MENSAJES
-            ================================================== -->
+            ============================================== -->
 
-            <div id="messages">
+            <div
+                id="messages"
+                aria-live="polite"
+                aria-label="Conversación"
+            >
 
                 <!-- Los mensajes aparecen aquí -->
 
@@ -380,12 +385,13 @@
 
         </main>
 
+
     </div>
 
 
 
     <!-- =====================================================
-         CONSOLA
+         CONSOLA INFERIOR
     ====================================================== -->
 
     <footer id="console">
@@ -394,7 +400,9 @@
         <div class="console-wrapper">
 
 
-            <!-- MICRÓFONO -->
+            <!-- =============================================
+                 MICRÓFONO
+            ============================================== -->
 
             <button
                 id="voiceButton"
@@ -407,17 +415,24 @@
             </button>
 
 
-            <!-- INPUT -->
+
+            <!-- =============================================
+                 CAMPO DE COMANDO
+            ============================================== -->
 
             <input
                 type="text"
                 id="messageInput"
                 placeholder="Escriba una instrucción..."
                 autocomplete="off"
+                aria-label="Escribir mensaje"
             >
 
 
-            <!-- ESTADO -->
+
+            <!-- =============================================
+                 ESTADO
+            ============================================== -->
 
             <div class="console-status">
 
@@ -428,7 +443,10 @@
             </div>
 
 
-            <!-- ENVIAR -->
+
+            <!-- =============================================
+                 ENVIAR
+            ============================================== -->
 
             <button
                 id="sendButton"
@@ -436,6 +454,7 @@
             >
                 ENVIAR
             </button>
+
 
         </div>
 
