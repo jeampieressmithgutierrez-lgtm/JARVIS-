@@ -1,1 +1,243 @@
+/* =====================================================
+   J.A.R.V.I.S. — INTRO 3D
+===================================================== */
 
+#jarvis-intro {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #000;
+    overflow: hidden;
+    perspective: 1000px;
+    transition:
+        opacity 1s ease,
+        visibility 1s ease;
+}
+
+/* Luz ambiental */
+
+#jarvis-intro::before {
+    content: "";
+    position: absolute;
+    width: 650px;
+    height: 650px;
+    border-radius: 50%;
+    background: radial-gradient(
+        circle,
+        rgba(0, 145, 255, 0.12) 0%,
+        rgba(0, 90, 255, 0.05) 35%,
+        transparent 70%
+    );
+    animation: introAmbient 4s ease-in-out infinite;
+}
+
+/* LOGO */
+
+.intro-logo {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-family: "Orbitron", sans-serif;
+    font-size: clamp(52px, 9vw, 125px);
+    font-weight: 800;
+    letter-spacing: 8px;
+
+    color: #78d9ff;
+
+    transform-style: preserve-3d;
+    animation: introLogoAppear 1.8s cubic-bezier(.16,1,.3,1) forwards;
+
+    text-shadow:
+        0 0 5px #fff,
+        0 0 15px #20bfff,
+        0 0 35px #008cff,
+        0 0 70px rgba(0, 119, 255, .7);
+}
+
+/* Profundidad 3D */
+
+.intro-logo::after {
+    content: "J.A.R.V.I.S.";
+    position: absolute;
+    inset: 0;
+
+    color: #003e72;
+    transform: translateZ(-35px) translate(10px, 12px);
+
+    filter: blur(.3px);
+
+    z-index: -1;
+}
+
+/* J */
+
+.intro-j {
+    display: inline-block;
+    position: relative;
+    z-index: 5;
+
+    transform-origin: center;
+    transition: all 1.4s cubic-bezier(.7,0,.2,1);
+
+    text-shadow:
+        0 0 5px #fff,
+        0 0 20px #20bfff,
+        0 0 45px #008cff,
+        0 0 90px #006eff;
+}
+
+/* RESTO DE JARVIS */
+
+.intro-rest {
+    display: inline-block;
+    position: relative;
+
+    transform-origin: left center;
+    transition: all 1.4s cubic-bezier(.7,0,.2,1);
+}
+
+/* Cuando la J absorbe las demás letras */
+
+#jarvis-intro.consume .intro-j {
+    transform:
+        translateX(38px)
+        scale(2.8)
+        rotateY(-8deg);
+
+    filter:
+        brightness(1.5)
+        drop-shadow(0 0 30px #00aaff);
+}
+
+#jarvis-intro.consume .intro-rest {
+    opacity: 0;
+    transform:
+        translateX(-180px)
+        scale(.2)
+        rotateY(80deg);
+
+    filter: blur(12px);
+}
+
+/* J desaparece */
+
+#jarvis-intro.finish .intro-j {
+    opacity: 0;
+    transform:
+        scale(4)
+        translateZ(150px);
+
+    filter:
+        blur(18px)
+        brightness(2);
+}
+
+#jarvis-intro.finish .intro-subtitle {
+    opacity: 0;
+}
+
+/* Subtítulo */
+
+.intro-subtitle {
+    position: relative;
+    z-index: 2;
+
+    margin-top: 25px;
+
+    font-family: "Share Tech Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 6px;
+
+    color: rgba(160, 220, 255, .7);
+
+    opacity: 0;
+    animation: introSubtitle 1s ease 1s forwards;
+
+    transition: opacity .6s ease;
+}
+
+/* Salida completa */
+
+#jarvis-intro.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+/* Animaciones */
+
+@keyframes introLogoAppear {
+    0% {
+        opacity: 0;
+        transform:
+            scale(.35)
+            rotateX(35deg)
+            translateZ(-200px);
+        filter: blur(15px);
+    }
+
+    60% {
+        opacity: 1;
+        transform:
+            scale(1.08)
+            rotateX(-5deg)
+            translateZ(20px);
+        filter: blur(0);
+    }
+
+    100% {
+        opacity: 1;
+        transform:
+            scale(1)
+            rotateX(0)
+            translateZ(0);
+    }
+}
+
+@keyframes introSubtitle {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+        letter-spacing: 1px;
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+        letter-spacing: 6px;
+    }
+}
+
+@keyframes introAmbient {
+    0%, 100% {
+        transform: scale(.85);
+        opacity: .55;
+    }
+
+    50% {
+        transform: scale(1.15);
+        opacity: 1;
+    }
+}
+
+/* Móviles */
+
+@media (max-width: 600px) {
+
+    .intro-logo {
+        font-size: 48px;
+        letter-spacing: 4px;
+    }
+
+    .intro-subtitle {
+        font-size: 8px;
+        letter-spacing: 3px;
+    }
+}
