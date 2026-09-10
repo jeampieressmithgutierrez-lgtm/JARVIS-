@@ -1377,3 +1377,39 @@ body {
     }
 
 }
+/* ============================================================
+   RELOJ J.A.R.V.I.S.
+============================================================ */
+
+#clock {
+    font-family: "Orbitron", sans-serif;
+    font-size: clamp(18px, 2vw, 28px);
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    color: #f1f1f1;
+    text-shadow:
+        0 0 5px rgba(255,255,255,.35),
+        0 0 15px rgba(255,180,0,.25);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.top-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.system-line {
+    width: 110px;
+    height: 1px;
+    margin-top: 8px;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,180,0,.75),
+        transparent
+    );
+    box-shadow: 0 0 8px rgba(255,180,0,.25);
+}
