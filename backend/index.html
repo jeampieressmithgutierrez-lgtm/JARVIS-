@@ -2,6 +2,7 @@
 <html lang="es">
 
 <head>
+
     <meta charset="UTF-8">
 
     <meta
@@ -41,7 +42,7 @@
 
 
     <!-- =====================================================
-         CSS
+         CSS PRINCIPAL
     ====================================================== -->
 
     <link
@@ -69,6 +70,16 @@
         href="css/responsive.css"
     >
 
+
+    <!-- =====================================================
+         CSS — INTRO CINEMÁTICA
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="css/jarvis-intro.css"
+    >
+
 </head>
 
 
@@ -76,29 +87,153 @@
 
 
 <!-- =========================================================
-     FONDO
+     INTRO CINEMÁTICA J.A.R.V.I.S.
 ========================================================== -->
-    <!-- =====================================================
-     INTRO J.A.R.V.I.S.
-====================================================== -->
-<div id="jarvis-intro">
-    <div class="intro-logo" aria-label="J.A.R.V.I.S.">
-        <span class="intro-j">J</span>
-        <span class="intro-rest">.A.R.V.I.S.</span>
+
+<div
+    id="jarvis-intro"
+    aria-hidden="true"
+>
+
+    <div class="intro-cinema">
+
+
+        <!-- =================================================
+             LOGO CINEMÁTICO
+        ================================================== -->
+
+        <div
+            class="intro-logo"
+            aria-label="J.A.R.V.I.S."
+        >
+
+            <!--
+                ESPACIO RESERVADO PARA LA J.
+                Evita que el movimiento de la J
+                modifique la posición de las demás letras.
+            -->
+
+            <span class="intro-j-space">
+                J
+            </span>
+
+
+            <!--
+                J PRINCIPAL.
+                Esta será la letra que se moverá
+                por delante de las demás.
+            -->
+
+            <span class="intro-letter intro-j">
+                J
+            </span>
+
+
+            <span class="intro-letter intro-dot">
+                .
+            </span>
+
+
+            <span class="intro-letter intro-a">
+                A
+            </span>
+
+
+            <span class="intro-letter intro-dot">
+                .
+            </span>
+
+
+            <span class="intro-letter intro-r">
+                R
+            </span>
+
+
+            <span class="intro-letter intro-dot">
+                .
+            </span>
+
+
+            <span class="intro-letter intro-v">
+                V
+            </span>
+
+
+            <span class="intro-letter intro-dot">
+                .
+            </span>
+
+
+            <span class="intro-letter intro-i">
+                I
+            </span>
+
+
+            <span class="intro-letter intro-dot">
+                .
+            </span>
+
+
+            <span class="intro-letter intro-s">
+                S
+            </span>
+
+        </div>
+
+
+        <!-- =================================================
+             SUBTÍTULO
+        ================================================== -->
+
+        <div class="intro-subtitle">
+            ARTIFICIAL INTELLIGENCE
+        </div>
+
+
+        <!-- =================================================
+             ESTADO DEL SISTEMA
+        ================================================== -->
+
+        <div class="intro-status">
+
+            <span class="intro-status-dot"></span>
+
+            <span>
+                STARK INDUSTRIES
+            </span>
+
+            <span class="intro-status-separator">
+                •
+            </span>
+
+            <span>
+                COGNITIVE SYSTEM
+            </span>
+
+        </div>
+
+
     </div>
 
-    <div class="intro-subtitle">
-        ARTIFICIAL INTELLIGENCE
-    </div>
 </div>
+
+
+
+<!-- =========================================================
+     FONDO PRINCIPAL
+========================================================== -->
 
 <div id="background-container">
 
+
     <canvas id="particles-canvas"></canvas>
+
 
     <div id="grid-overlay"></div>
 
+
     <div id="scan-overlay"></div>
+
 
 </div>
 
@@ -124,59 +259,74 @@
 
         <div class="top-brand jarvis-3d-brand">
 
+
             <div class="jarvis-3d-logo">
+
 
                 <div class="jarvis-depth depth-12">
                     J.A.R.V.I.S.
                 </div>
 
+
                 <div class="jarvis-depth depth-11">
                     J.A.R.V.I.S.
                 </div>
+
 
                 <div class="jarvis-depth depth-10">
                     J.A.R.V.I.S.
                 </div>
 
+
                 <div class="jarvis-depth depth-9">
                     J.A.R.V.I.S.
                 </div>
+
 
                 <div class="jarvis-depth depth-8">
                     J.A.R.V.I.S.
                 </div>
 
+
                 <div class="jarvis-depth depth-7">
                     J.A.R.V.I.S.
                 </div>
+
 
                 <div class="jarvis-depth depth-6">
                     J.A.R.V.I.S.
                 </div>
 
+
                 <div class="jarvis-depth depth-5">
                     J.A.R.V.I.S.
                 </div>
+
 
                 <div class="jarvis-depth depth-4">
                     J.A.R.V.I.S.
                 </div>
 
+
                 <div class="jarvis-depth depth-3">
                     J.A.R.V.I.S.
                 </div>
+
 
                 <div class="jarvis-depth depth-2">
                     J.A.R.V.I.S.
                 </div>
 
+
                 <div class="jarvis-depth depth-1">
                     J.A.R.V.I.S.
                 </div>
 
+
                 <div class="jarvis-front">
                     J.A.R.V.I.S.
                 </div>
+
 
             </div>
 
@@ -184,6 +334,7 @@
             <div class="jarvis-subtitle-3d">
                 ARTIFICIAL INTELLIGENCE
             </div>
+
 
         </div>
 
@@ -195,6 +346,7 @@
 
         <div class="top-center">
 
+
             <div
                 id="clock"
                 aria-label="Hora del sistema"
@@ -202,7 +354,9 @@
                 00:00:00
             </div>
 
+
             <div class="system-line"></div>
+
 
         </div>
 
@@ -214,17 +368,25 @@
 
         <div class="stark-brand">
 
+
             <div class="stark-logo">
                 STARK INDUSTRIES
             </div>
 
+
             <div class="system-state">
+
 
                 <span id="status-light"></span>
 
-                <span>ONLINE</span>
+
+                <span>
+                    ONLINE
+                </span>
+
 
             </div>
+
 
         </div>
 
@@ -253,12 +415,14 @@
 
             <section class="sidebar-section user-section">
 
+
                 <div class="section-label">
                     USUARIO
                 </div>
 
 
                 <div class="user-account">
+
 
                     <div
                         class="user-avatar"
@@ -270,6 +434,7 @@
 
                     <div class="user-info">
 
+
                         <div
                             id="user-name"
                             class="user-name"
@@ -277,14 +442,21 @@
                             Invitado
                         </div>
 
+
                         <div class="user-status">
                             SESIÓN TEMPORAL
                         </div>
 
+
                     </div>
+
 
                 </div>
 
+
+                <!-- =========================================
+                     GOOGLE LOGIN
+                ========================================== -->
 
                 <a
                     href="/auth/google"
@@ -292,13 +464,17 @@
                     class="google-login"
                 >
 
+
                     <span aria-hidden="true">
                         ●
                     </span>
 
+
                     INICIAR CON GOOGLE
 
+
                 </a>
+
 
             </section>
 
@@ -312,6 +488,7 @@
 
 
                 <div class="history-header">
+
 
                     <div class="section-label">
                         HISTORIAL
@@ -327,13 +504,17 @@
                         +
                     </button>
 
+
                 </div>
 
 
 
-                <!-- BUSCADOR -->
+                <!-- =========================================
+                     BUSCADOR DE CONVERSACIONES
+                ========================================== -->
 
                 <div class="chat-search">
+
 
                     <span aria-hidden="true">
                         ⌕
@@ -348,18 +529,23 @@
                         aria-label="Buscar conversaciones"
                     >
 
+
                 </div>
 
 
 
-                <!-- LISTA DE CONVERSACIONES -->
+                <!-- =========================================
+                     HISTORIAL DINÁMICO
+                ========================================== -->
 
                 <div id="chat-history">
 
+
                     <!--
-                        Las conversaciones son
-                        generadas por chat.js
+                        Las conversaciones son generadas
+                        automáticamente por chat.js.
                     -->
+
 
                 </div>
 
@@ -372,7 +558,7 @@
 
 
         <!-- =================================================
-             ÁREA CENTRAL
+             ÁREA CENTRAL DEL CHAT
         ================================================== -->
 
         <main
@@ -391,7 +577,12 @@
                 aria-label="Conversación"
             >
 
-                <!-- Los mensajes aparecen aquí -->
+
+                <!--
+                    Los mensajes son generados
+                    automáticamente por chat.js.
+                -->
+
 
             </div>
 
@@ -414,7 +605,7 @@
 
 
             <!-- =============================================
-                 MICRÓFONO
+                 ENTRADA DE VOZ
             ============================================== -->
 
             <button
@@ -430,7 +621,7 @@
 
 
             <!-- =============================================
-                 CAMPO DE COMANDO
+                 CAMPO DE MENSAJE
             ============================================== -->
 
             <input
@@ -444,21 +635,24 @@
 
 
             <!-- =============================================
-                 ESTADO
+                 ESTADO DE CONSOLA
             ============================================== -->
 
             <div class="console-status">
 
+
                 <span></span>
 
+
                 READY
+
 
             </div>
 
 
 
             <!-- =============================================
-                 ENVIAR
+                 BOTÓN ENVIAR
             ============================================== -->
 
             <button
@@ -483,9 +677,17 @@
      JAVASCRIPT
 ========================================================== -->
 
+<!-- Núcleo -->
+
 <script src="js/core.js"></script>
 
+
+<!-- Intro cinematográfica -->
+
 <script src="js/jarvis-intro.js"></script>
+
+
+<!-- Fondo -->
 
 <script src="js/background.js"></script>
 
@@ -493,15 +695,27 @@
 
 <script src="js/effects.js"></script>
 
+
+<!-- Interfaz -->
+
 <script src="js/ui.js"></script>
+
+
+<!-- Chat -->
 
 <script src="js/chat.js"></script>
 
+
+<!-- API -->
+
 <script src="js/api.js"></script>
+
+
+<!-- Inicialización -->
 
 <script src="js/main.js"></script>
 
 
 </body>
 
-</html>
+    </html>
