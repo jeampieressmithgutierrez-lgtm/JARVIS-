@@ -1413,3 +1413,196 @@ body {
     );
     box-shadow: 0 0 8px rgba(255,180,0,.25);
 }
+/* =========================================================
+   J.A.R.V.I.S. — IDENTIDAD SUPERIOR FINAL
+   NO AFECTA CHAT / MEMORIA / API
+========================================================= */
+
+/* Contenedor superior */
+.jarvis-3d-brand {
+    opacity: 1 !important;
+    visibility: visible !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+
+    position: relative;
+}
+
+
+/* Nombre J.A.R.V.I.S. */
+.jarvis-3d-logo {
+    opacity: 1 !important;
+    visibility: visible !important;
+
+    position: relative;
+
+    font-family: "Orbitron", sans-serif;
+    font-size: clamp(20px, 2vw, 27px);
+    font-weight: 800;
+    letter-spacing: 4px;
+
+    color: #f1f1f1;
+
+    text-shadow:
+        0 1px 0 #777,
+        0 2px 0 #444,
+        0 0 5px rgba(255,255,255,.45),
+        0 0 14px rgba(255,180,0,.28);
+}
+
+
+/* Todas las capas del logo 3D */
+.jarvis-depth,
+.jarvis-front {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+
+/* Capa frontal */
+.jarvis-front {
+    color: #f4f4f4;
+
+    text-shadow:
+        0 0 5px rgba(255,255,255,.35),
+        0 0 14px rgba(255,180,0,.25);
+}
+
+
+/* =========================================================
+   ARTIFICIAL INTELLIGENCE
+========================================================= */
+
+.jarvis-subtitle-3d {
+    display: block !important;
+
+    opacity: 1 !important;
+    visibility: visible !important;
+
+    position: relative;
+
+    margin-top: 4px;
+
+    color: #858b94;
+
+    font-family: "Share Tech Mono", monospace;
+
+    font-size: 8px;
+    font-weight: 400;
+
+    letter-spacing: 2.5px;
+
+    white-space: nowrap;
+
+    transform: none !important;
+
+    transition: none !important;
+    animation: none !important;
+
+    text-shadow:
+        0 0 5px rgba(255,180,0,.12);
+}
+
+
+/* =========================================================
+   RELOJ — UNA SOLA VERSIÓN FINAL
+========================================================= */
+
+.top-center {
+    display: flex !important;
+
+    flex-direction: column !important;
+
+    align-items: center !important;
+
+    justify-content: center !important;
+
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+
+#clock {
+    display: block !important;
+
+    opacity: 1 !important;
+    visibility: visible !important;
+
+    font-family: "Orbitron", sans-serif;
+
+    font-size: clamp(18px, 2vw, 28px);
+
+    font-weight: 600;
+
+    letter-spacing: .16em;
+
+    color: #f1f1f1;
+
+    font-variant-numeric: tabular-nums;
+
+    white-space: nowrap;
+
+    text-shadow:
+        0 0 5px rgba(255,255,255,.35),
+        0 0 15px rgba(255,180,0,.25);
+}
+
+
+/* Línea bajo el reloj */
+.system-line {
+    width: 110px;
+
+    height: 1px;
+
+    margin-top: 8px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,180,0,.75),
+            transparent
+        );
+
+    box-shadow:
+        0 0 8px rgba(255,180,0,.25);
+}
+
+
+/* =========================================================
+   EVITAR QUE ANIMACIONES ANTIGUAS OCULTEN EL TÍTULO
+========================================================= */
+
+.jarvis-3d-brand,
+.jarvis-3d-logo,
+.jarvis-subtitle-3d,
+.jarvis-depth,
+.jarvis-front {
+    animation: none !important;
+}
+
+
+/* =========================================================
+   MÓVIL
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .jarvis-3d-logo {
+        font-size: 19px;
+        letter-spacing: 3px;
+    }
+
+    .jarvis-subtitle-3d {
+        font-size: 7px;
+        letter-spacing: 2px;
+    }
+
+    #clock {
+        font-size: 17px;
+    }
+
+}
