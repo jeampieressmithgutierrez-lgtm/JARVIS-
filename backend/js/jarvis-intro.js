@@ -1,138 +1,123 @@
 /* ============================================================
    J.A.R.V.I.S. — CINEMATIC INTRO CONTROLLER
    Stark Industries / Cognitive System
+
+   IMPORTANTE:
+   Este archivo SOLO controla la intro.
+   No toca chat.js, api.js, memoria ni backend.
 ============================================================ */
 
 (function () {
 
     "use strict";
 
-
-    /* ========================================================
-       CONFIGURACIÓN
-    ======================================================== */
-
-    const INTRO_DURATION = 7600;
-
     const intro = document.getElementById("jarvis-intro");
 
-    if (!intro) {
-        return;
-    }
+    if (!intro) return;
 
 
     const logo = intro.querySelector(".intro-logo");
 
     const jarvisJ = intro.querySelector(".intro-j");
 
+    const jSpace = intro.querySelector(".intro-j-space");
+
     const letters = Array.from(
-        intro.querySelectorAll(".intro-letter:not(.intro-j)")
+        intro.querySelectorAll(
+            ".intro-letter:not(.intro-j)"
+        )
     );
 
 
-    if (!logo || !jarvisJ) {
-        return;
-    }
+    if (!logo || !jarvisJ || !jSpace) return;
 
 
-    /* ========================================================
-       PREPARACIÓN
-    ======================================================== */
-
-    document.body.classList.add("jarvis-intro-active");
-
-
-    /*
-       El resto de las letras comienza ligeramente
-       atenuado para dar sensación holográfica.
-    */
-
-    letters.forEach((letter) => {
-
-        letter.classList.add("intro-dimmed");
-
-    });
+    document.body.classList.add(
+        "jarvis-intro-active"
+    );
 
 
     /* ========================================================
        UTILIDADES
     ======================================================== */
 
-    function wait(ms) {
-
-        return new Promise((resolve) => {
-
-            setTimeout(resolve, ms);
-
-        });
-
-    }
+    const wait = (ms) =>
+        new Promise(resolve =>
+            setTimeout(resolve, ms)
+        );
 
 
     function centerOf(element) {
 
-        const rect = element.getBoundingClientRect();
+        const rect =
+            element.getBoundingClientRect();
 
-        const parentRect = logo.getBoundingClientRect();
+        const parent =
+            logo.getBoundingClientRect();
 
         return {
 
             x:
                 rect.left +
                 rect.width / 2 -
-                parentRect.left,
+                parent.left,
 
             y:
                 rect.top +
                 rect.height / 2 -
-                parentRect.top
+                parent.top
 
         };
 
     }
 
 
-    function setJPosition(x, y) {
+    function moveJ(x, y) {
 
-        const parentRect = logo.getBoundingClientRect();
+        const rect =
+            jarvisJ.getBoundingClientRect();
 
-        const jRect = jarvisJ.getBoundingClientRect();
+        const parent =
+            logo.getBoundingClientRect();
 
-        const jWidth = jRect.width;
+        const width = rect.width;
 
-        const jHeight = jRect.height;
+        const height = rect.height;
 
 
         jarvisJ.style.left =
-            `${x - jWidth / 2}px`;
+            `${x - width / 2}px`;
 
         jarvisJ.style.top =
-            `${y - jHeight / 2}px`;
+            `${y - height / 2}px`;
 
     }
 
 
     /* ========================================================
-       POSICIÓN INICIAL DE LA J
+       PREPARAR ESCENA
     ======================================================== */
 
-    function prepareJ() {
+    function prepareScene() {
 
-        const position = centerOf(
-            logo.querySelector(".intro-j-space")
+        letters.forEach(letter => {
+
+            letter.classList.add(
+                "intro-dimmed"
+            );
+
+        });
+
+
+        const start =
+            centerOf(jSpace);
+
+
+        moveJ(
+            start.x,
+            start.y
         );
 
-
-        setJPosition(
-            position.x,
-            position.y
-        );
-
-
-        /*
-           La J comienza prácticamente integrada
-           con el logo original.
-        */
 
         jarvisJ.style.transform =
             "translateZ(120px) scale(1)";
@@ -141,102 +126,85 @@
 
 
     /* ========================================================
-       ANIMACIÓN DE ENTRADA
+       ANIMACIÓN PRINCIPAL
     ======================================================== */
 
-    async function introStart() {
+    async function startIntro() {
 
-        await wait(350);
+        /* -----------------------------------------------
+           ENTRADA
+        ------------------------------------------------ */
 
+        await wait(450);
 
-        /*
-           Revelamos progresivamente
-           el subtítulo.
-        */
 
         intro.classList.add(
             "intro-subtitle-visible"
         );
 
 
-        await wait(700);
+        await wait(850);
 
 
-        /*
-           La J adquiere protagonismo.
-        */
+        /* -----------------------------------------------
+           J COBRA ENERGÍA
+        ------------------------------------------------ */
 
         intro.classList.add(
             "intro-hunting"
         );
 
 
-        await wait(850);
+        await wait(600);
 
 
-        /*
-           Calculamos nuevamente las posiciones.
-           Esto permite que funcione en diferentes
-           tamaños de pantalla.
-        */
+        /* -----------------------------------------------
+           J RECORRE LAS LETRAS
+        ------------------------------------------------ */
 
-        const targets = letters.map((letter) => {
-
-            return {
+        const targets =
+            letters.map(letter => ({
 
                 element: letter,
 
                 position: centerOf(letter)
 
-            };
-
-        });
+            }));
 
 
-        /* ====================================================
-           LA J COMIENZA A ATRAVESAR EL LOGO
-        ==================================================== */
+        for (const target of targets) {
 
-        for (let i = 0; i < targets.length; i++) {
+            const element =
+                target.element;
 
-            const target = targets[i];
+            const position =
+                target.position;
 
-            const element = target.element;
-
-            const position = target.position;
-
-
-            /*
-               La J aumenta ligeramente antes
-               de atacar cada letra.
-            */
 
             jarvisJ.style.transition =
-                "left .55s cubic-bezier(.22,1,.36,1), " +
-                "top .55s cubic-bezier(.22,1,.36,1), " +
-                "transform .55s cubic-bezier(.22,1,.36,1)";
+                "left .52s cubic-bezier(.16,1,.3,1), " +
+                "top .52s cubic-bezier(.16,1,.3,1), " +
+                "transform .52s cubic-bezier(.16,1,.3,1)";
 
+
+            /* J aumenta antes del impacto */
 
             jarvisJ.style.transform =
-                "translateZ(220px) scale(1.45)";
+                "translateZ(300px) scale(1.5)";
 
 
-            /*
-               Movimiento hacia la letra.
-            */
-
-            setJPosition(
+            moveJ(
                 position.x,
                 position.y
             );
 
 
-            await wait(430);
+            await wait(390);
 
 
-            /*
-               Impacto energético.
-            */
+            /* -------------------------------------------
+               IMPACTO
+            ------------------------------------------- */
 
             element.classList.remove(
                 "intro-dimmed"
@@ -248,28 +216,24 @@
             );
 
 
-            await wait(120);
+            await wait(100);
 
-
-            /*
-               La letra desaparece.
-            */
 
             element.classList.add(
                 "intro-eaten"
             );
 
 
-            await wait(180);
+            await wait(130);
 
         }
 
 
-        /* ====================================================
-           J SOLA
-        ==================================================== */
+        /* -----------------------------------------------
+           LIMPIEZA
+        ------------------------------------------------ */
 
-        await wait(350);
+        await wait(400);
 
 
         intro.classList.remove(
@@ -282,9 +246,9 @@
         );
 
 
-        /*
-           Recentramos la J.
-        */
+        /* -----------------------------------------------
+           J AL CENTRO
+        ------------------------------------------------ */
 
         const logoRect =
             logo.getBoundingClientRect();
@@ -299,23 +263,27 @@
 
 
         jarvisJ.style.transition =
-            "left .9s cubic-bezier(.22,1,.36,1), " +
-            "top .9s cubic-bezier(.22,1,.36,1), " +
-            "transform .9s cubic-bezier(.22,1,.36,1)";
+            "left .9s cubic-bezier(.16,1,.3,1), " +
+            "top .9s cubic-bezier(.16,1,.3,1), " +
+            "transform .9s cubic-bezier(.16,1,.3,1)";
 
 
-        setJPosition(
+        moveJ(
             centerX,
             centerY
         );
 
 
+        jarvisJ.style.transform =
+            "translateZ(280px) scale(1.7)";
+
+
         await wait(1500);
 
 
-        /* ====================================================
-           J SE PREPARA PARA IR A LA ESQUINA
-        ==================================================== */
+        /* -----------------------------------------------
+           PREPARAR MOVIMIENTO A LA ESQUINA
+        ------------------------------------------------ */
 
         intro.classList.add(
             "intro-moving-home"
@@ -326,28 +294,38 @@
 
 
         /*
-           Posición final aproximada.
-           Se calcula en relación con la pantalla.
+           Calculamos una posición relativa al logo,
+           pero usamos coordenadas de viewport para que
+           el movimiento sea consistente.
         */
 
-        const finalX =
+        const logoNow =
+            logo.getBoundingClientRect();
+
+
+        const desiredX =
             Math.max(
                 55,
                 window.innerWidth * 0.055
             );
 
 
-        const finalY =
+        const desiredY =
             Math.max(
                 42,
                 window.innerHeight * 0.055
             );
 
 
-        /*
-           Movemos la J desde el centro
-           hacia la esquina superior izquierda.
-        */
+        const targetX =
+            desiredX -
+            logoNow.left;
+
+
+        const targetY =
+            desiredY -
+            logoNow.top;
+
 
         jarvisJ.style.transition =
             "left 1.15s cubic-bezier(.16,1,.3,1), " +
@@ -356,26 +334,7 @@
             "filter 1.15s ease";
 
 
-        /*
-           Como la J pertenece al logo,
-           calculamos su posición relativa.
-        */
-
-        const currentParentRect =
-            logo.getBoundingClientRect();
-
-
-        const targetX =
-            finalX -
-            currentParentRect.left;
-
-
-        const targetY =
-            finalY -
-            currentParentRect.top;
-
-
-        setJPosition(
+        moveJ(
             targetX,
             targetY
         );
@@ -388,9 +347,9 @@
         await wait(1150);
 
 
-        /* ====================================================
-           REVELACIÓN DE LA INTERFAZ
-        ==================================================== */
+        /* -----------------------------------------------
+           DESVANECER INTRO
+        ------------------------------------------------ */
 
         intro.classList.add(
             "intro-finished"
@@ -400,33 +359,28 @@
         await wait(950);
 
 
-        /*
-           Liberamos el scroll.
-           Desde aquí J.A.R.V.I.S. vuelve a funcionar
-           normalmente.
-        */
-
         document.body.classList.remove(
             "jarvis-intro-active"
         );
 
 
-        /*
-           Limpiamos estilos temporales
-           para evitar interferencias posteriores.
-        */
+        /* -----------------------------------------------
+           LIMPIEZA DE ESTILOS INLINE
+        ------------------------------------------------ */
 
         jarvisJ.style.left = "";
-        jarvisJ.style.top = "";
-        jarvisJ.style.transform = "";
-        jarvisJ.style.transition = "";
 
+        jarvisJ.style.top = "";
+
+        jarvisJ.style.transform = "";
+
+        jarvisJ.style.transition = "";
 
     }
 
 
     /* ========================================================
-       MODO REDUCIDO DE MOVIMIENTO
+       REDUCED MOTION
     ======================================================== */
 
     const reducedMotion =
@@ -452,7 +406,7 @@
 
 
     /* ========================================================
-       INICIO
+       INICIAR CUANDO EL DOM ESTÉ LISTO
     ======================================================== */
 
     if (
@@ -464,9 +418,9 @@
             "DOMContentLoaded",
             () => {
 
-                prepareJ();
+                prepareScene();
 
-                introStart();
+                startIntro();
 
             },
             {
@@ -476,11 +430,10 @@
 
     } else {
 
-        prepareJ();
+        prepareScene();
 
-        introStart();
+        startIntro();
 
     }
-
 
 })();
