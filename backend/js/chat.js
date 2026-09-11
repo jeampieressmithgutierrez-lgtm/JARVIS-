@@ -1,12 +1,12 @@
-/* =========================================================
-   J.A.R.V.I.S.
-   CHAT + MEMORIA TEMPORAL DE INVITADO
-========================================================= */
+/* =====================================================
+   J.A.R.V.I.S. — CHAT / MEMORIA / VOZ
+===================================================== */
 
+"use strict";
 
-/* =========================================================
+/* =====================================================
    CONFIGURACIÓN
-========================================================= */
+===================================================== */
 
 const STORAGE_KEY = "jarvis_guest_memory_v2";
 
@@ -17,1340 +17,1005 @@ let memoriaSesion = {
 
 let enviandoMensaje = false;
 
+let reconocimientoVoz = null;
+let vozActiva = false;
 
-/* =========================================================
-   ID
-========================================================= */
+
+/* =====================================================
+   UTILIDADES
+===================================================== */
 
 function generarId() {
-
     return (
         Date.now().toString(36) +
-        Math.random()
-            .toString(36)
-            .substring(2, 8)
+        Math.random().toString(36).substring(2, 9)
     );
-
 }
 
 
-/* =========================================================
-   CREAR CHAT
-========================================================= */
+/* =====================================================
+   CREACIÓN DE CHATS
+===================================================== */
 
-function crearChatObjeto(
-    titulo = "Nueva conversación"
-) {
+function crearChatObjeto(titulo = "Nueva conversación") {
+    const ahora = Date.now();
 
     return {
-
         id: generarId(),
-
         title: titulo,
-
         messages: [],
-
-        createdAt: Date.now(),
-
-        updatedAt: Date.now()
-
+        createdAt: ahora,
+        updatedAt: ahora
     };
-
 }
 
 
-/* =========================================================
-   CREAR PRIMER CHAT
-========================================================= */
-
 function crearPrimerChat() {
+    const chat = crearChatObjeto("Nueva conversación");
 
-    const chat =
-        crearChatObjeto(
-            "Conversación actual"
-        );
-
-
-    memoriaSesion = {
-
-        currentChatId: chat.id,
-
-        chats: [chat]
-
-    };
-
+    memoriaSesion.chats = [chat];
+    memoriaSesion.currentChatId = chat.id;
 
     guardarMemoriaSesion();
 
+    return chat;
 }
 
 
-/* =========================================================
-   CARGAR MEMORIA
-========================================================= */
+/* =====================================================
+   MEMORIA DE SESIÓN
+===================================================== */
 
 function cargarMemoriaSesion() {
-
     try {
-
-        const guardado =
-            sessionStorage.getItem(
-                STORAGE_KEY
-            );
-
+        const guardado = sessionStorage.getItem(STORAGE_KEY);
 
         if (!guardado) {
-
             crearPrimerChat();
-
             return;
-
         }
 
-
-        const datos =
-            JSON.parse(guardado);
-
+        const datos = JSON.parse(guardado);
 
         if (
             !datos ||
             !Array.isArray(datos.chats)
         ) {
-
             crearPrimerChat();
-
             return;
-
         }
 
+        memoriaSesion = {
+            currentChatId: datos.currentChatId || null,
+            chats: datos.chats || []
+        };
 
-        memoriaSesion = datos;
-
-
-        if (
-            !memoriaSesion.chats.length
-        ) {
-
+        if (memoriaSesion.chats.length === 0) {
             crearPrimerChat();
-
             return;
-
         }
 
+        const chatActual = memoriaSesion.chats.find(
+            chat => chat.id === memoriaSesion.currentChatId
+        );
 
-        const chatExiste =
-            memoriaSesion.chats.some(
-                chat =>
-                    chat.id ===
-                    memoriaSesion.currentChatId
-            );
-
-
-        if (!chatExiste) {
-
+        if (!chatActual) {
             memoriaSesion.currentChatId =
                 memoriaSesion.chats[0].id;
-
         }
 
-
-        guardarMemoriaSesion();
-
     } catch (error) {
-
         console.error(
-            "[MEMORY LOAD ERROR]",
+            "[MEMORY LOAD ERROR]:",
             error
         );
+
+        memoriaSesion = {
+            currentChatId: null,
+            chats: []
+        };
 
         crearPrimerChat();
-
     }
-
 }
 
-
-/* =========================================================
-   GUARDAR MEMORIA
-========================================================= */
 
 function guardarMemoriaSesion() {
-
     try {
-
         sessionStorage.setItem(
             STORAGE_KEY,
-            JSON.stringify(
-                memoriaSesion
-            )
+            JSON.stringify(memoriaSesion)
         );
-
     } catch (error) {
-
         console.error(
-            "[MEMORY SAVE ERROR]",
+            "[MEMORY SAVE ERROR]:",
             error
         );
-
     }
-
 }
 
 
-/* =========================================================
+/* =====================================================
    CHAT ACTUAL
-========================================================= */
+===================================================== */
 
 function obtenerChatActual() {
-
     return memoriaSesion.chats.find(
         chat =>
-            chat.id ===
-            memoriaSesion.currentChatId
+            chat.id === memoriaSesion.currentChatId
     );
-
 }
 
 
-/* =========================================================
+/* =====================================================
    NUEVO CHAT
-========================================================= */
+===================================================== */
 
-function nuevoChat() {
+function nuevoChat(titulo = "Nueva conversación") {
+    const nuevo = crearChatObjeto(titulo);
 
-    const chat =
-        crearChatObjeto(
-            "Nueva conversación"
-        );
-
-
-    memoriaSesion.chats.unshift(chat);
-
-
-    memoriaSesion.currentChatId =
-        chat.id;
-
+    memoriaSesion.chats.unshift(nuevo);
+    memoriaSesion.currentChatId = nuevo.id;
 
     guardarMemoriaSesion();
 
     renderizarHistorial();
-
     renderizarChatActual();
-
 
     const input =
-        document.getElementById(
-            "messageInput"
-        );
-
+        document.getElementById("messageInput");
 
     if (input) {
-
+        input.value = "";
         input.focus();
-
     }
 
+    return nuevo;
 }
 
 
-/* =========================================================
+/* =====================================================
    SELECCIONAR CHAT
-========================================================= */
+===================================================== */
 
 function seleccionarChat(chatId) {
-
-    const existe =
-        memoriaSesion.chats.some(
-            chat =>
-                chat.id === chatId
-        );
-
-
-    if (!existe) return;
-
-
-    memoriaSesion.currentChatId =
-        chatId;
-
-
-    guardarMemoriaSesion();
-
-    renderizarHistorial();
-
-    renderizarChatActual();
-
-}
-
-
-/* =========================================================
-   ELIMINAR CHAT
-========================================================= */
-
-function eliminarChat(
-    chatId,
-    event
-) {
-
-    if (event) {
-
-        event.stopPropagation();
-
-    }
-
-
-    if (
-        memoriaSesion.chats.length <= 1
-    ) {
-
-        const chat =
-            obtenerChatActual();
-
-
-        if (chat) {
-
-            chat.messages = [];
-
-            chat.title =
-                "Conversación actual";
-
-            chat.updatedAt =
-                Date.now();
-
-        }
-
-
-        guardarMemoriaSesion();
-
-        renderizarHistorial();
-
-        renderizarChatActual();
-
-        return;
-
-    }
-
-
-    memoriaSesion.chats =
-        memoriaSesion.chats.filter(
-            chat =>
-                chat.id !== chatId
-        );
-
-
-    if (
-        memoriaSesion.currentChatId ===
-        chatId
-    ) {
-
-        memoriaSesion.currentChatId =
-            memoriaSesion.chats[0].id;
-
-    }
-
-
-    guardarMemoriaSesion();
-
-    renderizarHistorial();
-
-    renderizarChatActual();
-
-}
-
-
-/* =========================================================
-   TÍTULO AUTOMÁTICO
-========================================================= */
-
-function generarTituloChat(texto) {
-
-    const limpio =
-        texto
-            .replace(/\s+/g, " ")
-            .trim();
-
-
-    if (!limpio) {
-
-        return "Nueva conversación";
-
-    }
-
-
-    if (limpio.length <= 28) {
-
-        return limpio;
-
-    }
-
-
-    return (
-        limpio.substring(0, 28).trim() +
-        "..."
+    const chat = memoriaSesion.chats.find(
+        item => item.id === chatId
     );
 
+    if (!chat) {
+        return;
+    }
+
+    memoriaSesion.currentChatId = chatId;
+
+    guardarMemoriaSesion();
+
+    renderizarHistorial();
+    renderizarChatActual();
+
+    const input =
+        document.getElementById("messageInput");
+
+    if (input) {
+        input.focus();
+    }
 }
 
 
-/* =========================================================
-   GUARDAR MENSAJE
-========================================================= */
+/* =====================================================
+   ELIMINAR CHAT
+===================================================== */
+
+function eliminarChat(chatId) {
+    memoriaSesion.chats =
+        memoriaSesion.chats.filter(
+            chat => chat.id !== chatId
+        );
+
+    if (
+        memoriaSesion.currentChatId === chatId
+    ) {
+        if (memoriaSesion.chats.length > 0) {
+            memoriaSesion.currentChatId =
+                memoriaSesion.chats[0].id;
+        } else {
+            crearPrimerChat();
+        }
+    }
+
+    guardarMemoriaSesion();
+
+    renderizarHistorial();
+    renderizarChatActual();
+}
+
+
+/* =====================================================
+   TÍTULO AUTOMÁTICO
+===================================================== */
+
+function generarTituloChat(mensaje) {
+    if (!mensaje) {
+        return "Nueva conversación";
+    }
+
+    let titulo = mensaje
+        .replace(/\s+/g, " ")
+        .trim();
+
+    if (titulo.length > 32) {
+        titulo =
+            titulo.substring(0, 32).trim() + "...";
+    }
+
+    return titulo || "Nueva conversación";
+}
+
+
+/* =====================================================
+   GUARDAR MENSAJES
+===================================================== */
 
 function guardarMensajeChat(
     role,
     content
 ) {
+    const chat = obtenerChatActual();
 
-    const chat =
-        obtenerChatActual();
-
-
-    if (!chat) return;
-
+    if (!chat) {
+        return;
+    }
 
     chat.messages.push({
-
         role: role,
-
-        content: content,
-
-        timestamp: Date.now()
-
+        content: content
     });
 
-
-    chat.updatedAt =
-        Date.now();
-
+    chat.updatedAt = Date.now();
 
     if (
         chat.messages.length === 1 &&
         role === "user"
     ) {
-
         chat.title =
-            generarTituloChat(
-                content
-            );
-
+            generarTituloChat(content);
     }
-
 
     guardarMemoriaSesion();
 
     renderizarHistorial();
-
 }
 
 
-/* =========================================================
-   CONSTRUIR MEMORIA COMPARTIDA
-========================================================= */
+/* =====================================================
+   CONSTRUIR CONTEXTO DE MEMORIA
+===================================================== */
 
 function construirContextoMemoria() {
+    const chatActual = obtenerChatActual();
 
-    const chatActual =
-        obtenerChatActual();
+    if (!chatActual) {
+        return "";
+    }
 
+    let contexto = "";
+
+    contexto +=
+        "CONTEXTO DE MEMORIA DE J.A.R.V.I.S.\n";
+    contexto +=
+        "Utilice esta información únicamente como contexto de conversaciones anteriores.\n\n";
+
+    /* -------------------------------------------------
+       CHAT ACTUAL
+    ------------------------------------------------- */
+
+    contexto +=
+        "=== CONVERSACIÓN ACTUAL ===\n";
+
+    const mensajesActuales =
+        chatActual.messages.slice(-10);
+
+    for (const mensaje of mensajesActuales) {
+        const rol =
+            mensaje.role === "user"
+                ? "Usuario"
+                : "J.A.R.V.I.S.";
+
+        contexto +=
+            `${rol}: ${mensaje.content}\n`;
+    }
+
+    contexto += "\n";
+
+
+    /* -------------------------------------------------
+       OTROS CHATS
+    ------------------------------------------------- */
 
     const otrosChats =
         memoriaSesion.chats.filter(
-            chat =>
-                chat.id !==
-                memoriaSesion.currentChatId
+            chat => chat.id !== chatActual.id
         );
 
+    if (otrosChats.length > 0) {
+        contexto +=
+            "=== OTRAS CONVERSACIONES DE ESTA SESIÓN ===\n";
 
-    const bloques = [];
+        for (const chat of otrosChats.slice(0, 8)) {
+            contexto +=
+                `\n[Chat: ${chat.title}]\n`;
 
+            const mensajes =
+                chat.messages.slice(-4);
 
-    /* =====================================================
-       CHAT ACTUAL
-    ===================================================== */
+            for (const mensaje of mensajes) {
+                const rol =
+                    mensaje.role === "user"
+                        ? "Usuario"
+                        : "J.A.R.V.I.S.";
 
-    if (
-        chatActual &&
-        chatActual.messages.length
-    ) {
-
-        const mensajesActuales =
-            chatActual.messages
-                .slice(-10);
-
-
-        bloques.push(
-            "CHAT ACTUAL:\n" +
-            mensajesActuales
-                .map(mensaje => {
-
-                    const rol =
-                        mensaje.role === "user"
-                            ? "SEÑOR"
-                            : "J.A.R.V.I.S.";
-
-                    return (
-                        rol +
-                        ": " +
-                        mensaje.content
-                    );
-
-                })
-                .join("\n")
-        );
-
-    }
-
-
-    /* =====================================================
-       OTROS CHATS
-    ===================================================== */
-
-    if (otrosChats.length) {
-
-        const historiales =
-            otrosChats
-                .slice(0, 8)
-                .map(chat => {
-
-                    const mensajes =
-                        chat.messages
-                            .slice(-4);
-
-
-                    if (!mensajes.length) {
-
-                        return "";
-
-                    }
-
-
-                    return (
-                        "CHAT: " +
-                        chat.title +
-                        "\n" +
-                        mensajes
-                            .map(mensaje => {
-
-                                const rol =
-                                    mensaje.role === "user"
-                                        ? "SEÑOR"
-                                        : "J.A.R.V.I.S.";
-
-                                return (
-                                    rol +
-                                    ": " +
-                                    mensaje.content
-                                );
-
-                            })
-                            .join("\n")
-                    );
-
-                })
-                .filter(Boolean);
-
-
-        if (historiales.length) {
-
-            bloques.push(
-                "MEMORIA DE OTROS CHATS:\n" +
-                historiales.join("\n\n")
-            );
-
+                contexto +=
+                    `${rol}: ${mensaje.content}\n`;
+            }
         }
-
     }
 
+    /* -------------------------------------------------
+       LÍMITE DE SEGURIDAD
+    ------------------------------------------------- */
 
-    if (!bloques.length) {
-
-        return "";
-
-    }
-
-
-    let contexto =
-        bloques.join("\n\n");
-
-
-    const MAX =
-        10000;
-
-
-    if (
-        contexto.length > MAX
-    ) {
-
+    if (contexto.length > 10000) {
         contexto =
             contexto.substring(
-                contexto.length - MAX
+                0,
+                10000
             );
-
     }
 
-
     return contexto;
-
 }
 
 
-/* =========================================================
-   RENDERIZAR CHAT ACTUAL
-========================================================= */
+/* =====================================================
+   RENDERIZAR CHAT
+===================================================== */
 
 function renderizarChatActual() {
+    const chatContainer =
+        document.getElementById("chatMessages");
 
-    const chatBox =
-        document.getElementById(
-            "messages"
-        );
+    if (!chatContainer) {
+        return;
+    }
 
+    chatContainer.innerHTML = "";
 
-    if (!chatBox) return;
+    const chat = obtenerChatActual();
 
+    if (!chat) {
+        return;
+    }
 
-    chatBox.innerHTML = "";
-
-
-    const chat =
-        obtenerChatActual();
-
-
-    if (!chat) return;
-
-
-    chat.messages.forEach(
-        mensaje => {
-
-            if (
-                mensaje.role === "user"
-            ) {
-
-                agregarMensajeUsuario(
-                    mensaje.content,
-                    false
-                );
-
-            } else {
-
-                agregarMensajeJarvis(
-                    mensaje.content,
-                    false
-                );
-
-            }
-
+    for (const mensaje of chat.messages) {
+        if (mensaje.role === "user") {
+            agregarMensajeUsuario(
+                mensaje.content,
+                false
+            );
+        } else {
+            agregarMensajeJarvis(
+                mensaje.content,
+                false
+            );
         }
-    );
-
+    }
 
     desplazarChat();
-
 }
 
 
-/* =========================================================
+/* =====================================================
    RENDERIZAR HISTORIAL
-========================================================= */
+===================================================== */
 
-function renderizarHistorial(
-    filtro = ""
-) {
-
+function renderizarHistorial() {
     const historial =
-        document.getElementById(
-            "chat-history"
-        );
+        document.getElementById("chatHistory");
 
-
-    if (!historial) return;
-
+    if (!historial) {
+        return;
+    }
 
     historial.innerHTML = "";
 
+    for (const chat of memoriaSesion.chats) {
+        const elemento =
+            document.createElement("div");
 
-    const textoFiltro =
-        filtro
-            .toLowerCase()
-            .trim();
+        elemento.className =
+            "chat-history-item";
 
+        if (
+            chat.id ===
+            memoriaSesion.currentChatId
+        ) {
+            elemento.classList.add("active");
+        }
 
-    const chats =
-        memoriaSesion.chats.filter(
-            chat =>
-                !textoFiltro ||
-                chat.title
-                    .toLowerCase()
-                    .includes(textoFiltro)
-        );
+        elemento.dataset.chatId = chat.id;
 
+        const titulo =
+            document.createElement("span");
 
-    chats.forEach(chat => {
+        titulo.className =
+            "chat-history-title";
 
-        const item =
-            document.createElement(
-                "div"
-            );
+        titulo.textContent =
+            chat.title || "Nueva conversación";
 
+        elemento.appendChild(titulo);
 
-        item.className =
-            "history-item" +
-            (
-                chat.id ===
-                memoriaSesion.currentChatId
-                    ? " active"
-                    : ""
-            );
-
-
-        item.addEventListener(
+        elemento.addEventListener(
             "click",
-            () =>
-                seleccionarChat(
-                    chat.id
-                )
+            () => {
+                seleccionarChat(chat.id);
+            }
         );
 
-
-        const dot =
-            document.createElement(
-                "span"
-            );
-
-
-        dot.className =
-            "history-dot";
-
-        dot.textContent =
-            "●";
-
-
-        const title =
-            document.createElement(
-                "span"
-            );
-
-
-        title.className =
-            "history-title";
-
-        title.textContent =
-            chat.title;
-
-
-        const borrar =
-            document.createElement(
-                "button"
-            );
-
-
-        borrar.className =
-            "history-delete";
-
-        borrar.type =
-            "button";
-
-        borrar.textContent =
-            "×";
-
-        borrar.title =
-            "Eliminar conversación";
-
-
-        borrar.addEventListener(
-            "click",
-            event =>
-                eliminarChat(
-                    chat.id,
-                    event
-                )
-        );
-
-
-        item.appendChild(dot);
-
-        item.appendChild(title);
-
-        item.appendChild(borrar);
-
-
-        historial.appendChild(item);
-
-    });
-
+        historial.appendChild(elemento);
+    }
 }
 
 
-/* =========================================================
-   MENSAJE USUARIO
-========================================================= */
+/* =====================================================
+   AGREGAR MENSAJE DEL USUARIO
+===================================================== */
 
 function agregarMensajeUsuario(
-    texto,
+    contenido,
     guardar = true
 ) {
+    const chatContainer =
+        document.getElementById("chatMessages");
 
-    const chatBox =
-        document.getElementById(
-            "messages"
-        );
-
-
-    if (!chatBox) return;
-
+    if (!chatContainer) {
+        return;
+    }
 
     const wrapper =
-        document.createElement(
-            "div"
-        );
-
+        document.createElement("div");
 
     wrapper.className =
-        "message-wrapper user-wrapper";
-
-
-    const mensaje =
-        document.createElement(
-            "div"
-        );
-
-
-    mensaje.className =
         "message user-message";
 
+    const contenidoElemento =
+        document.createElement("div");
 
-    mensaje.textContent =
-        texto;
+    contenidoElemento.className =
+        "message-content";
 
+    contenidoElemento.textContent =
+        contenido;
 
-    wrapper.appendChild(mensaje);
+    wrapper.appendChild(
+        contenidoElemento
+    );
 
-
-    chatBox.appendChild(wrapper);
-
+    chatContainer.appendChild(wrapper);
 
     if (guardar) {
-
         guardarMensajeChat(
             "user",
-            texto
+            contenido
         );
-
     }
 
-
     desplazarChat();
-
 }
 
 
-/* =========================================================
-   MENSAJE JARVIS
-========================================================= */
+/* =====================================================
+   AGREGAR MENSAJE DE J.A.R.V.I.S.
+===================================================== */
 
 function agregarMensajeJarvis(
-    texto,
+    contenido,
     guardar = true
 ) {
+    const chatContainer =
+        document.getElementById("chatMessages");
 
-    const chatBox =
-        document.getElementById(
-            "messages"
-        );
-
-
-    if (!chatBox) return;
-
-
-    const wrapper =
-        document.createElement(
-            "div"
-        );
-
-
-    wrapper.className =
-        "message-wrapper jarvis-wrapper";
-
-
-    const avatar =
-        document.createElement(
-            "div"
-        );
-
-
-    avatar.className =
-        "message-avatar";
-
-
-    const mensaje =
-        document.createElement(
-            "div"
-        );
-
-
-    mensaje.className =
-        "message jarvis-message";
-
-
-    const nombre =
-        document.createElement(
-            "span"
-        );
-
-
-    nombre.className =
-        "jarvis-name";
-
-    nombre.textContent =
-        "J.A.R.V.I.S.";
-
-
-    const contenido =
-        document.createElement(
-            "span"
-        );
-
-
-    contenido.textContent =
-        texto;
-
-
-    mensaje.appendChild(nombre);
-
-    mensaje.appendChild(contenido);
-
-
-    wrapper.appendChild(avatar);
-
-    wrapper.appendChild(mensaje);
-
-
-    chatBox.appendChild(wrapper);
-
-
-    if (guardar) {
-
-        guardarMensajeChat(
-            "assistant",
-            texto
-        );
-
+    if (!chatContainer) {
+        return;
     }
 
+    const wrapper =
+        document.createElement("div");
+
+    wrapper.className =
+        "message jarvis-message";
+
+    const contenidoElemento =
+        document.createElement("div");
+
+    contenidoElemento.className =
+        "message-content";
+
+    contenidoElemento.textContent =
+        contenido;
+
+    wrapper.appendChild(
+        contenidoElemento
+    );
+
+    chatContainer.appendChild(wrapper);
+
+    if (guardar) {
+        guardarMensajeChat(
+            "assistant",
+            contenido
+        );
+    }
 
     desplazarChat();
-
 }
 
 
-/* =========================================================
-   PROCESANDO
-========================================================= */
+/* =====================================================
+   INDICADOR DE PROCESAMIENTO
+===================================================== */
 
 function mostrarProcesando() {
+    const chatContainer =
+        document.getElementById("chatMessages");
 
-    const chatBox =
-        document.getElementById(
-            "messages"
-        );
-
-
-    if (!chatBox) return;
-
+    if (!chatContainer) {
+        return;
+    }
 
     ocultarProcesando();
 
-
     const wrapper =
-        document.createElement(
-            "div"
-        );
-
-
-    wrapper.className =
-        "message-wrapper jarvis-wrapper";
-
+        document.createElement("div");
 
     wrapper.id =
-        "jarvis-processing";
+        "jarvisProcessing";
 
+    wrapper.className =
+        "message jarvis-message processing-message";
 
-    const avatar =
-        document.createElement(
-            "div"
-        );
+    const contenido =
+        document.createElement("div");
 
+    contenido.className =
+        "message-content";
 
-    avatar.className =
-        "message-avatar";
+    contenido.textContent =
+        "Procesando, Señor...";
 
+    wrapper.appendChild(contenido);
 
-    const mensaje =
-        document.createElement(
-            "div"
-        );
-
-
-    mensaje.className =
-        "message jarvis-message";
-
-
-    const nombre =
-        document.createElement(
-            "span"
-        );
-
-
-    nombre.className =
-        "jarvis-name";
-
-    nombre.textContent =
-        "J.A.R.V.I.S.";
-
-
-    const indicador =
-        document.createElement(
-            "div"
-        );
-
-
-    indicador.className =
-        "typing-indicator";
-
-
-    for (
-        let i = 0;
-        i < 3;
-        i++
-    ) {
-
-        const punto =
-            document.createElement(
-                "span"
-            );
-
-
-        indicador.appendChild(
-            punto
-        );
-
-    }
-
-
-    mensaje.appendChild(nombre);
-
-    mensaje.appendChild(indicador);
-
-
-    wrapper.appendChild(avatar);
-
-    wrapper.appendChild(mensaje);
-
-
-    chatBox.appendChild(wrapper);
-
+    chatContainer.appendChild(wrapper);
 
     desplazarChat();
-
 }
 
-
-/* =========================================================
-   OCULTAR PROCESANDO
-========================================================= */
 
 function ocultarProcesando() {
-
     const elemento =
         document.getElementById(
-            "jarvis-processing"
+            "jarvisProcessing"
         );
-
 
     if (elemento) {
-
         elemento.remove();
-
     }
-
 }
 
 
-/* =========================================================
-   SCROLL
-========================================================= */
+/* =====================================================
+   DESPLAZAMIENTO
+===================================================== */
 
 function desplazarChat() {
+    const chatContainer =
+        document.getElementById("chatMessages");
 
-    const chatBox =
-        document.getElementById(
-            "messages"
-        );
+    if (!chatContainer) {
+        return;
+    }
 
-
-    if (!chatBox) return;
-
-
-    chatBox.scrollTo({
-
-        top:
-            chatBox.scrollHeight,
-
-        behavior:
-            "smooth"
-
+    requestAnimationFrame(() => {
+        chatContainer.scrollTop =
+            chatContainer.scrollHeight;
     });
-
 }
 
 
-/* =========================================================
-   ENVIAR MENSAJE
-========================================================= */
+/* =====================================================
+   ENVÍO DE MENSAJES
+===================================================== */
 
 async function sendMessage() {
-
     if (enviandoMensaje) {
-
         return;
-
     }
 
-
     const input =
-        document.getElementById(
-            "messageInput"
-        );
+        document.getElementById("messageInput");
 
+    const sendButton =
+        document.getElementById("sendButton");
 
     if (!input) {
-
         console.error(
             "[CHAT ERROR] No se encontró #messageInput."
         );
-
         return;
-
     }
-
 
     const mensaje =
         input.value.trim();
 
-
     if (!mensaje) {
-
         return;
-
     }
 
+    const chatActual =
+        obtenerChatActual();
+
+    if (!chatActual) {
+        crearPrimerChat();
+    }
 
     enviandoMensaje = true;
 
-
-    const boton =
-        document.getElementById(
-            "sendButton"
-        );
-
-
-    if (boton) {
-
-        boton.disabled = true;
-
+    if (sendButton) {
+        sendButton.disabled = true;
+        sendButton.classList.add("loading");
     }
 
-
-    /* =====================================================
-       GUARDAR MENSAJE DEL SEÑOR
-    ===================================================== */
-
     agregarMensajeUsuario(
-        mensaje
+        mensaje,
+        true
     );
-
 
     input.value = "";
 
-
     mostrarProcesando();
 
-
-    /* =====================================================
-       CONSTRUIR MEMORIA
-    ===================================================== */
-
-    const contexto =
-        construirContextoMemoria();
-
-
     try {
+        const contextoMemoria =
+            construirContextoMemoria();
 
-        const respuesta =
+        const datos =
             await enviarMensajeAPI(
                 mensaje,
-                contexto
+                contextoMemoria
             );
-
 
         ocultarProcesando();
 
-
         if (
-            !respuesta ||
-            typeof respuesta.response ===
-            "undefined"
+            datos &&
+            datos.response
         ) {
-
             agregarMensajeJarvis(
-                "He recibido una respuesta inesperada del núcleo cognitivo, Señor."
+                datos.response,
+                true
             );
-
-            return;
-
+        } else {
+            agregarMensajeJarvis(
+                "No he recibido una respuesta válida del núcleo cognitivo, Señor.",
+                true
+            );
         }
 
-
-        agregarMensajeJarvis(
-            String(
-                respuesta.response
-            )
-        );
-
-
     } catch (error) {
-
         console.error(
-            "[CHAT ERROR]",
+            "[CHAT API ERROR]:",
             error
         );
 
-
         ocultarProcesando();
 
-
         agregarMensajeJarvis(
-            "Se ha producido un error de comunicación con el núcleo cognitivo, Señor."
+            error.message ||
+            "Se ha producido un error de comunicación con el núcleo cognitivo, Señor.",
+            true
         );
 
     } finally {
-
         enviandoMensaje = false;
 
-
-        if (boton) {
-
-            boton.disabled = false;
-
+        if (sendButton) {
+            sendButton.disabled = false;
+            sendButton.classList.remove(
+                "loading"
+            );
         }
 
-
         input.focus();
-
     }
-
 }
 
 
-/* =========================================================
-   ENTER
-========================================================= */
+/* =====================================================
+   TECLADO
+===================================================== */
 
 function handleKeyPress(event) {
-
     if (
         event.key === "Enter" &&
         !event.shiftKey
     ) {
-
         event.preventDefault();
 
         sendMessage();
-
     }
-
 }
 
 
-/* =========================================================
+/* =====================================================
    ENTRADA DE VOZ
-========================================================= */
+===================================================== */
 
 function iniciarEntradaVoz() {
-
     const SpeechRecognition =
         window.SpeechRecognition ||
         window.webkitSpeechRecognition;
 
+    const input =
+        document.getElementById("messageInput");
+
+    const button =
+        document.getElementById("voiceButton");
 
     if (!SpeechRecognition) {
-
         agregarMensajeJarvis(
             "La entrada de voz no está disponible en este navegador, Señor."
         );
 
-        return;
+        console.warn(
+            "[VOICE] SpeechRecognition no está disponible."
+        );
 
+        return;
     }
 
-
-    const input =
-        document.getElementById(
-            "messageInput"
-        );
-
-
-    const button =
-        document.getElementById(
-            "voiceButton"
-        );
-
-
     if (!input) {
-
         console.error(
             "[VOICE ERROR] No se encontró #messageInput."
         );
 
         return;
+    }
 
+    /* -------------------------------------------------
+       SI YA ESTÁ ESCUCHANDO → DETENER
+    ------------------------------------------------- */
+
+    if (
+        vozActiva &&
+        reconocimientoVoz
+    ) {
+        try {
+            reconocimientoVoz.stop();
+        } catch (error) {
+            console.warn(
+                "[VOICE STOP]",
+                error
+            );
+        }
+
+        return;
     }
 
 
-    const recognition =
+    /* -------------------------------------------------
+       CREAR RECONOCIMIENTO
+    ------------------------------------------------- */
+
+    reconocimientoVoz =
         new SpeechRecognition();
 
+    reconocimientoVoz.lang = "es-CO";
 
-    recognition.lang =
-        "es-CO";
+    reconocimientoVoz.continuous = false;
 
+    reconocimientoVoz.interimResults = true;
 
-    recognition.interimResults =
-        false;
-
-
-    recognition.continuous =
-        false;
+    reconocimientoVoz.maxAlternatives = 1;
 
 
-    recognition.maxAlternatives =
-        1;
+    /* -------------------------------------------------
+       INICIO
+    ------------------------------------------------- */
 
+    reconocimientoVoz.onstart = () => {
+        vozActiva = true;
 
-    if (button) {
-
-        button.classList.add(
-            "recording"
+        console.log(
+            "[VOICE] Micrófono activo. Escuchando..."
         );
 
-        button.disabled =
-            true;
+        if (button) {
+            button.classList.add(
+                "recording"
+            );
 
-    }
+            button.setAttribute(
+                "aria-label",
+                "Detener entrada de voz"
+            );
 
+            button.setAttribute(
+                "title",
+                "Detener entrada de voz"
+            );
+        }
+
+        input.placeholder =
+            "Escuchando, Señor...";
+    };
+
+
+    /* -------------------------------------------------
+       RESULTADO
+    ------------------------------------------------- */
+
+    reconocimientoVoz.onresult = (event) => {
+        let textoFinal = "";
+        let textoIntermedio = "";
+
+        for (
+            let i = event.resultIndex;
+            i < event.results.length;
+            i++
+        ) {
+            const resultado =
+                event.results[i];
+
+            const transcript =
+                resultado[0].transcript;
+
+            if (resultado.isFinal) {
+                textoFinal +=
+                    transcript + " ";
+            } else {
+                textoIntermedio +=
+                    transcript;
+            }
+        }
+
+        if (textoIntermedio.trim()) {
+            input.value =
+                textoIntermedio.trim();
+        }
+
+        if (textoFinal.trim()) {
+            input.value =
+                textoFinal.trim();
+
+            input.focus();
+
+            console.log(
+                "[VOICE RESULT]:",
+                textoFinal.trim()
+            );
+        }
+    };
+
+
+    /* -------------------------------------------------
+       ERRORES
+    ------------------------------------------------- */
+
+    reconocimientoVoz.onerror = (event) => {
+        console.error(
+            "[VOICE ERROR]:",
+            event.error
+        );
+
+        switch (event.error) {
+
+            case "not-allowed":
+
+                agregarMensajeJarvis(
+                    "El navegador no permite acceder al micrófono, Señor. Revise los permisos del sitio."
+                );
+
+                break;
+
+
+            case "no-speech":
+
+                agregarMensajeJarvis(
+                    "No he detectado ninguna orden de voz, Señor."
+                );
+
+                break;
+
+
+            case "audio-capture":
+
+                agregarMensajeJarvis(
+                    "No he podido acceder al dispositivo de audio, Señor. Compruebe que el micrófono esté disponible."
+                );
+
+                break;
+
+
+            case "network":
+
+                agregarMensajeJarvis(
+                    "El reconocimiento de voz no pudo comunicarse con su servicio, Señor."
+                );
+
+                break;
+
+
+            case "service-not-allowed":
+
+                agregarMensajeJarvis(
+                    "El servicio de reconocimiento de voz no está disponible en este navegador, Señor."
+                );
+
+                break;
+
+
+            default:
+
+                agregarMensajeJarvis(
+                    "Se produjo un inconveniente con la entrada de voz, Señor."
+                );
+
+                break;
+        }
+    };
+
+
+    /* -------------------------------------------------
+       FINALIZACIÓN
+    ------------------------------------------------- */
+
+    reconocimientoVoz.onend = () => {
+        vozActiva = false;
+
+        console.log(
+            "[VOICE] Reconocimiento finalizado."
+        );
+
+        if (button) {
+            button.classList.remove(
+                "recording"
+            );
+
+            button.setAttribute(
+                "aria-label",
+                "Entrada de voz"
+            );
+
+            button.setAttribute(
+                "title",
+                "Entrada de voz"
+            );
+        }
+
+        input.placeholder =
+            "Escriba una instrucción...";
+
+        input.focus();
+    };
+
+
+    /* -------------------------------------------------
+       INICIAR
+    ------------------------------------------------- */
 
     try {
-
-        recognition.start();
+        reconocimientoVoz.start();
 
     } catch (error) {
 
@@ -1359,254 +1024,187 @@ function iniciarEntradaVoz() {
             error
         );
 
-        if (button) {
+        vozActiva = false;
 
+        if (button) {
             button.classList.remove(
                 "recording"
             );
-
-            button.disabled =
-                false;
-
         }
 
-        return;
-
+        input.placeholder =
+            "Escriba una instrucción...";
     }
-
-
-    recognition.onresult =
-        event => {
-
-            const texto =
-                event
-                    .results[0][0]
-                    .transcript
-                    .trim();
-
-
-            if (texto) {
-
-                input.value =
-                    texto;
-
-                input.focus();
-
-            }
-
-        };
-
-
-    recognition.onerror =
-        event => {
-
-            console.error(
-                "[VOICE ERROR]",
-                event.error
-            );
-
-
-            if (
-                event.error ===
-                "not-allowed"
-            ) {
-
-                agregarMensajeJarvis(
-                    "El navegador ha bloqueado el acceso al micrófono, Señor."
-                );
-
-            } else if (
-                event.error ===
-                "no-speech"
-            ) {
-
-                agregarMensajeJarvis(
-                    "No he detectado ninguna orden de voz, Señor."
-                );
-
-            }
-
-        };
-
-
-    recognition.onend =
-        () => {
-
-            if (button) {
-
-                button.classList.remove(
-                    "recording"
-                );
-
-                button.disabled =
-                    false;
-
-            }
-
-        };
-
 }
 
 
-/* =========================================================
-   BOTÓN DE VOZ
-========================================================= */
+/* =====================================================
+   CONFIGURAR BOTÓN DE VOZ
+===================================================== */
 
 function configurarBotonVoz() {
-
     const button =
-        document.getElementById(
-            "voiceButton"
-        );
-
+        document.getElementById("voiceButton");
 
     if (!button) {
+        console.warn(
+            "[VOICE] No se encontró #voiceButton."
+        );
 
         return;
-
     }
-
 
     button.addEventListener(
         "click",
         iniciarEntradaVoz
     );
-
 }
 
 
-/* =========================================================
-   BÚSQUEDA DE CHATS
-========================================================= */
+/* =====================================================
+   NUEVA CONVERSACIÓN
+===================================================== */
+
+function configurarNuevoChat() {
+    const botones =
+        document.querySelectorAll(
+            "#newChatButton, .new-chat-button, [data-new-chat]"
+        );
+
+    botones.forEach(button => {
+
+        button.addEventListener(
+            "click",
+            () => {
+                nuevoChat();
+            }
+        );
+
+    });
+}
+
+
+/* =====================================================
+   BUSCADOR DE CHATS
+===================================================== */
 
 function configurarBusquedaChats() {
-
-    const buscador =
+    const input =
         document.getElementById(
             "chatSearch"
         );
 
-
-    if (!buscador) {
-
+    if (!input) {
         return;
-
     }
 
-
-    buscador.addEventListener(
+    input.addEventListener(
         "input",
         () => {
 
-            renderizarHistorial(
-                buscador.value
-            );
+            const busqueda =
+                input.value
+                    .toLowerCase()
+                    .trim();
+
+            const elementos =
+                document.querySelectorAll(
+                    ".chat-history-item"
+                );
+
+            elementos.forEach(elemento => {
+
+                const texto =
+                    elemento.textContent
+                        .toLowerCase();
+
+                if (
+                    !busqueda ||
+                    texto.includes(busqueda)
+                ) {
+                    elemento.style.display =
+                        "";
+                } else {
+                    elemento.style.display =
+                        "none";
+                }
+
+            });
 
         }
     );
-
 }
 
 
-/* =========================================================
-   BOTÓN NUEVO CHAT
-========================================================= */
-
-function configurarNuevoChat() {
-
-    const boton =
-        document.getElementById(
-            "newChatButton"
-        );
-
-
-    if (!boton) {
-
-        return;
-
-    }
-
-
-    boton.addEventListener(
-        "click",
-        nuevoChat
-    );
-
-}
-
-
-/* =========================================================
-   INICIALIZAR CHAT
-========================================================= */
+/* =====================================================
+   INICIALIZACIÓN
+===================================================== */
 
 function initChat() {
 
-    console.log(
-        "[CHAT] Sistema conversacional iniciado."
-    );
-
-
     cargarMemoriaSesion();
-
 
     renderizarHistorial();
 
-
     renderizarChatActual();
-
-
-    configurarBusquedaChats();
-
-
-    configurarNuevoChat();
-
 
     configurarBotonVoz();
 
+    configurarNuevoChat();
+
+    configurarBusquedaChats();
+
+    const sendButton =
+        document.getElementById(
+            "sendButton"
+        );
+
+    const input =
+        document.getElementById(
+            "messageInput"
+        );
+
+    if (sendButton) {
+
+        sendButton.addEventListener(
+            "click",
+            sendMessage
+        );
+
+    } else {
+
+        console.warn(
+            "[CHAT] No se encontró #sendButton."
+        );
+
+    }
+
+    if (input) {
+
+        input.addEventListener(
+            "keydown",
+            handleKeyPress
+        );
+
+    } else {
+
+        console.warn(
+            "[CHAT] No se encontró #messageInput."
+        );
+
+    }
+
+    console.log(
+        "[J.A.R.V.I.S.] Chat inicializado correctamente."
+    );
 }
 
 
-/* =========================================================
-   INICIALIZACIÓN
-========================================================= */
+/* =====================================================
+   DOM READY
+===================================================== */
 
 document.addEventListener(
     "DOMContentLoaded",
-    () => {
-
-        const button =
-            document.getElementById(
-                "sendButton"
-            );
-
-
-        const input =
-            document.getElementById(
-                "messageInput"
-            );
-
-
-        if (button) {
-
-            button.addEventListener(
-                "click",
-                sendMessage
-            );
-
-        }
-
-
-        if (input) {
-
-            input.addEventListener(
-                "keydown",
-                handleKeyPress
-            );
-
-        }
-
-
-        initChat();
-
-    }
+    initChat
 );
