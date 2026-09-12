@@ -666,7 +666,111 @@ function agregarMensajeUsuario(
     desplazarChat();
 }
 
+/* =====================================================
+   FORMATEADOR DE RESPUESTAS DE J.A.R.V.I.S.
+===================================================== */
 
+function escaparHTML(texto) {
+
+    return String(texto)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+function formatearRespuestaJarvis(texto) {
+
+    if (!texto) {
+        return "";
+    }
+
+    let html =
+        escaparHTML(texto);
+
+
+    /* NEGRITA */
+
+    html =
+        html.replace(
+            /\*\*(.*?)\*\*/g,
+            "<strong>$1</strong>"
+        );
+
+
+    /* TÍTULOS SIMPLES */
+
+    html =
+        html.replace(
+            /^### (.+)$/gm,
+            '<h4>$1</h4>'
+        );
+
+
+    html =
+        html.replace(
+            /^## (.+)$/gm,
+            '<h3>$1</h3>'
+        );
+
+
+    /* LISTAS CON GUION */
+
+    html =
+        html.replace(
+            /^[•\-] (.+)$/gm,
+            '<li>$1</li>'
+        );
+
+
+    /* AGRUPAR LISTAS */
+
+    html =
+        html.replace(
+            /(<li>.*<\/li>\n?)+/g,
+            match =>
+                `<ul>${match}</ul>`
+        );
+
+
+    /* PÁRRAFOS */
+
+    html =
+        html.replace(
+            /\n{2,}/g,
+            "</p><p>"
+        );
+
+
+    /* SALTOS NORMALES */
+
+    html =
+        html.replace(
+            /\n/g,
+            "<br>"
+        );
+
+
+    /*
+       Evitar envolver elementos HTML
+       importantes dentro de <p>.
+    */
+
+    if (
+        !html.startsWith("<h") &&
+        !html.startsWith("<ul") &&
+        !html.startsWith("<p>")
+    ) {
+
+        html =
+            `<p>${html}</p>`;
+    }
+
+
+    return html;
+}
 /* =====================================================
    MENSAJE DE J.A.R.V.I.S.
 ===================================================== */
@@ -675,6 +779,113 @@ function agregarMensajeJarvis(
     contenido,
     guardar = true
 ) {
+
+    const chatContainer =
+        document.getElementById("messages");
+
+    if (!chatContainer) {
+        return;
+    }
+
+    const wrapper =
+        document.createElement("div");
+
+    wrapper.className =
+        "message jarvis-message";
+
+
+    /* =================================================
+       CABECERA DE J.A.R.V.I.S.
+    ================================================= */
+
+    const header =
+        document.createElement("div");
+
+    header.className =
+        "jarvis-message-header";
+
+
+    const core =
+        document.createElement("div");
+
+    core.className =
+        "jarvis-core";
+
+    core.innerHTML = `
+        <span></span>
+    `;
+
+
+    const identity =
+        document.createElement("div");
+
+    identity.className =
+        "jarvis-identity";
+
+    identity.innerHTML = `
+        <strong>J.A.R.V.I.S.</strong>
+        <small>ARTIFICIAL INTELLIGENCE</small>
+    `;
+
+
+    header.appendChild(core);
+    header.appendChild(identity);
+
+
+    /* =================================================
+       CONTENIDO
+    ================================================= */
+
+    const contenidoElemento =
+        document.createElement("div");
+
+    contenidoElemento.className =
+        "message-content jarvis-content";
+
+    contenidoElemento.innerHTML =
+        formatearRespuestaJarvis(contenido);
+
+
+    /* =================================================
+       FIRMA DEL SISTEMA
+    ================================================= */
+
+    const footer =
+        document.createElement("div");
+
+    footer.className =
+        "jarvis-message-footer";
+
+    footer.textContent =
+        "J.A.R.V.I.S. • SYSTEM RESPONSE";
+
+
+    /* =================================================
+       ENSAMBLAR
+    ================================================= */
+
+    wrapper.appendChild(header);
+    wrapper.appendChild(contenidoElemento);
+    wrapper.appendChild(footer);
+
+    chatContainer.appendChild(wrapper);
+
+
+    /* =================================================
+       MEMORIA
+    ================================================= */
+
+    if (guardar) {
+
+        guardarMensajeChat(
+            "assistant",
+            contenido
+        );
+    }
+
+
+    desplazarChat();
+}
 
     const chatContainer =
         document.getElementById(
