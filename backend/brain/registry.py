@@ -1,240 +1,56 @@
 # ============================================================
-# J.A.R.V.I.S. — AGENTES ESPECIALIZADOS
+# J.A.R.V.I.S. — REGISTRO CENTRAL DE AGENTES
 # ============================================================
 
-from dataclasses import dataclass
-from typing import Callable, Any
+from .agents import (
+    HistoryAgent,
+    ScienceAgent,
+    CodingAgent,
+    ImageAgent,
+    GeneralAgent
+)
 
 
-@dataclass
-class AgentResult:
-    success: bool
-    agent: str
-    response: str
-    data: Any = None
+AGENTS = [
+    HistoryAgent(),
+    ScienceAgent(),
+    CodingAgent(),
+    ImageAgent(),
+    GeneralAgent(),
+]
 
 
-class BaseAgent:
+def obtener_agente(request: str):
 
-    name = "base"
-    description = "Agente base."
+    """
+    Mission Control busca el primer especialista
+    capaz de manejar la solicitud.
 
-    def can_handle(self, request: str) -> bool:
-        return False
+    Si ninguno coincide, utiliza GeneralAgent.
+    """
 
-    def execute(self, request: str, context: str = "") -> AgentResult:
-        raise NotImplementedError
+    if not request:
+        return AGENTS[-1]
+
+    texto = request.strip()
+
+    for agent in AGENTS:
+
+        if agent.name == "general":
+            continue
+
+        if agent.can_handle(texto):
+            return agent
+
+    return AGENTS[-1]
 
 
-class HistoryAgent(BaseAgent):
+def listar_agentes():
 
-    name = "history"
-    description = (
-        "Especialista en historia, acontecimientos históricos, "
-        "personajes, fechas, civilizaciones y procesos políticos."
-    )
-
-    KEYWORDS = [
-        "historia",
-        "histórico",
-        "historica",
-        "fundó",
-        "fundador",
-        "independencia",
-        "guerra",
-        "revolución",
-        "presidente",
-        "civilización",
-        "imperio",
-        "colombia",
-        "españa",
-        "roma",
-        "egipto",
+    return [
+        {
+            "name": agent.name,
+            "description": agent.description
+        }
+        for agent in AGENTS
     ]
-
-    def can_handle(self, request: str) -> bool:
-        request = request.lower()
-
-        return any(
-            keyword in request
-            for keyword in self.KEYWORDS
-        )
-
-    def execute(self, request: str, context: str = "") -> AgentResult:
-
-        return AgentResult(
-            success=True,
-            agent=self.name,
-            response="",
-            data={
-                "specialty": self.description,
-                "request": request
-            }
-        )
-
-
-class ScienceAgent(BaseAgent):
-
-    name = "science"
-    description = (
-        "Especialista en ciencias naturales, física, química, "
-        "biología, astronomía y conceptos científicos."
-    )
-
-    KEYWORDS = [
-        "física",
-        "fisica",
-        "química",
-        "quimica",
-        "biología",
-        "biologia",
-        "astronomía",
-        "astronomia",
-        "planeta",
-        "átomo",
-        "atomo",
-        "energía",
-        "energia",
-        "gravedad",
-        "universo",
-        "célula",
-        "celula",
-        "molécula",
-        "molecula",
-    ]
-
-    def can_handle(self, request: str) -> bool:
-        request = request.lower()
-
-        return any(
-            keyword in request
-            for keyword in self.KEYWORDS
-        )
-
-    def execute(self, request: str, context: str = ""):
-
-        return AgentResult(
-            success=True,
-            agent=self.name,
-            response="",
-            data={
-                "specialty": self.description,
-                "request": request
-            }
-        )
-
-
-class CodingAgent(BaseAgent):
-
-    name = "coding"
-    description = (
-        "Especialista en programación, software, algoritmos, "
-        "Python, JavaScript, HTML, CSS, APIs y desarrollo."
-    )
-
-    KEYWORDS = [
-        "código",
-        "codigo",
-        "programar",
-        "programación",
-        "programacion",
-        "python",
-        "javascript",
-        "html",
-        "css",
-        "flask",
-        "api",
-        "error",
-        "bug",
-        "función",
-        "funcion",
-        "script",
-        "programa",
-    ]
-
-    def can_handle(self, request: str) -> bool:
-        request = request.lower()
-
-        return any(
-            keyword in request
-            for keyword in self.KEYWORDS
-        )
-
-    def execute(self, request: str, context: str = ""):
-
-        return AgentResult(
-            success=True,
-            agent=self.name,
-            response="",
-            data={
-                "specialty": self.description,
-                "request": request
-            }
-        )
-
-
-class ImageAgent(BaseAgent):
-
-    name = "image"
-    description = (
-        "Especialista en generación y edición de imágenes."
-    )
-
-    KEYWORDS = [
-        "genera una imagen",
-        "generame una imagen",
-        "générame una imagen",
-        "crear una imagen",
-        "crea una imagen",
-        "haz una imagen",
-        "dibuja",
-        "dibújame",
-        "imagen",
-        "ilustración",
-        "ilustracion",
-    ]
-
-    def can_handle(self, request: str) -> bool:
-        request = request.lower()
-
-        return any(
-            keyword in request
-            for keyword in self.KEYWORDS
-        )
-
-    def execute(self, request: str, context: str = ""):
-
-        return AgentResult(
-            success=True,
-            agent=self.name,
-            response="",
-            data={
-                "specialty": self.description,
-                "request": request,
-                "action": "image_generation"
-            }
-        )
-
-
-class GeneralAgent(BaseAgent):
-
-    name = "general"
-    description = (
-        "Agente general capaz de responder preguntas "
-        "y mantener conversaciones."
-    )
-
-    def can_handle(self, request: str) -> bool:
-        return True
-
-    def execute(self, request: str, context: str = ""):
-
-        return AgentResult(
-            success=True,
-            agent=self.name,
-            response="",
-            data={
-                "specialty": self.description,
-                "request": request
-            }
-        )
