@@ -933,3 +933,305 @@ input:focus-visible {
     }
 
 }
+/* =========================================================
+   J.A.R.V.I.S. — MENSAJE PREMIUM
+========================================================= */
+
+.jarvis-message {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+
+/* CABECERA */
+
+.jarvis-message-header {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+
+    margin-left: 2px;
+}
+
+
+/* NÚCLEO */
+
+.jarvis-core {
+    position: relative;
+
+    width: 27px;
+    height: 27px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid rgba(255, 180, 0, .65);
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255, 190, 40, .95) 0%,
+            rgba(255, 145, 0, .45) 28%,
+            rgba(255, 120, 0, .08) 65%,
+            transparent 70%
+        );
+
+    box-shadow:
+        0 0 8px rgba(255, 170, 0, .45),
+        inset 0 0 7px rgba(255, 200, 70, .25);
+
+    animation: jarvisCorePulse 2.4s ease-in-out infinite;
+}
+
+
+.jarvis-core span {
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: #ffd36a;
+
+    box-shadow:
+        0 0 8px #ffb400,
+        0 0 15px rgba(255, 180, 0, .75);
+}
+
+
+/* IDENTIDAD */
+
+.jarvis-identity {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+
+.jarvis-identity strong {
+    color: #f4f4f4;
+
+    font-family:
+        "Share Tech Mono",
+        monospace;
+
+    font-size: 11px;
+
+    letter-spacing: 2px;
+
+    font-weight: 500;
+}
+
+
+.jarvis-identity small {
+    color: rgba(255, 180, 0, .58);
+
+    font-family:
+        "Share Tech Mono",
+        monospace;
+
+    font-size: 7px;
+
+    letter-spacing: 1.2px;
+}
+
+
+/* CONTENIDO */
+
+.jarvis-message .jarvis-content {
+
+    max-width: min(78%, 820px);
+
+    padding: 17px 21px;
+
+    margin-left: 0;
+
+    color: #e4e5e7;
+
+    font-family:
+        "Inter",
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    font-size: 14px;
+
+    line-height: 1.75;
+
+    letter-spacing: .05px;
+
+    border:
+        1px solid
+        rgba(255, 180, 0, .18);
+
+    border-radius:
+        3px
+        15px
+        15px
+        15px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(17, 21, 28, .97),
+            rgba(7, 10, 15, .96)
+        );
+
+    box-shadow:
+        0 8px 28px rgba(0, 0, 0, .18),
+        inset 0 1px 0 rgba(255,255,255,.025);
+
+    backdrop-filter: blur(10px);
+}
+
+
+/* PÁRRAFOS */
+
+.jarvis-content p {
+    margin: 0 0 13px;
+}
+
+
+.jarvis-content p:last-child {
+    margin-bottom: 0;
+}
+
+
+/* TÍTULOS */
+
+.jarvis-content h3,
+.jarvis-content h4 {
+
+    margin: 17px 0 8px;
+
+    color: #f5c451;
+
+    font-family:
+        "Share Tech Mono",
+        monospace;
+
+    font-weight: 500;
+
+    letter-spacing: .7px;
+}
+
+
+.jarvis-content h3 {
+    font-size: 13px;
+}
+
+
+.jarvis-content h4 {
+    font-size: 12px;
+}
+
+
+/* TEXTO DESTACADO */
+
+.jarvis-content strong {
+
+    color: #ffd36a;
+
+    font-weight: 600;
+}
+
+
+/* LISTAS */
+
+.jarvis-content ul {
+
+    margin: 9px 0 14px;
+
+    padding-left: 21px;
+}
+
+
+.jarvis-content li {
+
+    margin: 5px 0;
+
+    padding-left: 3px;
+
+    color: #dfe1e4;
+}
+
+
+.jarvis-content li::marker {
+
+    color: #ffb400;
+
+    font-size: 9px;
+}
+
+
+/* FIRMA */
+
+.jarvis-message-footer {
+
+    margin-left: 38px;
+
+    color:
+        rgba(255,255,255,.25);
+
+    font-family:
+        "Share Tech Mono",
+        monospace;
+
+    font-size: 7px;
+
+    letter-spacing: 1.1px;
+}
+
+
+/* ANIMACIÓN DEL NÚCLEO */
+
+@keyframes jarvisCorePulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+
+        box-shadow:
+            0 0 8px rgba(255,170,0,.4),
+            inset 0 0 7px rgba(255,200,70,.2);
+    }
+
+    50% {
+        transform: scale(1.05);
+
+        box-shadow:
+            0 0 14px rgba(255,170,0,.65),
+            inset 0 0 9px rgba(255,200,70,.3);
+    }
+}
+
+
+/* MÓVIL */
+
+@media (max-width: 700px) {
+
+    .jarvis-message .jarvis-content {
+
+        max-width: 88%;
+
+        padding: 14px 16px;
+
+        font-size: 13px;
+
+        line-height: 1.65;
+    }
+
+
+    .jarvis-identity strong {
+        font-size: 10px;
+    }
+
+
+    .jarvis-message-footer {
+        margin-left: 36px;
+    }
+}
