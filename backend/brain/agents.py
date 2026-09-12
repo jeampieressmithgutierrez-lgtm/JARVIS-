@@ -1,187 +1,315 @@
-/* =========================================================
-   J.A.R.V.I.S. — REAL 3D IDENTITY
-========================================================= */
+# ============================================================
+# J.A.R.V.I.S. — AGENTES ESPECIALIZADOS
+# ============================================================
 
-.jarvis-3d-brand {
-    position: relative;
-    width: min(360px, 32vw);
-    height: 76px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-#jarvis3d-stage {
-    position: absolute;
-    inset: 0;
-
-    width: 100%;
-    height: 100%;
-
-    overflow: hidden;
-
-    pointer-events: auto;
-}
-
-.jarvis3d-canvas {
-    display: block;
-
-    width: 100%;
-    height: 100%;
-
-    cursor: default;
-}
-
-.jarvis3d-accessibility {
-    position: absolute;
-
-    width: 1px;
-    height: 1px;
-
-    overflow: hidden;
-
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-}
-
-.jarvis3d-fallback {
-    position: absolute;
-    inset: 0;
-
-    display: flex;
-    flex-direction: column;
-
-    align-items: center;
-    justify-content: center;
-
-    gap: 4px;
-
-    pointer-events: none;
-}
-
-.jarvis3d-fallback strong {
-    color: #b91d1d;
-
-    font-family: "Orbitron", sans-serif;
-    font-size: 23px;
-    font-weight: 800;
-
-    letter-spacing: 3px;
-
-    text-shadow:
-        1px 1px 0 #ffb400,
-        2px 2px 0 #5b1115,
-        0 0 14px rgba(255, 180, 0, 0.25);
-}
-
-.jarvis3d-fallback span {
-    color: #858b94;
-
-    font-family: "Share Tech Mono", monospace;
-    font-size: 8px;
-
-    letter-spacing: 2px;
-}
+from dataclasses import dataclass
+from typing import Any
 
 
-/* =========================================================
-   DETALLES DE PROFUNDIDAD DEL HEADER
-========================================================= */
-
-#topbar {
-    perspective: 900px;
-    transform-style: preserve-3d;
-}
-
-.top-brand {
-    transform-style: preserve-3d;
-}
-
-.jarvis-3d-brand::before {
-    content: "";
-
-    position: absolute;
-
-    left: 8%;
-    right: 8%;
-    bottom: 5px;
-
-    height: 1px;
-
-    background:
-        linear-gradient(
-            90deg,
-            transparent,
-            rgba(255, 180, 0, 0.55),
-            transparent
-        );
-
-    opacity: 0.45;
-
-    filter: blur(0.4px);
-
-    pointer-events: none;
-}
-
-.jarvis-3d-brand::after {
-    content: "";
-
-    position: absolute;
-
-    width: 110px;
-    height: 30px;
-
-    left: 50%;
-    top: 50%;
-
-    transform:
-        translate(-50%, -50%);
-
-    background:
-        radial-gradient(
-            ellipse,
-            rgba(255, 180, 0, 0.10),
-            transparent 70%
-        );
-
-    filter: blur(10px);
-
-    pointer-events: none;
-
-    z-index: -1;
-}
+@dataclass
+class AgentResult:
+    success: bool
+    agent: str
+    response: str = ""
+    data: Any = None
 
 
-/* =========================================================
-   REDUCIR MOVIMIENTO
-========================================================= */
+class BaseAgent:
 
-@media (prefers-reduced-motion: reduce) {
+    name = "base"
+    description = "Agente base."
 
-    .jarvis3d-canvas {
-        opacity: 0.92;
-    }
-}
+    def can_handle(self, request: str) -> bool:
+        return False
+
+    def execute(self, request: str, context: str = "") -> AgentResult:
+        raise NotImplementedError
 
 
-/* =========================================================
-   MÓVIL
-========================================================= */
+# ============================================================
+# HISTORIA
+# ============================================================
 
-@media (max-width: 700px) {
+class HistoryAgent(BaseAgent):
 
-    .jarvis-3d-brand {
-        width: 220px;
-        height: 70px;
-    }
+    name = "history"
 
-}
+    description = (
+        "Especialista en historia, personajes históricos, "
+        "acontecimientos, fechas, civilizaciones y procesos históricos."
+    )
 
-@media (max-width: 480px) {
+    KEYWORDS = [
+        "historia",
+        "histórico",
+        "histórica",
+        "historico",
+        "historica",
+        "fundó",
+        "fundo",
+        "fundador",
+        "independencia",
+        "guerra",
+        "revolución",
+        "revolucion",
+        "presidente",
+        "civilización",
+        "civilizacion",
+        "imperio",
+        "conquista",
+        "colonia",
+        "virreinato",
+        "antiguo",
+        "antigua",
+    ]
 
-    .jarvis-3d-brand {
-        width: 175px;
-        height: 64px;
-    }
+    def can_handle(self, request: str) -> bool:
 
-}
+        texto = request.lower()
+
+        return any(
+            palabra in texto
+            for palabra in self.KEYWORDS
+        )
+
+    def execute(
+        self,
+        request: str,
+        context: str = ""
+    ) -> AgentResult:
+
+        return AgentResult(
+            success=True,
+            agent=self.name,
+            data={
+                "specialty": self.description,
+                "request": request,
+                "context": context
+            }
+        )
+
+
+# ============================================================
+# CIENCIA
+# ============================================================
+
+class ScienceAgent(BaseAgent):
+
+    name = "science"
+
+    description = (
+        "Especialista en física, química, biología, "
+        "astronomía y ciencias naturales."
+    )
+
+    KEYWORDS = [
+        "física",
+        "fisica",
+        "química",
+        "quimica",
+        "biología",
+        "biologia",
+        "astronomía",
+        "astronomia",
+        "planeta",
+        "átomo",
+        "atomo",
+        "energía",
+        "energia",
+        "gravedad",
+        "universo",
+        "célula",
+        "celula",
+        "molécula",
+        "molecula",
+        "genética",
+        "genetica",
+        "evolución",
+        "evolucion",
+        "ecosistema",
+        "átomos",
+        "atomos",
+    ]
+
+    def can_handle(self, request: str) -> bool:
+
+        texto = request.lower()
+
+        return any(
+            palabra in texto
+            for palabra in self.KEYWORDS
+        )
+
+    def execute(
+        self,
+        request: str,
+        context: str = ""
+    ) -> AgentResult:
+
+        return AgentResult(
+            success=True,
+            agent=self.name,
+            data={
+                "specialty": self.description,
+                "request": request,
+                "context": context
+            }
+        )
+
+
+# ============================================================
+# PROGRAMACIÓN
+# ============================================================
+
+class CodingAgent(BaseAgent):
+
+    name = "coding"
+
+    description = (
+        "Especialista en programación, software, "
+        "Python, JavaScript, HTML, CSS, Flask, APIs y arquitectura."
+    )
+
+    KEYWORDS = [
+        "código",
+        "codigo",
+        "programar",
+        "programación",
+        "programacion",
+        "python",
+        "javascript",
+        "html",
+        "css",
+        "flask",
+        "api",
+        "error",
+        "bug",
+        "función",
+        "funcion",
+        "script",
+        "programa",
+        "software",
+        "backend",
+        "frontend",
+        "servidor",
+        "github",
+        "render",
+    ]
+
+    def can_handle(self, request: str) -> bool:
+
+        texto = request.lower()
+
+        return any(
+            palabra in texto
+            for palabra in self.KEYWORDS
+        )
+
+    def execute(
+        self,
+        request: str,
+        context: str = ""
+    ) -> AgentResult:
+
+        return AgentResult(
+            success=True,
+            agent=self.name,
+            data={
+                "specialty": self.description,
+                "request": request,
+                "context": context
+            }
+        )
+
+
+# ============================================================
+# IMÁGENES
+# ============================================================
+
+class ImageAgent(BaseAgent):
+
+    name = "image"
+
+    description = (
+        "Especialista en creación, análisis y edición "
+        "de imágenes y contenido visual."
+    )
+
+    KEYWORDS = [
+        "imagen",
+        "imágenes",
+        "imagenes",
+        "dibujar",
+        "dibuja",
+        "dibújame",
+        "dibujame",
+        "ilustración",
+        "ilustracion",
+        "foto",
+        "fotografía",
+        "fotografia",
+        "render",
+        "visual",
+        "diseño",
+        "diseñar",
+    ]
+
+    def can_handle(self, request: str) -> bool:
+
+        texto = request.lower()
+
+        return any(
+            palabra in texto
+            for palabra in self.KEYWORDS
+        )
+
+    def execute(
+        self,
+        request: str,
+        context: str = ""
+    ) -> AgentResult:
+
+        return AgentResult(
+            success=True,
+            agent=self.name,
+            data={
+                "specialty": self.description,
+                "request": request,
+                "context": context,
+                "action": "visual_task"
+            }
+        )
+
+
+# ============================================================
+# GENERAL
+# ============================================================
+
+class GeneralAgent(BaseAgent):
+
+    name = "general"
+
+    description = (
+        "Especialista general para conversación, "
+        "razonamiento, explicaciones y tareas no especializadas."
+    )
+
+    def can_handle(self, request: str) -> bool:
+
+        return True
+
+    def execute(
+        self,
+        request: str,
+        context: str = ""
+    ) -> AgentResult:
+
+        return AgentResult(
+            success=True,
+            agent=self.name,
+            data={
+                "specialty": self.description,
+                "request": request,
+                "context": context
+            }
+        )
