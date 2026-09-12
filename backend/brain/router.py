@@ -1,48 +1,49 @@
 # ============================================================
-# J.A.R.V.I.S. — REGISTRO DE AGENTES
+# J.A.R.V.I.S. — MISSION CONTROL
 # ============================================================
 
-from .agents import (
-    HistoryAgent,
-    ScienceAgent,
-    CodingAgent,
-    ImageAgent,
-    GeneralAgent
-)
+from .registry import obtener_agente
 
 
-AGENTS = [
-    HistoryAgent(),
-    ScienceAgent(),
-    CodingAgent(),
-    ImageAgent(),
-    GeneralAgent(),
-]
+class JarvisRouter:
 
+    def __init__(self):
 
-def obtener_agente(request: str):
+        self.nombre = "MISSION CONTROL"
+        self.modo = "ORCHESTRATOR"
 
-    for agent in AGENTS:
+    def analizar(self, request: str):
 
-        if agent.name == "general":
-            continue
+        """
+        Analiza una solicitud y determina
+        qué especialista puede ayudar.
+        """
 
-        if agent.can_handle(request):
-            return agent
+        return obtener_agente(request)
 
-    return next(
-        agent
-        for agent in AGENTS
-        if agent.name == "general"
-    )
+    def ejecutar(
+        self,
+        request: str,
+        context: str = ""
+    ):
 
+        """
+        Envía la solicitud al especialista seleccionado.
+        """
 
-def listar_agentes():
+        agente = self.analizar(request)
 
-    return [
-        {
-            "name": agent.name,
-            "description": agent.description
+        resultado = agente.execute(
+            request,
+            context
+        )
+
+        return {
+            "agent": agente.name,
+            "success": resultado.success,
+            "response": resultado.response,
+            "data": resultado.data
         }
-        for agent in AGENTS
-    ]
+
+
+router = JarvisRouter()
