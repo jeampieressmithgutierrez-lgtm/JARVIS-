@@ -1,42 +1,18 @@
 # ============================================================
-# J.A.R.V.I.S. — ORQUESTADOR COGNITIVO
+# J.A.R.V.I.S. — BRAIN
 # ============================================================
 
-from .registry import obtener_agente
+from .router import JarvisRouter, router
+
+from .registry import (
+    obtener_agente,
+    listar_agentes
+)
 
 
-class JarvisRouter:
-
-    def __init__(self):
-
-        self.nombre = "J.A.R.V.I.S."
-        self.modo = "ORCHESTRATOR"
-
-    def analizar(self, request: str):
-
-        agente = obtener_agente(request)
-
-        return agente
-
-    def ejecutar(
-        self,
-        request: str,
-        context: str = ""
-    ):
-
-        agente = self.analizar(request)
-
-        resultado = agente.execute(
-            request,
-            context
-        )
-
-        return {
-            "agent": agente.name,
-            "success": resultado.success,
-            "response": resultado.response,
-            "data": resultado.data
-        }
-
-
-router = JarvisRouter()
+__all__ = [
+    "JarvisRouter",
+    "router",
+    "obtener_agente",
+    "listar_agentes"
+]
