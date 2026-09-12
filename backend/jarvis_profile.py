@@ -9,7 +9,6 @@ import re
 
 from groq import Groq
 
-from brain.registry import obtener_agente
 
 
 # ============================================================================
