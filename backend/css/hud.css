@@ -1,259 +1,427 @@
 /* =========================================================
-   J.A.R.V.I.S. — HUD
-========================================================= */
-
-
-/* =========================================================
-   CONTENEDOR CENTRAL
-========================================================= */
+   J.A.R.V.I.S. — CORE HUD
+   Stark Industries Interface
+   ========================================================= */
 
 #chat-container {
-
     position: relative;
-
     display: flex;
-
     flex-direction: column;
-
     min-width: 0;
-
     min-height: 0;
-
     overflow: hidden;
-
 }
 
 
 /* =========================================================
-   INTERFAZ DEL NÚCLEO
-========================================================= */
+   CORE AREA
+   ========================================================= */
 
 #jarvis-interface {
-
     position: relative;
-
-    flex-shrink: 0;
-
-    height: 150px;
+    flex: 0 0 190px;
+    height: 190px;
 
     display: flex;
-
     flex-direction: column;
-
     align-items: center;
-
     justify-content: center;
 
     pointer-events: none;
+    isolation: isolate;
+}
 
+
+/* Línea tecnológica superior/inferior */
+
+#jarvis-interface::before {
+    content: "";
+    position: absolute;
+    left: 12%;
+    right: 12%;
+    top: 18px;
+
+    height: 1px;
+
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 180, 0, 0.15),
+        rgba(255, 180, 0, 0.65),
+        rgba(255, 180, 0, 0.15),
+        transparent
+    );
+}
+
+#jarvis-interface::after {
+    content: "";
+    position: absolute;
+    left: 18%;
+    right: 18%;
+    bottom: 12px;
+
+    height: 1px;
+
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 180, 0, 0.08),
+        rgba(255, 180, 0, 0.42),
+        rgba(255, 180, 0, 0.08),
+        transparent
+    );
 }
 
 
 /* =========================================================
-   BLOB
-========================================================= */
+   J.A.R.V.I.S. CORE
+   ========================================================= */
 
 .jarvis-blob {
-
     position: relative;
 
-    width: 92px;
-
-    height: 92px;
+    width: 132px;
+    height: 132px;
 
     display: flex;
-
     align-items: center;
-
     justify-content: center;
 
+    filter:
+        drop-shadow(0 0 12px rgba(255, 180, 0, 0.15))
+        drop-shadow(0 0 30px rgba(255, 180, 0, 0.08));
+
+    animation: jarvisCoreFloat 4s ease-in-out infinite;
 }
 
 
 /* =========================================================
-   ANILLOS
-========================================================= */
+   RINGS
+   ========================================================= */
 
 .blob-ring {
-
     position: absolute;
 
-    border: 1px solid rgba(255, 180, 0, 0.45);
+    top: 50%;
+    left: 50%;
 
     border-radius: 50%;
+    transform: translate(-50%, -50%);
 
+    box-sizing: border-box;
 }
 
+
+/* Outer */
 
 .ring-outer {
+    width: 132px;
+    height: 132px;
 
-    width: 92px;
-
-    height: 92px;
-
-    border-style: dashed;
+    border: 1px dashed rgba(255, 180, 0, 0.55);
 
     animation:
-        hudRotate 18s linear infinite;
-
+        hudRotate 18s linear infinite,
+        outerPulse 3.5s ease-in-out infinite;
 }
 
+
+/* Middle */
 
 .ring-middle {
+    width: 96px;
+    height: 96px;
 
-    width: 68px;
+    border: 1px solid rgba(255, 180, 0, 0.32);
 
-    height: 68px;
-
-    border-color:
-        rgba(255, 180, 0, 0.28);
+    box-shadow:
+        0 0 12px rgba(255, 180, 0, 0.08),
+        inset 0 0 12px rgba(255, 180, 0, 0.04);
 
     animation:
-        hudRotateReverse 12s linear infinite;
-
+        hudRotateReverse 11s linear infinite,
+        middlePulse 3s ease-in-out infinite;
 }
 
 
+/* Inner */
+
 .ring-inner {
+    width: 66px;
+    height: 66px;
 
-    width: 46px;
-
-    height: 46px;
-
-    border-color:
-        rgba(255, 212, 90, 0.55);
+    border: 1px solid rgba(255, 213, 91, 0.75);
 
     box-shadow:
-        0 0 14px
-        rgba(255, 180, 0, 0.12);
+        0 0 15px rgba(255, 180, 0, 0.18),
+        inset 0 0 12px rgba(255, 180, 0, 0.08);
 
+    animation: innerPulse 2.5s ease-in-out infinite;
 }
 
 
 /* =========================================================
-   NÚCLEO
-========================================================= */
+   CENTRAL CORE
+   ========================================================= */
 
 .blob-core {
+    position: absolute;
 
-    position: relative;
-
-    width: 25px;
-
-    height: 25px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    border:
-        1px solid
-        rgba(255, 212, 90, 0.85);
+    width: 34px;
+    height: 34px;
 
     border-radius: 50%;
 
     background:
         radial-gradient(
-            circle,
-            #fff 0%,
-            #ffd45a 15%,
-            #ffb400 38%,
-            #5d3d00 65%,
-            #080a0d 100%
+            circle at 35% 30%,
+            #ffffff 0%,
+            #fff4bf 18%,
+            #ffd45a 38%,
+            #ffb400 62%,
+            #a96600 82%,
+            #171108 100%
         );
 
-    color: #fff;
-
-    font-family:
-        "Orbitron",
-        sans-serif;
-
-    font-size: 8px;
-
-    font-weight: 800;
+    border: 1px solid rgba(255, 238, 180, 0.9);
 
     box-shadow:
+        0 0 8px rgba(255, 220, 120, 0.9),
+        0 0 22px rgba(255, 180, 0, 0.7),
+        0 0 45px rgba(255, 140, 0, 0.25),
+        inset 0 0 8px rgba(255, 255, 255, 0.45);
 
-        0 0 12px
-        rgba(255, 180, 0, 0.55),
-
-        0 0 28px
-        rgba(255, 180, 0, 0.14);
-
+    animation:
+        corePulse 2.2s ease-in-out infinite,
+        coreGlow 3s ease-in-out infinite;
 }
 
 
-/* =========================================================
-   ESTADO
-========================================================= */
+/* Pequeño punto central */
 
-.interface-status {
+.blob-core::after {
+    content: "";
 
-    display: flex;
+    position: absolute;
 
-    align-items: center;
+    width: 7px;
+    height: 7px;
 
-    gap: 6px;
+    top: 50%;
+    left: 50%;
 
-    margin-top: 7px;
-
-    color: #686f78;
-
-    font-family:
-        "Share Tech Mono",
-        monospace;
-
-    font-size: 8px;
-
-    letter-spacing: 1.5px;
-
-}
-
-
-.status-dot {
-
-    width: 5px;
-
-    height: 5px;
+    transform: translate(-50%, -50%);
 
     border-radius: 50%;
 
-    background: var(--gold);
+    background: #ffffff;
 
     box-shadow:
-        0 0 7px
-        rgba(255, 180, 0, 0.75);
-
+        0 0 8px #ffffff,
+        0 0 16px rgba(255, 210, 80, 0.95);
 }
 
 
 /* =========================================================
-   ANIMACIONES HUD
-========================================================= */
+   DECORACIÓN ORBITAL
+   ========================================================= */
 
-@keyframes hudRotate {
+.jarvis-blob::before {
+    content: "";
 
-    from {
-        transform: rotate(0deg);
-    }
+    position: absolute;
 
-    to {
-        transform: rotate(360deg);
-    }
+    width: 116px;
+    height: 42px;
 
+    border-top: 1px solid rgba(255, 180, 0, 0.18);
+    border-bottom: 1px solid rgba(255, 180, 0, 0.10);
+
+    border-radius: 50%;
+
+    transform: rotate(28deg);
+
+    animation: orbitalTilt 7s linear infinite;
+}
+
+.jarvis-blob::after {
+    content: "";
+
+    position: absolute;
+
+    width: 116px;
+    height: 42px;
+
+    border-top: 1px solid rgba(255, 213, 91, 0.12);
+    border-bottom: 1px solid rgba(255, 213, 91, 0.06);
+
+    border-radius: 50%;
+
+    transform: rotate(-28deg);
+
+    animation: orbitalTiltReverse 9s linear infinite;
 }
 
 
-@keyframes hudRotateReverse {
+/* =========================================================
+   ANIMACIONES
+   ========================================================= */
 
+@keyframes hudRotate {
     from {
-        transform: rotate(360deg);
+        transform: translate(-50%, -50%) rotate(0deg);
     }
 
     to {
-        transform: rotate(0deg);
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+@keyframes hudRotateReverse {
+    from {
+        transform: translate(-50%, -50%) rotate(360deg);
     }
 
+    to {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+}
+
+@keyframes jarvisCoreFloat {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-4px);
+    }
+}
+
+@keyframes corePulse {
+    0%,
+    100% {
+        transform: scale(0.94);
+    }
+
+    50% {
+        transform: scale(1.08);
+    }
+}
+
+@keyframes coreGlow {
+    0%,
+    100% {
+        filter: brightness(0.95);
+    }
+
+    50% {
+        filter: brightness(1.2);
+    }
+}
+
+@keyframes outerPulse {
+    0%,
+    100% {
+        opacity: 0.55;
+    }
+
+    50% {
+        opacity: 0.9;
+    }
+}
+
+@keyframes middlePulse {
+    0%,
+    100% {
+        opacity: 0.45;
+    }
+
+    50% {
+        opacity: 0.8;
+    }
+}
+
+@keyframes innerPulse {
+    0%,
+    100% {
+        opacity: 0.65;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+@keyframes orbitalTilt {
+    from {
+        transform: rotate(28deg);
+    }
+
+    to {
+        transform: rotate(388deg);
+    }
+}
+
+@keyframes orbitalTiltReverse {
+    from {
+        transform: rotate(-28deg);
+    }
+
+    to {
+        transform: rotate(-388deg);
+    }
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 800px) {
+
+    #jarvis-interface {
+        flex-basis: 160px;
+        height: 160px;
+    }
+
+    .jarvis-blob {
+        width: 110px;
+        height: 110px;
+    }
+
+    .ring-outer {
+        width: 110px;
+        height: 110px;
+    }
+
+    .ring-middle {
+        width: 80px;
+        height: 80px;
+    }
+
+    .ring-inner {
+        width: 56px;
+        height: 56px;
+    }
+
+    .blob-core {
+        width: 29px;
+        height: 29px;
+    }
+
+    .jarvis-blob::before,
+    .jarvis-blob::after {
+        width: 98px;
+    }
+
+    #jarvis-interface::before {
+        left: 6%;
+        right: 6%;
+    }
+
+    #jarvis-interface::after {
+        left: 10%;
+        right: 10%;
+    }
 }
