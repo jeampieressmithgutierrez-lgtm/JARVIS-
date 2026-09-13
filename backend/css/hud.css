@@ -1,376 +1,892 @@
 /* =========================================================
    J.A.R.V.I.S. — CORE HUD
-   Stark Industries Interface
+   STARK INDUSTRIES
+   ========================================================= */
+
+
+/* =========================================================
+   CONTENEDOR DEL CHAT
    ========================================================= */
 
 #chat-container {
+
     position: relative;
+
     display: flex;
     flex-direction: column;
+
     min-width: 0;
     min-height: 0;
+
+    height: 100%;
+
     overflow: hidden;
+
 }
 
 
 /* =========================================================
-   CORE AREA
+   ÁREA RESERVADA PARA EL NÚCLEO
    ========================================================= */
 
 #jarvis-interface {
+
     position: relative;
-    flex: 0 0 190px;
-    height: 190px;
+
+    flex: 0 0 155px;
+
+    width: 100%;
+    height: 155px;
 
     display: flex;
-    flex-direction: column;
+
     align-items: center;
     justify-content: center;
 
+    overflow: hidden;
+
     pointer-events: none;
+
     isolation: isolate;
-}
 
-
-/* Línea tecnológica superior/inferior */
-
-#jarvis-interface::before {
-    content: "";
-    position: absolute;
-    left: 12%;
-    right: 12%;
-    top: 18px;
-
-    height: 1px;
-
-    background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(255, 180, 0, 0.15),
-        rgba(255, 180, 0, 0.65),
-        rgba(255, 180, 0, 0.15),
-        transparent
-    );
-}
-
-#jarvis-interface::after {
-    content: "";
-    position: absolute;
-    left: 18%;
-    right: 18%;
-    bottom: 12px;
-
-    height: 1px;
-
-    background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(255, 180, 0, 0.08),
-        rgba(255, 180, 0, 0.42),
-        rgba(255, 180, 0, 0.08),
-        transparent
-    );
 }
 
 
 /* =========================================================
-   J.A.R.V.I.S. CORE
+   LÍNEA SUPERIOR DEL HUD
+   ========================================================= */
+
+#jarvis-interface::before {
+
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 7%;
+    right: 7%;
+
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent 0%,
+            rgba(255,180,0,0.08) 15%,
+            rgba(255,180,0,0.5) 50%,
+            rgba(255,180,0,0.08) 85%,
+            transparent 100%
+        );
+
+}
+
+
+/* =========================================================
+   LÍNEA INFERIOR
+   ========================================================= */
+
+#jarvis-interface::after {
+
+    content: "";
+
+    position: absolute;
+
+    bottom: 0;
+
+    left: 12%;
+    right: 12%;
+
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,180,0,0.18),
+            rgba(255,180,0,0.45),
+            rgba(255,180,0,0.18),
+            transparent
+        );
+
+    opacity: 0.65;
+
+}
+
+
+/* =========================================================
+   ALMA / NÚCLEO
    ========================================================= */
 
 .jarvis-blob {
+
     position: relative;
 
-    width: 132px;
-    height: 132px;
+    width: 120px;
+    height: 120px;
 
     display: flex;
+
     align-items: center;
     justify-content: center;
 
-    filter:
-        drop-shadow(0 0 12px rgba(255, 180, 0, 0.15))
-        drop-shadow(0 0 30px rgba(255, 180, 0, 0.08));
+    flex-shrink: 0;
 
-    animation: jarvisCoreFloat 4s ease-in-out infinite;
+    animation:
+        jarvisCoreFloat 5s ease-in-out infinite;
+
 }
 
 
 /* =========================================================
-   RINGS
+   AURA DEL NÚCLEO
    ========================================================= */
 
-.blob-ring {
+.jarvis-blob::before {
+
+    content: "";
+
     position: absolute;
 
-    top: 50%;
-    left: 50%;
-
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-
-    box-sizing: border-box;
-}
-
-
-/* Outer */
-
-.ring-outer {
-    width: 132px;
-    height: 132px;
-
-    border: 1px dashed rgba(255, 180, 0, 0.55);
-
-    animation:
-        hudRotate 18s linear infinite,
-        outerPulse 3.5s ease-in-out infinite;
-}
-
-
-/* Middle */
-
-.ring-middle {
-    width: 96px;
-    height: 96px;
-
-    border: 1px solid rgba(255, 180, 0, 0.32);
-
-    box-shadow:
-        0 0 12px rgba(255, 180, 0, 0.08),
-        inset 0 0 12px rgba(255, 180, 0, 0.04);
-
-    animation:
-        hudRotateReverse 11s linear infinite,
-        middlePulse 3s ease-in-out infinite;
-}
-
-
-/* Inner */
-
-.ring-inner {
-    width: 66px;
-    height: 66px;
-
-    border: 1px solid rgba(255, 213, 91, 0.75);
-
-    box-shadow:
-        0 0 15px rgba(255, 180, 0, 0.18),
-        inset 0 0 12px rgba(255, 180, 0, 0.08);
-
-    animation: innerPulse 2.5s ease-in-out infinite;
-}
-
-
-/* =========================================================
-   CENTRAL CORE
-   ========================================================= */
-
-.blob-core {
-    position: absolute;
-
-    width: 34px;
-    height: 34px;
+    width: 72px;
+    height: 72px;
 
     border-radius: 50%;
 
     background:
         radial-gradient(
-            circle at 35% 30%,
-            #ffffff 0%,
-            #fff4bf 18%,
-            #ffd45a 38%,
-            #ffb400 62%,
-            #a96600 82%,
-            #171108 100%
+            circle,
+            rgba(255,220,100,0.28) 0%,
+            rgba(255,180,0,0.16) 30%,
+            rgba(255,150,0,0.06) 55%,
+            transparent 75%
         );
 
-    border: 1px solid rgba(255, 238, 180, 0.9);
-
-    box-shadow:
-        0 0 8px rgba(255, 220, 120, 0.9),
-        0 0 22px rgba(255, 180, 0, 0.7),
-        0 0 45px rgba(255, 140, 0, 0.25),
-        inset 0 0 8px rgba(255, 255, 255, 0.45);
+    filter: blur(8px);
 
     animation:
-        corePulse 2.2s ease-in-out infinite,
-        coreGlow 3s ease-in-out infinite;
+        energyAura 2.8s ease-in-out infinite;
+
 }
 
 
-/* Pequeño punto central */
+/* =========================================================
+   HALO EXTERIOR
+   ========================================================= */
 
-.blob-core::after {
+.jarvis-blob::after {
+
     content: "";
 
     position: absolute;
 
-    width: 7px;
-    height: 7px;
+    width: 108px;
+    height: 108px;
+
+    border-radius: 50%;
+
+    border:
+
+        1px solid
+        rgba(255,180,0,0.12);
+
+    box-shadow:
+
+        0 0 25px
+        rgba(255,180,0,0.05),
+
+        inset 0 0 20px
+        rgba(255,180,0,0.03);
+
+    animation:
+        haloPulse 3.5s ease-in-out infinite;
+
+}
+
+
+/* =========================================================
+   ANILLOS
+   ========================================================= */
+
+.blob-ring {
+
+    position: absolute;
 
     top: 50%;
     left: 50%;
 
-    transform: translate(-50%, -50%);
+    border-radius: 50%;
+
+    box-sizing: border-box;
+
+    transform:
+        translate(-50%, -50%);
+
+}
+
+
+/* =========================================================
+   ANILLO EXTERIOR
+   ========================================================= */
+
+.ring-outer {
+
+    width: 112px;
+    height: 112px;
+
+    border:
+
+        1px dashed
+        rgba(255,180,0,0.46);
+
+    animation:
+
+        hudRotate
+        16s
+        linear
+        infinite,
+
+        outerPulse
+        4s
+        ease-in-out
+        infinite;
+
+}
+
+
+/* =========================================================
+   ANILLO MEDIO
+   ========================================================= */
+
+.ring-middle {
+
+    width: 84px;
+    height: 84px;
+
+    border:
+
+        1px solid
+        rgba(255,195,40,0.30);
+
+    box-shadow:
+
+        0 0 12px
+        rgba(255,180,0,0.06),
+
+        inset 0 0 12px
+        rgba(255,180,0,0.04);
+
+    animation:
+
+        hudRotateReverse
+        10s
+        linear
+        infinite,
+
+        middlePulse
+        3s
+        ease-in-out
+        infinite;
+
+}
+
+
+/* =========================================================
+   ANILLO INTERIOR
+   ========================================================= */
+
+.ring-inner {
+
+    width: 58px;
+    height: 58px;
+
+    border:
+
+        1px solid
+        rgba(255,220,110,0.58);
+
+    box-shadow:
+
+        0 0 18px
+        rgba(255,180,0,0.12),
+
+        inset 0 0 15px
+        rgba(255,180,0,0.07);
+
+    animation:
+
+        innerPulse
+        2.4s
+        ease-in-out
+        infinite;
+
+}
+
+
+/* =========================================================
+   CORRIENTES DE ENERGÍA
+   ========================================================= */
+
+.blob-energy {
+
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    width: 92px;
+    height: 26px;
+
+    border-radius: 50%;
+
+    border-top:
+        1px solid
+        rgba(255,210,80,0.18);
+
+    border-bottom:
+        1px solid
+        rgba(255,170,0,0.10);
+
+    transform:
+        translate(-50%, -50%)
+        rotate(35deg);
+
+    opacity: 0.7;
+
+}
+
+
+/* Primera corriente */
+
+.energy-one {
+
+    animation:
+        energyOrbitOne
+        5s
+        linear
+        infinite;
+
+}
+
+
+/* Segunda corriente */
+
+.energy-two {
+
+    transform:
+        translate(-50%, -50%)
+        rotate(-35deg);
+
+    border-top-color:
+        rgba(255,220,120,0.14);
+
+    animation:
+        energyOrbitTwo
+        7s
+        linear
+        infinite;
+
+}
+
+
+/* =========================================================
+   NÚCLEO CENTRAL
+   ========================================================= */
+
+.blob-core {
+
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    width: 30px;
+    height: 30px;
+
+    transform:
+        translate(-50%, -50%);
+
+    border-radius: 50%;
+
+    background:
+
+        radial-gradient(
+            circle at 35% 28%,
+
+            #ffffff 0%,
+
+            #fff8d9 13%,
+
+            #ffe47b 29%,
+
+            #ffc21c 48%,
+
+            #ff9d00 67%,
+
+            #b86600 84%,
+
+            #241505 100%
+        );
+
+    border:
+
+        1px solid
+        rgba(255,241,190,0.95);
+
+    box-shadow:
+
+        0 0 7px
+        rgba(255,244,190,0.95),
+
+        0 0 18px
+        rgba(255,190,30,0.9),
+
+        0 0 38px
+        rgba(255,145,0,0.42),
+
+        inset 0 0 8px
+        rgba(255,255,255,0.55);
+
+    z-index: 5;
+
+    animation:
+
+        corePulse
+        2.1s
+        ease-in-out
+        infinite,
+
+        coreGlow
+        2.8s
+        ease-in-out
+        infinite;
+
+}
+
+
+/* =========================================================
+   PUNTO DE ENERGÍA CENTRAL
+   ========================================================= */
+
+.blob-core::before {
+
+    content: "";
+
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    width: 7px;
+    height: 7px;
+
+    transform:
+        translate(-50%, -50%);
 
     border-radius: 50%;
 
     background: #ffffff;
 
     box-shadow:
-        0 0 8px #ffffff,
-        0 0 16px rgba(255, 210, 80, 0.95);
+
+        0 0 7px
+        #ffffff,
+
+        0 0 15px
+        rgba(255,220,90,1),
+
+        0 0 24px
+        rgba(255,180,0,0.8);
+
 }
 
 
 /* =========================================================
-   DECORACIÓN ORBITAL
+   PEQUEÑO DESTELLO
    ========================================================= */
 
-.jarvis-blob::before {
+.blob-core::after {
+
     content: "";
 
     position: absolute;
 
-    width: 116px;
-    height: 42px;
+    top: 4px;
+    left: 7px;
 
-    border-top: 1px solid rgba(255, 180, 0, 0.18);
-    border-bottom: 1px solid rgba(255, 180, 0, 0.10);
-
-    border-radius: 50%;
-
-    transform: rotate(28deg);
-
-    animation: orbitalTilt 7s linear infinite;
-}
-
-.jarvis-blob::after {
-    content: "";
-
-    position: absolute;
-
-    width: 116px;
-    height: 42px;
-
-    border-top: 1px solid rgba(255, 213, 91, 0.12);
-    border-bottom: 1px solid rgba(255, 213, 91, 0.06);
+    width: 6px;
+    height: 6px;
 
     border-radius: 50%;
 
-    transform: rotate(-28deg);
+    background:
+        rgba(255,255,255,0.85);
 
-    animation: orbitalTiltReverse 9s linear infinite;
+    filter: blur(1px);
+
 }
 
 
 /* =========================================================
-   ANIMACIONES
+   ANIMACIONES DE ROTACIÓN
    ========================================================= */
 
 @keyframes hudRotate {
+
     from {
-        transform: translate(-50%, -50%) rotate(0deg);
+
+        transform:
+            translate(-50%, -50%)
+            rotate(0deg);
+
     }
 
     to {
-        transform: translate(-50%, -50%) rotate(360deg);
+
+        transform:
+            translate(-50%, -50%)
+            rotate(360deg);
+
     }
+
 }
+
 
 @keyframes hudRotateReverse {
+
     from {
-        transform: translate(-50%, -50%) rotate(360deg);
+
+        transform:
+            translate(-50%, -50%)
+            rotate(360deg);
+
     }
 
     to {
-        transform: translate(-50%, -50%) rotate(0deg);
+
+        transform:
+            translate(-50%, -50%)
+            rotate(0deg);
+
     }
+
 }
+
+
+/* =========================================================
+   MOVIMIENTO DEL NÚCLEO
+   ========================================================= */
 
 @keyframes jarvisCoreFloat {
+
     0%,
     100% {
-        transform: translateY(0);
+
+        transform:
+            translateY(0);
+
     }
 
     50% {
-        transform: translateY(-4px);
+
+        transform:
+            translateY(-3px);
+
     }
+
 }
+
+
+/* =========================================================
+   PULSO DEL CORE
+   ========================================================= */
 
 @keyframes corePulse {
+
     0%,
     100% {
-        transform: scale(0.94);
+
+        transform:
+            translate(-50%, -50%)
+            scale(0.92);
+
     }
 
     50% {
-        transform: scale(1.08);
+
+        transform:
+            translate(-50%, -50%)
+            scale(1.08);
+
     }
+
 }
+
+
+/* =========================================================
+   BRILLO
+   ========================================================= */
 
 @keyframes coreGlow {
+
     0%,
     100% {
-        filter: brightness(0.95);
+
+        filter:
+            brightness(0.95);
+
     }
 
     50% {
-        filter: brightness(1.2);
+
+        filter:
+            brightness(1.25);
+
     }
+
 }
+
+
+/* =========================================================
+   AURA
+   ========================================================= */
+
+@keyframes energyAura {
+
+    0%,
+    100% {
+
+        transform:
+            scale(0.85);
+
+        opacity:
+            0.45;
+
+    }
+
+    50% {
+
+        transform:
+            scale(1.15);
+
+        opacity:
+            0.8;
+
+    }
+
+}
+
+
+/* =========================================================
+   HALO
+   ========================================================= */
+
+@keyframes haloPulse {
+
+    0%,
+    100% {
+
+        opacity:
+            0.45;
+
+        transform:
+            scale(0.96);
+
+    }
+
+    50% {
+
+        opacity:
+            0.9;
+
+        transform:
+            scale(1.04);
+
+    }
+
+}
+
+
+/* =========================================================
+   PULSOS DE ANILLOS
+   ========================================================= */
 
 @keyframes outerPulse {
+
     0%,
     100% {
-        opacity: 0.55;
+
+        opacity:
+            0.45;
+
     }
 
     50% {
-        opacity: 0.9;
+
+        opacity:
+            0.9;
+
     }
+
 }
+
 
 @keyframes middlePulse {
+
     0%,
     100% {
-        opacity: 0.45;
+
+        opacity:
+            0.35;
+
     }
 
     50% {
-        opacity: 0.8;
+
+        opacity:
+            0.8;
+
     }
+
 }
+
 
 @keyframes innerPulse {
+
     0%,
     100% {
-        opacity: 0.65;
+
+        opacity:
+            0.55;
+
     }
 
     50% {
-        opacity: 1;
+
+        opacity:
+            1;
+
     }
+
 }
 
-@keyframes orbitalTilt {
+
+/* =========================================================
+   ÓRBITAS DE ENERGÍA
+   ========================================================= */
+
+@keyframes energyOrbitOne {
+
     from {
-        transform: rotate(28deg);
+
+        transform:
+            translate(-50%, -50%)
+            rotate(35deg);
+
     }
 
     to {
-        transform: rotate(388deg);
+
+        transform:
+            translate(-50%, -50%)
+            rotate(395deg);
+
     }
+
 }
 
-@keyframes orbitalTiltReverse {
+
+@keyframes energyOrbitTwo {
+
     from {
-        transform: rotate(-28deg);
+
+        transform:
+            translate(-50%, -50%)
+            rotate(-35deg);
+
     }
 
     to {
-        transform: rotate(-388deg);
+
+        transform:
+            translate(-50%, -50%)
+            rotate(-395deg);
+
     }
+
+}
+
+
+/* =========================================================
+   ÁREA DE MENSAJES
+   ========================================================= */
+
+#messages {
+
+    position: relative;
+
+    flex: 1 1 auto;
+
+    min-height: 0;
+
+    width: 100%;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+}
+
+
+/*
+   Esto es importante:
+   el núcleo termina antes de que comiencen
+   los mensajes. Por tanto, jamás debería
+   colocarse encima de ellos.
+*/
+
+#messages > * {
+
+    position: relative;
+
+    z-index: 2;
+
+}
+
+
+/* =========================================================
+   SCROLLBAR DEL CHAT
+   ========================================================= */
+
+#messages::-webkit-scrollbar {
+
+    width: 5px;
+
+}
+
+
+#messages::-webkit-scrollbar-track {
+
+    background:
+        rgba(0,0,0,0.15);
+
+}
+
+
+#messages::-webkit-scrollbar-thumb {
+
+    background:
+        rgba(255,180,0,0.28);
+
+    border-radius:
+        10px;
+
+}
+
+
+#messages::-webkit-scrollbar-thumb:hover {
+
+    background:
+        rgba(255,180,0,0.48);
+
 }
 
 
@@ -381,47 +897,118 @@
 @media (max-width: 800px) {
 
     #jarvis-interface {
-        flex-basis: 160px;
-        height: 160px;
+
+        flex-basis: 130px;
+
+        height: 130px;
+
     }
+
 
     .jarvis-blob {
-        width: 110px;
-        height: 110px;
+
+        width: 100px;
+        height: 100px;
+
     }
+
 
     .ring-outer {
-        width: 110px;
-        height: 110px;
+
+        width: 96px;
+        height: 96px;
+
     }
+
 
     .ring-middle {
-        width: 80px;
-        height: 80px;
+
+        width: 72px;
+        height: 72px;
+
     }
+
 
     .ring-inner {
-        width: 56px;
-        height: 56px;
+
+        width: 50px;
+        height: 50px;
+
     }
+
+
+    .blob-energy {
+
+        width: 78px;
+
+    }
+
 
     .blob-core {
-        width: 29px;
-        height: 29px;
+
+        width: 27px;
+        height: 27px;
+
     }
 
-    .jarvis-blob::before,
-    .jarvis-blob::after {
-        width: 98px;
+}
+
+
+@media (max-width: 480px) {
+
+    #jarvis-interface {
+
+        flex-basis: 115px;
+
+        height: 115px;
+
     }
 
-    #jarvis-interface::before {
-        left: 6%;
-        right: 6%;
+
+    .jarvis-blob {
+
+        width: 88px;
+        height: 88px;
+
     }
 
-    #jarvis-interface::after {
-        left: 10%;
-        right: 10%;
+
+    .ring-outer {
+
+        width: 84px;
+        height: 84px;
+
     }
+
+
+    .ring-middle {
+
+        width: 64px;
+        height: 64px;
+
+    }
+
+
+    .ring-inner {
+
+        width: 44px;
+        height: 44px;
+
+    }
+
+
+    .blob-energy {
+
+        width: 68px;
+
+    }
+
+
+    .blob-core {
+
+        width: 24px;
+        height: 24px;
+
+    }
+
 }
