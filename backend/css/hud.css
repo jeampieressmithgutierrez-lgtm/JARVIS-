@@ -1,1014 +1,348 @@
 /* =========================================================
-   J.A.R.V.I.S. — CORE HUD
-   STARK INDUSTRIES
-   ========================================================= */
-
-
-/* =========================================================
-   CONTENEDOR DEL CHAT
+   J.A.R.V.I.S. — CENTRAL CORE / CHAT SOUL
+   El núcleo permanece detrás de los mensajes.
    ========================================================= */
 
 #chat-container {
-
     position: relative;
-
     display: flex;
     flex-direction: column;
-
     min-width: 0;
     min-height: 0;
-
     height: 100%;
-
     overflow: hidden;
-
 }
 
-
 /* =========================================================
-   ÁREA RESERVADA PARA EL NÚCLEO
+   NÚCLEO CENTRAL
    ========================================================= */
 
 #jarvis-interface {
-
-    position: relative;
-
-    flex: 0 0 155px;
-
-    width: 100%;
-    height: 155px;
+    position: absolute;
+    inset: 0;
 
     display: flex;
-
     align-items: center;
     justify-content: center;
-
-    overflow: hidden;
 
     pointer-events: none;
+    z-index: 0;
 
-    isolation: isolate;
-
+    /* No ocupa espacio dentro del chat */
 }
 
-
-/* =========================================================
-   LÍNEA SUPERIOR DEL HUD
-   ========================================================= */
+/* Aura detrás del núcleo */
 
 #jarvis-interface::before {
-
     content: "";
-
     position: absolute;
 
-    top: 0;
-    left: 7%;
-    right: 7%;
-
-    height: 1px;
-
-    background:
-        linear-gradient(
-            90deg,
-            transparent 0%,
-            rgba(255,180,0,0.08) 15%,
-            rgba(255,180,0,0.5) 50%,
-            rgba(255,180,0,0.08) 85%,
-            transparent 100%
-        );
-
-}
-
-
-/* =========================================================
-   LÍNEA INFERIOR
-   ========================================================= */
-
-#jarvis-interface::after {
-
-    content: "";
-
-    position: absolute;
-
-    bottom: 0;
-
-    left: 12%;
-    right: 12%;
-
-    height: 1px;
-
-    background:
-        linear-gradient(
-            90deg,
-            transparent,
-            rgba(255,180,0,0.18),
-            rgba(255,180,0,0.45),
-            rgba(255,180,0,0.18),
-            transparent
-        );
-
-    opacity: 0.65;
-
-}
-
-
-/* =========================================================
-   ALMA / NÚCLEO
-   ========================================================= */
-
-.jarvis-blob {
-
-    position: relative;
-
-    width: 120px;
-    height: 120px;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    flex-shrink: 0;
-
-    animation:
-        jarvisCoreFloat 5s ease-in-out infinite;
-
-}
-
-
-/* =========================================================
-   AURA DEL NÚCLEO
-   ========================================================= */
-
-.jarvis-blob::before {
-
-    content: "";
-
-    position: absolute;
-
-    width: 72px;
-    height: 72px;
+    width: 280px;
+    height: 280px;
 
     border-radius: 50%;
 
     background:
         radial-gradient(
             circle,
-            rgba(255,220,100,0.28) 0%,
-            rgba(255,180,0,0.16) 30%,
-            rgba(255,150,0,0.06) 55%,
-            transparent 75%
+            rgba(255, 180, 0, 0.13) 0%,
+            rgba(255, 180, 0, 0.055) 28%,
+            rgba(255, 180, 0, 0.015) 52%,
+            transparent 72%
         );
 
     filter: blur(8px);
 
-    animation:
-        energyAura 2.8s ease-in-out infinite;
-
+    animation: coreBreathing 5s ease-in-out infinite;
 }
-
 
 /* =========================================================
-   HALO EXTERIOR
+   NÚCLEO
    ========================================================= */
 
-.jarvis-blob::after {
+.jarvis-blob {
+    position: relative;
 
-    content: "";
+    width: 150px;
+    height: 150px;
 
-    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    width: 108px;
-    height: 108px;
+    opacity: 0.72;
 
-    border-radius: 50%;
+    transform: translateZ(0);
 
-    border:
+    filter:
+        drop-shadow(0 0 12px rgba(255, 180, 0, 0.20))
+        drop-shadow(0 0 35px rgba(255, 180, 0, 0.10));
 
-        1px solid
-        rgba(255,180,0,0.12);
-
-    box-shadow:
-
-        0 0 25px
-        rgba(255,180,0,0.05),
-
-        inset 0 0 20px
-        rgba(255,180,0,0.03);
-
-    animation:
-        haloPulse 3.5s ease-in-out infinite;
-
+    animation: coreFloat 6s ease-in-out infinite;
 }
-
 
 /* =========================================================
    ANILLOS
    ========================================================= */
 
 .blob-ring {
-
     position: absolute;
 
-    top: 50%;
     left: 50%;
+    top: 50%;
+
+    transform: translate(-50%, -50%);
 
     border-radius: 50%;
 
     box-sizing: border-box;
-
-    transform:
-        translate(-50%, -50%);
-
 }
 
-
-/* =========================================================
-   ANILLO EXTERIOR
-   ========================================================= */
+/* Anillo exterior */
 
 .ring-outer {
+    width: 150px;
+    height: 150px;
 
+    border: 1px solid rgba(255, 180, 0, 0.28);
+
+    border-style: dashed;
+
+    animation:
+        hudRotate 18s linear infinite,
+        ringPulse 4s ease-in-out infinite;
+}
+
+/* Anillo medio */
+
+.ring-middle {
     width: 112px;
     height: 112px;
 
-    border:
-
-        1px dashed
-        rgba(255,180,0,0.46);
+    border: 1px solid rgba(255, 194, 40, 0.30);
 
     animation:
-
-        hudRotate
-        16s
-        linear
-        infinite,
-
-        outerPulse
-        4s
-        ease-in-out
-        infinite;
-
+        hudRotateReverse 12s linear infinite,
+        ringPulse 3.5s ease-in-out infinite;
 }
 
-
-/* =========================================================
-   ANILLO MEDIO
-   ========================================================= */
-
-.ring-middle {
-
-    width: 84px;
-    height: 84px;
-
-    border:
-
-        1px solid
-        rgba(255,195,40,0.30);
-
-    box-shadow:
-
-        0 0 12px
-        rgba(255,180,0,0.06),
-
-        inset 0 0 12px
-        rgba(255,180,0,0.04);
-
-    animation:
-
-        hudRotateReverse
-        10s
-        linear
-        infinite,
-
-        middlePulse
-        3s
-        ease-in-out
-        infinite;
-
-}
-
-
-/* =========================================================
-   ANILLO INTERIOR
-   ========================================================= */
+/* Anillo interior */
 
 .ring-inner {
+    width: 76px;
+    height: 76px;
 
-    width: 58px;
-    height: 58px;
-
-    border:
-
-        1px solid
-        rgba(255,220,110,0.58);
+    border: 1px solid rgba(255, 220, 100, 0.42);
 
     box-shadow:
+        0 0 15px rgba(255, 180, 0, 0.15),
+        inset 0 0 15px rgba(255, 180, 0, 0.08);
 
-        0 0 18px
-        rgba(255,180,0,0.12),
-
-        inset 0 0 15px
-        rgba(255,180,0,0.07);
-
-    animation:
-
-        innerPulse
-        2.4s
-        ease-in-out
-        infinite;
-
+    animation: innerPulse 3s ease-in-out infinite;
 }
-
 
 /* =========================================================
-   CORRIENTES DE ENERGÍA
-   ========================================================= */
-
-.blob-energy {
-
-    position: absolute;
-
-    top: 50%;
-    left: 50%;
-
-    width: 92px;
-    height: 26px;
-
-    border-radius: 50%;
-
-    border-top:
-        1px solid
-        rgba(255,210,80,0.18);
-
-    border-bottom:
-        1px solid
-        rgba(255,170,0,0.10);
-
-    transform:
-        translate(-50%, -50%)
-        rotate(35deg);
-
-    opacity: 0.7;
-
-}
-
-
-/* Primera corriente */
-
-.energy-one {
-
-    animation:
-        energyOrbitOne
-        5s
-        linear
-        infinite;
-
-}
-
-
-/* Segunda corriente */
-
-.energy-two {
-
-    transform:
-        translate(-50%, -50%)
-        rotate(-35deg);
-
-    border-top-color:
-        rgba(255,220,120,0.14);
-
-    animation:
-        energyOrbitTwo
-        7s
-        linear
-        infinite;
-
-}
-
-
-/* =========================================================
-   NÚCLEO CENTRAL
+   CORAZÓN DEL NÚCLEO
    ========================================================= */
 
 .blob-core {
+    position: relative;
 
-    position: absolute;
-
-    top: 50%;
-    left: 50%;
-
-    width: 30px;
-    height: 30px;
-
-    transform:
-        translate(-50%, -50%);
+    width: 42px;
+    height: 42px;
 
     border-radius: 50%;
 
     background:
-
         radial-gradient(
-            circle at 35% 28%,
-
+            circle at 35% 30%,
             #ffffff 0%,
-
-            #fff8d9 13%,
-
-            #ffe47b 29%,
-
-            #ffc21c 48%,
-
-            #ff9d00 67%,
-
-            #b86600 84%,
-
-            #241505 100%
+            #ffe9a3 18%,
+            #ffc229 42%,
+            #ff9d00 62%,
+            rgba(120, 65, 0, 0.9) 100%
         );
 
-    border:
-
-        1px solid
-        rgba(255,241,190,0.95);
-
     box-shadow:
-
-        0 0 7px
-        rgba(255,244,190,0.95),
-
-        0 0 18px
-        rgba(255,190,30,0.9),
-
-        0 0 38px
-        rgba(255,145,0,0.42),
-
-        inset 0 0 8px
-        rgba(255,255,255,0.55);
-
-    z-index: 5;
+        0 0 8px rgba(255, 220, 120, 0.85),
+        0 0 20px rgba(255, 180, 0, 0.65),
+        0 0 45px rgba(255, 150, 0, 0.32),
+        inset 0 0 12px rgba(255, 255, 255, 0.55);
 
     animation:
+        corePulse 2.8s ease-in-out infinite;
 
-        corePulse
-        2.1s
-        ease-in-out
-        infinite,
-
-        coreGlow
-        2.8s
-        ease-in-out
-        infinite;
-
+    z-index: 4;
 }
 
-
-/* =========================================================
-   PUNTO DE ENERGÍA CENTRAL
-   ========================================================= */
-
-.blob-core::before {
-
-    content: "";
-
-    position: absolute;
-
-    top: 50%;
-    left: 50%;
-
-    width: 7px;
-    height: 7px;
-
-    transform:
-        translate(-50%, -50%);
-
-    border-radius: 50%;
-
-    background: #ffffff;
-
-    box-shadow:
-
-        0 0 7px
-        #ffffff,
-
-        0 0 15px
-        rgba(255,220,90,1),
-
-        0 0 24px
-        rgba(255,180,0,0.8);
-
-}
-
-
-/* =========================================================
-   PEQUEÑO DESTELLO
-   ========================================================= */
+/* Pequeño punto luminoso interno */
 
 .blob-core::after {
-
     content: "";
 
     position: absolute;
 
-    top: 4px;
-    left: 7px;
+    width: 9px;
+    height: 9px;
 
-    width: 6px;
-    height: 6px;
+    left: 10px;
+    top: 8px;
 
     border-radius: 50%;
 
-    background:
-        rgba(255,255,255,0.85);
+    background: rgba(255, 255, 255, 0.9);
 
     filter: blur(1px);
 
+    opacity: 0.85;
 }
-
 
 /* =========================================================
-   ANIMACIONES DE ROTACIÓN
-   ========================================================= */
-
-@keyframes hudRotate {
-
-    from {
-
-        transform:
-            translate(-50%, -50%)
-            rotate(0deg);
-
-    }
-
-    to {
-
-        transform:
-            translate(-50%, -50%)
-            rotate(360deg);
-
-    }
-
-}
-
-
-@keyframes hudRotateReverse {
-
-    from {
-
-        transform:
-            translate(-50%, -50%)
-            rotate(360deg);
-
-    }
-
-    to {
-
-        transform:
-            translate(-50%, -50%)
-            rotate(0deg);
-
-    }
-
-}
-
-
-/* =========================================================
-   MOVIMIENTO DEL NÚCLEO
-   ========================================================= */
-
-@keyframes jarvisCoreFloat {
-
-    0%,
-    100% {
-
-        transform:
-            translateY(0);
-
-    }
-
-    50% {
-
-        transform:
-            translateY(-3px);
-
-    }
-
-}
-
-
-/* =========================================================
-   PULSO DEL CORE
-   ========================================================= */
-
-@keyframes corePulse {
-
-    0%,
-    100% {
-
-        transform:
-            translate(-50%, -50%)
-            scale(0.92);
-
-    }
-
-    50% {
-
-        transform:
-            translate(-50%, -50%)
-            scale(1.08);
-
-    }
-
-}
-
-
-/* =========================================================
-   BRILLO
-   ========================================================= */
-
-@keyframes coreGlow {
-
-    0%,
-    100% {
-
-        filter:
-            brightness(0.95);
-
-    }
-
-    50% {
-
-        filter:
-            brightness(1.25);
-
-    }
-
-}
-
-
-/* =========================================================
-   AURA
-   ========================================================= */
-
-@keyframes energyAura {
-
-    0%,
-    100% {
-
-        transform:
-            scale(0.85);
-
-        opacity:
-            0.45;
-
-    }
-
-    50% {
-
-        transform:
-            scale(1.15);
-
-        opacity:
-            0.8;
-
-    }
-
-}
-
-
-/* =========================================================
-   HALO
-   ========================================================= */
-
-@keyframes haloPulse {
-
-    0%,
-    100% {
-
-        opacity:
-            0.45;
-
-        transform:
-            scale(0.96);
-
-    }
-
-    50% {
-
-        opacity:
-            0.9;
-
-        transform:
-            scale(1.04);
-
-    }
-
-}
-
-
-/* =========================================================
-   PULSOS DE ANILLOS
-   ========================================================= */
-
-@keyframes outerPulse {
-
-    0%,
-    100% {
-
-        opacity:
-            0.45;
-
-    }
-
-    50% {
-
-        opacity:
-            0.9;
-
-    }
-
-}
-
-
-@keyframes middlePulse {
-
-    0%,
-    100% {
-
-        opacity:
-            0.35;
-
-    }
-
-    50% {
-
-        opacity:
-            0.8;
-
-    }
-
-}
-
-
-@keyframes innerPulse {
-
-    0%,
-    100% {
-
-        opacity:
-            0.55;
-
-    }
-
-    50% {
-
-        opacity:
-            1;
-
-    }
-
-}
-
-
-/* =========================================================
-   ÓRBITAS DE ENERGÍA
-   ========================================================= */
-
-@keyframes energyOrbitOne {
-
-    from {
-
-        transform:
-            translate(-50%, -50%)
-            rotate(35deg);
-
-    }
-
-    to {
-
-        transform:
-            translate(-50%, -50%)
-            rotate(395deg);
-
-    }
-
-}
-
-
-@keyframes energyOrbitTwo {
-
-    from {
-
-        transform:
-            translate(-50%, -50%)
-            rotate(-35deg);
-
-    }
-
-    to {
-
-        transform:
-            translate(-50%, -50%)
-            rotate(-395deg);
-
-    }
-
-}
-
-
-/* =========================================================
-   ÁREA DE MENSAJES
+   MENSAJES POR ENCIMA DEL NÚCLEO
    ========================================================= */
 
 #messages {
-
-    position: relative;
-
-    flex: 1 1 auto;
-
-    min-height: 0;
-
-    width: 100%;
-
-    overflow-y: auto;
-    overflow-x: hidden;
-
-}
-
-
-/*
-   Esto es importante:
-   el núcleo termina antes de que comiencen
-   los mensajes. Por tanto, jamás debería
-   colocarse encima de ellos.
-*/
-
-#messages > * {
-
     position: relative;
 
     z-index: 2;
 
+    flex: 1;
+    min-height: 0;
+
+    background: transparent;
 }
 
+/*
+   El núcleo jamás debe bloquear:
+   - mensajes
+   - scroll
+   - botones
+   - input
+*/
+
+#jarvis-interface,
+#jarvis-interface * {
+    pointer-events: none;
+}
 
 /* =========================================================
-   SCROLLBAR DEL CHAT
+   ANIMACIONES
    ========================================================= */
 
-#messages::-webkit-scrollbar {
-
-    width: 5px;
-
-}
-
-
-#messages::-webkit-scrollbar-track {
-
-    background:
-        rgba(0,0,0,0.15);
-
-}
-
-
-#messages::-webkit-scrollbar-thumb {
-
-    background:
-        rgba(255,180,0,0.28);
-
-    border-radius:
-        10px;
-
-}
-
-
-#messages::-webkit-scrollbar-thumb:hover {
-
-    background:
-        rgba(255,180,0,0.48);
-
-}
-
-
-/* =========================================================
-   RESPONSIVE
-   ========================================================= */
-
-@media (max-width: 800px) {
-
-    #jarvis-interface {
-
-        flex-basis: 130px;
-
-        height: 130px;
-
+@keyframes hudRotate {
+    from {
+        transform: translate(-50%, -50%) rotate(0deg);
     }
 
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+@keyframes hudRotateReverse {
+    from {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+
+    to {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+}
+
+@keyframes corePulse {
+    0%,
+    100% {
+        transform: scale(0.92);
+        opacity: 0.78;
+    }
+
+    50% {
+        transform: scale(1.08);
+        opacity: 1;
+    }
+}
+
+@keyframes coreBreathing {
+    0%,
+    100% {
+        transform: scale(0.90);
+        opacity: 0.55;
+    }
+
+    50% {
+        transform: scale(1.10);
+        opacity: 1;
+    }
+}
+
+@keyframes coreFloat {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-7px);
+    }
+}
+
+@keyframes ringPulse {
+    0%,
+    100% {
+        opacity: 0.45;
+    }
+
+    50% {
+        opacity: 0.90;
+    }
+}
+
+@keyframes innerPulse {
+    0%,
+    100% {
+        transform: translate(-50%, -50%) scale(0.94);
+        opacity: 0.60;
+    }
+
+    50% {
+        transform: translate(-50%, -50%) scale(1.06);
+        opacity: 1;
+    }
+}
+
+/* =========================================================
+   MÓVIL
+   ========================================================= */
+
+@media (max-width: 700px) {
 
     .jarvis-blob {
-
-        width: 100px;
-        height: 100px;
-
+        width: 125px;
+        height: 125px;
     }
-
 
     .ring-outer {
-
-        width: 96px;
-        height: 96px;
-
+        width: 125px;
+        height: 125px;
     }
-
 
     .ring-middle {
-
-        width: 72px;
-        height: 72px;
-
+        width: 94px;
+        height: 94px;
     }
-
 
     .ring-inner {
-
-        width: 50px;
-        height: 50px;
-
-    }
-
-
-    .blob-energy {
-
-        width: 78px;
-
-    }
-
-
-    .blob-core {
-
-        width: 27px;
-        height: 27px;
-
-    }
-
-}
-
-
-@media (max-width: 480px) {
-
-    #jarvis-interface {
-
-        flex-basis: 115px;
-
-        height: 115px;
-
-    }
-
-
-    .jarvis-blob {
-
-        width: 88px;
-        height: 88px;
-
-    }
-
-
-    .ring-outer {
-
-        width: 84px;
-        height: 84px;
-
-    }
-
-
-    .ring-middle {
-
         width: 64px;
         height: 64px;
-
     }
-
-
-    .ring-inner {
-
-        width: 44px;
-        height: 44px;
-
-    }
-
-
-    .blob-energy {
-
-        width: 68px;
-
-    }
-
 
     .blob-core {
-
-        width: 24px;
-        height: 24px;
-
+        width: 36px;
+        height: 36px;
     }
 
+    #jarvis-interface::before {
+        width: 230px;
+        height: 230px;
+    }
 }
