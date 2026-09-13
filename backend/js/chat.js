@@ -1,1746 +1,1237 @@
-/* =====================================================
-   J.A.R.V.I.S. — CHAT / MEMORIA / VOZ
-===================================================== */
-
-"use strict";
-
-
-/* =====================================================
-   CONFIGURACIÓN
-===================================================== */
-
-const STORAGE_KEY = "jarvis_guest_memory_v2";
-
-let memoriaSesion = {
-    currentChatId: null,
-    chats: []
-};
-
-let enviandoMensaje = false;
-
-let reconocimientoVoz = null;
-let vozActiva = false;
+/* =========================================================
+   J.A.R.V.I.S.
+   CHAT SYSTEM — STARK INTERFACE
+========================================================= */
 
 
-/* =====================================================
-   UTILIDADES
-===================================================== */
+/* =========================================================
+   CONTENEDOR PRINCIPAL DE MENSAJES
+========================================================= */
 
-function generarId() {
-    return (
-        Date.now().toString(36) +
-        Math.random().toString(36).substring(2, 9)
-    );
+#messages {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    padding: 22px 28px 32px;
+
+    scroll-behavior: smooth;
+
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 180, 0, 0.35) transparent;
 }
 
 
-/* =====================================================
-   CREACIÓN DE CHATS
-===================================================== */
+/* Scrollbar — Chrome / Edge */
 
-function crearChatObjeto(
-    titulo = "Nueva conversación"
-) {
-    const ahora = Date.now();
+#messages::-webkit-scrollbar {
+    width: 5px;
+}
 
-    return {
-        id: generarId(),
-        title: titulo,
-        messages: [],
-        createdAt: ahora,
-        updatedAt: ahora
-    };
+#messages::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#messages::-webkit-scrollbar-thumb {
+    background: rgba(255, 180, 0, 0.28);
+    border-radius: 10px;
+}
+
+#messages::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 180, 0, 0.55);
 }
 
 
-function crearPrimerChat() {
-    const chat =
-        crearChatObjeto("Nueva conversación");
+/* =========================================================
+   MENSAJE GENERAL
+========================================================= */
 
-    memoriaSesion.chats = [chat];
+.message {
+    display: flex;
 
-    memoriaSesion.currentChatId =
-        chat.id;
+    width: 100%;
 
-    guardarMemoriaSesion();
+    animation: messageAppear 0.35s cubic-bezier(.2,.8,.2,1);
 
-    return chat;
+    will-change: transform, opacity;
 }
 
 
-/* =====================================================
-   MEMORIA
-===================================================== */
+/* =========================================================
+   CONTENIDO GENERAL
+========================================================= */
 
-function cargarMemoriaSesion() {
-    try {
-        const guardado =
-            sessionStorage.getItem(
-                STORAGE_KEY
-            );
+.message-content {
+    position: relative;
 
-        if (!guardado) {
-            crearPrimerChat();
-            return;
-        }
+    word-wrap: break-word;
+    overflow-wrap: anywhere;
 
-        const datos =
-            JSON.parse(guardado);
-
-        if (
-            !datos ||
-            !Array.isArray(datos.chats)
-        ) {
-            crearPrimerChat();
-            return;
-        }
-
-        memoriaSesion = {
-            currentChatId:
-                datos.currentChatId || null,
-
-            chats:
-                datos.chats || []
-        };
-
-        if (
-            memoriaSesion.chats.length === 0
-        ) {
-            crearPrimerChat();
-            return;
-        }
-
-        const chatActual =
-            memoriaSesion.chats.find(
-                chat =>
-                    chat.id ===
-                    memoriaSesion.currentChatId
-            );
-
-        if (!chatActual) {
-            memoriaSesion.currentChatId =
-                memoriaSesion.chats[0].id;
-        }
-
-    } catch (error) {
-
-        console.error(
-            "[MEMORY LOAD ERROR]",
-            error
-        );
-
-        memoriaSesion = {
-            currentChatId: null,
-            chats: []
-        };
-
-        crearPrimerChat();
-    }
+    white-space: pre-wrap;
 }
 
 
-function guardarMemoriaSesion() {
-    try {
-
-        sessionStorage.setItem(
-            STORAGE_KEY,
-            JSON.stringify(
-                memoriaSesion
-            )
-        );
-
-    } catch (error) {
-
-        console.error(
-            "[MEMORY SAVE ERROR]",
-            error
-        );
-    }
-}
-
-
-/* =====================================================
-   CHAT ACTUAL
-===================================================== */
-
-function obtenerChatActual() {
-
-    return memoriaSesion.chats.find(
-        chat =>
-            chat.id ===
-            memoriaSesion.currentChatId
-    );
-
-}
-
-
-/* =====================================================
-   NUEVO CHAT
-===================================================== */
-
-function nuevoChat(
-    titulo = "Nueva conversación"
-) {
-
-    const nuevo =
-        crearChatObjeto(titulo);
-
-    memoriaSesion.chats.unshift(nuevo);
-
-    memoriaSesion.currentChatId =
-        nuevo.id;
-
-    guardarMemoriaSesion();
-
-    renderizarHistorial();
-
-    renderizarChatActual();
-
-    const input =
-        document.getElementById(
-            "messageInput"
-        );
-
-    if (input) {
-        input.value = "";
-        input.focus();
-    }
-
-    return nuevo;
-}
-
-
-/* =====================================================
-   SELECCIONAR CHAT
-===================================================== */
-
-function seleccionarChat(chatId) {
-
-    const chat =
-        memoriaSesion.chats.find(
-            item =>
-                item.id === chatId
-        );
-
-    if (!chat) {
-        return;
-    }
-
-    memoriaSesion.currentChatId =
-        chatId;
-
-    guardarMemoriaSesion();
-
-    renderizarHistorial();
-
-    renderizarChatActual();
-
-    const input =
-        document.getElementById(
-            "messageInput"
-        );
-
-    if (input) {
-        input.focus();
-    }
-}
-
-
-/* =====================================================
-   ELIMINAR CHAT
-===================================================== */
-
-function eliminarChat(chatId) {
-
-    memoriaSesion.chats =
-        memoriaSesion.chats.filter(
-            chat =>
-                chat.id !== chatId
-        );
-
-    if (
-        memoriaSesion.currentChatId ===
-        chatId
-    ) {
-
-        if (
-            memoriaSesion.chats.length > 0
-        ) {
-
-            memoriaSesion.currentChatId =
-                memoriaSesion.chats[0].id;
-
-        } else {
-
-            crearPrimerChat();
-        }
-    }
-
-    guardarMemoriaSesion();
-
-    renderizarHistorial();
-
-    renderizarChatActual();
-}
-
-
-/* =====================================================
-   TÍTULO DEL CHAT
-===================================================== */
-
-function generarTituloChat(mensaje) {
-
-    if (!mensaje) {
-        return "Nueva conversación";
-    }
-
-    let titulo =
-        mensaje
-            .replace(/\s+/g, " ")
-            .trim();
-
-    if (titulo.length > 32) {
-
-        titulo =
-            titulo
-                .substring(0, 32)
-                .trim() + "...";
-    }
-
-    return (
-        titulo ||
-        "Nueva conversación"
-    );
-}
-
-
-/* =====================================================
-   GUARDAR MENSAJE
-===================================================== */
-
-function guardarMensajeChat(
-    role,
-    content
-) {
-
-    const chat =
-        obtenerChatActual();
-
-    if (!chat) {
-        return;
-    }
-
-    chat.messages.push({
-        role: role,
-        content: content
-    });
-
-    chat.updatedAt =
-        Date.now();
-
-    if (
-        chat.messages.length === 1 &&
-        role === "user"
-    ) {
-
-        chat.title =
-            generarTituloChat(
-                content
-            );
-    }
-
-    guardarMemoriaSesion();
-
-    renderizarHistorial();
-}
-
-
-/* =====================================================
-   CONTEXTO DE MEMORIA
-===================================================== */
-
-function construirContextoMemoria() {
-
-    const chatActual =
-        obtenerChatActual();
-
-    if (!chatActual) {
-        return "";
-    }
-
-    let contexto = "";
-
-    contexto +=
-        "CONTEXTO DE MEMORIA DE J.A.R.V.I.S.\n";
-
-    contexto +=
-        "Utilice esta información únicamente como contexto de conversaciones anteriores.\n\n";
-
-
-    /* CHAT ACTUAL */
-
-    contexto +=
-        "=== CONVERSACIÓN ACTUAL ===\n";
-
-    const mensajesActuales =
-        chatActual.messages.slice(-10);
-
-    for (
-        const mensaje
-        of mensajesActuales
-    ) {
-
-        const rol =
-            mensaje.role === "user"
-                ? "Usuario"
-                : "J.A.R.V.I.S.";
-
-        contexto +=
-            `${rol}: ${mensaje.content}\n`;
-    }
-
-    contexto += "\n";
-
-
-    /* OTROS CHATS */
-
-    const otrosChats =
-        memoriaSesion.chats.filter(
-            chat =>
-                chat.id !==
-                chatActual.id
-        );
-
-    if (
-        otrosChats.length > 0
-    ) {
-
-        contexto +=
-            "=== OTRAS CONVERSACIONES DE ESTA SESIÓN ===\n";
-
-        for (
-            const chat
-            of otrosChats.slice(0, 8)
-        ) {
-
-            contexto +=
-                `\n[Chat: ${chat.title}]\n`;
-
-            const mensajes =
-                chat.messages.slice(-4);
-
-            for (
-                const mensaje
-                of mensajes
-            ) {
-
-                const rol =
-                    mensaje.role === "user"
-                        ? "Usuario"
-                        : "J.A.R.V.I.S.";
-
-                contexto +=
-                    `${rol}: ${mensaje.content}\n`;
-            }
-        }
-    }
-
-
-    /* LÍMITE */
-
-    if (contexto.length > 10000) {
-
-        contexto =
-            contexto.substring(
-                0,
-                10000
-            );
-    }
-
-    return contexto;
-}
-
-
-/* =====================================================
-   RENDERIZAR CHAT
-===================================================== */
-
-function renderizarChatActual() {
-
-    /*
-       IMPORTANTE:
-       El HTML utiliza #messages,
-       no #chatMessages.
-    */
-
-    const chatContainer =
-        document.getElementById(
-            "messages"
-        );
-
-    if (!chatContainer) {
-
-        console.error(
-            "[CHAT ERROR] No se encontró #messages."
-        );
-
-        return;
-    }
-
-    chatContainer.innerHTML = "";
-
-    const chat =
-        obtenerChatActual();
-
-    if (!chat) {
-        return;
-    }
-
-    for (
-        const mensaje
-        of chat.messages
-    ) {
-
-        if (
-            mensaje.role === "user"
-        ) {
-
-            agregarMensajeUsuario(
-                mensaje.content,
-                false
-            );
-
-        } else {
-
-            agregarMensajeJarvis(
-                mensaje.content,
-                false
-            );
-        }
-    }
-
-    desplazarChat();
-}
-
-
-/* =====================================================
-   HISTORIAL
-===================================================== */
-
-function renderizarHistorial() {
-
-    /*
-       IMPORTANTE:
-       El HTML utiliza #chat-history.
-    */
-
-    const historial =
-        document.getElementById(
-            "chat-history"
-        );
-
-    if (!historial) {
-
-        console.error(
-            "[HISTORY ERROR] No se encontró #chat-history."
-        );
-
-        return;
-    }
-
-    historial.innerHTML = "";
-
-    for (
-        const chat
-        of memoriaSesion.chats
-    ) {
-
-        const elemento =
-            document.createElement(
-                "div"
-            );
-
-        elemento.className =
-            "chat-history-item";
-
-        if (
-            chat.id ===
-            memoriaSesion.currentChatId
-        ) {
-
-            elemento.classList.add(
-                "active"
-            );
-        }
-
-        elemento.dataset.chatId =
-            chat.id;
-
-        const titulo =
-            document.createElement(
-                "span"
-            );
-
-        titulo.className =
-            "chat-history-title";
-
-        titulo.textContent =
-            chat.title ||
-            "Nueva conversación";
-
-        elemento.appendChild(
-            titulo
-        );
-
-        elemento.addEventListener(
-            "click",
-            () => {
-
-                seleccionarChat(
-                    chat.id
-                );
-
-            }
-        );
-
-        historial.appendChild(
-            elemento
-        );
-    }
-}
-
-
-/* =====================================================
+/* =========================================================
    MENSAJE DEL USUARIO
-===================================================== */
+========================================================= */
 
-function agregarMensajeUsuario(
-    contenido,
-    guardar = true
-) {
-
-    const chatContainer =
-        document.getElementById(
-            "messages"
-        );
-
-    if (!chatContainer) {
-        return;
-    }
-
-    const wrapper =
-        document.createElement(
-            "div"
-        );
-
-    wrapper.className =
-        "message user-message";
-
-    const contenidoElemento =
-        document.createElement(
-            "div"
-        );
-
-    contenidoElemento.className =
-        "message-content";
-
-    contenidoElemento.textContent =
-        contenido;
-
-    wrapper.appendChild(
-        contenidoElemento
-    );
-
-    chatContainer.appendChild(
-        wrapper
-    );
-
-    if (guardar) {
-
-        guardarMensajeChat(
-            "user",
-            contenido
-        );
-    }
-
-    desplazarChat();
-}
-
-/* =====================================================
-   FORMATEADOR DE RESPUESTAS DE J.A.R.V.I.S.
-===================================================== */
-
-function escaparHTML(texto) {
-
-    return String(texto)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+.message.user-message {
+    justify-content: flex-end;
 }
 
 
-function formatearRespuestaJarvis(texto) {
+.user-message .message-content {
 
-    if (!texto) {
-        return "";
-    }
+    max-width: min(68%, 720px);
 
-    let html =
-        escaparHTML(texto);
+    padding: 12px 16px;
 
+    border: 1px solid rgba(255, 180, 0, 0.32);
 
-    /* NEGRITA */
+    border-radius:
+        15px
+        15px
+        4px
+        15px;
 
-    html =
-        html.replace(
-            /\*\*(.*?)\*\*/g,
-            "<strong>$1</strong>"
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255, 180, 0, 0.13),
+            rgba(255, 140, 0, 0.045)
         );
 
+    color: #f0f0f0;
 
-    /* TÍTULOS SIMPLES */
+    font-family:
+        "Share Tech Mono",
+        monospace;
 
-    html =
-        html.replace(
-            /^### (.+)$/gm,
-            '<h4>$1</h4>'
-        );
+    font-size: 12px;
 
+    line-height: 1.65;
 
-    html =
-        html.replace(
-            /^## (.+)$/gm,
-            '<h3>$1</h3>'
-        );
+    box-shadow:
+        0 0 18px rgba(255, 180, 0, 0.035),
+        inset 0 1px 0 rgba(255, 255, 255, 0.035);
 
+    backdrop-filter: blur(8px);
 
-    /* LISTAS CON GUION */
-
-    html =
-        html.replace(
-            /^[•\-] (.+)$/gm,
-            '<li>$1</li>'
-        );
-
-
-    /* AGRUPAR LISTAS */
-
-    html =
-        html.replace(
-            /(<li>.*<\/li>\n?)+/g,
-            match =>
-                `<ul>${match}</ul>`
-        );
-
-
-    /* PÁRRAFOS */
-
-    html =
-        html.replace(
-            /\n{2,}/g,
-            "</p><p>"
-        );
-
-
-    /* SALTOS NORMALES */
-
-    html =
-        html.replace(
-            /\n/g,
-            "<br>"
-        );
-
-
-    /*
-       Evitar envolver elementos HTML
-       importantes dentro de <p>.
-    */
-
-    if (
-        !html.startsWith("<h") &&
-        !html.startsWith("<ul") &&
-        !html.startsWith("<p>")
-    ) {
-
-        html =
-            `<p>${html}</p>`;
-    }
-
-
-    return html;
-}
-/* =====================================================
-   MENSAJE DE J.A.R.V.I.S.
-===================================================== */
-
-function agregarMensajeJarvis(
-    contenido,
-    guardar = true
-) {
-
-    const chatContainer =
-        document.getElementById("messages");
-
-    if (!chatContainer) {
-        return;
-    }
-
-    const wrapper =
-        document.createElement("div");
-
-    wrapper.className =
-        "message jarvis-message";
-
-
-    /* =================================================
-       CABECERA DE J.A.R.V.I.S.
-    ================================================= */
-
-    const header =
-        document.createElement("div");
-
-    header.className =
-        "jarvis-message-header";
-
-
-    const core =
-        document.createElement("div");
-
-    core.className =
-        "jarvis-core";
-
-    core.innerHTML = `
-        <span></span>
-    `;
-
-
-    const identity =
-        document.createElement("div");
-
-    identity.className =
-        "jarvis-identity";
-
-    identity.innerHTML = `
-        <strong>J.A.R.V.I.S.</strong>
-        <small>ARTIFICIAL INTELLIGENCE</small>
-    `;
-
-
-    header.appendChild(core);
-    header.appendChild(identity);
-
-
-    /* =================================================
-       CONTENIDO
-    ================================================= */
-
-    const contenidoElemento =
-        document.createElement("div");
-
-    contenidoElemento.className =
-        "message-content jarvis-content";
-
-    contenidoElemento.innerHTML =
-        formatearRespuestaJarvis(contenido);
-
-
-    /* =================================================
-       FIRMA DEL SISTEMA
-    ================================================= */
-
-    const footer =
-        document.createElement("div");
-
-    footer.className =
-        "jarvis-message-footer";
-
-    footer.textContent =
-        "J.A.R.V.I.S. • SYSTEM RESPONSE";
-
-
-    /* =================================================
-       ENSAMBLAR
-    ================================================= */
-
-    wrapper.appendChild(header);
-    wrapper.appendChild(contenidoElemento);
-    wrapper.appendChild(footer);
-
-    chatContainer.appendChild(wrapper);
-
-
-    /* =================================================
-       MEMORIA
-    ================================================= */
-
-    if (guardar) {
-
-        guardarMensajeChat(
-            "assistant",
-            contenido
-        );
-    }
-
-
-    desplazarChat();
-}
-
-    const chatContainer =
-        document.getElementById(
-            "messages"
-        );
-
-    if (!chatContainer) {
-        return;
-    }
-
-    const wrapper =
-        document.createElement(
-            "div"
-        );
-
-    wrapper.className =
-        "message jarvis-message";
-
-    const contenidoElemento =
-        document.createElement(
-            "div"
-        );
-
-    contenidoElemento.className =
-        "message-content";
-
-    contenidoElemento.textContent =
-        contenido;
-
-    wrapper.appendChild(
-        contenidoElemento
-    );
-
-    chatContainer.appendChild(
-        wrapper
-    );
-
-    if (guardar) {
-
-        guardarMensajeChat(
-            "assistant",
-            contenido
-        );
-    }
-
-    desplazarChat();
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease;
 }
 
 
-/* =====================================================
-   PROCESANDO
-===================================================== */
+.user-message .message-content:hover {
 
-function mostrarProcesando() {
+    border-color: rgba(255, 180, 0, 0.48);
 
-    const chatContainer =
-        document.getElementById(
-            "messages"
-        );
-
-    if (!chatContainer) {
-        return;
-    }
-
-    ocultarProcesando();
-
-    const wrapper =
-        document.createElement(
-            "div"
-        );
-
-    wrapper.id =
-        "jarvisProcessing";
-
-    wrapper.className =
-        "message jarvis-message processing-message";
-
-    const contenido =
-        document.createElement(
-            "div"
-        );
-
-    contenido.className =
-        "message-content";
-
-    contenido.textContent =
-        "Procesando, Señor...";
-
-    wrapper.appendChild(
-        contenido
-    );
-
-    chatContainer.appendChild(
-        wrapper
-    );
-
-    desplazarChat();
+    box-shadow:
+        0 0 22px rgba(255, 180, 0, 0.07),
+        inset 0 1px 0 rgba(255, 255, 255, 0.045);
 }
 
 
-function ocultarProcesando() {
+/* =========================================================
+   MENSAJE DE JARVIS
+========================================================= */
 
-    const elemento =
-        document.getElementById(
-            "jarvisProcessing"
+.message.jarvis-message {
+    justify-content: flex-start;
+}
+
+
+.jarvis-message .message-content {
+
+    position: relative;
+
+    max-width: min(78%, 820px);
+
+    padding: 15px 18px 16px;
+
+    margin-left: 0;
+
+    border:
+        1px solid
+        rgba(255, 180, 0, 0.19);
+
+    border-radius:
+        4px
+        14px
+        14px
+        14px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(16, 20, 27, 0.96),
+            rgba(7, 10, 15, 0.93)
         );
 
-    if (elemento) {
-        elemento.remove();
+    color: #dedede;
+
+    font-family:
+        "Share Tech Mono",
+        monospace;
+
+    font-size: 12px;
+
+    line-height: 1.72;
+
+    box-shadow:
+        0 0 22px rgba(255, 180, 0, 0.025),
+        inset 0 1px 0 rgba(255, 255, 255, 0.025);
+
+    backdrop-filter: blur(10px);
+}
+
+
+/* Línea luminosa de JARVIS */
+
+.jarvis-message .message-content::before {
+
+    content: "";
+
+    position: absolute;
+
+    left: -1px;
+    top: 12px;
+    bottom: 12px;
+
+    width: 2px;
+
+    background:
+        linear-gradient(
+            to bottom,
+            transparent,
+            rgba(255, 180, 0, 0.8),
+            transparent
+        );
+
+    border-radius: 4px;
+
+    opacity: .75;
+}
+
+
+/* =========================================================
+   INDICADOR DE PROCESAMIENTO
+========================================================= */
+
+#jarvisProcessing {
+
+    justify-content: flex-start;
+
+    animation:
+        messageAppear
+        .25s
+        ease-out;
+}
+
+
+#jarvisProcessing .message-content {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    min-height: 46px;
+
+    min-width: 110px;
+
+    padding:
+        12px
+        16px;
+
+    color: rgba(255, 255, 255, 0.65);
+
+    font-family:
+        "Share Tech Mono",
+        monospace;
+
+    font-size: 11px;
+
+    letter-spacing: .4px;
+
+    border:
+        1px solid
+        rgba(255, 180, 0, 0.15);
+
+    border-radius:
+        4px
+        13px
+        13px
+        13px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(16, 20, 27, .9),
+            rgba(7, 10, 15, .88)
+        );
+
+    box-shadow:
+        0 0 16px rgba(255, 180, 0, .025);
+}
+
+
+/* =========================================================
+   TEXTO "PROCESANDO"
+========================================================= */
+
+#jarvisProcessing .message-content::after {
+
+    content: "";
+
+    width: 5px;
+    height: 5px;
+
+    margin-left: 3px;
+
+    border-radius: 50%;
+
+    background: var(--gold, #ffb400);
+
+    box-shadow:
+        0 0 7px
+        rgba(255, 180, 0, .7);
+
+    animation:
+        processingPulse
+        1s
+        infinite
+        ease-in-out;
+}
+
+
+/* =========================================================
+   ANIMACIÓN DE MENSAJES
+========================================================= */
+
+@keyframes messageAppear {
+
+    from {
+        opacity: 0;
+        transform:
+            translateY(10px)
+            scale(.985);
+    }
+
+    to {
+        opacity: 1;
+        transform:
+            translateY(0)
+            scale(1);
+    }
+
+}
+
+
+/* =========================================================
+   ANIMACIÓN DE PROCESAMIENTO
+========================================================= */
+
+@keyframes processingPulse {
+
+    0%,
+    100% {
+        opacity: .25;
+        transform: scale(.75);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.15);
+    }
+
+}
+
+
+/* =========================================================
+   HISTORIAL DE CONVERSACIONES
+========================================================= */
+
+#chat-history {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 6px;
+
+    width: 100%;
+
+    max-height: calc(100vh - 300px);
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    padding:
+        4px
+        2px
+        8px;
+
+    scrollbar-width: thin;
+    scrollbar-color:
+        rgba(255, 180, 0, .22)
+        transparent;
+}
+
+
+#chat-history::-webkit-scrollbar {
+    width: 4px;
+}
+
+#chat-history::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#chat-history::-webkit-scrollbar-thumb {
+
+    background:
+        rgba(255, 180, 0, .2);
+
+    border-radius: 10px;
+}
+
+
+/* =========================================================
+   ELEMENTO DEL HISTORIAL
+========================================================= */
+
+.history-item {
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    width: 100%;
+
+    min-height: 42px;
+
+    padding:
+        8px
+        9px;
+
+    border:
+        1px solid
+        transparent;
+
+    border-radius: 7px;
+
+    background:
+        rgba(255, 255, 255, .015);
+
+    color: #9da2aa;
+
+    cursor: pointer;
+
+    transition:
+        background .2s ease,
+        border-color .2s ease,
+        color .2s ease,
+        transform .2s ease;
+}
+
+
+.history-item:hover {
+
+    background:
+        rgba(255, 180, 0, .055);
+
+    border-color:
+        rgba(255, 180, 0, .14);
+
+    color: #e6e6e6;
+
+    transform:
+        translateX(2px);
+}
+
+
+/* Conversación activa */
+
+.history-item.active {
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(255, 180, 0, .095),
+            rgba(255, 180, 0, .025)
+        );
+
+    border-color:
+        rgba(255, 180, 0, .24);
+
+    color: #f1f1f1;
+
+    box-shadow:
+        inset 2px 0 0
+        rgba(255, 180, 0, .8);
+}
+
+
+/* =========================================================
+   TÍTULO DEL HISTORIAL
+========================================================= */
+
+.history-title {
+
+    flex: 1;
+
+    min-width: 0;
+
+    overflow: hidden;
+
+    white-space: nowrap;
+
+    text-overflow: ellipsis;
+
+    color: inherit;
+
+    font-family:
+        "Share Tech Mono",
+        monospace;
+
+    font-size: 10px;
+
+    line-height: 1.4;
+
+    letter-spacing: .2px;
+}
+
+
+/* =========================================================
+   BOTÓN ELIMINAR HISTORIAL
+========================================================= */
+
+.history-delete {
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 24px;
+    height: 24px;
+
+    margin-left: 5px;
+
+    padding: 0;
+
+    border: none;
+
+    border-radius: 5px;
+
+    background: transparent;
+
+    color: #555b63;
+
+    cursor: pointer;
+
+    opacity: .55;
+
+    font-family:
+        "Share Tech Mono",
+        monospace;
+
+    font-size: 13px;
+
+    transition:
+        color .2s ease,
+        background .2s ease,
+        opacity .2s ease;
+}
+
+
+.history-delete:hover {
+
+    color: var(--gold, #ffb400);
+
+    background:
+        rgba(255, 180, 0, .08);
+
+    opacity: 1;
+}
+
+
+/* =========================================================
+   BÚSQUEDA DEL HISTORIAL
+========================================================= */
+
+.chat-search {
+
+    position: relative;
+}
+
+
+#chatSearchInput {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    outline: none;
+
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease;
+}
+
+
+#chatSearchInput:focus {
+
+    border-color:
+        rgba(255, 180, 0, .42) !important;
+
+    box-shadow:
+        0 0 14px
+        rgba(255, 180, 0, .055);
+}
+
+
+/* =========================================================
+   CONSOLA / INPUT
+========================================================= */
+
+#console {
+
+    position: relative;
+
+    z-index: 20;
+}
+
+
+/* =========================================================
+   BOTÓN DE MICRÓFONO
+========================================================= */
+
+#voiceButton {
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    width: 42px;
+    height: 42px;
+
+    border:
+        1px solid
+        rgba(255, 180, 0, .2);
+
+    border-radius: 8px;
+
+    background:
+        rgba(8, 11, 16, .82);
+
+    color: rgba(255, 255, 255, .72);
+
+    cursor: pointer;
+
+    font-size: 16px;
+
+    transition:
+        color .2s ease,
+        border-color .2s ease,
+        background .2s ease,
+        box-shadow .2s ease,
+        transform .15s ease;
+}
+
+
+#voiceButton:hover {
+
+    color:
+        var(--gold, #ffb400);
+
+    border-color:
+        rgba(255, 180, 0, .5);
+
+    background:
+        rgba(255, 180, 0, .055);
+
+    box-shadow:
+        0 0 14px
+        rgba(255, 180, 0, .08);
+}
+
+
+#voiceButton:active {
+
+    transform:
+        scale(.94);
+}
+
+
+/* =========================================================
+   MICRÓFONO ACTIVO
+========================================================= */
+
+#voiceButton.recording {
+
+    color:
+        var(--gold, #ffb400);
+
+    border-color:
+        rgba(255, 180, 0, .75);
+
+    background:
+        rgba(255, 180, 0, .08);
+
+    box-shadow:
+        0 0 0 0
+        rgba(255, 180, 0, .25),
+        0 0 18px
+        rgba(255, 180, 0, .15);
+
+    animation:
+        microphonePulse
+        1.35s
+        infinite;
+}
+
+
+@keyframes microphonePulse {
+
+    0% {
+        box-shadow:
+            0 0 0 0
+            rgba(255, 180, 0, .3),
+            0 0 16px
+            rgba(255, 180, 0, .08);
+    }
+
+    70% {
+        box-shadow:
+            0 0 0 8px
+            rgba(255, 180, 0, 0),
+            0 0 22px
+            rgba(255, 180, 0, .14);
+    }
+
+    100% {
+        box-shadow:
+            0 0 0 0
+            rgba(255, 180, 0, 0),
+            0 0 16px
+            rgba(255, 180, 0, .08);
+    }
+
+}
+
+
+/* =========================================================
+   INPUT DE MENSAJE
+========================================================= */
+
+#messageInput {
+
+    font-family:
+        "Share Tech Mono",
+        monospace;
+
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease;
+}
+
+
+#messageInput:focus {
+
+    border-color:
+        rgba(255, 180, 0, .42) !important;
+
+    box-shadow:
+        0 0 18px
+        rgba(255, 180, 0, .055);
+}
+
+
+/* =========================================================
+   BOTÓN ENVIAR
+========================================================= */
+
+#sendButton {
+
+    transition:
+        transform .15s ease,
+        box-shadow .2s ease,
+        background .2s ease;
+}
+
+
+#sendButton:active {
+
+    transform:
+        scale(.96);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 900px) {
+
+    #messages {
+
+        padding:
+            18px
+            18px
+            26px;
+
+    }
+
+    .user-message .message-content {
+
+        max-width: 76%;
+
+    }
+
+    .jarvis-message .message-content {
+
+        max-width: 84%;
+
+    }
+
+}
+
+
+@media (max-width: 700px) {
+
+    #messages {
+
+        gap: 13px;
+
+        padding:
+            14px
+            12px
+            22px;
+
+    }
+
+
+    .user-message .message-content,
+    .jarvis-message .message-content {
+
+        max-width: 88%;
+
+        padding:
+            10px
+            13px;
+
+        font-size: 11px;
+
+        line-height: 1.6;
+
+    }
+
+
+    #jarvisProcessing .message-content {
+
+        min-height: 40px;
+
+        padding:
+            10px
+            13px;
+
+    }
+
+
+    #voiceButton {
+
+        width: 39px;
+        height: 39px;
+
+        font-size: 14px;
+
+    }
+
+}
+
+
+@media (max-width: 480px) {
+
+    #messages {
+
+        padding:
+            12px
+            9px
+            18px;
+
+    }
+
+
+    .user-message .message-content,
+    .jarvis-message .message-content {
+
+        max-width: 92%;
+
+    }
+
+
+    .history-title {
+
+        font-size: 9px;
+
+    }
+
+}
+
+
+/* =========================================================
+   ACCESIBILIDAD
+========================================================= */
+
+button:focus-visible,
+input:focus-visible {
+
+    outline:
+        1px solid
+        rgba(255, 180, 0, .65);
+
+    outline-offset: 2px;
+}
+
+
+/* =========================================================
+   REDUCIR ANIMACIONES SI EL SISTEMA LO SOLICITA
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    #messages {
+
+        scroll-behavior: auto;
+
+    }
+
+    .message,
+    #jarvisProcessing,
+    #voiceButton.recording {
+
+        animation: none;
+
+    }
+
+}
+/* =========================================================
+   J.A.R.V.I.S. — MENSAJE PREMIUM
+========================================================= */
+
+.jarvis-message {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+
+/* CABECERA */
+
+.jarvis-message-header {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+
+    margin-left: 2px;
+}
+
+
+/* NÚCLEO */
+
+.jarvis-core {
+    position: relative;
+
+    width: 27px;
+    height: 27px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid rgba(255, 180, 0, .65);
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255, 190, 40, .95) 0%,
+            rgba(255, 145, 0, .45) 28%,
+            rgba(255, 120, 0, .08) 65%,
+            transparent 70%
+        );
+
+    box-shadow:
+        0 0 8px rgba(255, 170, 0, .45),
+        inset 0 0 7px rgba(255, 200, 70, .25);
+
+    animation: jarvisCorePulse 2.4s ease-in-out infinite;
+}
+
+
+.jarvis-core span {
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: #ffd36a;
+
+    box-shadow:
+        0 0 8px #ffb400,
+        0 0 15px rgba(255, 180, 0, .75);
+}
+
+
+/* IDENTIDAD */
+
+.jarvis-identity {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+
+.jarvis-identity strong {
+    color: #f4f4f4;
+
+    font-family:
+        "Share Tech Mono",
+        monospace;
+
+    font-size: 11px;
+
+    letter-spacing: 2px;
+
+    font-weight: 500;
+}
+
+
+.jarvis-identity small {
+    color: rgba(255, 180, 0, .58);
+
+    font-family:
+        "Share Tech Mono",
+        monospace;
+
+    font-size: 7px;
+
+    letter-spacing: 1.2px;
+}
+
+
+/* CONTENIDO */
+
+.jarvis-message .jarvis-content {
+
+    max-width: min(78%, 820px);
+
+    padding: 17px 21px;
+
+    margin-left: 0;
+
+    color: #e4e5e7;
+
+    font-family:
+        "Inter",
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    font-size: 14px;
+
+    line-height: 1.75;
+
+    letter-spacing: .05px;
+
+    border:
+        1px solid
+        rgba(255, 180, 0, .18);
+
+    border-radius:
+        3px
+        15px
+        15px
+        15px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(17, 21, 28, .97),
+            rgba(7, 10, 15, .96)
+        );
+
+    box-shadow:
+        0 8px 28px rgba(0, 0, 0, .18),
+        inset 0 1px 0 rgba(255,255,255,.025);
+
+    backdrop-filter: blur(10px);
+}
+
+
+/* PÁRRAFOS */
+
+.jarvis-content p {
+    margin: 0 0 13px;
+}
+
+
+.jarvis-content p:last-child {
+    margin-bottom: 0;
+}
+
+
+/* TÍTULOS */
+
+.jarvis-content h3,
+.jarvis-content h4 {
+
+    margin: 17px 0 8px;
+
+    color: #f5c451;
+
+    font-family:
+        "Share Tech Mono",
+        monospace;
+
+    font-weight: 500;
+
+    letter-spacing: .7px;
+}
+
+
+.jarvis-content h3 {
+    font-size: 13px;
+}
+
+
+.jarvis-content h4 {
+    font-size: 12px;
+}
+
+
+/* TEXTO DESTACADO */
+
+.jarvis-content strong {
+
+    color: #ffd36a;
+
+    font-weight: 600;
+}
+
+
+/* LISTAS */
+
+.jarvis-content ul {
+
+    margin: 9px 0 14px;
+
+    padding-left: 21px;
+}
+
+
+.jarvis-content li {
+
+    margin: 5px 0;
+
+    padding-left: 3px;
+
+    color: #dfe1e4;
+}
+
+
+.jarvis-content li::marker {
+
+    color: #ffb400;
+
+    font-size: 9px;
+}
+
+
+/* FIRMA */
+
+.jarvis-message-footer {
+
+    margin-left: 38px;
+
+    color:
+        rgba(255,255,255,.25);
+
+    font-family:
+        "Share Tech Mono",
+        monospace;
+
+    font-size: 7px;
+
+    letter-spacing: 1.1px;
+}
+
+
+/* ANIMACIÓN DEL NÚCLEO */
+
+@keyframes jarvisCorePulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+
+        box-shadow:
+            0 0 8px rgba(255,170,0,.4),
+            inset 0 0 7px rgba(255,200,70,.2);
+    }
+
+    50% {
+        transform: scale(1.05);
+
+        box-shadow:
+            0 0 14px rgba(255,170,0,.65),
+            inset 0 0 9px rgba(255,200,70,.3);
     }
 }
 
 
-/* =====================================================
-   SCROLL
-===================================================== */
+/* MÓVIL */
 
-function desplazarChat() {
+@media (max-width: 700px) {
 
-    const chatContainer =
-        document.getElementById(
-            "messages"
-        );
+    .jarvis-message .jarvis-content {
 
-    if (!chatContainer) {
-        return;
-    }
+        max-width: 88%;
 
-    requestAnimationFrame(
-        () => {
+        padding: 14px 16px;
 
-            chatContainer.scrollTop =
-                chatContainer.scrollHeight;
+        font-size: 13px;
 
-        }
-    );
-}
-
-
-/* =====================================================
-   ENVIAR MENSAJE
-===================================================== */
-
-async function sendMessage() {
-
-    if (enviandoMensaje) {
-        return;
-    }
-
-    const input =
-        document.getElementById(
-            "messageInput"
-        );
-
-    const sendButton =
-        document.getElementById(
-            "sendButton"
-        );
-
-    if (!input) {
-
-        console.error(
-            "[CHAT ERROR] No se encontró #messageInput."
-        );
-
-        return;
-    }
-
-    const mensaje =
-        input.value.trim();
-
-    if (!mensaje) {
-        return;
+        line-height: 1.65;
     }
 
 
-    /* ASEGURAR CHAT */
-
-    let chatActual =
-        obtenerChatActual();
-
-    if (!chatActual) {
-        chatActual =
-            crearPrimerChat();
+    .jarvis-identity strong {
+        font-size: 10px;
     }
 
 
-    /* BLOQUEAR ENVÍO */
-
-    enviandoMensaje = true;
-
-    if (sendButton) {
-
-        sendButton.disabled =
-            true;
-
-        sendButton.classList.add(
-            "loading"
-        );
-    }
-
-
-    /*
-       PRIMERO mostramos el mensaje.
-       Después limpiamos el campo.
-    */
-
-    agregarMensajeUsuario(
-        mensaje,
-        true
-    );
-
-    input.value = "";
-
-    mostrarProcesando();
-
-
-    try {
-
-        const contextoMemoria =
-            construirContextoMemoria();
-
-        /*
-           API
-        */
-
-        if (
-            typeof enviarMensajeAPI !==
-            "function"
-        ) {
-
-            throw new Error(
-                "El módulo API de J.A.R.V.I.S. no está disponible."
-            );
-        }
-
-        const datos =
-            await enviarMensajeAPI(
-                mensaje,
-                contextoMemoria
-            );
-
-        ocultarProcesando();
-
-
-        if (
-            datos &&
-            datos.response
-        ) {
-
-            agregarMensajeJarvis(
-                datos.response,
-                true
-            );
-
-        } else {
-
-            agregarMensajeJarvis(
-                "No he recibido una respuesta válida del núcleo cognitivo, Señor.",
-                true
-            );
-        }
-
-
-    } catch (error) {
-
-        console.error(
-            "[CHAT API ERROR]:",
-            error
-        );
-
-        ocultarProcesando();
-
-        agregarMensajeJarvis(
-            error.message ||
-            "Se ha producido un error de comunicación con el núcleo cognitivo, Señor.",
-            true
-        );
-
-
-    } finally {
-
-        enviandoMensaje = false;
-
-        if (sendButton) {
-
-            sendButton.disabled =
-                false;
-
-            sendButton.classList.remove(
-                "loading"
-            );
-        }
-
-        input.focus();
+    .jarvis-message-footer {
+        margin-left: 36px;
     }
 }
-
-
-/* =====================================================
-   TECLADO
-===================================================== */
-
-function handleKeyPress(event) {
-
-    if (
-        event.key === "Enter" &&
-        !event.shiftKey
-    ) {
-
-        event.preventDefault();
-
-        sendMessage();
-    }
-}
-
-
-/* =====================================================
-   MICRÓFONO
-===================================================== */
-
-function iniciarEntradaVoz() {
-
-    const SpeechRecognition =
-        window.SpeechRecognition ||
-        window.webkitSpeechRecognition;
-
-    const input =
-        document.getElementById(
-            "messageInput"
-        );
-
-    const button =
-        document.getElementById(
-            "voiceButton"
-        );
-
-
-    /* NAVEGADOR NO COMPATIBLE */
-
-    if (!SpeechRecognition) {
-
-        agregarMensajeJarvis(
-            "La entrada de voz no está disponible en este navegador, Señor."
-        );
-
-        console.warn(
-            "[VOICE] SpeechRecognition no disponible."
-        );
-
-        return;
-    }
-
-
-    /* INPUT NO EXISTE */
-
-    if (!input) {
-
-        console.error(
-            "[VOICE ERROR] No se encontró #messageInput."
-        );
-
-        return;
-    }
-
-
-    /* DETENER SI YA ESTÁ ACTIVO */
-
-    if (
-        vozActiva &&
-        reconocimientoVoz
-    ) {
-
-        try {
-
-            reconocimientoVoz.stop();
-
-        } catch (error) {
-
-            console.warn(
-                "[VOICE STOP]",
-                error
-            );
-        }
-
-        return;
-    }
-
-
-    /* CREAR RECONOCIMIENTO */
-
-    reconocimientoVoz =
-        new SpeechRecognition();
-
-    reconocimientoVoz.lang =
-        "es-CO";
-
-    reconocimientoVoz.continuous =
-        false;
-
-    reconocimientoVoz.interimResults =
-        true;
-
-    reconocimientoVoz.maxAlternatives =
-        1;
-
-
-    /* INICIO */
-
-    reconocimientoVoz.onstart =
-        () => {
-
-            vozActiva = true;
-
-            console.log(
-                "[VOICE] Escuchando..."
-            );
-
-            if (button) {
-
-                button.classList.add(
-                    "recording"
-                );
-
-                button.setAttribute(
-                    "aria-label",
-                    "Detener entrada de voz"
-                );
-
-                button.setAttribute(
-                    "title",
-                    "Detener entrada de voz"
-                );
-            }
-
-            input.placeholder =
-                "Escuchando, Señor...";
-        };
-
-
-    /* RESULTADO */
-
-    reconocimientoVoz.onresult =
-        (event) => {
-
-            let textoFinal = "";
-
-            let textoIntermedio = "";
-
-            for (
-                let i =
-                    event.resultIndex;
-
-                i <
-                    event.results.length;
-
-                i++
-            ) {
-
-                const resultado =
-                    event.results[i];
-
-                const transcript =
-                    resultado[0].transcript;
-
-
-                if (
-                    resultado.isFinal
-                ) {
-
-                    textoFinal +=
-                        transcript + " ";
-
-                } else {
-
-                    textoIntermedio +=
-                        transcript;
-                }
-            }
-
-
-            /*
-               Mientras habla:
-               mostrar texto provisional.
-            */
-
-            if (
-                textoIntermedio.trim()
-            ) {
-
-                input.value =
-                    textoIntermedio.trim();
-            }
-
-
-            /*
-               Cuando termina:
-               dejar el texto definitivo.
-            */
-
-            if (
-                textoFinal.trim()
-            ) {
-
-                input.value =
-                    textoFinal.trim();
-
-                input.focus();
-
-                console.log(
-                    "[VOICE RESULT]",
-                    textoFinal.trim()
-                );
-            }
-        };
-
-
-    /* ERROR */
-
-    reconocimientoVoz.onerror =
-        (event) => {
-
-            console.error(
-                "[VOICE ERROR]",
-                event.error
-            );
-
-            switch (event.error) {
-
-                case "not-allowed":
-
-                    agregarMensajeJarvis(
-                        "El navegador no permite acceder al micrófono, Señor. Revise los permisos del sitio."
-                    );
-
-                    break;
-
-
-                case "no-speech":
-
-                    console.log(
-                        "[VOICE] No se detectó voz."
-                    );
-
-                    break;
-
-
-                case "audio-capture":
-
-                    agregarMensajeJarvis(
-                        "No he podido acceder al dispositivo de audio, Señor. Compruebe que el micrófono esté disponible."
-                    );
-
-                    break;
-
-
-                case "network":
-
-                    agregarMensajeJarvis(
-                        "El reconocimiento de voz no pudo comunicarse con su servicio, Señor."
-                    );
-
-                    break;
-
-
-                case "service-not-allowed":
-
-                    agregarMensajeJarvis(
-                        "El servicio de reconocimiento de voz no está disponible en este navegador, Señor."
-                    );
-
-                    break;
-
-
-                default:
-
-                    agregarMensajeJarvis(
-                        "Se produjo un inconveniente con la entrada de voz, Señor."
-                    );
-
-                    break;
-            }
-        };
-
-
-    /* FINAL */
-
-    reconocimientoVoz.onend =
-        () => {
-
-            vozActiva = false;
-
-            console.log(
-                "[VOICE] Reconocimiento finalizado."
-            );
-
-            if (button) {
-
-                button.classList.remove(
-                    "recording"
-                );
-
-                button.setAttribute(
-                    "aria-label",
-                    "Entrada de voz"
-                );
-
-                button.setAttribute(
-                    "title",
-                    "Entrada de voz"
-                );
-            }
-
-            input.placeholder =
-                "Escriba una instrucción...";
-
-            input.focus();
-        };
-
-
-    /* INICIAR */
-
-    try {
-
-        reconocimientoVoz.start();
-
-    } catch (error) {
-
-        console.error(
-            "[VOICE START ERROR]",
-            error
-        );
-
-        vozActiva = false;
-
-        if (button) {
-
-            button.classList.remove(
-                "recording"
-            );
-        }
-
-        input.placeholder =
-            "Escriba una instrucción...";
-    }
-}
-
-
-/* =====================================================
-   CONFIGURAR VOZ
-===================================================== */
-
-function configurarBotonVoz() {
-
-    const button =
-        document.getElementById(
-            "voiceButton"
-        );
-
-    if (!button) {
-
-        console.warn(
-            "[VOICE] No se encontró #voiceButton."
-        );
-
-        return;
-    }
-
-    button.addEventListener(
-        "click",
-        iniciarEntradaVoz
-    );
-}
-
-
-/* =====================================================
-   NUEVO CHAT
-===================================================== */
-
-function configurarNuevoChat() {
-
-    const button =
-        document.getElementById(
-            "newChatButton"
-        );
-
-    if (!button) {
-        return;
-    }
-
-    button.addEventListener(
-        "click",
-        () => {
-            nuevoChat();
-        }
-    );
-}
-
-
-/* =====================================================
-   BUSCADOR
-===================================================== */
-
-function configurarBusquedaChats() {
-
-    /*
-       IMPORTANTE:
-       Tu HTML utiliza #chatSearchInput.
-    */
-
-    const input =
-        document.getElementById(
-            "chatSearchInput"
-        );
-
-    if (!input) {
-        return;
-    }
-
-    input.addEventListener(
-        "input",
-        () => {
-
-            const busqueda =
-                input.value
-                    .toLowerCase()
-                    .trim();
-
-            const elementos =
-                document.querySelectorAll(
-                    ".chat-history-item"
-                );
-
-            elementos.forEach(
-                elemento => {
-
-                    const texto =
-                        elemento.textContent
-                            .toLowerCase();
-
-                    if (
-                        !busqueda ||
-                        texto.includes(
-                            busqueda
-                        )
-                    ) {
-
-                        elemento.style.display =
-                            "";
-
-                    } else {
-
-                        elemento.style.display =
-                            "none";
-                    }
-                }
-            );
-        }
-    );
-}
-
-
-/* =====================================================
-   INICIALIZACIÓN
-===================================================== */
-
-function initChat() {
-
-    console.log(
-        "[J.A.R.V.I.S.] Inicializando sistema de chat..."
-    );
-
-
-    /* MEMORIA */
-
-    cargarMemoriaSesion();
-
-
-    /* CHAT */
-
-    renderizarHistorial();
-
-    renderizarChatActual();
-
-
-    /* VOZ */
-
-    configurarBotonVoz();
-
-
-    /* NUEVO CHAT */
-
-    configurarNuevoChat();
-
-
-    /* BUSCADOR */
-
-    configurarBusquedaChats();
-
-
-    /* BOTÓN ENVIAR */
-
-    const sendButton =
-        document.getElementById(
-            "sendButton"
-        );
-
-    if (sendButton) {
-
-        sendButton.addEventListener(
-            "click",
-            sendMessage
-        );
-
-    } else {
-
-        console.error(
-            "[CHAT ERROR] No se encontró #sendButton."
-        );
-    }
-
-
-    /* CAMPO DE MENSAJE */
-
-    const input =
-        document.getElementById(
-            "messageInput"
-        );
-
-    if (input) {
-
-        input.addEventListener(
-            "keydown",
-            handleKeyPress
-        );
-
-    } else {
-
-        console.error(
-            "[CHAT ERROR] No se encontró #messageInput."
-        );
-    }
-
-
-    console.log(
-        "[J.A.R.V.I.S.] Sistema de chat ONLINE."
-    );
-}
-
-
-/* =====================================================
-   DOM READY
-===================================================== */
-
-document.addEventListener(
-    "DOMContentLoaded",
-    initChat
-);
