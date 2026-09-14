@@ -1,28 +1,46 @@
 /* =========================================================
    STARK INDUSTRIES
-   J.A.R.V.I.S. — 3D IDENTITY CORE
-   Three.js / WebGL
-========================================================= */
+   J.A.R.V.I.S. — CENTRAL COGNITIVE CORE
+   Three.js / WebGL / GLSL
+   ========================================================= */
 
-import * as THREE from "three";
-import { FontLoader } from "three/addons/loaders/FontLoader.js";
-import { TextGeometry } from "three/addons/geometries/TextGeometry.js";
+"use strict";
 
-const stage = document.getElementById("jarvis3d-stage");
+(function () {
 
-if (!stage) {
-    console.warn("[JARVIS 3D] Stage no encontrado.");
-} else {
+    const canvas = document.getElementById("jarvis-3d-canvas");
+
+    if (!canvas) {
+        console.warn("[JARVIS 3D] Canvas del núcleo no encontrado.");
+        return;
+    }
+
+    if (typeof THREE === "undefined") {
+        console.error("[JARVIS 3D] Three.js no está disponible.");
+        return;
+    }
+
+
+    /* =====================================================
+       CONFIGURACIÓN
+    ===================================================== */
 
     let scene;
     let camera;
     let renderer;
-    let group;
-    let mainText;
-    let goldShell;
-    let subtitle;
-    let lightSweep;
+
+    let coreGroup;
+    let coreSphere;
+    let energyParticles;
+    let outerParticles;
+
+    let ring1;
+    let ring2;
+    let ring3;
+
     let animationFrame;
+
+    const clock = new THREE.Clock();
 
     const pointer = {
         x: 0,
@@ -31,24 +49,38 @@ if (!stage) {
         targetY: 0
     };
 
-    const clock = new THREE.Clock();
+
+    /* =====================================================
+       INICIALIZACIÓN
+    ===================================================== */
 
     init();
+
 
     function init() {
 
         scene = new THREE.Scene();
 
         camera = new THREE.PerspectiveCamera(
-            32,
-            stage.clientWidth / stage.clientHeight,
+            42,
+            getWidth() / getHeight(),
             0.1,
             100
         );
 
-        camera.position.set(0, 0.05, 5.5);
+        camera.position.set(
+            0,
+            0,
+            5.2
+        );
+
+
+        /* =================================================
+           RENDERER
+        ================================================= */
 
         renderer = new THREE.WebGLRenderer({
+            canvas: canvas,
             antialias: true,
             alpha: true,
             powerPreference: "high-performance"
@@ -59,35 +91,104 @@ if (!stage) {
         );
 
         renderer.setSize(
-            stage.clientWidth,
-            stage.clientHeight
+            getWidth(),
+            getHeight(),
+            false
         );
 
-        renderer.outputColorSpace = THREE.SRGBColorSpace;
+        renderer.setClearColor(
+            0x000000,
+            0
+        );
 
-        renderer.toneMapping = THREE.ACESFilmicToneMapping;
-        renderer.toneMappingExposure = 1.15;
 
-        renderer.domElement.className = "jarvis3d-canvas";
+        /* =================================================
+           GRUPO PRINCIPAL
+        ================================================= */
 
-        stage.appendChild(renderer.domElement);
+        coreGroup = new THREE.Group();
+
+        scene.add(coreGroup);
+
+
+        /* =================================================
+           LUCES
+        ================================================= */
 
         createLights();
-        createInterfaceElements();
-        loadFont();
+
+
+        /* =================================================
+           NÚCLEO
+        ================================================= */
+
+        createCore();
+
+
+        /* =================================================
+           ANILLOS
+        ================================================= */
+
+        createRings();
+
+
+        /* =================================================
+           PARTÍCULAS
+        ================================================= */
+
+        createParticles();
+
+
+        /* =================================================
+           EVENTOS
+        ================================================= */
 
         window.addEventListener(
             "resize",
-            resize
+            resize,
+            { passive: true }
         );
 
         window.addEventListener(
             "pointermove",
-            handlePointer
+            handlePointer,
+            { passive: true }
         );
 
+
+        /* =================================================
+           ANIMACIÓN
+        ================================================= */
+
         animate();
+
+        console.log(
+            "[JARVIS 3D] Núcleo cognitivo inicializado."
+        );
     }
+
+
+    /* =====================================================
+       UTILIDADES
+    ===================================================== */
+
+    function getWidth() {
+
+        return Math.max(
+            canvas.clientWidth || canvas.parentElement?.clientWidth || 1,
+            1
+        );
+    }
+
+
+    function getHeight() {
+
+        return Math.max(
+            canvas.clientHeight || canvas.parentElement?.clientHeight || 1,
+            1
+        );
+    }
+
 
     /* =====================================================
        ILUMINACIÓN
@@ -95,424 +196,584 @@ if (!stage) {
 
     function createLights() {
 
-        const ambient = new THREE.AmbientLight(
-            0xffffff,
-            1.1
-        );
+        const ambient =
+            new THREE.AmbientLight(
+                0xffffff,
+                0.7
+            );
 
         scene.add(ambient);
 
-        const goldLight = new THREE.PointLight(
-            0xffb400,
-            10,
-            8
-        );
+
+        const goldLight =
+            new THREE.PointLight(
+                0xffb400,
+                3.5,
+                7
+            );
 
         goldLight.position.set(
-            -2.2,
+            -1.5,
             1.2,
-            2.8
+            2
         );
 
         scene.add(goldLight);
 
-        const redLight = new THREE.PointLight(
-            0xff241c,
-            8,
-            7
-        );
 
-        redLight.position.set(
-            2.5,
+        const warmLight =
+            new THREE.PointLight(
+                0xff8a00,
+                2.2,
+                6
+            );
+
+        warmLight.position.set(
+            1.5,
             -0.8,
-            2.2
+            1.8
         );
 
-        scene.add(redLight);
+        scene.add(warmLight);
 
-        const whiteLight = new THREE.PointLight(
-            0xffffff,
-            5,
-            6
-        );
+
+        const whiteLight =
+            new THREE.PointLight(
+                0xffffff,
+                1.8,
+                5
+            );
 
         whiteLight.position.set(
             0,
-            1.8,
-            3.5
+            0,
+            3
         );
 
         scene.add(whiteLight);
     }
 
-    /* =====================================================
-       ELEMENTOS HOLOGRÁFICOS
-    ===================================================== */
-
-    function createInterfaceElements() {
-
-        const interfaceGroup = new THREE.Group();
-
-        /* Línea horizontal */
-
-        const lineGeometry = new THREE.BufferGeometry();
-
-        lineGeometry.setAttribute(
-            "position",
-            new THREE.Float32BufferAttribute(
-                [
-                    -2.7, -0.92, -0.25,
-                     2.7, -0.92, -0.25
-                ],
-                3
-            )
-        );
-
-        const lineMaterial = new THREE.LineBasicMaterial({
-            color: 0xffb400,
-            transparent: true,
-            opacity: 0.42
-        });
-
-        const line = new THREE.Line(
-            lineGeometry,
-            lineMaterial
-        );
-
-        interfaceGroup.add(line);
-
-        /* Anillos laterales */
-
-        const ringMaterial = new THREE.MeshBasicMaterial({
-            color: 0xffb400,
-            transparent: true,
-            opacity: 0.28,
-            side: THREE.DoubleSide
-        });
-
-        const leftRing = new THREE.Mesh(
-            new THREE.RingGeometry(
-                0.30,
-                0.315,
-                64
-            ),
-            ringMaterial
-        );
-
-        leftRing.position.set(
-            -2.45,
-            0.15,
-            -0.4
-        );
-
-        leftRing.rotation.y = Math.PI / 2;
-
-        interfaceGroup.add(leftRing);
-
-        const rightRing = leftRing.clone();
-
-        rightRing.position.x = 2.45;
-
-        interfaceGroup.add(rightRing);
-
-        /* Puntos holográficos */
-
-        const points = [];
-
-        for (let i = 0; i < 28; i++) {
-
-            const x = (Math.random() - 0.5) * 5.6;
-            const y = (Math.random() - 0.5) * 1.5;
-            const z = -0.4 - Math.random() * 0.8;
-
-            points.push(x, y, z);
-        }
-
-        const pointsGeometry =
-            new THREE.BufferGeometry();
-
-        pointsGeometry.setAttribute(
-            "position",
-            new THREE.Float32BufferAttribute(
-                points,
-                3
-            )
-        );
-
-        const pointsMaterial =
-            new THREE.PointsMaterial({
-                color: 0xffb400,
-                size: 0.025,
-                transparent: true,
-                opacity: 0.55
-            });
-
-        const stars = new THREE.Points(
-            pointsGeometry,
-            pointsMaterial
-        );
-
-        interfaceGroup.add(stars);
-
-        scene.add(interfaceGroup);
-
-        group = interfaceGroup;
-    }
 
     /* =====================================================
-       TEXTO 3D
+       NÚCLEO CENTRAL
+       SHADER GLSL
     ===================================================== */
 
-    function loadFont() {
-
-        const loader = new FontLoader();
-
-        loader.load(
-            "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/fonts/helvetiker_bold.typeface.json",
-
-            function(font) {
-
-                createMainText(font);
-                createSubtitle(font);
-
-            },
-
-            undefined,
-
-            function(error) {
-
-                console.error(
-                    "[JARVIS 3D] No se pudo cargar la fuente.",
-                    error
-                );
-
-                createFallback();
-            }
-        );
-    }
-
-    function createMainText(font) {
-
-        const geometry = new TextGeometry(
-            "J.A.R.V.I.S.",
-            {
-                font: font,
-                size: 0.52,
-                depth: 0.17,
-
-                curveSegments: 10,
-
-                bevelEnabled: true,
-                bevelThickness: 0.035,
-                bevelSize: 0.025,
-                bevelOffset: 0,
-                bevelSegments: 5
-            }
-        );
-
-        geometry.computeBoundingBox();
-
-        const centerOffset =
-            -0.5 *
-            (
-                geometry.boundingBox.max.x -
-                geometry.boundingBox.min.x
-            );
-
-        geometry.translate(
-            centerOffset,
-            -0.22,
-            0
-        );
-
-        /* CAPA DORADA */
-
-        const shellGeometry =
-            geometry.clone();
-
-        const shellMaterial =
-            new THREE.MeshStandardMaterial({
-
-                color: 0xffb400,
-
-                metalness: 0.95,
-                roughness: 0.20,
-
-                emissive: 0x5c3000,
-                emissiveIntensity: 0.18
-            });
-
-        goldShell = new THREE.Mesh(
-            shellGeometry,
-            shellMaterial
-        );
-
-        goldShell.scale.set(
-            1.018,
-            1.018,
-            1.018
-        );
-
-        goldShell.position.z = -0.045;
-
-        scene.add(goldShell);
-
-        /* CUERPO PRINCIPAL */
-
-        const material =
-            new THREE.MeshStandardMaterial({
-
-                color: 0x5b1115,
-
-                metalness: 0.94,
-                roughness: 0.19,
-
-                emissive: 0x260304,
-                emissiveIntensity: 0.22
-            });
-
-        mainText = new THREE.Mesh(
-            geometry,
-            material
-        );
-
-        mainText.position.z = 0;
-
-        scene.add(mainText);
-
-        /* REFLEJO METÁLICO */
-
-        const highlightMaterial =
-            new THREE.MeshStandardMaterial({
-
-                color: 0xd73526,
-
-                metalness: 1,
-                roughness: 0.12,
-
-                emissive: 0x160000,
-                emissiveIntensity: 0.15
-            });
-
-        const highlight =
-            new THREE.Mesh(
-                geometry.clone(),
-                highlightMaterial
-            );
-
-        highlight.scale.set(
-            0.998,
-            0.998,
-            0.72
-        );
-
-        highlight.position.z = 0.025;
-
-        scene.add(highlight);
-    }
-
-    /* =====================================================
-       SUBTÍTULO 3D
-    ===================================================== */
-
-    function createSubtitle(font) {
+    function createCore() {
 
         const geometry =
-            new TextGeometry(
-                "ARTIFICIAL INTELLIGENCE",
-                {
-                    font: font,
-                    size: 0.115,
-                    depth: 0.035,
-                    curveSegments: 5,
-                    bevelEnabled: true,
-                    bevelThickness: 0.008,
-                    bevelSize: 0.006,
-                    bevelSegments: 2
-                }
+            new THREE.SphereGeometry(
+                0.43,
+                64,
+                64
             );
 
-        geometry.computeBoundingBox();
-
-        const width =
-            geometry.boundingBox.max.x -
-            geometry.boundingBox.min.x;
-
-        geometry.translate(
-            -width / 2,
-            -0.72,
-            0
-        );
 
         const material =
-            new THREE.MeshStandardMaterial({
+            new THREE.ShaderMaterial({
 
-                color: 0xaaaeb5,
+                transparent: true,
 
-                metalness: 0.8,
-                roughness: 0.3,
+                depthWrite: false,
 
-                emissive: 0x222222,
-                emissiveIntensity: 0.25
+                uniforms: {
+
+                    uTime: {
+                        value: 0
+                    },
+
+                    uColor: {
+                        value: new THREE.Color(
+                            0xffb400
+                        )
+                    }
+
+                },
+
+                vertexShader: `
+
+                    varying vec3 vNormal;
+                    varying vec3 vPosition;
+
+                    void main() {
+
+                        vNormal = normalize(
+                            normalMatrix * normal
+                        );
+
+                        vPosition = position;
+
+                        gl_Position =
+                            projectionMatrix *
+                            modelViewMatrix *
+                            vec4(position, 1.0);
+                    }
+
+                `,
+
+                fragmentShader: `
+
+                    uniform float uTime;
+                    uniform vec3 uColor;
+
+                    varying vec3 vNormal;
+                    varying vec3 vPosition;
+
+                    void main() {
+
+                        float edge =
+                            1.0 -
+                            abs(vNormal.z);
+
+                        float pulse =
+                            0.5 +
+                            0.5 *
+                            sin(uTime * 2.2);
+
+                        float glow =
+                            pow(
+                                edge,
+                                2.6
+                            );
+
+                        float energy =
+                            0.72 +
+                            pulse * 0.28;
+
+                        vec3 whiteCore =
+                            vec3(
+                                1.0,
+                                0.88,
+                                0.55
+                            );
+
+                        vec3 finalColor =
+                            mix(
+                                uColor,
+                                whiteCore,
+                                glow * 0.72
+                            );
+
+                        finalColor *= energy;
+
+                        float alpha =
+                            0.42 +
+                            glow * 0.42;
+
+                        gl_FragColor =
+                            vec4(
+                                finalColor,
+                                alpha
+                            );
+                    }
+
+                `
+
             });
 
-        subtitle =
+
+        coreSphere =
             new THREE.Mesh(
                 geometry,
                 material
             );
 
-        subtitle.position.z = 0;
 
-        scene.add(subtitle);
+        coreGroup.add(
+            coreSphere
+        );
     }
 
+
     /* =====================================================
-       FALLBACK
+       ANILLOS
     ===================================================== */
 
-    function createFallback() {
+    function createRings() {
 
-        const fallback =
-            document.createElement("div");
+        const material1 =
+            new THREE.MeshBasicMaterial({
 
-        fallback.className =
-            "jarvis3d-fallback";
+                color: 0xffb400,
 
-        fallback.innerHTML = `
-            <strong>J.A.R.V.I.S.</strong>
-            <span>ARTIFICIAL INTELLIGENCE</span>
-        `;
+                transparent: true,
 
-        stage.appendChild(fallback);
+                opacity: 0.46,
+
+                side: THREE.DoubleSide,
+
+                depthWrite: false
+
+            });
+
+
+        const material2 =
+            new THREE.MeshBasicMaterial({
+
+                color: 0xffd35c,
+
+                transparent: true,
+
+                opacity: 0.27,
+
+                side: THREE.DoubleSide,
+
+                depthWrite: false
+
+            });
+
+
+        const material3 =
+            new THREE.MeshBasicMaterial({
+
+                color: 0xffa000,
+
+                transparent: true,
+
+                opacity: 0.20,
+
+                side: THREE.DoubleSide,
+
+                depthWrite: false
+
+            });
+
+
+        /* =================================================
+           ANILLO 1
+        ================================================= */
+
+        ring1 =
+            new THREE.Mesh(
+                new THREE.RingGeometry(
+                    0.56,
+                    0.575,
+                    96
+                ),
+                material1
+            );
+
+
+        ring1.rotation.x =
+            Math.PI * 0.28;
+
+
+        coreGroup.add(
+            ring1
+        );
+
+
+        /* =================================================
+           ANILLO 2
+        ================================================= */
+
+        ring2 =
+            new THREE.Mesh(
+                new THREE.RingGeometry(
+                    0.72,
+                    0.735,
+                    96
+                ),
+                material2
+            );
+
+
+        ring2.rotation.y =
+            Math.PI * 0.48;
+
+
+        coreGroup.add(
+            ring2
+        );
+
+
+        /* =================================================
+           ANILLO 3
+        ================================================= */
+
+        ring3 =
+            new THREE.Mesh(
+                new THREE.RingGeometry(
+                    0.88,
+                    0.895,
+                    96
+                ),
+                material3
+            );
+
+
+        ring3.rotation.x =
+            Math.PI * 0.66;
+
+        ring3.rotation.z =
+            Math.PI * 0.22;
+
+
+        coreGroup.add(
+            ring3
+        );
     }
 
+
     /* =====================================================
-       PARALLAX
+       PARTÍCULAS
+    ===================================================== */
+
+    function createParticles() {
+
+        const particleCount = 180;
+
+        const positions =
+            new Float32Array(
+                particleCount * 3
+            );
+
+        const sizes =
+            new Float32Array(
+                particleCount
+            );
+
+        const speeds =
+            new Float32Array(
+                particleCount
+            );
+
+
+        for (
+            let i = 0;
+            i < particleCount;
+            i++
+        ) {
+
+            const radius =
+                0.9 +
+                Math.random() * 1.15;
+
+            const angle =
+                Math.random() *
+                Math.PI *
+                2;
+
+            const height =
+                (Math.random() - 0.5) *
+                1.7;
+
+
+            positions[i * 3] =
+                Math.cos(angle) *
+                radius;
+
+            positions[i * 3 + 1] =
+                height;
+
+            positions[i * 3 + 2] =
+                Math.sin(angle) *
+                radius *
+                0.58;
+
+
+            sizes[i] =
+                0.018 +
+                Math.random() *
+                0.045;
+
+
+            speeds[i] =
+                0.15 +
+                Math.random() *
+                0.45;
+        }
+
+
+        const geometry =
+            new THREE.BufferGeometry();
+
+
+        geometry.setAttribute(
+            "position",
+            new THREE.BufferAttribute(
+                positions,
+                3
+            )
+        );
+
+
+        geometry.setAttribute(
+            "size",
+            new THREE.BufferAttribute(
+                sizes,
+                1
+            )
+        );
+
+
+        geometry.setAttribute(
+            "speed",
+            new THREE.BufferAttribute(
+                speeds,
+                1
+            )
+        );
+
+
+        const material =
+            new THREE.PointsMaterial({
+
+                color: 0xffc84d,
+
+                size: 0.035,
+
+                transparent: true,
+
+                opacity: 0.58,
+
+                depthWrite: false,
+
+                blending:
+                    THREE.AdditiveBlending
+            });
+
+
+        energyParticles =
+            new THREE.Points(
+                geometry,
+                material
+            );
+
+
+        coreGroup.add(
+            energyParticles
+        );
+
+
+        /* =================================================
+           PARTÍCULAS EXTERNAS
+        ================================================= */
+
+        createOuterParticles();
+    }
+
+
+    function createOuterParticles() {
+
+        const count = 80;
+
+        const positions =
+            new Float32Array(
+                count * 3
+            );
+
+
+        for (
+            let i = 0;
+            i < count;
+            i++
+        ) {
+
+            positions[i * 3] =
+                (Math.random() - 0.5) *
+                4.8;
+
+            positions[i * 3 + 1] =
+                (Math.random() - 0.5) *
+                3.1;
+
+            positions[i * 3 + 2] =
+                -0.5 -
+                Math.random() *
+                1.2;
+        }
+
+
+        const geometry =
+            new THREE.BufferGeometry();
+
+
+        geometry.setAttribute(
+            "position",
+            new THREE.BufferAttribute(
+                positions,
+                3
+            )
+        );
+
+
+        const material =
+            new THREE.PointsMaterial({
+
+                color: 0xffb400,
+
+                size: 0.018,
+
+                transparent: true,
+
+                opacity: 0.32,
+
+                depthWrite: false,
+
+                blending:
+                    THREE.AdditiveBlending
+            });
+
+
+        outerParticles =
+            new THREE.Points(
+                geometry,
+                material
+            );
+
+
+        scene.add(
+            outerParticles
+        );
+    }
+
+
+    /* =====================================================
+       MOVIMIENTO DEL MOUSE
     ===================================================== */
 
     function handlePointer(event) {
 
         const rect =
-            stage.getBoundingClientRect();
+            canvas.getBoundingClientRect();
+
+
+        if (
+            rect.width <= 0 ||
+            rect.height <= 0
+        ) {
+            return;
+        }
+
 
         const x =
-            (event.clientX - rect.left) /
+            (
+                event.clientX -
+                rect.left
+            ) /
             rect.width;
 
+
         const y =
-            (event.clientY - rect.top) /
+            (
+                event.clientY -
+                rect.top
+            ) /
             rect.height;
+
 
         pointer.targetX =
             (x - 0.5) * 2;
+
 
         pointer.targetY =
             (y - 0.5) * 2;
     }
 
+
     /* =====================================================
-       ANIMACIÓN
+       ANIMACIÓN PRINCIPAL
     ===================================================== */
 
     function animate() {
@@ -522,60 +783,144 @@ if (!stage) {
                 animate
             );
 
+
         const elapsed =
             clock.getElapsedTime();
 
+
+        /* =================================================
+           SUAVIZAR POINTER
+        ================================================= */
+
         pointer.x +=
-            (pointer.targetX - pointer.x) *
-            0.035;
+            (
+                pointer.targetX -
+                pointer.x
+            ) * 0.035;
+
 
         pointer.y +=
-            (pointer.targetY - pointer.y) *
-            0.035;
+            (
+                pointer.targetY -
+                pointer.y
+            ) * 0.035;
 
-        if (mainText) {
 
-            mainText.rotation.y =
-                pointer.x * 0.13 +
-                Math.sin(elapsed * 0.65) * 0.018;
+        /* =================================================
+           NÚCLEO
+        ================================================= */
 
-            mainText.rotation.x =
-                -pointer.y * 0.07;
+        if (coreSphere) {
 
-            mainText.position.y =
-                Math.sin(elapsed * 0.9) *
-                0.012;
+            coreSphere.material
+                .uniforms
+                .uTime
+                .value =
+                elapsed;
+
+
+            const pulse =
+                1 +
+                Math.sin(
+                    elapsed * 1.8
+                ) * 0.045;
+
+
+            coreSphere.scale.set(
+                pulse,
+                pulse,
+                pulse
+            );
         }
 
-        if (goldShell) {
 
-            goldShell.rotation.y =
-                pointer.x * 0.13 +
-                Math.sin(elapsed * 0.65) * 0.018;
+        /* =================================================
+           MOVIMIENTO DEL GRUPO
+        ================================================= */
 
-            goldShell.rotation.x =
-                -pointer.y * 0.07;
+        if (coreGroup) {
 
-            goldShell.position.y =
-                Math.sin(elapsed * 0.9) *
-                0.012;
+            coreGroup.rotation.y +=
+                0.0015;
+
+
+            coreGroup.rotation.x =
+                pointer.y * 0.08;
+
+
+            coreGroup.rotation.z =
+                pointer.x * 0.035;
+
+
+            coreGroup.position.y =
+                Math.sin(
+                    elapsed * 0.7
+                ) * 0.035;
         }
 
-        if (subtitle) {
 
-            subtitle.rotation.y =
-                pointer.x * 0.09;
+        /* =================================================
+           ANILLOS
+        ================================================= */
 
-            subtitle.rotation.x =
-                -pointer.y * 0.045;
-        }
+        if (ring1) {
 
-        if (group) {
-
-            group.rotation.z =
-                Math.sin(elapsed * 0.25) *
+            ring1.rotation.z +=
                 0.006;
         }
+
+
+        if (ring2) {
+
+            ring2.rotation.z -=
+                0.004;
+
+
+            ring2.rotation.x +=
+                0.0015;
+        }
+
+
+        if (ring3) {
+
+            ring3.rotation.z +=
+                0.0025;
+        }
+
+
+        /* =================================================
+           PARTÍCULAS
+        ================================================= */
+
+        if (energyParticles) {
+
+            energyParticles.rotation.y +=
+                0.0028;
+
+
+            energyParticles.rotation.x =
+                Math.sin(
+                    elapsed * 0.35
+                ) * 0.08;
+        }
+
+
+        if (outerParticles) {
+
+            outerParticles.rotation.y +=
+                0.00045;
+
+
+            outerParticles.rotation.z =
+                Math.sin(
+                    elapsed * 0.18
+                ) * 0.025;
+        }
+
+
+        /* =================================================
+           RENDER
+        ================================================= */
 
         renderer.render(
             scene,
@@ -583,30 +928,62 @@ if (!stage) {
         );
     }
 
+
     /* =====================================================
        RESPONSIVE
     ===================================================== */
 
     function resize() {
 
-        if (!stage || !renderer) {
+        if (!renderer || !camera) {
             return;
         }
 
+
         const width =
-            Math.max(stage.clientWidth, 1);
+            getWidth();
+
 
         const height =
-            Math.max(stage.clientHeight, 1);
+            getHeight();
+
 
         camera.aspect =
             width / height;
 
+
         camera.updateProjectionMatrix();
+
 
         renderer.setSize(
             width,
-            height
+            height,
+            false
         );
     }
-}
+
+
+    /* =====================================================
+       LIMPIEZA
+    ===================================================== */
+
+    window.addEventListener(
+        "beforeunload",
+        function () {
+
+            if (animationFrame) {
+
+                cancelAnimationFrame(
+                    animationFrame
+                );
+            }
+
+
+            if (renderer) {
+
+                renderer.dispose();
+            }
+        }
+    );
+
+})();
