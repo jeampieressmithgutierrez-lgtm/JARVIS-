@@ -148,7 +148,6 @@
     </div>
 
 
-
     <!-- =====================================================
          FONDO PRINCIPAL
     ====================================================== -->
@@ -162,7 +161,6 @@
         <div id="scan-overlay"></div>
 
     </div>
-
 
 
     <!-- =====================================================
@@ -180,60 +178,19 @@
 
 
             <!-- =============================================
-                 J.A.R.V.I.S.
+                 MARCA J.A.R.V.I.S.
             ============================================== -->
 
             <div class="top-brand jarvis-3d-brand">
 
                 <div class="jarvis-3d-logo">
 
-                    <div class="jarvis-depth depth-12">
-                        J.A.R.V.I.S.
-                    </div>
-
-                    <div class="jarvis-depth depth-11">
-                        J.A.R.V.I.S.
-                    </div>
-
-                    <div class="jarvis-depth depth-10">
-                        J.A.R.V.I.S.
-                    </div>
-
-                    <div class="jarvis-depth depth-9">
-                        J.A.R.V.I.S.
-                    </div>
-
-                    <div class="jarvis-depth depth-8">
-                        J.A.R.V.I.S.
-                    </div>
-
-                    <div class="jarvis-depth depth-7">
-                        J.A.R.V.I.S.
-                    </div>
-
-                    <div class="jarvis-depth depth-6">
-                        J.A.R.V.I.S.
-                    </div>
-
-                    <div class="jarvis-depth depth-5">
-                        J.A.R.V.I.S.
-                    </div>
-
-                    <div class="jarvis-depth depth-4">
-                        J.A.R.V.I.S.
-                    </div>
-
-                    <div class="jarvis-depth depth-3">
-                        J.A.R.V.I.S.
-                    </div>
-
-                    <div class="jarvis-depth depth-2">
-                        J.A.R.V.I.S.
-                    </div>
-
-                    <div class="jarvis-depth depth-1">
-                        J.A.R.V.I.S.
-                    </div>
+                    <!--
+                        IMPORTANTE:
+                        Antes había múltiples capas repetidas
+                        de J.A.R.V.I.S.
+                        Ahora existe una sola marca.
+                    -->
 
                     <div class="jarvis-front">
                         J.A.R.V.I.S.
@@ -247,7 +204,6 @@
                 </div>
 
             </div>
-
 
 
             <!-- =============================================
@@ -266,7 +222,6 @@
                 <div class="system-line"></div>
 
             </div>
-
 
 
             <!-- =============================================
@@ -295,7 +250,6 @@
         </header>
 
 
-
         <!-- =================================================
              CUERPO PRINCIPAL
         ================================================== -->
@@ -303,81 +257,67 @@
         <div id="main-layout">
 
 
-            <!-- =============================================
+            <!-- =================================================
                  SIDEBAR
-            ============================================== -->
+                 
+                 ORDEN:
+                 1. BUSCAR
+                 2. HISTORIAL
+                 3. HERRAMIENTAS
+                 4. USUARIO
+            ================================================== -->
 
-            <aside id="sidebar">
+            <aside
+                id="sidebar"
+                aria-label="Panel lateral de J.A.R.V.I.S."
+            >
 
 
                 <!-- =========================================
-                     USUARIO
+                     BUSCAR CHAT
                 ========================================== -->
 
-                <section class="sidebar-section user-section">
+                <section
+                    class="sidebar-section search-section"
+                    aria-label="Buscar conversaciones"
+                >
 
-                    <div class="section-label">
-                        USUARIO
-                    </div>
+                    <div class="chat-search">
 
-
-                    <div class="user-account">
-
-                        <div
-                            class="user-avatar"
+                        <span
+                            class="search-icon"
                             aria-hidden="true"
                         >
-                            ◉
-                        </div>
-
-
-                        <div class="user-info">
-
-                            <div
-                                id="user-name"
-                                class="user-name"
-                            >
-                                Invitado
-                            </div>
-
-
-                            <div class="user-status">
-                                SESIÓN TEMPORAL
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-
-                    <!-- =====================================
-                         GOOGLE LOGIN
-                    ====================================== -->
-
-                    <a
-                        href="/auth/google"
-                        id="google-login"
-                        class="google-login"
-                    >
-
-                        <span aria-hidden="true">
-                            ●
+                            ⌕
                         </span>
 
-                        INICIAR CON GOOGLE
 
-                    </a>
+                        <!--
+                            ID compatible con la lógica de búsqueda.
+                            Se conserva como elemento único.
+                        -->
+
+                        <input
+                            id="chatSearch"
+                            type="text"
+                            placeholder="Buscar Chat..."
+                            autocomplete="off"
+                            aria-label="Buscar conversaciones"
+                        >
+
+                    </div>
 
                 </section>
 
 
-
-                <!-- =============================================
+                <!-- =========================================
                      HISTORIAL
-                ============================================== -->
+                ========================================== -->
 
-                <section class="sidebar-section history-section">
+                <section
+                    class="sidebar-section history-section"
+                    aria-label="Historial de conversaciones"
+                >
 
                     <div class="history-header">
 
@@ -398,44 +338,247 @@
                     </div>
 
 
+                    <!-- =====================================
+                         HISTORIAL DINÁMICO
+                         
+                         chat.js escribe aquí.
+                    ====================================== -->
 
-                    <!-- =========================================
-                         BUSCADOR
-                    ========================================== -->
+                    <div
+                        id="chat-history"
+                        aria-label="Conversaciones anteriores"
+                    >
 
-                    <div class="chat-search">
+                        <!--
+                            Las conversaciones son generadas
+                            dinámicamente por chat.js.
+                        -->
 
-                        <span aria-hidden="true">
-                            ⌕
-                        </span>
+                    </div>
+
+                </section>
 
 
-                        <input
-                            id="chatSearchInput"
-                            type="text"
-                            placeholder="Buscar conversaciones..."
-                            autocomplete="off"
-                            aria-label="Buscar conversaciones"
-                        >
+                <!-- =========================================
+                     HERRAMIENTAS
+                ========================================== -->
+
+                <section
+                    class="sidebar-section tools-section"
+                    aria-label="Herramientas"
+                >
+
+                    <div class="tools-header">
+
+                        <div class="section-label">
+                            HERRAMIENTAS
+                        </div>
 
                     </div>
 
 
+                    <div class="tools-list">
 
-                    <!-- =========================================
-                         HISTORIAL DINÁMICO
-                    ========================================== -->
 
-                    <div id="chat-history">
+                        <!--
+                            Estas opciones son visuales por ahora.
+                            No interfieren con chat.js.
+                        -->
 
-                        <!-- chat.js genera aquí las conversaciones -->
+                        <button
+                            class="tool-item"
+                            type="button"
+                            title="Cámara"
+                        >
+
+                            <span
+                                class="tool-icon"
+                                aria-hidden="true"
+                            >
+                                ◉
+                            </span>
+
+                            <span>
+                                WEBCAM
+                            </span>
+
+                        </button>
+
+
+                        <button
+                            class="tool-item"
+                            type="button"
+                            title="Archivos"
+                        >
+
+                            <span
+                                class="tool-icon"
+                                aria-hidden="true"
+                            >
+                                ▣
+                            </span>
+
+                            <span>
+                                ARCHIVOS
+                            </span>
+
+                        </button>
+
+
+                        <button
+                            class="tool-item"
+                            type="button"
+                            title="Otros recursos"
+                        >
+
+                            <span
+                                class="tool-icon"
+                                aria-hidden="true"
+                            >
+                                ◇
+                            </span>
+
+                            <span>
+                                OTROS
+                            </span>
+
+                        </button>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =========================================
+                     USUARIO / INVITADO
+                ========================================== -->
+
+                <section
+                    class="sidebar-section user-section"
+                    aria-label="Cuenta de usuario"
+                >
+
+                    <div class="section-label">
+                        USUARIO
+                    </div>
+
+
+                    <div class="user-account">
+
+
+                        <!-- =================================
+                             AVATAR
+                        ================================== -->
+
+                        <div
+                            class="user-avatar"
+                            aria-hidden="true"
+                        >
+                            ◉
+                        </div>
+
+
+                        <!-- =================================
+                             INFORMACIÓN
+                        ================================== -->
+
+                        <div class="user-info">
+
+                            <div
+                                id="user-name"
+                                class="user-name"
+                            >
+                                Invitado
+                            </div>
+
+
+                            <div class="user-status">
+                                SESIÓN TEMPORAL
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =====================================
+                         ACCESO GOOGLE
+                    ====================================== -->
+
+                    <a
+                        href="/auth/google"
+                        id="google-login"
+                        class="google-login"
+                        aria-label="Iniciar sesión con Google"
+                    >
+
+                        <span
+                            class="google-icon"
+                            aria-hidden="true"
+                        >
+                            G
+                        </span>
+
+                        <span>
+                            INICIAR CON GOOGLE
+                        </span>
+
+                    </a>
+
+
+                    <!-- =====================================
+                         ACCESOS SOCIALES / FUTUROS
+                    ====================================== -->
+
+                    <div
+                        class="login-options"
+                        aria-label="Opciones de acceso"
+                    >
+
+
+                        <button
+                            type="button"
+                            class="login-option"
+                            title="Apple"
+                        >
+
+                            <span
+                                aria-hidden="true"
+                            >
+                                
+                            </span>
+
+                            <small>
+                                Apple
+                            </small>
+
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="login-option"
+                            title="Facebook"
+                        >
+
+                            <span
+                                aria-hidden="true"
+                            >
+                                f
+                            </span>
+
+                            <small>
+                                Facebook
+                            </small>
+
+                        </button>
+
 
                     </div>
 
                 </section>
 
             </aside>
-
 
 
             <!-- =================================================
@@ -451,8 +594,11 @@
                 <!-- =============================================
                      VISUAL CENTRAL
                      
-                     ESTE CONTENEDOR NO EMPUJA LOS MENSAJES.
-                     SERÁ LA ZONA PARA LA IMAGEN DE REFERENCIA.
+                     NO RESERVA ESPACIO.
+                     
+                     Queda detrás de los mensajes.
+                     Aquí colocaremos posteriormente la imagen
+                     de referencia.
                 ============================================== -->
 
                 <div
@@ -469,27 +615,30 @@
                         id="jarvis-visual-frame"
                     >
 
-                        <!--
-                            AQUÍ SE COLOCARÁ LA IMAGEN
-                            DEL NUEVO NÚCLEO / ALMA DE J.A.R.V.I.S.
-
-                            No se agrega una imagen inventada todavía.
-                        -->
-
                         <div
                             id="jarvis-visual-placeholder"
-                        ></div>
+                        >
+
+                            <!--
+                                IMAGEN J.A.R.V.I.S.
+
+                                La colocaremos aquí posteriormente.
+
+                                Ejemplo futuro:
+                                <img src="..." alt="">
+                            -->
+
+                        </div>
 
                     </div>
 
                 </div>
 
 
-
                 <!-- =============================================
                      MENSAJES
                      
-                     QUEDAN POR ENCIMA DEL VISUAL.
+                     Siempre por encima del visual.
                 ============================================== -->
 
                 <div
@@ -498,7 +647,9 @@
                     aria-label="Conversación"
                 >
 
-                    <!-- chat.js genera los mensajes aquí -->
+                    <!--
+                        chat.js genera aquí los mensajes.
+                    -->
 
                 </div>
 
@@ -507,18 +658,60 @@
         </div>
 
 
-
         <!-- =====================================================
              CONSOLA INFERIOR
         ====================================================== -->
 
-        <footer id="console">
+        <footer
+            id="console"
+            aria-label="Entrada de J.A.R.V.I.S."
+        >
 
             <div class="console-wrapper">
 
 
                 <!-- =============================================
-                     ENTRADA DE VOZ
+                     BOTÓN COGNITIVO
+                     
+                     Visualmente preparado.
+                ============================================== -->
+
+                <button
+                    id="cognitiveButton"
+                    class="console-icon-button cognitive-button"
+                    type="button"
+                    aria-label="Sistema cognitivo"
+                    title="Sistema cognitivo"
+                >
+
+                    <span aria-hidden="true">
+                        ◉
+                    </span>
+
+                </button>
+
+
+                <!-- =============================================
+                     CAMPO DE MENSAJE
+                     
+                     ESTE ID NO CAMBIA.
+                     chat.js depende de él.
+                ============================================== -->
+
+                <input
+                    type="text"
+                    id="messageInput"
+                    placeholder="Ingrese su solicitud...."
+                    autocomplete="off"
+                    aria-label="Escribir mensaje"
+                >
+
+
+                <!-- =============================================
+                     MICRÓFONO
+                     
+                     ESTE ID NO CAMBIA.
+                     chat.js depende de él.
                 ============================================== -->
 
                 <button
@@ -528,27 +721,14 @@
                     aria-label="Entrada de voz"
                     title="Entrada de voz"
                 >
+
                     🎙
+
                 </button>
 
 
-
                 <!-- =============================================
-                     CAMPO DE MENSAJE
-                ============================================== -->
-
-                <input
-                    type="text"
-                    id="messageInput"
-                    placeholder="Escriba una instrucción..."
-                    autocomplete="off"
-                    aria-label="Escribir mensaje"
-                >
-
-
-
-                <!-- =============================================
-                     ESTADO DE CONSOLA
+                     ESTADO
                 ============================================== -->
 
                 <div class="console-status">
@@ -560,14 +740,17 @@
                 </div>
 
 
-
                 <!-- =============================================
-                     BOTÓN ENVIAR
+                     ENVIAR
+                     
+                     ESTE ID NO CAMBIA.
+                     chat.js depende de él.
                 ============================================== -->
 
                 <button
                     id="sendButton"
                     type="button"
+                    aria-label="Enviar mensaje"
                 >
                     ENVIAR
                 </button>
@@ -579,11 +762,12 @@
     </div>
 
 
-
     <!-- =====================================================
          JAVASCRIPT
          
-         NO SE TOCA LA LÓGICA DEL CHAT.
+         ORDEN CONSERVADO.
+         
+         NO SE CAMBIA LA LÓGICA DEL CHAT.
     ====================================================== -->
 
     <script src="js/core.js"></script>
