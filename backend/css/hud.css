@@ -1,204 +1,171 @@
 /* =========================================================
-   J.A.R.V.I.S. — CENTRAL CORE / CHAT SOUL
-   El núcleo permanece detrás de los mensajes.
+   J.A.R.V.I.S. — HUD / CENTRAL COGNITIVE CORE
+   Three.js / WebGL detrás de la conversación
+   ========================================================= */
+
+
+/* =========================================================
+   CONTENEDOR DEL CHAT
    ========================================================= */
 
 #chat-container {
     position: relative;
+
     display: flex;
     flex-direction: column;
+
     min-width: 0;
     min-height: 0;
+
     height: 100%;
+
     overflow: hidden;
 }
 
+
 /* =========================================================
-   NÚCLEO CENTRAL
+   CAPA DEL NÚCLEO
+   NO OCUPA ESPACIO EN EL LAYOUT
    ========================================================= */
 
 #jarvis-interface {
     position: absolute;
+
     inset: 0;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 100%;
+    height: 100%;
+
+    display: block;
 
     pointer-events: none;
+
     z-index: 0;
 
-    /* No ocupa espacio dentro del chat */
+    overflow: hidden;
 }
 
-/* Aura detrás del núcleo */
+
+/* =========================================================
+   CANVAS 3D
+   ========================================================= */
+
+#jarvis-3d-canvas {
+    position: absolute;
+
+    left: 0;
+    top: 0;
+
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    pointer-events: none;
+
+    z-index: 0;
+
+    opacity: 0.82;
+
+    background: transparent;
+
+    /* El canvas no debe crear scroll */
+    max-width: 100%;
+    max-height: 100%;
+}
+
+
+/* =========================================================
+   AURA AMBIENTAL
+   Complemento visual detrás del WebGL
+   ========================================================= */
 
 #jarvis-interface::before {
     content: "";
+
     position: absolute;
 
-    width: 280px;
-    height: 280px;
+    left: 50%;
+    top: 50%;
+
+    width: 360px;
+    height: 360px;
+
+    transform: translate(-50%, -50%);
 
     border-radius: 50%;
 
     background:
         radial-gradient(
             circle,
-            rgba(255, 180, 0, 0.13) 0%,
-            rgba(255, 180, 0, 0.055) 28%,
-            rgba(255, 180, 0, 0.015) 52%,
+            rgba(255, 180, 0, 0.075) 0%,
+            rgba(255, 180, 0, 0.035) 25%,
+            rgba(255, 150, 0, 0.015) 48%,
             transparent 72%
         );
 
-    filter: blur(8px);
+    filter: blur(16px);
 
-    animation: coreBreathing 5s ease-in-out infinite;
+    pointer-events: none;
+
+    animation:
+        jarvisAmbientBreath
+        6s
+        ease-in-out
+        infinite;
 }
 
-/* =========================================================
-   NÚCLEO
-   ========================================================= */
-
-.jarvis-blob {
-    position: relative;
-
-    width: 150px;
-    height: 150px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    opacity: 0.72;
-
-    transform: translateZ(0);
-
-    filter:
-        drop-shadow(0 0 12px rgba(255, 180, 0, 0.20))
-        drop-shadow(0 0 35px rgba(255, 180, 0, 0.10));
-
-    animation: coreFloat 6s ease-in-out infinite;
-}
 
 /* =========================================================
-   ANILLOS
+   SEGUNDA AURA
    ========================================================= */
 
-.blob-ring {
+#jarvis-interface::after {
+    content: "";
+
     position: absolute;
 
     left: 50%;
     top: 50%;
 
+    width: 210px;
+    height: 210px;
+
     transform: translate(-50%, -50%);
 
     border-radius: 50%;
 
-    box-sizing: border-box;
-}
-
-/* Anillo exterior */
-
-.ring-outer {
-    width: 150px;
-    height: 150px;
-
-    border: 1px solid rgba(255, 180, 0, 0.28);
-
-    border-style: dashed;
-
-    animation:
-        hudRotate 18s linear infinite,
-        ringPulse 4s ease-in-out infinite;
-}
-
-/* Anillo medio */
-
-.ring-middle {
-    width: 112px;
-    height: 112px;
-
-    border: 1px solid rgba(255, 194, 40, 0.30);
-
-    animation:
-        hudRotateReverse 12s linear infinite,
-        ringPulse 3.5s ease-in-out infinite;
-}
-
-/* Anillo interior */
-
-.ring-inner {
-    width: 76px;
-    height: 76px;
-
-    border: 1px solid rgba(255, 220, 100, 0.42);
+    border: 1px solid rgba(255, 180, 0, 0.055);
 
     box-shadow:
-        0 0 15px rgba(255, 180, 0, 0.15),
-        inset 0 0 15px rgba(255, 180, 0, 0.08);
+        0 0 35px rgba(255, 180, 0, 0.035),
+        inset 0 0 35px rgba(255, 180, 0, 0.025);
 
-    animation: innerPulse 3s ease-in-out infinite;
+    opacity: 0.7;
+
+    pointer-events: none;
+
+    animation:
+        jarvisAmbientRing
+        8s
+        linear
+        infinite;
 }
 
+
 /* =========================================================
-   CORAZÓN DEL NÚCLEO
+   OCULTAMOS EL ANTIGUO NÚCLEO CSS
+   El núcleo real ahora pertenece a Three.js
    ========================================================= */
 
-.blob-core {
-    position: relative;
-
-    width: 42px;
-    height: 42px;
-
-    border-radius: 50%;
-
-    background:
-        radial-gradient(
-            circle at 35% 30%,
-            #ffffff 0%,
-            #ffe9a3 18%,
-            #ffc229 42%,
-            #ff9d00 62%,
-            rgba(120, 65, 0, 0.9) 100%
-        );
-
-    box-shadow:
-        0 0 8px rgba(255, 220, 120, 0.85),
-        0 0 20px rgba(255, 180, 0, 0.65),
-        0 0 45px rgba(255, 150, 0, 0.32),
-        inset 0 0 12px rgba(255, 255, 255, 0.55);
-
-    animation:
-        corePulse 2.8s ease-in-out infinite;
-
-    z-index: 4;
+#jarvis-interface .jarvis-blob {
+    display: none !important;
 }
 
-/* Pequeño punto luminoso interno */
-
-.blob-core::after {
-    content: "";
-
-    position: absolute;
-
-    width: 9px;
-    height: 9px;
-
-    left: 10px;
-    top: 8px;
-
-    border-radius: 50%;
-
-    background: rgba(255, 255, 255, 0.9);
-
-    filter: blur(1px);
-
-    opacity: 0.85;
-}
 
 /* =========================================================
-   MENSAJES POR ENCIMA DEL NÚCLEO
+   MENSAJES
+   SIEMPRE POR ENCIMA DEL NÚCLEO
    ========================================================= */
 
 #messages {
@@ -207,108 +174,102 @@
     z-index: 2;
 
     flex: 1;
+
     min-height: 0;
 
     background: transparent;
+
+    overflow-x: hidden;
 }
 
-/*
-   El núcleo jamás debe bloquear:
-   - mensajes
-   - scroll
-   - botones
-   - input
-*/
-
-#jarvis-interface,
-#jarvis-interface * {
-    pointer-events: none;
-}
 
 /* =========================================================
-   ANIMACIONES
+   GARANTIZAR QUE LOS MENSAJES SEAN INTERACTIVOS
    ========================================================= */
 
-@keyframes hudRotate {
-    from {
-        transform: translate(-50%, -50%) rotate(0deg);
-    }
-
-    to {
-        transform: translate(-50%, -50%) rotate(360deg);
-    }
+#messages,
+#messages * {
+    pointer-events: auto;
 }
 
-@keyframes hudRotateReverse {
-    from {
-        transform: translate(-50%, -50%) rotate(360deg);
-    }
 
-    to {
-        transform: translate(-50%, -50%) rotate(0deg);
-    }
+/* =========================================================
+   EL NÚCLEO JAMÁS INTERFIERE CON EL CHAT
+   ========================================================= */
+
+#jarvis-interface,
+#jarvis-interface *,
+#jarvis-3d-canvas {
+    pointer-events: none !important;
 }
 
-@keyframes corePulse {
+
+/* =========================================================
+   ANIMACIÓN DEL AURA
+   ========================================================= */
+
+@keyframes jarvisAmbientBreath {
+
     0%,
     100% {
-        transform: scale(0.92);
-        opacity: 0.78;
-    }
+        transform:
+            translate(-50%, -50%)
+            scale(0.88);
 
-    50% {
-        transform: scale(1.08);
-        opacity: 1;
-    }
-}
-
-@keyframes coreBreathing {
-    0%,
-    100% {
-        transform: scale(0.90);
-        opacity: 0.55;
-    }
-
-    50% {
-        transform: scale(1.10);
-        opacity: 1;
-    }
-}
-
-@keyframes coreFloat {
-    0%,
-    100% {
-        transform: translateY(0);
-    }
-
-    50% {
-        transform: translateY(-7px);
-    }
-}
-
-@keyframes ringPulse {
-    0%,
-    100% {
         opacity: 0.45;
     }
 
     50% {
-        opacity: 0.90;
+        transform:
+            translate(-50%, -50%)
+            scale(1.08);
+
+        opacity: 0.9;
     }
 }
 
-@keyframes innerPulse {
-    0%,
-    100% {
-        transform: translate(-50%, -50%) scale(0.94);
-        opacity: 0.60;
+
+/* =========================================================
+   ANIMACIÓN DEL ANILLO AMBIENTAL
+   ========================================================= */
+
+@keyframes jarvisAmbientRing {
+
+    from {
+        transform:
+            translate(-50%, -50%)
+            rotate(0deg);
     }
 
-    50% {
-        transform: translate(-50%, -50%) scale(1.06);
-        opacity: 1;
+    to {
+        transform:
+            translate(-50%, -50%)
+            rotate(360deg);
     }
 }
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 1000px) {
+
+    #jarvis-interface::before {
+        width: 300px;
+        height: 300px;
+    }
+
+    #jarvis-interface::after {
+        width: 180px;
+        height: 180px;
+    }
+
+    #jarvis-3d-canvas {
+        opacity: 0.72;
+    }
+}
+
 
 /* =========================================================
    MÓVIL
@@ -316,33 +277,41 @@
 
 @media (max-width: 700px) {
 
-    .jarvis-blob {
-        width: 125px;
-        height: 125px;
+    #jarvis-interface::before {
+        width: 250px;
+        height: 250px;
+
+        filter: blur(13px);
     }
 
-    .ring-outer {
-        width: 125px;
-        height: 125px;
+    #jarvis-interface::after {
+        width: 150px;
+        height: 150px;
     }
 
-    .ring-middle {
-        width: 94px;
-        height: 94px;
+    #jarvis-3d-canvas {
+        opacity: 0.62;
     }
+}
 
-    .ring-inner {
-        width: 64px;
-        height: 64px;
-    }
 
-    .blob-core {
-        width: 36px;
-        height: 36px;
-    }
+/* =========================================================
+   PANTALLAS PEQUEÑAS
+   ========================================================= */
+
+@media (max-width: 450px) {
 
     #jarvis-interface::before {
-        width: 230px;
-        height: 230px;
+        width: 210px;
+        height: 210px;
+    }
+
+    #jarvis-interface::after {
+        width: 125px;
+        height: 125px;
+    }
+
+    #jarvis-3d-canvas {
+        opacity: 0.55;
     }
 }
