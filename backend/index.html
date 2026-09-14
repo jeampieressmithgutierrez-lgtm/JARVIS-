@@ -135,7 +135,9 @@
 
                 <span>STARK INDUSTRIES</span>
 
-                <span class="intro-status-separator">•</span>
+                <span class="intro-status-separator">
+                    •
+                </span>
 
                 <span>COGNITIVE SYSTEM</span>
 
@@ -146,34 +148,21 @@
     </div>
 
 
+
     <!-- =====================================================
          FONDO PRINCIPAL
     ====================================================== -->
 
     <div id="background-container">
 
-        <!-- Partículas existentes -->
-        <canvas
-            id="particles-canvas"
-            aria-hidden="true"
-        ></canvas>
-
-
-        <!-- =================================================
-             CANVAS 3D DEL NÚCLEO COGNITIVO
-        ================================================== -->
-
-        <canvas
-            id="jarvis-3d-canvas"
-            aria-hidden="true"
-        ></canvas>
-
+        <canvas id="particles-canvas"></canvas>
 
         <div id="grid-overlay"></div>
 
         <div id="scan-overlay"></div>
 
     </div>
+
 
 
     <!-- =====================================================
@@ -260,6 +249,7 @@
             </div>
 
 
+
             <!-- =============================================
                  RELOJ CENTRAL
             ============================================== -->
@@ -278,6 +268,7 @@
             </div>
 
 
+
             <!-- =============================================
                  STARK INDUSTRIES
             ============================================== -->
@@ -287,6 +278,7 @@
                 <div class="stark-logo">
                     STARK INDUSTRIES
                 </div>
+
 
                 <div class="system-state">
 
@@ -301,6 +293,7 @@
             </div>
 
         </header>
+
 
 
         <!-- =================================================
@@ -347,6 +340,7 @@
                                 Invitado
                             </div>
 
+
                             <div class="user-status">
                                 SESIÓN TEMPORAL
                             </div>
@@ -354,6 +348,7 @@
                         </div>
 
                     </div>
+
 
 
                     <!-- =====================================
@@ -375,6 +370,7 @@
                     </a>
 
                 </section>
+
 
 
                 <!-- =============================================
@@ -402,6 +398,7 @@
                     </div>
 
 
+
                     <!-- =========================================
                          BUSCADOR
                     ========================================== -->
@@ -424,6 +421,7 @@
                     </div>
 
 
+
                     <!-- =========================================
                          HISTORIAL DINÁMICO
                     ========================================== -->
@@ -439,6 +437,7 @@
             </aside>
 
 
+
             <!-- =================================================
                  ÁREA CENTRAL DEL CHAT
             ================================================== -->
@@ -450,40 +449,47 @@
 
 
                 <!-- =============================================
-                     NÚCLEO COGNITIVO
-                     CAPA VISUAL DETRÁS DEL CHAT
+                     VISUAL CENTRAL
+                     
+                     ESTE CONTENEDOR NO EMPUJA LOS MENSAJES.
+                     SERÁ LA ZONA PARA LA IMAGEN DE REFERENCIA.
                 ============================================== -->
 
-                <section
-                    id="jarvis-interface"
-                    aria-label="Núcleo de J.A.R.V.I.S."
+                <div
+                    id="jarvis-visual"
+                    aria-hidden="true"
                 >
 
                     <div
-                        class="jarvis-blob"
-                        aria-hidden="true"
+                        id="jarvis-visual-aura"
+                    ></div>
+
+
+                    <div
+                        id="jarvis-visual-frame"
                     >
 
-                        <span class="blob-ring ring-outer"></span>
+                        <!--
+                            AQUÍ SE COLOCARÁ LA IMAGEN
+                            DEL NUEVO NÚCLEO / ALMA DE J.A.R.V.I.S.
 
-                        <span class="blob-ring ring-middle"></span>
+                            No se agrega una imagen inventada todavía.
+                        -->
 
-                        <span class="blob-ring ring-inner"></span>
-
-                        <span class="blob-energy energy-one"></span>
-
-                        <span class="blob-energy energy-two"></span>
-
-                        <span class="blob-core"></span>
+                        <div
+                            id="jarvis-visual-placeholder"
+                        ></div>
 
                     </div>
 
-                </section>
+                </div>
+
 
 
                 <!-- =============================================
                      MENSAJES
-                     CAPA SUPERIOR AL NÚCLEO
+                     
+                     QUEDAN POR ENCIMA DEL VISUAL.
                 ============================================== -->
 
                 <div
@@ -499,6 +505,7 @@
             </main>
 
         </div>
+
 
 
         <!-- =====================================================
@@ -525,6 +532,7 @@
                 </button>
 
 
+
                 <!-- =============================================
                      CAMPO DE MENSAJE
                 ============================================== -->
@@ -538,6 +546,7 @@
                 >
 
 
+
                 <!-- =============================================
                      ESTADO DE CONSOLA
                 ============================================== -->
@@ -549,6 +558,7 @@
                     READY
 
                 </div>
+
 
 
                 <!-- =============================================
@@ -566,30 +576,14 @@
 
         </footer>
 
-
     </div>
 
 
-    <!-- =====================================================
-         LIBRERÍAS VISUALES
-         IMPORTANTE:
-         Se cargan ANTES de jarvis3D.js
-    ====================================================== -->
-
-    <!-- Three.js — motor 3D / WebGL -->
-    <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"
-    ></script>
-
-
-    <!-- GSAP — animaciones -->
-    <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"
-    ></script>
-
 
     <!-- =====================================================
-         JAVASCRIPT DEL SISTEMA
+         JAVASCRIPT
+         
+         NO SE TOCA LA LÓGICA DEL CHAT.
     ====================================================== -->
 
     <script src="js/core.js"></script>
@@ -603,19 +597,6 @@
     <script src="js/effects.js"></script>
 
     <script src="js/ui.js"></script>
-
-
-    <!-- =====================================================
-         J.A.R.V.I.S. 3D
-         Debe ejecutarse DESPUÉS de Three.js
-    ====================================================== -->
-
-    <script src="js/jarvis3D.js"></script>
-
-
-    <!-- =====================================================
-         CHAT
-    ====================================================== -->
 
     <script src="js/chat.js"></script>
 
