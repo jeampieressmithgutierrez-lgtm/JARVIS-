@@ -42,23 +42,6 @@
 
 
     <!-- =====================================================
-         LIBRERÍAS VISUALES
-    ====================================================== -->
-
-    <!-- Three.js — motor 3D / WebGL -->
-    <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"
-        defer
-    ></script>
-
-    <!-- GSAP — animaciones -->
-    <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"
-        defer
-    ></script>
-
-
-    <!-- =====================================================
          CSS PRINCIPAL
     ====================================================== -->
 
@@ -170,13 +153,21 @@
     <div id="background-container">
 
         <!-- Partículas existentes -->
-        <canvas id="particles-canvas"></canvas>
+        <canvas
+            id="particles-canvas"
+            aria-hidden="true"
+        ></canvas>
 
-        <!-- Canvas exclusivo para el núcleo 3D -->
+
+        <!-- =================================================
+             CANVAS 3D DEL NÚCLEO COGNITIVO
+        ================================================== -->
+
         <canvas
             id="jarvis-3d-canvas"
             aria-hidden="true"
         ></canvas>
+
 
         <div id="grid-overlay"></div>
 
@@ -460,7 +451,7 @@
 
                 <!-- =============================================
                      NÚCLEO COGNITIVO
-                     PERMANECE DETRÁS DE LOS MENSAJES
+                     CAPA VISUAL DETRÁS DEL CHAT
                 ============================================== -->
 
                 <section
@@ -468,7 +459,6 @@
                     aria-label="Núcleo de J.A.R.V.I.S."
                 >
 
-                    <!-- Núcleo visual 3D -->
                     <div
                         class="jarvis-blob"
                         aria-hidden="true"
@@ -493,7 +483,7 @@
 
                 <!-- =============================================
                      MENSAJES
-                     SIEMPRE POR ENCIMA DEL NÚCLEO
+                     CAPA SUPERIOR AL NÚCLEO
                 ============================================== -->
 
                 <div
@@ -581,6 +571,24 @@
 
 
     <!-- =====================================================
+         LIBRERÍAS VISUALES
+         IMPORTANTE:
+         Se cargan ANTES de jarvis3D.js
+    ====================================================== -->
+
+    <!-- Three.js — motor 3D / WebGL -->
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"
+    ></script>
+
+
+    <!-- GSAP — animaciones -->
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"
+    ></script>
+
+
+    <!-- =====================================================
          JAVASCRIPT DEL SISTEMA
     ====================================================== -->
 
@@ -595,6 +603,19 @@
     <script src="js/effects.js"></script>
 
     <script src="js/ui.js"></script>
+
+
+    <!-- =====================================================
+         J.A.R.V.I.S. 3D
+         Debe ejecutarse DESPUÉS de Three.js
+    ====================================================== -->
+
+    <script src="js/jarvis3D.js"></script>
+
+
+    <!-- =====================================================
+         CHAT
+    ====================================================== -->
 
     <script src="js/chat.js"></script>
 
