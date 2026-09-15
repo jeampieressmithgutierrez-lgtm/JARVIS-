@@ -2,6 +2,7 @@
 <html lang="es">
 
 <head>
+
     <meta charset="UTF-8">
 
     <meta
@@ -20,6 +21,7 @@
     >
 
     <title>J.A.R.V.I.S. • Stark Industries</title>
+
 
     <!-- =====================================================
          FUENTES
@@ -54,46 +56,24 @@
 
 
     <!-- =====================================================
-         CSS PRINCIPAL
+         CSS
     ====================================================== -->
 
-    <link
-        rel="stylesheet"
-        href="css/styles.css"
-    >
-
-    <link
-        rel="stylesheet"
-        href="css/hud.css"
-    >
-
-    <link
-        rel="stylesheet"
-        href="css/chat.css"
-    >
-
-    <link
-        rel="stylesheet"
-        href="css/animations.css"
-    >
-
-    <link
-        rel="stylesheet"
-        href="css/responsive.css"
-    >
-
-    <link
-        rel="stylesheet"
-        href="css/jarvis-intro.css"
-    >
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/hud.css">
+    <link rel="stylesheet" href="css/chat.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/jarvis-intro.css">
 
 </head>
 
 
 <body>
 
+
     <!-- =====================================================
-         INTRO CINEMÁTICA
+         INTRO
     ====================================================== -->
 
     <div
@@ -107,6 +87,7 @@
                 class="intro-logo"
                 aria-label="J.A.R.V.I.S."
             >
+
                 <span class="intro-j-space">J</span>
 
                 <span class="intro-letter intro-j">J</span>
@@ -120,6 +101,7 @@
                 <span class="intro-letter intro-i">I</span>
                 <span class="intro-letter intro-dot">.</span>
                 <span class="intro-letter intro-s">S</span>
+
             </div>
 
             <div class="intro-subtitle">
@@ -127,10 +109,17 @@
             </div>
 
             <div class="intro-status">
+
                 <span class="intro-status-dot"></span>
+
                 <span>STARK INDUSTRIES</span>
-                <span class="intro-status-separator">•</span>
+
+                <span class="intro-status-separator">
+                    •
+                </span>
+
                 <span>COGNITIVE SYSTEM</span>
+
             </div>
 
         </div>
@@ -144,7 +133,6 @@
 
     <div id="background-container">
 
-        <!-- Conservado para el sistema existente de partículas -->
         <canvas
             id="particles-canvas"
             aria-hidden="true"
@@ -158,20 +146,20 @@
 
 
     <!-- =====================================================
-         HUD PRINCIPAL
+         HUD
     ====================================================== -->
 
     <div id="hud">
 
 
         <!-- =================================================
-             BARRA SUPERIOR
+             TOPBAR
         ================================================== -->
 
         <header id="topbar">
 
 
-            <!-- J.A.R.V.I.S. -->
+            <!-- JARVIS -->
 
             <div class="top-brand jarvis-brand">
 
@@ -202,7 +190,7 @@
             </div>
 
 
-            <!-- STARK INDUSTRIES -->
+            <!-- STARK -->
 
             <div class="stark-header">
 
@@ -230,7 +218,7 @@
 
 
         <!-- =================================================
-             ESTRUCTURA PRINCIPAL
+             MAIN
         ================================================== -->
 
         <div id="main-layout">
@@ -243,9 +231,7 @@
             <aside id="sidebar">
 
 
-                <!-- =================================================
-                     BUSCADOR
-                ================================================== -->
+                <!-- BUSCADOR -->
 
                 <section class="sidebar-section search-section">
 
@@ -275,9 +261,7 @@
                 </section>
 
 
-                <!-- =================================================
-                     HISTORIAL
-                ================================================== -->
+                <!-- HISTORIAL -->
 
                 <section class="sidebar-section history-section">
 
@@ -301,16 +285,14 @@
 
                     <div id="chat-history">
 
-                        <!-- chat.js genera aquí las conversaciones -->
+                        <!-- chat.js genera las conversaciones -->
 
                     </div>
 
                 </section>
 
 
-                <!-- =================================================
-                     HERRAMIENTAS
-                ================================================== -->
+                <!-- HERRAMIENTAS -->
 
                 <section class="sidebar-section tools-section">
 
@@ -370,9 +352,7 @@
                 </section>
 
 
-                <!-- =================================================
-                     USUARIO
-                ================================================== -->
+                <!-- USUARIO -->
 
                 <section class="sidebar-section user-section">
 
@@ -408,8 +388,6 @@
                     </div>
 
 
-                    <!-- GOOGLE -->
-
                     <a
                         href="/auth/google"
                         id="google-login"
@@ -432,7 +410,7 @@
 
 
             <!-- =================================================
-                 ÁREA CENTRAL
+                 CHAT
             ================================================== -->
 
             <main
@@ -441,9 +419,7 @@
             >
 
 
-                <!-- =================================================
-                     NÚCLEO 3D
-                ================================================== -->
+                <!-- NÚCLEO -->
 
                 <section
                     id="jarvis-visual"
@@ -458,11 +434,7 @@
                 </section>
 
 
-                <!-- =================================================
-                     INTERFAZ 3D ANTIGUA
-                     Se conserva el ID para compatibilidad,
-                     pero el nuevo núcleo la reemplaza visualmente.
-                ================================================== -->
+                <!-- COMPATIBILIDAD CON SISTEMA ANTIGUO -->
 
                 <section
                     id="jarvis-interface"
@@ -470,24 +442,16 @@
                 ></section>
 
 
-                <!-- =================================================
-                     MENSAJES
-                ================================================== -->
+                <!-- MENSAJES -->
 
                 <div
                     id="messages"
                     aria-live="polite"
                     aria-label="Conversación"
-                >
-
-                    <!-- chat.js genera los mensajes -->
-
-                </div>
+                ></div>
 
 
-                <!-- =================================================
-                     ESTADO DE PROCESAMIENTO
-                ================================================== -->
+                <!-- PROCESANDO -->
 
                 <div
                     id="jarvisProcessing"
@@ -500,7 +464,7 @@
 
 
         <!-- =====================================================
-             COMPOSER INFERIOR
+             COMPOSER
         ====================================================== -->
 
         <footer id="console">
@@ -508,7 +472,23 @@
             <div class="console-wrapper">
 
 
-                <!-- MICRÓFONO -->
+                <!-- =================================================
+                     CAMPO DE TEXTO
+                ================================================== -->
+
+                <input
+                    type="text"
+                    id="messageInput"
+                    placeholder="Escriba una instrucción..."
+                    autocomplete="off"
+                    aria-label="Escribir mensaje"
+                >
+
+
+                <!-- =================================================
+                     MICRÓFONO
+                     AHORA A LA DERECHA DEL INPUT
+                ================================================== -->
 
                 <button
                     id="voiceButton"
@@ -521,18 +501,9 @@
                 </button>
 
 
-                <!-- CAMPO -->
-
-                <input
-                    type="text"
-                    id="messageInput"
-                    placeholder="Escriba una instrucción..."
-                    autocomplete="off"
-                    aria-label="Escribir mensaje"
-                >
-
-
-                <!-- ESTADO -->
+                <!-- =================================================
+                     ESTADO
+                ================================================== -->
 
                 <div class="console-status">
 
@@ -543,7 +514,9 @@
                 </div>
 
 
-                <!-- COGNITIVE -->
+                <!-- =================================================
+                     COGNITIVE
+                ================================================== -->
 
                 <button
                     id="cognitiveButton"
@@ -563,7 +536,9 @@
                 </button>
 
 
-                <!-- ENVIAR -->
+                <!-- =================================================
+                     ENVIAR
+                ================================================== -->
 
                 <button
                     id="sendButton"
@@ -586,26 +561,18 @@
     ====================================================== -->
 
     <script src="js/core.js"></script>
-
     <script src="js/jarvis-intro.js"></script>
-
     <script src="js/background.js"></script>
-
     <script src="js/particles.js"></script>
-
     <script src="js/effects.js"></script>
-
     <script src="js/ui.js"></script>
-
     <script src="js/chat.js"></script>
-
     <script src="js/api.js"></script>
-
     <script src="js/main.js"></script>
 
 
     <!-- =====================================================
-         NUEVO NÚCLEO THREE.JS
+         NÚCLEO THREE.JS
     ====================================================== -->
 
     <script
@@ -615,34 +582,44 @@
 
 
     <!-- =====================================================
-         HERRAMIENTAS SIDEBAR
+         HERRAMIENTAS
     ====================================================== -->
 
     <script>
 
         (() => {
 
-            const toggle = document.getElementById("toolsToggle");
-            const panel = document.getElementById("toolsPanel");
+            const toggle =
+                document.getElementById("toolsToggle");
 
-            if (!toggle || !panel) return;
+            const panel =
+                document.getElementById("toolsPanel");
 
-            toggle.addEventListener("click", () => {
+            if (!toggle || !panel) {
+                return;
+            }
 
-                const abierto =
-                    toggle.getAttribute("aria-expanded") === "true";
+            toggle.addEventListener(
+                "click",
+                () => {
 
-                toggle.setAttribute(
-                    "aria-expanded",
-                    String(!abierto)
-                );
+                    const abierto =
+                        toggle.getAttribute(
+                            "aria-expanded"
+                        ) === "true";
 
-                panel.classList.toggle(
-                    "tools-open",
-                    !abierto
-                );
+                    toggle.setAttribute(
+                        "aria-expanded",
+                        String(!abierto)
+                    );
 
-            });
+                    panel.classList.toggle(
+                        "tools-open",
+                        !abierto
+                    );
+
+                }
+            );
 
         })();
 
@@ -650,4 +627,4 @@
 
 </body>
 
-</html>
+</html>VV
