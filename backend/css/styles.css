@@ -1,1006 +1,908 @@
+/* =========================================================
+   J.A.R.V.I.S.
+   STARK HOLOGRAPHIC INTERFACE
+   ========================================================= */
+
 :root {
-    --bg: #030507;
-    --panel: #090d12;
-    --panel2: #0c1117;
 
-    --gold: #ffbd32;
-    --gold2: #ffd76a;
+    --bg: #020407;
 
-    --white: #f5f7fa;
-    --text: #d8dde5;
-    --muted: #77818e;
+    --glass:
+        rgba(10, 15, 25, 0.60);
 
-    --line: rgba(255, 189, 50, 0.22);
-    --green: #78e39a;
+    --glass-strong:
+        rgba(7, 11, 18, 0.78);
 
-    --sidebar: 286px;
-    --topbar: 92px;
+    --gold:
+        #ffb52e;
+
+    --gold-bright:
+        #ffd76a;
+
+    --gold-soft:
+        rgba(255, 170, 0, 0.40);
+
+    --white:
+        #f5f7fa;
+
+    --text:
+        #d9dde4;
+
+    --muted:
+        #737c88;
+
+    --cyan:
+        #00bfff;
+
+    --border:
+        rgba(255, 170, 0, 0.40);
+
+    --shadow:
+        0 0 30px rgba(255, 170, 0, 0.08);
+
+    --radius:
+        14px;
 }
+
+
+/* =========================================================
+   RESET
+   ========================================================= */
 
 * {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
+
 
 html,
 body {
     width: 100%;
     height: 100%;
-    margin: 0;
     overflow: hidden;
 }
 
+
 body {
+
     background:
         radial-gradient(
-            circle at 65% 45%,
-            rgba(255, 189, 50, 0.045),
-            transparent 30%
-        ),
-        #030507;
+            circle at center,
+            #0a1018 0%,
+            #030507 45%,
+            #010204 100%
+        );
 
     color: var(--text);
-    font-family: Orbitron, system-ui, sans-serif;
+
+    font-family:
+        "Share Tech Mono",
+        monospace;
 
     -webkit-font-smoothing: antialiased;
 }
 
-button,
-input {
-    font: inherit;
-}
-
-button:focus-visible,
-input:focus-visible,
-a:focus-visible {
-    outline: 1px solid var(--gold);
-    outline-offset: 2px;
-}
 
 /* =========================================================
-   FONDO
-========================================================= */
+   THREE.JS BACKGROUND
+   ========================================================= */
 
-#background-container,
-#particles-canvas,
-#grid-overlay,
-#scan-overlay {
+#three-background {
+
     position: fixed;
+
     inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    z-index: 1;
+
     pointer-events: none;
 }
 
-#background-container {
-    z-index: 0;
-    overflow: hidden;
+
+#three-background canvas {
+
+    display: block;
+
+    width: 100% !important;
+    height: 100% !important;
 }
 
-#particles-canvas {
-    width: 100%;
-    height: 100%;
-    opacity: 0.48;
-}
-
-#grid-overlay {
-    background-image:
-        linear-gradient(
-            rgba(255, 189, 50, 0.025) 1px,
-            transparent 1px
-        ),
-        linear-gradient(
-            90deg,
-            rgba(255, 189, 50, 0.025) 1px,
-            transparent 1px
-        );
-
-    background-size: 42px 42px;
-}
-
-#scan-overlay {
-    background:
-        linear-gradient(
-            transparent,
-            rgba(255, 189, 50, 0.025),
-            transparent
-        );
-
-    background-size: 100% 7px;
-    opacity: 0.18;
-}
 
 /* =========================================================
    HUD
-========================================================= */
+   ========================================================= */
 
 #hud {
-    position: relative;
-    z-index: 5;
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 10;
+
+    display: flex;
 
     width: 100%;
     height: 100%;
 
-    display: flex;
-    flex-direction: column;
+    pointer-events: none;
+}
 
-    border: 1px solid var(--line);
 
-    background: rgba(2, 4, 7, 0.55);
+#hud > * {
+
+    pointer-events: auto;
+}
+
+
+/* =========================================================
+   GLASS
+   ========================================================= */
+
+.glass-panel {
+
+    background:
+        rgba(10, 15, 25, 0.60);
+
+    backdrop-filter:
+        blur(12px);
+
+    -webkit-backdrop-filter:
+        blur(12px);
+
+    border:
+        1px solid rgba(255, 170, 0, 0.40);
 
     box-shadow:
-        inset 0 0 90px rgba(0, 0, 0, 0.45);
+        0 0 30px rgba(255, 170, 0, 0.06),
+        inset 0 0 30px rgba(255, 255, 255, 0.015);
 }
 
-/* =========================================================
-   TOPBAR
-========================================================= */
-
-#topbar {
-    position: relative;
-
-    flex: 0 0 var(--topbar);
-    min-height: var(--topbar);
-
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-
-    align-items: center;
-
-    padding: 0 30px;
-
-    border-bottom: 1px solid var(--line);
-
-    background:
-        linear-gradient(
-            180deg,
-            rgba(9, 12, 17, 0.92),
-            rgba(5, 8, 12, 0.78)
-        );
-}
-
-#topbar::after {
-    content: "";
-
-    position: absolute;
-
-    left: 0;
-    right: 0;
-    bottom: -1px;
-
-    height: 1px;
-
-    background:
-        linear-gradient(
-            90deg,
-            transparent,
-            rgba(255, 189, 50, 0.55),
-            transparent
-        );
-}
-
-/* =========================================================
-   JARVIS HEADER
-========================================================= */
-
-.jarvis-3d-brand {
-    display: flex;
-    flex-direction: column;
-
-    align-items: flex-start;
-    justify-content: center;
-
-    min-height: 60px;
-}
-
-.jarvis-3d-logo {
-    position: relative;
-
-    height: 31px;
-
-    display: flex;
-    align-items: center;
-}
-
-.jarvis-depth {
-    display: none;
-}
-
-.jarvis-front {
-    display: block;
-
-    color: var(--white);
-
-    font-size: 24px;
-    font-weight: 600;
-
-    letter-spacing: 0.18em;
-    line-height: 1;
-}
-
-.jarvis-subtitle-3d {
-    margin-top: 8px;
-
-    color: var(--gold);
-
-    font-family: "Share Tech Mono", monospace;
-
-    font-size: 9px;
-
-    letter-spacing: 0.27em;
-}
-
-/* =========================================================
-   RELOJ
-========================================================= */
-
-.top-center {
-    display: flex;
-    flex-direction: column;
-
-    align-items: center;
-
-    gap: 9px;
-}
-
-#clock {
-    color: #e6e9ed;
-
-    font-family: "Share Tech Mono", monospace;
-
-    font-size: 15px;
-
-    letter-spacing: 0.16em;
-}
-
-.system-line {
-    width: 78px;
-    height: 1px;
-
-    background:
-        linear-gradient(
-            90deg,
-            transparent,
-            var(--gold),
-            transparent
-        );
-}
-
-/* =========================================================
-   STARK INDUSTRIES
-========================================================= */
-
-.stark-brand {
-    justify-self: end;
-
-    display: flex;
-    flex-direction: column;
-
-    align-items: flex-end;
-
-    gap: 8px;
-}
-
-.stark-logo {
-    color: #d7dbe0;
-
-    font-size: 12px;
-    font-weight: 700;
-
-    letter-spacing: 0.32em;
-
-    text-transform: uppercase;
-}
-
-.system-state {
-    display: flex;
-    align-items: center;
-
-    gap: 7px;
-
-    color: var(--muted);
-
-    font-family: "Share Tech Mono", monospace;
-
-    font-size: 9px;
-
-    letter-spacing: 0.18em;
-}
-
-#status-light {
-    width: 6px;
-    height: 6px;
-
-    border-radius: 50%;
-
-    background: var(--green);
-
-    box-shadow:
-        0 0 9px rgba(120, 227, 154, 0.8);
-}
-
-/* =========================================================
-   MAIN LAYOUT
-========================================================= */
-
-#main-layout {
-    min-height: 0;
-
-    flex: 1;
-
-    display: grid;
-
-    grid-template-columns:
-        var(--sidebar)
-        minmax(0, 1fr);
-}
 
 /* =========================================================
    SIDEBAR
-========================================================= */
+   ========================================================= */
 
 #sidebar {
-    min-width: 0;
-    min-height: 0;
 
     position: relative;
 
-    z-index: 40;
+    width: 280px;
 
-    display: flex !important;
-    flex-direction: column !important;
-
-    padding: 18px 15px 14px;
-
-    border-right:
-        1px solid rgba(255, 189, 50, 0.17);
-
-    background:
-        linear-gradient(
-            180deg,
-            rgba(8, 11, 16, 0.97),
-            rgba(3, 6, 9, 0.93)
-        );
-
-    overflow: hidden;
-}
-
-#sidebar::before {
-    content: "";
-
-    position: absolute;
-
-    top: 0;
-    left: 0;
-
-    width: 2px;
     height: 100%;
 
-    background:
-        linear-gradient(
-            var(--gold),
-            transparent 70%
-        );
-
-    opacity: 0.55;
-}
-
-.sidebar-section {
-    position: relative;
-
-    min-width: 0;
-}
-
-.section-label {
-    color: var(--muted);
-
-    font-family: "Share Tech Mono", monospace;
-
-    font-size: 9px;
-
-    letter-spacing: 0.22em;
-
-    text-transform: uppercase;
-}
-
-/* =========================================================
-   ORDEN SIDEBAR
-========================================================= */
-
-#sidebar > .user-section {
-    order: 4 !important;
-
-    margin-top: auto !important;
-}
-
-#sidebar > .history-section {
-    order: 2 !important;
-
-    min-height: 0;
-
-    flex: 1 1 auto;
-
     display: flex;
+
     flex-direction: column;
-}
 
-#sidebar > .tools-section {
-    order: 3 !important;
-}
+    padding: 18px;
 
-/* =========================================================
-   BUSCADOR
-========================================================= */
+    gap: 14px;
 
-.history-section .chat-search {
-    order: 1;
-}
+    border-top: 0;
+    border-bottom: 0;
+    border-left: 0;
 
-.history-section .history-header {
-    order: 2;
-}
-
-.history-section #chat-history {
-    order: 3;
-}
-
-.chat-search {
-    height: 40px;
-
-    display: flex;
-    align-items: center;
-
-    gap: 9px;
-
-    margin-bottom: 12px;
-
-    padding: 0 12px;
-
-    border:
-        1px solid rgba(255, 255, 255, 0.09);
-
-    border-radius: 10px;
-
-    background:
-        rgba(255, 255, 255, 0.025);
-
-    transition: 0.2s;
-}
-
-.chat-search:focus-within {
-    border-color:
-        rgba(255, 189, 50, 0.5);
-
-    box-shadow:
-        0 0 20px rgba(255, 189, 50, 0.06);
-}
-
-.chat-search > span {
-    color: var(--gold);
-
-    font-size: 18px;
-}
-
-.chat-search input {
-    width: 100%;
-    min-width: 0;
-
-    border: 0;
-    outline: 0;
-
-    background: transparent;
-
-    color: var(--white);
-
-    font-family: "Share Tech Mono", monospace;
-
-    font-size: 11px;
-}
-
-.chat-search input::placeholder {
-    color: #626b76;
-}
-
-/* =========================================================
-   HISTORIAL
-========================================================= */
-
-.history-header {
-    display: flex;
-    align-items: center;
-
-    justify-content: space-between;
-
-    margin:
-        0 2px 8px;
-}
-
-#newChatButton {
-    width: 28px;
-    height: 28px;
-
-    display: grid;
-    place-items: center;
-
-    padding: 0;
-
-    border:
-        1px solid rgba(255, 189, 50, 0.3);
-
-    border-radius: 8px;
-
-    background:
-        rgba(255, 189, 50, 0.045);
-
-    color: var(--gold);
-
-    cursor: pointer;
-}
-
-#newChatButton:hover {
-    background:
-        rgba(255, 189, 50, 0.12);
-
-    border-color:
-        rgba(255, 189, 50, 0.65);
-}
-
-#chat-history {
-    min-height: 0;
-
-    flex: 1;
-
-    overflow: auto;
-
-    padding: 2px 2px 10px;
-
-    scrollbar-width: thin;
-
-    scrollbar-color:
-        rgba(255, 189, 50, 0.22)
-        transparent;
-}
-
-.chat-history-item {
-    min-height: 43px;
-
-    display: flex;
-    align-items: center;
-
-    margin: 4px 0;
-
-    padding:
-        0 10px 0 12px;
-
-    border:
-        1px solid transparent;
-
-    border-radius: 10px;
-
-    color: #aeb5bf;
-
-    background: transparent;
-
-    cursor: pointer;
-
-    transition: 0.2s;
-}
-
-.chat-history-item::before {
-    content: "";
-
-    width: 5px;
-    height: 5px;
-
-    flex: 0 0 5px;
-
-    margin-right: 9px;
-
-    border-radius: 50%;
-
-    background: #4d5660;
-}
-
-.chat-history-item:hover {
-    color: #e3e7ec;
-
-    border-color:
-        rgba(255, 189, 50, 0.14);
-
-    background:
-        rgba(255, 189, 50, 0.035);
-}
-
-.chat-history-item.active {
-    color: #fff;
-
-    border-color:
-        rgba(255, 189, 50, 0.32);
-
-    background:
-        linear-gradient(
-            90deg,
-            rgba(255, 189, 50, 0.095),
-            rgba(255, 189, 50, 0.025)
-        );
-
-    box-shadow:
-        inset 2px 0 var(--gold);
-}
-
-.chat-history-item.active::before {
-    background: var(--gold);
-
-    box-shadow:
-        0 0 8px rgba(255, 189, 50, 0.7);
-}
-
-.chat-history-title {
-    min-width: 0;
-
-    flex: 1;
+    border-radius: 0 18px 18px 0;
 
     overflow: hidden;
-
-    white-space: nowrap;
-
-    text-overflow: ellipsis;
-
-    font-family: "Share Tech Mono", monospace;
-
-    font-size: 10px;
 }
+
 
 /* =========================================================
-   HERRAMIENTAS
-========================================================= */
+   SEARCH
+   ========================================================= */
 
-.tools-section {
-    order: 3 !important;
+.sidebar-search {
 
-    flex: 0 0 auto;
+    height: 44px;
 
-    margin-top: 8px;
-
-    padding-top: 8px;
-
-    border-top:
-        1px solid rgba(255, 255, 255, 0.055);
-}
-
-.tools-section .section-label {
-    display: flex;
-
-    align-items: center;
-
-    min-height: 42px;
-
-    padding: 0 12px;
-
-    border:
-        1px solid rgba(255, 189, 50, 0.2);
-
-    border-radius: 10px;
-
-    color: #cdd2d8;
-
-    background:
-        linear-gradient(
-            90deg,
-            rgba(255, 189, 50, 0.055),
-            rgba(255, 255, 255, 0.015)
-        );
-}
-
-.tools-section .section-label::before {
-    content: "✦";
-
-    margin-right: 9px;
-
-    color: var(--gold);
-
-    font-size: 12px;
-}
-
-.tools-section .tool-item {
-    display: none !important;
-}
-
-/* =========================================================
-   USUARIO / LOGIN
-========================================================= */
-
-.user-section {
-    order: 4 !important;
-
-    flex: 0 0 auto;
-
-    margin-top: auto !important;
-
-    padding-top: 12px;
-
-    border-top:
-        1px solid rgba(255, 255, 255, 0.055);
-}
-
-.user-section > .section-label {
-    margin-bottom: 8px;
-}
-
-.user-account {
     display: flex;
 
     align-items: center;
 
     gap: 10px;
 
-    margin-bottom: 9px;
-
-    padding: 9px 10px;
-
-    border:
-        1px solid rgba(255, 255, 255, 0.075);
-
-    border-radius: 11px;
+    padding: 0 13px;
 
     background:
-        rgba(255, 255, 255, 0.025);
+        rgba(0, 0, 0, 0.28);
+
+    border:
+        1px solid rgba(255, 255, 255, 0.08);
+
+    border-radius: 10px;
+
+    transition:
+        border-color .25s ease,
+        box-shadow .25s ease;
 }
 
-.user-avatar {
-    width: 31px;
-    height: 31px;
 
-    display: grid;
-    place-items: center;
+.sidebar-search:focus-within {
 
-    flex: 0 0 31px;
+    border-color:
+        rgba(255, 183, 45, .55);
 
-    border:
-        1px solid rgba(255, 189, 50, 0.35);
+    box-shadow:
+        0 0 18px rgba(255, 170, 0, .08);
+}
 
-    border-radius: 50%;
 
-    color: var(--gold);
+.sidebar-search input {
 
-    background:
-        rgba(255, 189, 50, 0.05);
+    width: 100%;
+
+    border: 0;
+    outline: 0;
+
+    background: transparent;
+
+    color: var(--white);
+
+    font-family:
+        "Share Tech Mono",
+        monospace;
 
     font-size: 12px;
 }
 
-.user-info {
-    min-width: 0;
 
-    flex: 1;
+.sidebar-search input::placeholder {
+
+    color:
+        rgba(255, 255, 255, .35);
 }
 
-.user-name {
+
+.ui-icon {
+
+    color:
+        var(--gold-bright);
+
+    font-size: 20px;
+}
+
+
+/* =========================================================
+   SECTIONS
+   ========================================================= */
+
+.history-section {
+
+    flex: 1;
+
+    min-height: 0;
+
+    display: flex;
+
+    flex-direction: column;
+}
+
+
+.section-heading {
+
+    height: 34px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 0 4px;
+
+    color:
+        rgba(255,255,255,.65);
+
+    font-family:
+        Orbitron,
+        sans-serif;
+
+    font-size: 10px;
+
+    letter-spacing: 2px;
+}
+
+
+.section-heading button {
+
+    width: 28px;
+    height: 28px;
+
+    border: 1px solid
+        rgba(255, 183, 45, .35);
+
+    border-radius: 50%;
+
+    background:
+        rgba(255, 170, 0, .06);
+
+    color:
+        var(--gold-bright);
+
+    cursor: pointer;
+
+    transition:
+        .25s ease;
+}
+
+
+.section-heading button:hover {
+
+    background:
+        rgba(255, 170, 0, .16);
+
+    box-shadow:
+        0 0 15px rgba(255, 170, 0, .16);
+}
+
+
+/* =========================================================
+   HISTORY
+   ========================================================= */
+
+#chat-history {
+
+    flex: 1;
+
+    min-height: 0;
+
+    overflow-y: auto;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+
+    padding: 5px 2px 10px;
+}
+
+
+.chat-history-item {
+
+    position: relative;
+
+    min-height: 48px;
+
+    display: flex;
+
+    align-items: center;
+
+    padding: 10px 13px;
+
+    border:
+        1px solid rgba(255,255,255,.07);
+
+    border-radius: 12px;
+
+    background:
+        rgba(18, 23, 31, .55);
+
+    color:
+        rgba(255,255,255,.65);
+
+    cursor: pointer;
+
+    transition:
+        background .25s ease,
+        border-color .25s ease,
+        transform .25s ease,
+        box-shadow .25s ease;
+}
+
+
+.chat-history-item:hover {
+
+    transform:
+        translateX(2px);
+
+    background:
+        rgba(30, 35, 44, .72);
+
+    border-color:
+        rgba(255,183,45,.22);
+}
+
+
+.chat-history-item.active {
+
+    background:
+        linear-gradient(
+            100deg,
+            rgba(255, 160, 25, .20),
+            rgba(255, 160, 25, .06)
+        );
+
+    border-color:
+        rgba(255,183,45,.65);
+
+    color:
+        #fff;
+
+    box-shadow:
+        0 0 20px rgba(255,160,25,.10),
+        inset 3px 0 0 var(--gold);
+}
+
+
+.chat-history-title {
+
     overflow: hidden;
 
     white-space: nowrap;
 
     text-overflow: ellipsis;
 
-    color: #e5e8ec;
-
-    font-family: "Share Tech Mono", monospace;
-
     font-size: 11px;
 }
 
-.user-status {
-    margin-top: 3px;
-
-    color: #65707b;
-
-    font-family: "Share Tech Mono", monospace;
-
-    font-size: 8px;
-
-    letter-spacing: 0.13em;
-}
 
 /* =========================================================
-   GOOGLE
-========================================================= */
+   TOOLS
+   ========================================================= */
 
-#google-login,
-.google-login,
-#googleLoginButton,
-.google-login-button,
-.login-button {
+.tools-section {
+
+    flex-shrink: 0;
+}
+
+
+.glass-button {
+
     width: 100%;
-    min-height: 40px;
+
+    min-height: 44px;
+
+    border:
+        1px solid rgba(255,170,0,.30);
+
+    border-radius: 11px;
+
+    background:
+        rgba(10, 14, 21, .55);
+
+    color:
+        rgba(255,255,255,.75);
+
+    font-family:
+        Orbitron,
+        sans-serif;
+
+    font-size: 9px;
+
+    letter-spacing: 1.5px;
+
+    cursor: pointer;
+
+    transition:
+        .25s ease;
+}
+
+
+.glass-button:hover {
+
+    color: white;
+
+    border-color:
+        rgba(255,183,45,.65);
+
+    background:
+        rgba(255,170,0,.08);
+
+    box-shadow:
+        0 0 20px rgba(255,170,0,.08);
+}
+
+
+/* =========================================================
+   USER
+   ========================================================= */
+
+.user-section {
+
+    flex-shrink: 0;
+
+    padding-top: 12px;
+
+    border-top:
+        1px solid rgba(255,255,255,.07);
+}
+
+
+.user-status {
 
     display: flex;
 
     align-items: center;
 
-    justify-content: center;
+    gap: 10px;
 
-    position: relative;
+    margin-bottom: 10px;
+}
 
-    border:
-        1px solid rgba(255, 255, 255, 0.11);
 
-    border-radius: 10px;
+.status-dot {
+
+    width: 9px;
+    height: 9px;
+
+    border-radius: 50%;
 
     background:
-        rgba(255, 255, 255, 0.035);
+        var(--gold);
 
-    color: transparent;
+    box-shadow:
+        0 0 12px rgba(255,183,45,.65);
+}
 
-    text-decoration: none;
+
+.user-status strong {
+
+    display: block;
+
+    color: white;
+
+    font-family:
+        Orbitron,
+        sans-serif;
+
+    font-size: 9px;
+
+    letter-spacing: 1px;
+}
+
+
+.user-status small {
+
+    display: block;
+
+    margin-top: 3px;
+
+    color:
+        var(--muted);
+
+    font-size: 9px;
+}
+
+
+/* =========================================================
+   LOGIN METHODS
+   ========================================================= */
+
+.login-methods {
+
+    display: flex;
+
+    gap: 7px;
+}
+
+
+.login-method {
+
+    width: 38px;
+    height: 34px;
+
+    border:
+        1px solid rgba(255,255,255,.10);
+
+    border-radius: 9px;
+
+    background:
+        rgba(255,255,255,.035);
+
+    color:
+        rgba(255,255,255,.75);
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    font-size: 15px;
 
     cursor: pointer;
 
-    transition: 0.2s;
+    transition:
+        .25s ease;
 }
 
-#google-login > span,
-.google-login > span {
-    display: none;
-}
 
-#google-login::before,
-.google-login::before,
-#googleLoginButton::before,
-.google-login-button::before,
-.login-button::before {
-    content: "G";
+.login-method:hover {
 
-    font-family: Arial, sans-serif;
+    transform:
+        translateY(-2px);
 
-    font-size: 18px;
-
-    font-weight: 800;
-
-    background:
-        conic-gradient(
-            from 35deg,
-            #4285f4 0 25%,
-            #34a853 25% 50%,
-            #fbbc05 50% 75%,
-            #ea4335 75% 100%
-        );
-
-    -webkit-background-clip: text;
-    background-clip: text;
-
-    -webkit-text-fill-color: transparent;
-}
-
-#google-login:hover,
-.google-login:hover,
-#googleLoginButton:hover,
-.google-login-button:hover,
-.login-button:hover {
     border-color:
-        rgba(255, 189, 50, 0.4);
+        rgba(255,183,45,.55);
 
-    background:
-        rgba(255, 189, 50, 0.06);
+    color:
+        white;
 
     box-shadow:
-        0 0 18px rgba(255, 189, 50, 0.07);
+        0 0 15px rgba(255,170,0,.10);
 }
 
-/* =========================================================
-   CHAT
-========================================================= */
 
-#chat-container {
+/* =========================================================
+   MAIN
+   ========================================================= */
+
+#main-interface {
+
     position: relative;
 
+    flex: 1;
+
     min-width: 0;
-    min-height: 0;
 
-    overflow: hidden;
-
-    background:
-        radial-gradient(
-            circle at 50% 42%,
-            rgba(255, 189, 50, 0.025),
-            transparent 34%
-        ),
-        linear-gradient(
-            180deg,
-            rgba(5, 8, 12, 0.22),
-            rgba(2, 4, 7, 0.42)
-        );
+    height: 100%;
 }
 
-#jarvis-interface {
-    display: none !important;
-}
 
 /* =========================================================
-   VISUAL CENTRAL
-========================================================= */
+   TOPBAR
+   ========================================================= */
 
-#jarvis-visual {
-    position: absolute;
+#topbar {
 
-    inset: 0;
+    position: relative;
 
-    z-index: 1;
+    height: 92px;
+
+    display: grid;
+
+    grid-template-columns:
+        1fr auto 1fr;
+
+    align-items: center;
+
+    padding:
+        0 30px;
+
+    border-bottom:
+        1px solid rgba(255,170,0,.22);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(2,4,7,.76),
+            rgba(2,4,7,.25)
+        );
+
+    backdrop-filter:
+        blur(10px);
+}
+
+
+.jarvis-brand {
+
+    justify-self: start;
+}
+
+
+.jarvis-name {
+
+    color:
+        #ffffff;
+
+    font-family:
+        Orbitron,
+        sans-serif;
+
+    font-size: 23px;
+
+    font-weight: 600;
+
+    letter-spacing: 5px;
+
+    text-shadow:
+        0 0 20px rgba(255,255,255,.12);
+}
+
+
+.jarvis-subtitle {
+
+    margin-top: 5px;
+
+    color:
+        var(--gold);
+
+    font-family:
+        Orbitron,
+        sans-serif;
+
+    font-size: 8px;
+
+    letter-spacing: 3px;
+}
+
+
+#system-clock {
+
+    color:
+        rgba(255,255,255,.82);
+
+    font-family:
+        "Share Tech Mono",
+        monospace;
+
+    font-size: 19px;
+
+    letter-spacing: 3px;
+
+    text-shadow:
+        0 0 15px rgba(255,183,45,.18);
+}
+
+
+.stark-brand {
+
+    justify-self: end;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    color: white;
+}
+
+
+.stark-mark {
+
+    width: 38px;
+    height: 38px;
 
     display: grid;
 
     place-items: center;
 
-    pointer-events: none;
+    border:
+        1px solid rgba(255,183,45,.45);
 
-    opacity: 0.82;
+    border-radius: 50%;
+
+    color:
+        var(--gold-bright);
+
+    font-family:
+        Orbitron,
+        sans-serif;
+
+    font-weight: 700;
+
+    box-shadow:
+        0 0 18px rgba(255,170,0,.10);
 }
 
-#jarvis-visual img {
-    max-width: min(460px, 55vw);
 
-    max-height: 55vh;
+.stark-brand strong {
 
-    object-fit: contain;
+    display: block;
 
-    filter:
-        drop-shadow(
-            0 0 28px rgba(255, 189, 50, 0.08)
-        );
+    font-family:
+        Orbitron,
+        sans-serif;
 
-    opacity: 0.72;
+    font-size: 11px;
+
+    letter-spacing: 2px;
 }
+
+
+.stark-brand span {
+
+    display: block;
+
+    margin-top: 2px;
+
+    color:
+        var(--gold);
+
+    font-size: 7px;
+
+    letter-spacing: 2px;
+}
+
 
 /* =========================================================
-   MENSAJES
-========================================================= */
+   CHAT
+   ========================================================= */
 
-#messages {
+#chat-container {
+
+    position: relative;
+
+    width: 100%;
+
+    height:
+        calc(100% - 92px);
+
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   3D CORE
+   ========================================================= */
+
+#jarvis-core-stage {
+
     position: absolute;
 
     inset: 0;
 
-    z-index: 5;
-
-    overflow: auto;
-
-    padding:
-        28px 34px 132px;
-
-    scrollbar-width: thin;
-
-    scrollbar-color:
-        rgba(255, 189, 50, 0.18)
-        transparent;
-}
-
-/* =========================================================
-   COMPOSER FLOTANTE
-========================================================= */
-
-#console {
-    position: absolute;
-
-    left: 0;
-    right: 0;
-
-    bottom: 20px;
-
-    z-index: 50;
-
-    width: 100%;
-
-    padding: 0 24px;
-
-    border: 0;
-
-    background: transparent;
+    z-index: 2;
 
     pointer-events: none;
 }
 
+
+/* =========================================================
+   MESSAGES
+   ========================================================= */
+
+#messages {
+
+    position: relative;
+
+    z-index: 5;
+
+    width: 100%;
+    height: 100%;
+
+    overflow-y: auto;
+
+    padding:
+        30px 34px 125px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 20px;
+
+    pointer-events: auto;
+}
+
+
+/* =========================================================
+   FLOATING COMPOSER
+   ========================================================= */
+
+#console {
+
+    position: absolute;
+
+    left: 0;
+    right: 0;
+    bottom: 22px;
+
+    z-index: 20;
+
+    display: flex;
+
+    justify-content: center;
+
+    padding:
+        0 24px;
+
+    pointer-events: none;
+}
+
+
 .console-wrapper {
-    width: min(780px, 88%);
 
-    min-height: 58px;
+    width:
+        min(780px, 90%);
 
-    margin: 0 auto;
+    height: 58px;
 
     display: flex;
 
@@ -1009,284 +911,201 @@ a:focus-visible {
     gap: 7px;
 
     padding:
-        7px 8px 7px 17px;
+        6px 7px 6px 19px;
 
     border:
-        1px solid rgba(255, 189, 50, 0.25);
+        1px solid rgba(255,170,0,.36);
 
-    border-radius: 31px;
+    border-radius: 999px;
 
     background:
-        linear-gradient(
-            180deg,
-            rgba(17, 22, 29, 0.92),
-            rgba(8, 12, 17, 0.94)
-        );
+        rgba(7, 11, 18, .72);
+
+    backdrop-filter:
+        blur(18px);
+
+    -webkit-backdrop-filter:
+        blur(18px);
 
     box-shadow:
-        0 20px 55px rgba(0, 0, 0, 0.55),
-        0 0 28px rgba(255, 189, 50, 0.055),
-        inset 0 1px rgba(255, 255, 255, 0.045);
-
-    backdrop-filter: blur(20px);
+        0 12px 45px rgba(0,0,0,.45),
+        0 0 25px rgba(255,170,0,.08),
+        inset 0 0 20px rgba(255,255,255,.015);
 
     pointer-events: auto;
 }
 
+
 #messageInput {
+
     flex: 1;
 
     min-width: 0;
 
-    height: 42px;
+    height: 100%;
 
     border: 0;
-
     outline: 0;
 
     background: transparent;
 
-    color: #eef1f5;
+    color:
+        white;
 
-    font-family: "Share Tech Mono", monospace;
+    font-family:
+        "Share Tech Mono",
+        monospace;
 
-    font-size: 12px;
+    font-size: 13px;
 }
+
 
 #messageInput::placeholder {
-    color: #626b75;
+
+    color:
+        rgba(255,255,255,.38);
 }
 
+
 /* =========================================================
-   BOTONES
-========================================================= */
+   CONTROLS
+   ========================================================= */
 
 #voiceButton,
-#sendButton,
-.cognitive-button {
-    flex: 0 0 auto;
+#cognitiveButton,
+#sendButton {
+
+    flex-shrink: 0;
+
+    width: 42px;
+    height: 42px;
 
     display: grid;
 
     place-items: center;
 
-    padding: 0;
+    border:
+        1px solid rgba(255,183,45,.30);
+
+    border-radius: 50%;
+
+    background:
+        rgba(255,255,255,.035);
+
+    color:
+        rgba(255,255,255,.75);
 
     cursor: pointer;
 
-    transition: 0.2s;
+    transition:
+        transform .2s ease,
+        border-color .2s ease,
+        background .2s ease,
+        box-shadow .2s ease;
 }
 
-#voiceButton {
-    width: 42px;
-    height: 42px;
 
-    border:
-        1px solid rgba(255, 255, 255, 0.08);
+#voiceButton:hover,
+#cognitiveButton:hover,
+#sendButton:hover {
 
-    border-radius: 50%;
-
-    background:
-        rgba(255, 255, 255, 0.025);
-
-    color: #aeb7c1;
-
-    font-size: 15px;
-}
-
-#voiceButton:hover {
-    color: var(--gold);
+    transform:
+        translateY(-1px);
 
     border-color:
-        rgba(255, 189, 50, 0.35);
+        rgba(255,205,95,.80);
 
     background:
-        rgba(255, 189, 50, 0.06);
-}
+        rgba(255,170,0,.10);
 
-#sendButton {
-    width: 42px;
-    height: 42px;
-
-    border:
-        1px solid rgba(255, 189, 50, 0.38);
-
-    border-radius: 50%;
-
-    background:
-        rgba(255, 189, 50, 0.08);
-
-    color: var(--gold);
-
-    font-size: 0;
-}
-
-#sendButton::before {
-    content: "➤";
-
-    font-family: Arial, sans-serif;
-
-    font-size: 17px;
-
-    transform: rotate(-7deg);
-}
-
-#sendButton:hover {
-    color: #fff;
-
-    border-color: var(--gold);
-
-    background:
-        rgba(255, 189, 50, 0.16);
+    color:
+        white;
 
     box-shadow:
-        0 0 20px rgba(255, 189, 50, 0.15);
+        0 0 18px rgba(255,170,0,.13);
 }
 
-.cognitive-button {
-    width: 36px;
-    height: 36px;
 
-    border:
-        1px solid rgba(255, 189, 50, 0.24);
-
-    border-radius: 50%;
+#sendButton {
 
     background:
-        rgba(255, 189, 50, 0.035);
+        linear-gradient(
+            145deg,
+            rgba(255,185,50,.22),
+            rgba(255,145,0,.07)
+        );
 
-    color: var(--gold);
+    color:
+        var(--gold-bright);
+
+    font-size: 17px;
 }
 
-.cognitive-button::before {
-    content: "";
 
-    width: 13px;
-    height: 13px;
+.mic-icon {
 
-    border-radius: 50%;
-
-    background:
-        radial-gradient(
-            circle,
-            #ffcf58 0 2px,
-            transparent 2.5px
-        )
-        0 0 / 6px 6px;
+    font-size: 12px;
 }
 
-.console-status {
-    display: none !important;
+
+.cognitive-dots {
+
+    color:
+        var(--gold);
+
+    font-size: 10px;
+
+    line-height: 8px;
+
+    text-align: center;
 }
+
 
 /* =========================================================
-   SCROLLBARS
-========================================================= */
+   SCROLLBAR
+   ========================================================= */
 
-#messages::-webkit-scrollbar,
-#chat-history::-webkit-scrollbar {
-    width: 5px;
+::-webkit-scrollbar {
+
+    width: 4px;
 }
 
-#messages::-webkit-scrollbar-thumb,
-#chat-history::-webkit-scrollbar-thumb {
-    border-radius: 10px;
+
+::-webkit-scrollbar-track {
+
+    background: transparent;
+}
+
+
+::-webkit-scrollbar-thumb {
 
     background:
-        rgba(255, 189, 50, 0.18);
+        rgba(255,183,45,.25);
+
+    border-radius: 99px;
 }
+
 
 /* =========================================================
    RESPONSIVE
-========================================================= */
+   ========================================================= */
 
-@media (max-width: 900px) {
-
-    :root {
-        --sidebar: 245px;
-    }
-
-    #topbar {
-        padding: 0 20px;
-    }
-
-    .jarvis-front {
-        font-size: 20px;
-    }
-
-    .stark-logo {
-        font-size: 10px;
-    }
-
-    #messages {
-        padding-left: 24px;
-        padding-right: 24px;
-    }
-}
-
-@media (max-width: 700px) {
-
-    :root {
-        --topbar: 76px;
-    }
-
-    #main-layout {
-        grid-template-columns: 1fr;
-    }
+@media(max-width: 800px) {
 
     #sidebar {
-        display: none !important;
+        width: 230px;
     }
 
-    #topbar {
-        grid-template-columns: 1fr auto;
+    .jarvis-name {
+        font-size: 18px;
+        letter-spacing: 3px;
     }
 
-    .top-center {
-        justify-self: end;
-    }
-
-    .stark-brand {
-        display: none;
-    }
-
-    #console {
-        padding: 0 10px;
-
-        bottom: 12px;
+    #system-clock {
+        font-size: 14px;
     }
 
     .console-wrapper {
-        width: 100%;
-
-        min-height: 55px;
-    }
-
-    #messages {
-        padding:
-            20px 14px 118px;
-    }
-}
-
-@media (max-width: 420px) {
-
-    .jarvis-front {
-        font-size: 17px;
-    }
-
-    .jarvis-subtitle-3d {
-        font-size: 7px;
-    }
-
-    #clock {
-        font-size: 12px;
-    }
-
-    .console-wrapper {
-        padding-left: 12px;
-    }
-
-    #messageInput {
-        font-size: 11px;
+        width: 94%;
     }
 }
