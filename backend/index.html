@@ -5,30 +5,25 @@
 
     <meta
         name="viewport"
-        content="width=device-width, initial-scale=1.0"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
     >
 
-    <title>J.A.R.V.I.S. — Stark Interface</title>
+    <title>J.A.R.V.I.S. — Artificial Intelligence</title>
 
-    <!-- =====================================================
+    <!-- =========================================================
          FUENTES
-    ====================================================== -->
+    ========================================================== -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
     <link
-        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Share+Tech+Mono&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap"
         rel="stylesheet"
     >
 
-    <!-- =====================================================
-         ESTILOS
-    ====================================================== -->
-    <link rel="stylesheet" href="/css/styles.css">
-
-    <!-- =====================================================
-         THREE.JS IMPORT MAP
-         
-         Three.js recomienda importar el núcleo y los addons
-         desde la misma versión y CDN.
-    ====================================================== -->
+    <!-- =========================================================
+         THREE.JS
+    ========================================================== -->
     <script type="importmap">
     {
         "imports": {
@@ -37,204 +32,365 @@
         }
     }
     </script>
+
+    <!-- =========================================================
+         CSS
+    ========================================================== -->
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body>
 
-    <!-- =====================================================
-         ESCENA 3D
-         Este canvas queda detrás de toda la interfaz.
-    ====================================================== -->
-    <div id="three-background" aria-hidden="true"></div>
+    <!-- =========================================================
+         FONDO
+    ========================================================== -->
 
-    <!-- =====================================================
-         CAPA HUD
-    ====================================================== -->
-    <div id="hud">
+    <div class="background-system">
 
-        <!-- =================================================
-             SIDEBAR
-        ================================================== -->
-        <aside id="sidebar" class="glass-panel">
+        <div class="background-grid"></div>
 
-            <div class="sidebar-search">
-                <span class="ui-icon">⌕</span>
-                <input
-                    id="chatSearch"
-                    type="text"
-                    placeholder="Buscar chats..."
-                    autocomplete="off"
-                >
-            </div>
+        <div class="background-glow background-glow-one"></div>
+        <div class="background-glow background-glow-two"></div>
 
-            <section class="history-section">
+        <div class="scanline"></div>
 
-                <div class="section-heading">
-                    <span>HISTORIAL</span>
+    </div>
 
-                    <button
-                        id="newChatButton"
-                        type="button"
-                        aria-label="Nuevo chat"
-                    >
-                        +
-                    </button>
+
+    <!-- =========================================================
+         HUD PRINCIPAL
+    ========================================================== -->
+
+    <main id="jarvis-app">
+
+        <!-- =====================================================
+             TOP BAR
+        ====================================================== -->
+
+        <header id="topbar">
+
+            <!-- JARVIS -->
+            <section class="jarvis-brand">
+
+                <div class="brand-line"></div>
+
+                <div class="jarvis-title">
+                    J.A.R.V.I.S.
                 </div>
 
-                <div id="chat-history"></div>
-
-            </section>
-
-            <section class="tools-section">
-
-                <button
-                    id="toolsButton"
-                    class="glass-button"
-                    type="button"
-                >
-                    ✦ HERRAMIENTAS
-                </button>
-
-            </section>
-
-            <section class="user-section">
-
-                <div class="user-status">
-                    <span class="status-dot"></span>
-
-                    <div>
-                        <strong>USUARIO</strong>
-                        <small id="userStatus">
-                            INVITADO
-                        </small>
-                    </div>
-                </div>
-
-                <div class="login-methods">
-
-                    <button
-                        class="login-method"
-                        type="button"
-                        aria-label="Google"
-                    >
-                        G
-                    </button>
-
-                    <button
-                        class="login-method"
-                        type="button"
-                        aria-label="Apple"
-                    >
-                        
-                    </button>
-
-                    <button
-                        class="login-method"
-                        type="button"
-                        aria-label="Facebook"
-                    >
-                        f
-                    </button>
-
+                <div class="jarvis-subtitle">
+                    ARTIFICIAL INTELLIGENCE
                 </div>
 
             </section>
 
-        </aside>
 
-        <!-- =================================================
-             ÁREA PRINCIPAL
-        ================================================== -->
-        <main id="main-interface">
+            <!-- RELOJ -->
+            <section class="system-clock">
 
-            <!-- =============================================
-                 TOPBAR
-            ============================================== -->
-            <header id="topbar">
-
-                <div class="jarvis-brand">
-                    <div class="jarvis-name">
-                        J.A.R.V.I.S.
-                    </div>
-
-                    <div class="jarvis-subtitle">
-                        ARTIFICIAL INTELLIGENCE
-                    </div>
-                </div>
-
-                <div id="system-clock">
+                <div id="clock">
                     00:00:00
                 </div>
 
-                <div class="stark-brand">
-                    <div class="stark-mark">
-                        S
-                    </div>
-
-                    <div>
-                        <strong>STARK</strong>
-                        <span>INDUSTRIES</span>
-                    </div>
+                <div class="clock-status">
+                    SYSTEM TIME
                 </div>
 
-            </header>
+            </section>
 
-            <!-- =============================================
-                 CHAT
-            ============================================== -->
+
+            <!-- STARK -->
+            <section class="stark-logo">
+
+                <div class="stark-logo-main">
+
+                    <span class="stark-arrow">➤</span>
+
+                    <span class="stark-text">
+                        STARK INDUSTRIES
+                    </span>
+
+                </div>
+
+                <div class="stark-accent-line"></div>
+
+                <div class="stark-status">
+                    ADVANCED SYSTEMS DIVISION
+                </div>
+
+            </section>
+
+        </header>
+
+
+        <!-- =====================================================
+             BODY
+        ====================================================== -->
+
+        <div id="interface">
+
+
+            <!-- =================================================
+                 SIDEBAR
+            ================================================== -->
+
+            <aside id="sidebar">
+
+
+                <!-- BUSCADOR -->
+                <section class="hud-panel sidebar-search-panel">
+
+                    <div class="section-label">
+                        <span class="section-icon">⌕</span>
+                        BUSCAR CHATS
+                    </div>
+
+                    <div class="search-box">
+
+                        <span class="search-icon">⌕</span>
+
+                        <input
+                            id="chatSearch"
+                            type="text"
+                            placeholder="Buscar conversación..."
+                            autocomplete="off"
+                        >
+
+                    </div>
+
+                </section>
+
+
+                <!-- HISTORIAL -->
+                <section class="hud-panel history-section">
+
+                    <div class="section-header">
+
+                        <span class="section-label">
+                            <span class="section-icon">◈</span>
+                            HISTORIAL
+                        </span>
+
+                        <button
+                            id="newChatButton"
+                            class="small-hud-button"
+                            type="button"
+                            title="Nueva conversación"
+                        >
+                            +
+                        </button>
+
+                    </div>
+
+
+                    <div
+                        id="chat-history"
+                        class="chat-history"
+                    ></div>
+
+                </section>
+
+
+                <!-- HERRAMIENTAS -->
+                <section class="hud-panel tools-section">
+
+                    <button
+                        id="toolsToggle"
+                        class="tools-header"
+                        type="button"
+                    >
+
+                        <span class="tools-left">
+
+                            <span class="section-icon">
+                                ✦
+                            </span>
+
+                            HERRAMIENTAS
+
+                        </span>
+
+                        <span class="tools-arrow">
+                            ›
+                        </span>
+
+                    </button>
+
+
+                    <div
+                        id="toolsContent"
+                        class="tools-content"
+                    >
+
+                        <button
+                            class="tool-item"
+                            type="button"
+                            data-tool="general"
+                        >
+                            <span>◉</span>
+                            General
+                        </button>
+
+                        <button
+                            class="tool-item"
+                            type="button"
+                            data-tool="science"
+                        >
+                            <span>◉</span>
+                            Ciencia
+                        </button>
+
+                        <button
+                            class="tool-item"
+                            type="button"
+                            data-tool="coding"
+                        >
+                            <span>◉</span>
+                            Programación
+                        </button>
+
+                        <button
+                            class="tool-item"
+                            type="button"
+                            data-tool="history"
+                        >
+                            <span>◉</span>
+                            Historia
+                        </button>
+
+                    </div>
+
+                </section>
+
+
+                <!-- USUARIO -->
+                <section class="hud-panel user-section">
+
+                    <div class="user-status">
+
+                        <div class="user-core"></div>
+
+                        <div>
+
+                            <div class="user-name">
+                                USUARIO INVITADO
+                            </div>
+
+                            <div class="user-state">
+                                SESSION LIMITED
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        id="google-login"
+                        class="google-login"
+                        type="button"
+                    >
+
+                        <span class="google-icon">
+                            G
+                        </span>
+
+                        <span class="google-login-text">
+                            INICIAR SESIÓN
+                        </span>
+
+                    </button>
+
+                </section>
+
+            </aside>
+
+
+            <!-- =================================================
+                 ÁREA CENTRAL
+            ================================================== -->
+
             <section id="chat-container">
 
-                <!-- =========================================
-                     ORBE 3D
-                     ====================================== -->
+
+                <!-- NÚCLEO 3D -->
                 <div
-                    id="jarvis-core-stage"
+                    id="jarvis-visual"
                     aria-hidden="true"
+                >
+
+                    <div id="jarvis-core-stage"></div>
+
+                </div>
+
+
+                <!-- MENSAJES -->
+                <div
+                    id="messages"
+                    class="messages"
                 ></div>
 
-                <!-- =========================================
-                     MENSAJES
-                     ====================================== -->
-                <div id="messages"></div>
 
-                <!-- =========================================
+                <!-- =================================================
                      COMPOSER FLOTANTE
-                     ====================================== -->
+                ================================================== -->
+
                 <div id="console">
 
                     <div class="console-wrapper">
 
-                        <input
-                            id="messageInput"
-                            type="text"
-                            placeholder="Escriba una instrucción..."
-                            autocomplete="off"
-                        >
+                        <div class="console-input-area">
+
+                            <input
+                                id="messageInput"
+                                type="text"
+                                placeholder="Escriba una instrucción, Señor..."
+                                autocomplete="off"
+                                spellcheck="true"
+                            >
+
+                        </div>
+
 
                         <button
                             id="voiceButton"
+                            class="console-button"
                             type="button"
-                            aria-label="Micrófono"
+                            title="Entrada de voz"
+                            aria-label="Entrada de voz"
                         >
-                            <span class="mic-icon">◉</span>
+                            <span>◉</span>
                         </button>
+
 
                         <button
                             id="cognitiveButton"
+                            class="console-button cognitive-button"
                             type="button"
-                            aria-label="Funciones cognitivas"
+                            title="Cognitive Core"
+                            aria-label="Cognitive Core"
                         >
+
                             <span class="cognitive-dots">
-                                • •
-                                <br>
-                                • •
+
+                                <i></i>
+                                <i></i>
+                                <i></i>
+                                <i></i>
+                                <i></i>
+                                <i></i>
+
                             </span>
+
                         </button>
+
 
                         <button
                             id="sendButton"
+                            class="console-button send-button"
                             type="button"
-                            aria-label="Enviar mensaje"
+                            title="Enviar"
+                            aria-label="Enviar"
                         >
                             ➤
                         </button>
@@ -243,19 +399,77 @@
 
                 </div>
 
+
+                <!-- INDICADOR DE ESTADO -->
+                <div
+                    id="jarvisProcessing"
+                    class="jarvis-processing"
+                >
+
+                    <span class="processing-core"></span>
+
+                    <span>
+                        PROCESANDO
+                    </span>
+
+                    <span class="processing-dots">
+                        <i></i>
+                        <i></i>
+                        <i></i>
+                    </span>
+
+                </div>
+
             </section>
 
-        </main>
+        </div>
 
-    </div>
 
-    <!-- =====================================================
-         LÓGICA 3D
-    ====================================================== -->
-    <script
-        type="module"
-        src="/js/script.js"
-    ></script>
+        <!-- =====================================================
+             FOOTER
+        ====================================================== -->
+
+        <footer id="system-footer">
+
+            <span>
+                J.A.R.V.I.S. COGNITIVE SYSTEM
+            </span>
+
+            <span class="footer-separator">
+                //
+            </span>
+
+            <span>
+                MISSION CONTROL
+            </span>
+
+            <span class="footer-status">
+                ● ONLINE
+            </span>
+
+        </footer>
+
+    </main>
+
+
+    <!-- =========================================================
+         JS EXISTENTE DEL PROYECTO
+    ========================================================== -->
+
+    <script src="/js/api.js"></script>
+    <script src="/js/core.js"></script>
+    <script src="/js/ui.js"></script>
+    <script src="/js/chat.js"></script>
+    <script src="/js/clock.js"></script>
+    <script src="/js/effects.js"></script>
+    <script src="/js/main.js"></script>
+
+
+    <!-- =========================================================
+         THREE.JS — NUEVO NÚCLEO
+    ========================================================== -->
+
+    <script type="module" src="/js/script.js"></script>
 
 </body>
 </html>
