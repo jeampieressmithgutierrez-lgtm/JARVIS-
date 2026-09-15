@@ -1,134 +1,71 @@
 /* =========================================================
-   J.A.R.V.I.S.
-   CHAT SYSTEM — STARK COGNITIVE INTERFACE
+   J.A.R.V.I.S. — CHAT SYSTEM
 ========================================================= */
 
-:root {
-    --jarvis-gold: #ffb400;
-    --jarvis-gold-light: #ffd36a;
-    --jarvis-orange: #ff8a00;
+#messages {
+    display: flex;
 
-    --jarvis-text: #d9dcdf;
-    --jarvis-white: #f3f3f3;
+    flex-direction: column;
 
-    --jarvis-panel: rgba(10, 13, 18, .94);
+    align-items: stretch;
 
-    --jarvis-border: rgba(255, 180, 0, .18);
+    gap: 20px;
+
+    height: 100%;
+    width: 100%;
+
+    overflow-y: auto;
+
+    padding:
+        28px 34px 132px;
+
+    font-family:
+        "Share Tech Mono",
+        monospace;
 }
-
 
 /* =========================================================
    MENSAJES
 ========================================================= */
 
-#messages {
-
-    display: flex;
-
-    flex-direction: column;
-
-    width: 100%;
-    height: 100%;
-
-    min-height: 0;
-
-    gap: 24px;
-
-    overflow-y: auto;
-    overflow-x: hidden;
-
-    padding: 28px 34px 40px;
-
-    box-sizing: border-box;
-
-    scroll-behavior: smooth;
-
-    scrollbar-width: thin;
-
-    scrollbar-color:
-        rgba(255,180,0,.28)
-        transparent;
-}
-
-
-#messages::-webkit-scrollbar {
-    width: 5px;
-}
-
-
-#messages::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-
-#messages::-webkit-scrollbar-thumb {
-
-    background:
-        rgba(255,180,0,.26);
-
-    border-radius: 10px;
-}
-
-
-/* =========================================================
-   MENSAJE BASE
-========================================================= */
-
 .message {
-
     width: 100%;
 
     display: flex;
-
-    box-sizing: border-box;
-
-    animation:
-        messageAppear
-        .32s
-        cubic-bezier(.2,.8,.2,1);
-}
-
-
-/* =========================================================
-   CONTENIDO BASE
-========================================================= */
-
-.message-content {
 
     position: relative;
 
-    word-wrap: break-word;
-    overflow-wrap: anywhere;
-
-    white-space: pre-wrap;
-
-    box-sizing: border-box;
+    animation:
+        messageAppear 0.32s ease both;
 }
 
+.message-content {
+    max-width: 78%;
+
+    overflow-wrap: anywhere;
+
+    word-break: break-word;
+
+    white-space: pre-wrap;
+}
 
 /* =========================================================
-   MENSAJE USUARIO
+   USUARIO
 ========================================================= */
 
 .user-message {
-
     justify-content: flex-end;
-
-    padding-left: 100px;
 }
 
-
 .user-message .message-content {
+    max-width:
+        min(68%, 760px);
 
-    width: fit-content;
-
-    max-width: min(65%, 700px);
-
-    padding: 13px 17px;
+    padding:
+        11px 15px;
 
     border:
-        1px solid
-        rgba(255,180,0,.22);
+        1px solid rgba(255, 189, 50, 0.24);
 
     border-radius:
         16px 16px 4px 16px;
@@ -136,173 +73,126 @@
     background:
         linear-gradient(
             135deg,
-            rgba(255,180,0,.11),
-            rgba(255,140,0,.035)
+            rgba(255, 189, 50, 0.105),
+            rgba(255, 189, 50, 0.035)
         );
 
-    color:
-        #ededed;
+    color: #e9edf1;
 
-    font-family:
-        "Inter",
-        "Segoe UI",
-        Arial,
-        sans-serif;
-
-    font-size: 14px;
+    font-size: 12px;
 
     line-height: 1.65;
 
     box-shadow:
-        0 8px 25px
-        rgba(0,0,0,.14),
-
-        inset 0 1px 0
-        rgba(255,255,255,.035);
-
-    backdrop-filter:
-        blur(10px);
-
-    transition:
-        .2s ease;
+        0 8px 25px rgba(0, 0, 0, 0.18);
 }
-
-
-.user-message .message-content:hover {
-
-    border-color:
-        rgba(255,180,0,.42);
-
-    transform:
-        translateY(-1px);
-
-    box-shadow:
-        0 10px 30px
-        rgba(0,0,0,.2);
-}
-
 
 /* =========================================================
    JARVIS
 ========================================================= */
 
 .jarvis-message {
+    justify-content: flex-start;
 
-    flex-direction: column;
-
-    align-items: flex-start;
-
-    gap: 8px;
-
-    padding-right: 35px;
+    padding-left: 4px;
 }
 
+.jarvis-message .message-content {
+    max-width:
+        min(82%, 820px);
+
+    padding:
+        0 0 0 15px;
+
+    border-left:
+        1px solid rgba(255, 189, 50, 0.42);
+
+    color: #dfe4ea;
+
+    font-size: 12px;
+
+    line-height: 1.78;
+}
+
+.jarvis-message .message-content::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+
+    top: 0;
+    bottom: 0;
+
+    width: 1px;
+
+    background:
+        linear-gradient(
+            var(--gold),
+            rgba(255, 189, 50, 0.1)
+        );
+}
 
 /* =========================================================
-   CABECERA
+   IDENTIDAD JARVIS
 ========================================================= */
 
 .jarvis-message-header {
-
     display: flex;
 
     align-items: center;
 
     gap: 10px;
 
-    margin-left: 2px;
+    margin-bottom: 8px;
+
+    padding-left: 2px;
 }
 
-
-/* =========================================================
-   NÚCLEO
-========================================================= */
-
 .jarvis-core {
+    width: 25px;
+    height: 25px;
 
-    position: relative;
+    flex: 0 0 25px;
 
-    width: 29px;
-    height: 29px;
+    display: grid;
 
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    flex-shrink: 0;
+    place-items: center;
 
     border:
-        1px solid
-        rgba(255,180,0,.65);
+        1px solid rgba(255, 189, 50, 0.52);
 
     border-radius: 50%;
 
     background:
         radial-gradient(
             circle,
-            rgba(255,212,110,1) 0%,
-            rgba(255,145,0,.58) 25%,
-            rgba(255,110,0,.12) 60%,
-            transparent 74%
-        );
+            rgba(255, 189, 50, 0.42) 0 17%,
+            rgba(255, 189, 50, 0.12) 18% 42%,
+            transparent 43%
+        ),
+        rgba(255, 189, 50, 0.045);
 
     box-shadow:
-        0 0 9px
-        rgba(255,170,0,.48),
-
-        inset 0 0 8px
-        rgba(255,220,110,.24);
-
-    animation:
-        jarvisCorePulse
-        2.5s
-        ease-in-out
-        infinite;
+        0 0 13px rgba(255, 189, 50, 0.15),
+        inset 0 0 8px rgba(255, 189, 50, 0.12);
 }
-
 
 .jarvis-core::before {
-
     content: "";
-
-    position: absolute;
-
-    inset: 4px;
-
-    border:
-        1px solid
-        rgba(255,211,106,.34);
-
-    border-radius: 50%;
-}
-
-
-.jarvis-core span {
 
     width: 7px;
     height: 7px;
 
     border-radius: 50%;
 
-    background:
-        #ffe39b;
+    background: var(--gold);
 
     box-shadow:
-        0 0 8px
-        #ffb400,
-
-        0 0 16px
-        rgba(255,180,0,.75);
+        0 0 10px rgba(255, 189, 50, 0.8);
 }
 
-
-/* =========================================================
-   IDENTIDAD
-========================================================= */
-
 .jarvis-identity {
-
     display: flex;
 
     flex-direction: column;
@@ -310,789 +200,171 @@
     gap: 2px;
 }
 
+.jarvis-name {
+    color: #f0f2f5;
 
-.jarvis-identity strong {
+    font-family: Orbitron, sans-serif;
 
-    color:
-        #f1f1f1;
+    font-size: 9px;
+
+    font-weight: 600;
+
+    letter-spacing: 0.22em;
+}
+
+.jarvis-role {
+    color: var(--gold);
 
     font-family:
         "Share Tech Mono",
         monospace;
 
-    font-size:
-        11px;
+    font-size: 7px;
 
-    font-weight:
-        500;
-
-    letter-spacing:
-        2px;
+    letter-spacing: 0.2em;
 }
-
-
-.jarvis-identity small {
-
-    color:
-        rgba(255,180,0,.56);
-
-    font-family:
-        "Share Tech Mono",
-        monospace;
-
-    font-size:
-        7px;
-
-    letter-spacing:
-        1.3px;
-}
-
 
 /* =========================================================
-   CUERPO DE RESPUESTA
-========================================================= */
-
-.jarvis-content {
-
-    width: fit-content;
-
-    max-width: min(79%, 870px);
-
-    padding: 18px 23px;
-
-    border:
-        1px solid
-        rgba(255,180,0,.17);
-
-    border-left:
-        2px solid
-        rgba(255,180,0,.46);
-
-    border-radius:
-        3px 15px 15px 15px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(18,22,29,.98),
-            rgba(7,10,15,.98)
-        );
-
-    color:
-        var(--jarvis-text);
-
-    font-family:
-        "Inter",
-        "Segoe UI",
-        Arial,
-        sans-serif;
-
-    font-size:
-        14px;
-
-    line-height:
-        1.78;
-
-    letter-spacing:
-        .05px;
-
-    box-shadow:
-        0 9px 30px
-        rgba(0,0,0,.18),
-
-        inset 0 1px 0
-        rgba(255,255,255,.025);
-
-    backdrop-filter:
-        blur(12px);
-}
-
-
-.jarvis-content:hover {
-
-    border-color:
-        rgba(255,180,0,.29);
-}
-
-
-/* =========================================================
-   PÁRRAFOS
+   FORMATO DEL TEXTO JARVIS
 ========================================================= */
 
 .jarvis-content p {
-
     margin:
-        0 0 14px;
+        0 0 10px;
 }
-
 
 .jarvis-content p:last-child {
-
-    margin-bottom:
-        0;
+    margin-bottom: 0;
 }
 
-
-/* =========================================================
-   TÍTULOS
-========================================================= */
+.jarvis-content strong {
+    color: #f3f5f7;
+}
 
 .jarvis-content h3,
 .jarvis-content h4 {
-
-    color:
-        var(--jarvis-gold-light);
-
-    font-family:
-        "Share Tech Mono",
-        monospace;
-
-    font-weight:
-        500;
-
-    letter-spacing:
-        .7px;
-}
-
-
-.jarvis-content h3 {
-
     margin:
-        17px 0 9px;
+        12px 0 7px;
 
-    font-size:
-        14px;
+    color: var(--gold2);
+
+    font-family: Orbitron, sans-serif;
+
+    font-size: 11px;
 }
 
-
-.jarvis-content h4 {
-
+.jarvis-content ul,
+.jarvis-content ol {
     margin:
-        15px 0 8px;
+        7px 0 10px 18px;
 
-    font-size:
-        12px;
+    padding: 0;
 }
-
-
-/* =========================================================
-   TEXTO DESTACADO
-========================================================= */
-
-.jarvis-content strong {
-
-    color:
-        #ffd36a;
-
-    font-weight:
-        650;
-}
-
-
-/* =========================================================
-   LISTAS
-========================================================= */
-
-.jarvis-content ul {
-
-    margin:
-        10px 0 15px;
-
-    padding-left:
-        23px;
-}
-
 
 .jarvis-content li {
-
-    margin:
-        6px 0;
-
-    padding-left:
-        3px;
+    margin: 4px 0;
 }
-
-
-.jarvis-content li::marker {
-
-    color:
-        var(--jarvis-gold);
-}
-
 
 /* =========================================================
-   FIRMA
+   PIE DEL MENSAJE
 ========================================================= */
 
 .jarvis-message-footer {
+    margin-top: 8px;
 
-    margin-left:
-        41px;
+    padding-left: 39px;
 
-    color:
-        rgba(255,255,255,.21);
+    color: #4e5864;
 
-    font-family:
-        "Share Tech Mono",
-        monospace;
+    font-size: 7px;
 
-    font-size:
-        7px;
+    letter-spacing: 0.17em;
 
-    letter-spacing:
-        1.15px;
-
-    user-select:
-        none;
+    text-transform: uppercase;
 }
-
-
-/* =========================================================
-   ESCRITURA
-========================================================= */
-
-.jarvis-typing-text {
-
-    white-space:
-        pre-wrap;
-}
-
-
-.jarvis-typing-cursor {
-
-    display:
-        inline-block;
-
-    width:
-        6px;
-
-    height:
-        15px;
-
-    margin-left:
-        4px;
-
-    vertical-align:
-        -2px;
-
-    background:
-        var(--jarvis-gold);
-
-    box-shadow:
-        0 0 9px
-        rgba(255,180,0,.75);
-
-    animation:
-        typingCursor
-        .75s
-        steps(1)
-        infinite;
-}
-
 
 /* =========================================================
    PROCESANDO
 ========================================================= */
 
-#jarvisProcessing .jarvis-content {
+.processing-message .message-content {
+    color: #8e98a4;
 
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    gap:
-        10px;
-
-    min-height:
-        42px;
-
-    color:
-        rgba(255,255,255,.55);
-
-    font-family:
-        "Share Tech Mono",
-        monospace;
-
-    font-size:
-        10px;
-
-    letter-spacing:
-        .5px;
+    font-size: 11px;
 }
-
 
 .processing-dots {
+    display: inline-flex;
 
-    display:
-        inline-flex;
+    gap: 4px;
 
-    gap:
-        4px;
+    margin-left: 6px;
+
+    vertical-align: middle;
 }
 
+.processing-dots span {
+    width: 4px;
+    height: 4px;
 
-.processing-dots i {
+    border-radius: 50%;
 
-    width:
-        4px;
-
-    height:
-        4px;
-
-    border-radius:
-        50%;
-
-    background:
-        var(--jarvis-gold);
-
-    box-shadow:
-        0 0 7px
-        rgba(255,180,0,.7);
+    background: var(--gold);
 
     animation:
-        processingDot
-        1.15s
-        infinite
-        ease-in-out;
+        typingDot 1s infinite ease-in-out;
 }
 
-
-.processing-dots i:nth-child(2) {
-    animation-delay: .15s;
+.processing-dots span:nth-child(2) {
+    animation-delay: 0.15s;
 }
 
-
-.processing-dots i:nth-child(3) {
-    animation-delay: .30s;
+.processing-dots span:nth-child(3) {
+    animation-delay: 0.3s;
 }
-
 
 /* =========================================================
    HISTORIAL
 ========================================================= */
 
 #chat-history {
+    display: flex;
 
-    display:
-        flex;
+    flex-direction: column;
 
-    flex-direction:
-        column;
-
-    gap:
-        7px;
-
-    width:
-        100%;
-
-    max-height:
-        calc(100vh - 300px);
-
-    overflow-y:
-        auto;
-
-    overflow-x:
-        hidden;
-
-    padding:
-        5px 3px 10px;
-
-    box-sizing:
-        border-box;
+    gap: 3px;
 }
-
-
-/* =========================================================
-   TARJETAS DEL HISTORIAL
-========================================================= */
 
 .chat-history-item {
+    min-height: 43px;
 
-    position:
-        relative;
+    display: flex;
 
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    gap:
-        9px;
-
-    width:
-        100%;
-
-    min-height:
-        44px;
-
-    padding:
-        8px 10px;
-
-    box-sizing:
-        border-box;
-
-    border:
-        1px solid
-        rgba(255,255,255,.045);
-
-    border-radius:
-        8px;
-
-    background:
-        linear-gradient(
-            100deg,
-            rgba(255,255,255,.026),
-            rgba(255,255,255,.008)
-        );
-
-    color:
-        #8d939c;
-
-    cursor:
-        pointer;
-
-    overflow:
-        hidden;
-
-    transition:
-        .2s ease;
+    align-items: center;
 }
-
-
-.chat-history-item:hover {
-
-    transform:
-        translateX(2px);
-
-    color:
-        #e9e9e9;
-
-    background:
-        rgba(255,180,0,.055);
-
-    border-color:
-        rgba(255,180,0,.17);
-}
-
-
-.chat-history-item.active {
-
-    color:
-        #f1f1f1;
-
-    background:
-        linear-gradient(
-            100deg,
-            rgba(255,180,0,.10),
-            rgba(255,180,0,.025)
-        );
-
-    border-color:
-        rgba(255,180,0,.24);
-
-    box-shadow:
-        inset 2px 0 0
-        rgba(255,180,0,.8);
-}
-
-
-/* =========================================================
-   ICONO HISTORIAL
-========================================================= */
-
-.chat-history-icon {
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    flex-shrink:
-        0;
-
-    width:
-        22px;
-
-    height:
-        22px;
-
-    border:
-        1px solid
-        rgba(255,180,0,.18);
-
-    border-radius:
-        6px;
-
-    color:
-        rgba(255,180,0,.62);
-
-    font-size:
-        9px;
-}
-
-
-/* =========================================================
-   TITULO HISTORIAL
-========================================================= */
 
 .chat-history-title {
-
-    flex:
-        1;
-
-    min-width:
-        0;
-
-    overflow:
-        hidden;
-
-    white-space:
-        nowrap;
-
-    text-overflow:
-        ellipsis;
-
-    font-family:
-        "Inter",
-        "Segoe UI",
-        Arial,
-        sans-serif;
-
-    font-size:
-        11px;
+    line-height: 1.3;
 }
-
-
-/* =========================================================
-   CONTADOR
-========================================================= */
-
-.chat-history-count {
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    min-width:
-        17px;
-
-    height:
-        17px;
-
-    border:
-        1px solid
-        rgba(255,180,0,.14);
-
-    border-radius:
-        5px;
-
-    color:
-        rgba(255,180,0,.55);
-
-    font-family:
-        "Share Tech Mono",
-        monospace;
-
-    font-size:
-        7px;
-}
-
-
-/* =========================================================
-   BÚSQUEDA
-========================================================= */
-
-#chatSearchInput {
-
-    width:
-        100%;
-
-    box-sizing:
-        border-box;
-
-    outline:
-        none;
-
-    font-family:
-        "Inter",
-        "Segoe UI",
-        Arial,
-        sans-serif;
-}
-
-
-#chatSearchInput:focus {
-
-    border-color:
-        rgba(255,180,0,.42) !important;
-
-    box-shadow:
-        0 0 15px
-        rgba(255,180,0,.06);
-}
-
 
 /* =========================================================
    INPUT
 ========================================================= */
 
 #messageInput {
-
     font-family:
-        "Inter",
-        "Segoe UI",
-        Arial,
-        sans-serif;
+        "Share Tech Mono",
+        monospace;
 }
-
-
-#messageInput::placeholder {
-
-    color:
-        rgba(255,255,255,.3);
-}
-
-
-#messageInput:focus {
-
-    border-color:
-        rgba(255,180,0,.42) !important;
-
-    box-shadow:
-        0 0 18px
-        rgba(255,180,0,.055);
-}
-
 
 /* =========================================================
-   MICRÓFONO
+   BOTONES CIRCULARES
 ========================================================= */
 
-#voiceButton {
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    width:
-        42px;
-
-    height:
-        42px;
-
-    flex-shrink:
-        0;
-
-    border:
-        1px solid
-        rgba(255,180,0,.20);
-
-    border-radius:
-        8px;
-
-    background:
-        rgba(8,11,16,.84);
-
-    color:
-        rgba(255,255,255,.72);
-
-    cursor:
-        pointer;
-
-    transition:
-        .2s ease;
-}
-
-
-#voiceButton:hover {
-
-    color:
-        var(--jarvis-gold);
-
-    border-color:
-        rgba(255,180,0,.5);
-
-    box-shadow:
-        0 0 15px
-        rgba(255,180,0,.08);
-}
-
-
-#voiceButton:active {
-
-    transform:
-        scale(.94);
-}
-
-
-#voiceButton.recording {
-
-    color:
-        var(--jarvis-gold);
-
-    border-color:
-        rgba(255,180,0,.75);
-
-    animation:
-        microphonePulse
-        1.35s
-        infinite;
-}
-
-
-/* =========================================================
-   BOTÓN ENVIAR
-========================================================= */
-
+#voiceButton,
 #sendButton {
-
-    transition:
-        .2s ease;
+    border-radius: 50% !important;
 }
-
-
-#sendButton:active {
-
-    transform:
-        scale(.96);
-}
-
-
-#sendButton:disabled {
-
-    cursor:
-        wait;
-
-    opacity:
-        .55;
-}
-
-
-#sendButton.loading {
-
-    animation:
-        sendButtonPulse
-        1.2s
-        infinite;
-}
-
 
 /* =========================================================
    ANIMACIONES
@@ -1101,304 +373,67 @@
 @keyframes messageAppear {
 
     from {
-
-        opacity:
-            0;
+        opacity: 0;
 
         transform:
-            translateY(9px)
-            scale(.985);
+            translateY(7px);
     }
 
     to {
-
-        opacity:
-            1;
-
-        transform:
-            translateY(0)
-            scale(1);
-    }
-}
-
-
-@keyframes jarvisCorePulse {
-
-    0%,
-    100% {
-
-        transform:
-            scale(1);
-
-        box-shadow:
-            0 0 8px
-            rgba(255,170,0,.38),
-
-            inset 0 0 7px
-            rgba(255,200,70,.18);
-    }
-
-    50% {
-
-        transform:
-            scale(1.055);
-
-        box-shadow:
-            0 0 15px
-            rgba(255,170,0,.65),
-
-            inset 0 0 10px
-            rgba(255,200,70,.3);
-    }
-}
-
-
-@keyframes typingCursor {
-
-    0%,
-    45% {
         opacity: 1;
-    }
-
-    46%,
-    100% {
-        opacity: 0;
-    }
-}
-
-
-@keyframes processingDot {
-
-    0%,
-    100% {
-
-        opacity:
-            .25;
 
         transform:
-            translateY(0)
-            scale(.75);
-    }
-
-    50% {
-
-        opacity:
-            1;
-
-        transform:
-            translateY(-2px)
-            scale(1);
+            translateY(0);
     }
 }
 
-
-@keyframes microphonePulse {
-
-    0% {
-
-        box-shadow:
-            0 0 0 0
-            rgba(255,180,0,.25);
-    }
-
-    70% {
-
-        box-shadow:
-            0 0 0 8px
-            rgba(255,180,0,0);
-    }
-
-    100% {
-
-        box-shadow:
-            0 0 0 0
-            rgba(255,180,0,0);
-    }
-}
-
-
-@keyframes sendButtonPulse {
+@keyframes typingDot {
 
     0%,
+    60%,
     100% {
+        opacity: 0.25;
 
-        box-shadow:
-            0 0 0
-            rgba(255,180,0,0);
+        transform:
+            translateY(0);
     }
 
-    50% {
+    30% {
+        opacity: 1;
 
-        box-shadow:
-            0 0 15px
-            rgba(255,180,0,.13);
+        transform:
+            translateY(-3px);
     }
 }
-
 
 /* =========================================================
-   RESPONSIVE
+   MOBILE
 ========================================================= */
-
-@media (max-width: 900px) {
-
-    #messages {
-
-        padding:
-            20px
-            20px
-            30px;
-    }
-
-    .user-message {
-
-        padding-left:
-            45px;
-    }
-
-    .user-message .message-content {
-
-        max-width:
-            76%;
-    }
-
-    .jarvis-content {
-
-        max-width:
-            85%;
-    }
-}
-
 
 @media (max-width: 700px) {
 
     #messages {
-
-        gap:
-            18px;
+        gap: 17px;
 
         padding:
-            16px
-            13px
-            25px;
+            20px 14px 118px;
     }
 
-    .user-message {
+    .user-message .message-content {
+        max-width: 86%;
 
-        padding-left:
-            20px;
+        font-size: 11px;
     }
 
-    .jarvis-message {
+    .jarvis-message .message-content {
+        max-width: 92%;
 
-        padding-right:
-            10px;
-    }
+        font-size: 11px;
 
-    .user-message .message-content,
-    .jarvis-content {
-
-        max-width:
-            91%;
-
-        font-size:
-            13px;
-
-        line-height:
-            1.65;
-
-        padding:
-            13px
-            15px;
-    }
-
-    .jarvis-core {
-
-        width:
-            26px;
-
-        height:
-            26px;
-    }
-
-    .jarvis-identity strong {
-
-        font-size:
-            10px;
+        line-height: 1.7;
     }
 
     .jarvis-message-footer {
-
-        margin-left:
-            37px;
-    }
-
-    #voiceButton {
-
-        width:
-            39px;
-
-        height:
-            39px;
-    }
-}
-
-
-@media (max-width: 480px) {
-
-    #messages {
-
-        padding:
-            12px
-            9px
-            20px;
-    }
-
-    .user-message .message-content,
-    .jarvis-content {
-
-        max-width:
-            94%;
-    }
-
-    .chat-history-count {
-
-        display:
-            none;
-    }
-}
-
-
-/* =========================================================
-   ACCESIBILIDAD
-========================================================= */
-
-button:focus-visible,
-input:focus-visible {
-
-    outline:
-        1px solid
-        rgba(255,180,0,.65);
-
-    outline-offset:
-        2px;
-}
-
-
-/* =========================================================
-   REDUCIR MOVIMIENTO
-========================================================= */
-
-@media (prefers-reduced-motion: reduce) {
-
-    *,
-    *::before,
-    *::after {
-
-        animation:
-            none !important;
-
-        scroll-behavior:
-            auto !important;
+        padding-left: 35px;
     }
 }
