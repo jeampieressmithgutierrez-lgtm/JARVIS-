@@ -1,53 +1,42 @@
-/* =========================================================
+/* ============================================================
    J.A.R.V.I.S.
-   STARK HOLOGRAPHIC INTERFACE
-   ========================================================= */
+   STARK COGNITIVE INTERFACE
+   GLASS HUD / GOLD TECHNOLOGY
+============================================================ */
 
 :root {
 
-    --bg: #020407;
+    --bg-main: #030507;
+    --bg-panel: rgba(10, 15, 22, 0.75);
+    --bg-panel-dark: rgba(5, 9, 14, 0.82);
 
-    --glass:
-        rgba(10, 15, 25, 0.60);
+    --gold: #ffaa00;
+    --gold-bright: #ffbd32;
+    --gold-light: #ffe29a;
 
-    --glass-strong:
-        rgba(7, 11, 18, 0.78);
+    --gold-soft: rgba(255, 170, 0, 0.25);
+    --gold-faint: rgba(255, 170, 0, 0.10);
 
-    --gold:
-        #ffb52e;
+    --white: #f4f5f7;
+    --text: #d7dbe0;
+    --muted: #7f8994;
 
-    --gold-bright:
-        #ffd76a;
+    --cyan: #63d9ff;
 
-    --gold-soft:
-        rgba(255, 170, 0, 0.40);
+    --border: rgba(255, 170, 0, 0.65);
 
-    --white:
-        #f5f7fa;
+    --panel-radius: 8px;
 
-    --text:
-        #d9dde4;
+    --shadow-gold:
+        0 0 15px rgba(255, 170, 0, 0.25),
+        inset 0 0 10px rgba(255, 170, 0, 0.1);
 
-    --muted:
-        #737c88;
-
-    --cyan:
-        #00bfff;
-
-    --border:
-        rgba(255, 170, 0, 0.40);
-
-    --shadow:
-        0 0 30px rgba(255, 170, 0, 0.08);
-
-    --radius:
-        14px;
 }
 
 
-/* =========================================================
+/* ============================================================
    RESET
-   ========================================================= */
+============================================================ */
 
 * {
     box-sizing: border-box;
@@ -60,180 +49,655 @@ html,
 body {
     width: 100%;
     height: 100%;
-    overflow: hidden;
 }
 
 
 body {
 
+    overflow: hidden;
+
     background:
         radial-gradient(
-            circle at center,
-            #0a1018 0%,
-            #030507 45%,
-            #010204 100%
-        );
+            circle at 50% 45%,
+            rgba(255, 170, 0, 0.035),
+            transparent 40%
+        ),
+        #030507;
 
-    color: var(--text);
+    color: var(--white);
 
     font-family:
-        "Share Tech Mono",
-        monospace;
-
-    -webkit-font-smoothing: antialiased;
+        "Rajdhani",
+        sans-serif;
 }
 
 
-/* =========================================================
-   THREE.JS BACKGROUND
-   ========================================================= */
+/* ============================================================
+   BACKGROUND
+============================================================ */
 
-#three-background {
+.background-system {
 
     position: fixed;
 
     inset: 0;
 
-    width: 100%;
-    height: 100%;
+    z-index: -10;
 
-    z-index: 1;
-
-    pointer-events: none;
-}
-
-
-#three-background canvas {
-
-    display: block;
-
-    width: 100% !important;
-    height: 100% !important;
-}
-
-
-/* =========================================================
-   HUD
-   ========================================================= */
-
-#hud {
-
-    position: fixed;
-
-    inset: 0;
-
-    z-index: 10;
-
-    display: flex;
-
-    width: 100%;
-    height: 100%;
+    overflow: hidden;
 
     pointer-events: none;
-}
-
-
-#hud > * {
-
-    pointer-events: auto;
-}
-
-
-/* =========================================================
-   GLASS
-   ========================================================= */
-
-.glass-panel {
 
     background:
-        rgba(10, 15, 25, 0.60);
-
-    backdrop-filter:
-        blur(12px);
-
-    -webkit-backdrop-filter:
-        blur(12px);
-
-    border:
-        1px solid rgba(255, 170, 0, 0.40);
-
-    box-shadow:
-        0 0 30px rgba(255, 170, 0, 0.06),
-        inset 0 0 30px rgba(255, 255, 255, 0.015);
+        radial-gradient(
+            ellipse at center,
+            rgba(255, 170, 0, 0.025),
+            transparent 60%
+        );
 }
 
 
-/* =========================================================
-   SIDEBAR
-   ========================================================= */
+.background-grid {
 
-#sidebar {
+    position: absolute;
+
+    inset: 0;
+
+    opacity: 0.14;
+
+    background-image:
+        linear-gradient(
+            rgba(255, 170, 0, 0.07) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255, 170, 0, 0.07) 1px,
+            transparent 1px
+        );
+
+    background-size: 48px 48px;
+
+    mask-image:
+        radial-gradient(
+            ellipse at center,
+            black 20%,
+            transparent 80%
+        );
+}
+
+
+.background-glow {
+
+    position: absolute;
+
+    width: 600px;
+    height: 600px;
+
+    border-radius: 50%;
+
+    filter: blur(100px);
+
+    opacity: 0.06;
+}
+
+
+.background-glow-one {
+
+    top: 20%;
+    left: 42%;
+
+    background: #ffaa00;
+}
+
+
+.background-glow-two {
+
+    bottom: -300px;
+    right: -200px;
+
+    background: #ff7b00;
+}
+
+
+.scanline {
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        repeating-linear-gradient(
+            to bottom,
+            transparent 0px,
+            transparent 4px,
+            rgba(255, 255, 255, 0.008) 5px
+        );
+
+    pointer-events: none;
+}
+
+
+/* ============================================================
+   MAIN APPLICATION
+============================================================ */
+
+#jarvis-app {
 
     position: relative;
 
-    width: 280px;
-
-    height: 100%;
+    width: 100%;
+    height: 100vh;
 
     display: flex;
 
     flex-direction: column;
 
-    padding: 18px;
-
-    gap: 14px;
-
-    border-top: 0;
-    border-bottom: 0;
-    border-left: 0;
-
-    border-radius: 0 18px 18px 0;
-
     overflow: hidden;
 }
 
 
-/* =========================================================
-   SEARCH
-   ========================================================= */
+/* ============================================================
+   TOPBAR
+============================================================ */
 
-.sidebar-search {
+#topbar {
 
+    position: relative;
+
+    height: 92px;
+
+    min-height: 92px;
+
+    display: grid;
+
+    grid-template-columns:
+        1fr
+        auto
+        1fr;
+
+    align-items: center;
+
+    padding: 0 30px;
+
+    border-bottom:
+        1px solid rgba(255, 170, 0, 0.55);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(5, 8, 12, 0.92),
+            rgba(5, 8, 12, 0.65)
+        );
+
+    backdrop-filter: blur(18px);
+
+    box-shadow:
+        0 8px 30px rgba(0, 0, 0, 0.4),
+        inset 0 -1px 0 rgba(255, 170, 0, 0.08);
+
+    z-index: 50;
+}
+
+
+#topbar::after {
+
+    content: "";
+
+    position: absolute;
+
+    bottom: -1px;
+    left: 0;
+
+    width: 220px;
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--gold),
+            transparent
+        );
+
+    box-shadow:
+        0 0 10px var(--gold);
+}
+
+
+/* ============================================================
+   JARVIS BRAND
+============================================================ */
+
+.jarvis-brand {
+
+    position: relative;
+
+    padding-left: 16px;
+}
+
+
+.brand-line {
+
+    position: absolute;
+
+    left: 0;
+    top: 3px;
+
+    width: 2px;
     height: 44px;
+
+    background: var(--gold);
+
+    box-shadow:
+        0 0 8px var(--gold),
+        0 0 16px rgba(255, 170, 0, 0.4);
+}
+
+
+.jarvis-title {
+
+    color: #ffffff;
+
+    font-family: "Orbitron", sans-serif;
+
+    font-size: 25px;
+
+    font-weight: 700;
+
+    letter-spacing: 7px;
+
+    line-height: 1;
+
+    text-shadow:
+        0 0 8px rgba(255, 255, 255, 0.12);
+}
+
+
+.jarvis-subtitle {
+
+    margin-top: 7px;
+
+    color: var(--gold);
+
+    font-family:
+        "Share Tech Mono",
+        monospace;
+
+    font-size: 10px;
+
+    letter-spacing: 4px;
+
+    opacity: 0.9;
+
+    text-shadow:
+        0 0 8px rgba(255, 170, 0, 0.55);
+}
+
+
+/* ============================================================
+   CLOCK
+============================================================ */
+
+.system-clock {
+
+    text-align: center;
+}
+
+
+#clock {
+
+    color: var(--gold-light);
+
+    font-family:
+        "Share Tech Mono",
+        monospace;
+
+    font-size: 20px;
+
+    letter-spacing: 4px;
+
+    text-shadow:
+        0 0 10px rgba(255, 170, 0, 0.5);
+}
+
+
+.clock-status {
+
+    margin-top: 5px;
+
+    color: var(--muted);
+
+    font-family:
+        "Share Tech Mono",
+        monospace;
+
+    font-size: 8px;
+
+    letter-spacing: 3px;
+}
+
+
+/* ============================================================
+   STARK INDUSTRIES
+============================================================ */
+
+.stark-logo {
+
+    justify-self: end;
+
+    text-align: right;
+
+    font-family: "Orbitron", sans-serif;
+
+    transform: skewX(-7deg);
+}
+
+
+.stark-logo-main {
 
     display: flex;
 
     align-items: center;
 
+    justify-content: flex-end;
+
+    gap: 8px;
+}
+
+
+.stark-arrow {
+
+    display: inline-block;
+
+    color: var(--gold);
+
+    font-size: 20px;
+
+    transform:
+        rotate(-14deg)
+        skewX(7deg);
+
+    text-shadow:
+        0 0 8px rgba(255, 183, 0, 0.8);
+}
+
+
+.stark-text {
+
+    color: #ffb700;
+
+    font-size: 18px;
+
+    font-weight: 800;
+
+    font-style: italic;
+
+    letter-spacing: 3px;
+
+    text-shadow:
+        0 0 8px rgba(255, 183, 0, 0.8),
+        0 0 20px rgba(255, 183, 0, 0.18);
+}
+
+
+.stark-accent-line {
+
+    width: 170px;
+
+    height: 2px;
+
+    margin-top: 6px;
+
+    margin-left: auto;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--gold),
+            #fff0ae
+        );
+
+    box-shadow:
+        0 0 8px rgba(255, 183, 0, 0.65);
+}
+
+
+.stark-status {
+
+    margin-top: 4px;
+
+    color: rgba(255, 183, 0, 0.6);
+
+    font-family:
+        "Share Tech Mono",
+        monospace;
+
+    font-size: 7px;
+
+    letter-spacing: 2px;
+}
+
+
+/* ============================================================
+   INTERFACE
+============================================================ */
+
+#interface {
+
+    position: relative;
+
+    flex: 1;
+
+    min-height: 0;
+
+    display: grid;
+
+    grid-template-columns:
+        285px
+        minmax(0, 1fr);
+
+    overflow: hidden;
+}
+
+
+/* ============================================================
+   HUD PANEL
+============================================================ */
+
+.hud-panel {
+
+    position: relative;
+
+    background:
+        rgba(10, 15, 22, 0.75);
+
+    border:
+        1px solid #ffaa00;
+
+    border-radius:
+        8px;
+
+    box-shadow:
+        0 0 15px rgba(255, 170, 0, 0.25),
+        inset 0 0 10px rgba(255, 170, 0, 0.1);
+
+    backdrop-filter:
+        blur(10px);
+
+    -webkit-backdrop-filter:
+        blur(10px);
+
+    overflow: hidden;
+}
+
+
+/* ============================================================
+   TECHNOLOGICAL CUT CORNERS
+============================================================ */
+
+.hud-panel::before,
+.hud-panel::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 15px;
+    height: 15px;
+
+    pointer-events: none;
+
+    z-index: 5;
+}
+
+
+.hud-panel::before {
+
+    top: -1px;
+    left: -1px;
+
+    border-top:
+        2px solid var(--gold-bright);
+
+    border-left:
+        2px solid var(--gold-bright);
+}
+
+
+.hud-panel::after {
+
+    bottom: -1px;
+    right: -1px;
+
+    border-bottom:
+        2px solid var(--gold-bright);
+
+    border-right:
+        2px solid var(--gold-bright);
+}
+
+
+/* ============================================================
+   SIDEBAR
+============================================================ */
+
+#sidebar {
+
+    position: relative;
+
+    min-height: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
     gap: 10px;
 
-    padding: 0 13px;
+    padding: 14px;
+
+    border-right:
+        1px solid rgba(255, 170, 0, 0.35);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(4, 8, 12, 0.92),
+            rgba(4, 7, 11, 0.76)
+        );
+
+    overflow: hidden;
+
+    z-index: 40;
+}
+
+
+/* ============================================================
+   SECTION LABELS
+============================================================ */
+
+.section-label {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    color: var(--gold);
+
+    font-family:
+        "Orbitron",
+        sans-serif;
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+    letter-spacing: 2px;
+}
+
+
+.section-icon {
+
+    color: var(--gold-bright);
+
+    font-size: 14px;
+
+    text-shadow:
+        0 0 7px rgba(255, 170, 0, 0.7);
+}
+
+
+/* ============================================================
+   SEARCH
+============================================================ */
+
+.sidebar-search-panel {
+
+    flex-shrink: 0;
+
+    padding: 13px;
+}
+
+
+.search-box {
+
+    height: 38px;
+
+    margin-top: 10px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 0 10px;
 
     background:
         rgba(0, 0, 0, 0.28);
 
     border:
-        1px solid rgba(255, 255, 255, 0.08);
+        1px solid rgba(255, 170, 0, 0.38);
 
-    border-radius: 10px;
-
-    transition:
-        border-color .25s ease,
-        box-shadow .25s ease;
-}
-
-
-.sidebar-search:focus-within {
-
-    border-color:
-        rgba(255, 183, 45, .55);
+    border-radius: 6px;
 
     box-shadow:
-        0 0 18px rgba(255, 170, 0, .08);
+        inset 0 0 10px rgba(255, 170, 0, 0.04);
 }
 
 
-.sidebar-search input {
+.search-icon {
+
+    color: var(--gold);
+
+    font-size: 18px;
+}
+
+
+.search-box input {
 
     width: 100%;
 
@@ -245,32 +709,22 @@ body {
     color: var(--white);
 
     font-family:
-        "Share Tech Mono",
-        monospace;
+        "Rajdhani",
+        sans-serif;
 
-    font-size: 12px;
+    font-size: 13px;
 }
 
 
-.sidebar-search input::placeholder {
+.search-box input::placeholder {
 
-    color:
-        rgba(255, 255, 255, .35);
+    color: #68727c;
 }
 
 
-.ui-icon {
-
-    color:
-        var(--gold-bright);
-
-    font-size: 20px;
-}
-
-
-/* =========================================================
-   SECTIONS
-   ========================================================= */
+/* ============================================================
+   HISTORY
+============================================================ */
 
 .history-section {
 
@@ -281,12 +735,12 @@ body {
     display: flex;
 
     flex-direction: column;
+
+    padding: 13px;
 }
 
 
-.section-heading {
-
-    height: 34px;
+.section-header {
 
     display: flex;
 
@@ -294,73 +748,78 @@ body {
 
     justify-content: space-between;
 
-    padding: 0 4px;
-
-    color:
-        rgba(255,255,255,.65);
-
-    font-family:
-        Orbitron,
-        sans-serif;
-
-    font-size: 10px;
-
-    letter-spacing: 2px;
+    flex-shrink: 0;
 }
 
 
-.section-heading button {
+.small-hud-button {
 
-    width: 28px;
-    height: 28px;
+    width: 25px;
+    height: 25px;
 
-    border: 1px solid
-        rgba(255, 183, 45, .35);
+    display: grid;
 
-    border-radius: 50%;
+    place-items: center;
+
+    border:
+        1px solid rgba(255, 170, 0, 0.6);
+
+    border-radius: 5px;
 
     background:
-        rgba(255, 170, 0, .06);
+        rgba(255, 170, 0, 0.06);
 
-    color:
-        var(--gold-bright);
+    color: var(--gold);
 
     cursor: pointer;
 
     transition:
-        .25s ease;
+        0.2s ease;
 }
 
 
-.section-heading button:hover {
+.small-hud-button:hover {
 
     background:
-        rgba(255, 170, 0, .16);
+        rgba(255, 170, 0, 0.15);
 
     box-shadow:
-        0 0 15px rgba(255, 170, 0, .16);
+        0 0 12px rgba(255, 170, 0, 0.3);
 }
 
 
-/* =========================================================
-   HISTORY
-   ========================================================= */
-
-#chat-history {
+.chat-history {
 
     flex: 1;
 
     min-height: 0;
 
-    overflow-y: auto;
+    margin-top: 10px;
 
     display: flex;
 
     flex-direction: column;
 
-    gap: 8px;
+    gap: 7px;
 
-    padding: 5px 2px 10px;
+    overflow-y: auto;
+
+    padding-right: 3px;
+}
+
+
+.chat-history::-webkit-scrollbar {
+
+    width: 3px;
+}
+
+
+.chat-history::-webkit-scrollbar-thumb {
+
+    background:
+        rgba(255, 170, 0, 0.5);
+
+    border-radius: 10px;
 }
 
 
@@ -368,70 +827,69 @@ body {
 
     position: relative;
 
-    min-height: 48px;
+    min-height: 42px;
 
     display: flex;
 
     align-items: center;
 
-    padding: 10px 13px;
+    padding: 0 10px;
 
     border:
-        1px solid rgba(255,255,255,.07);
+        1px solid rgba(255, 170, 0, 0.18);
 
-    border-radius: 12px;
+    border-radius: 6px;
 
     background:
-        rgba(18, 23, 31, .55);
+        rgba(255, 255, 255, 0.015);
 
-    color:
-        rgba(255,255,255,.65);
+    color: #aeb6bf;
 
     cursor: pointer;
 
     transition:
-        background .25s ease,
-        border-color .25s ease,
-        transform .25s ease,
-        box-shadow .25s ease;
+        background 0.2s ease,
+        border 0.2s ease,
+        transform 0.2s ease;
 }
 
 
 .chat-history-item:hover {
 
-    transform:
-        translateX(2px);
+    border-color:
+        rgba(255, 170, 0, 0.5);
 
     background:
-        rgba(30, 35, 44, .72);
+        rgba(255, 170, 0, 0.055);
 
-    border-color:
-        rgba(255,183,45,.22);
+    transform:
+        translateX(2px);
 }
 
 
 .chat-history-item.active {
 
+    border-color:
+        rgba(255, 170, 0, 0.85);
+
     background:
         linear-gradient(
-            100deg,
-            rgba(255, 160, 25, .20),
-            rgba(255, 160, 25, .06)
+            90deg,
+            rgba(255, 170, 0, 0.12),
+            rgba(255, 170, 0, 0.025)
         );
 
-    border-color:
-        rgba(255,183,45,.65);
-
     color:
-        #fff;
+        #ffe4a2;
 
     box-shadow:
-        0 0 20px rgba(255,160,25,.10),
         inset 3px 0 0 var(--gold);
 }
 
 
 .chat-history-title {
+
+    width: 100%;
 
     overflow: hidden;
 
@@ -439,79 +897,171 @@ body {
 
     text-overflow: ellipsis;
 
-    font-size: 11px;
+    font-family:
+        "Rajdhani",
+        sans-serif;
+
+    font-size: 13px;
+
+    letter-spacing: 0.5px;
 }
 
 
-/* =========================================================
+/* ============================================================
    TOOLS
-   ========================================================= */
+============================================================ */
 
 .tools-section {
 
     flex-shrink: 0;
+
+    padding: 0;
+
 }
 
 
-.glass-button {
+.tools-header {
 
     width: 100%;
 
-    min-height: 44px;
+    min-height: 46px;
 
-    border:
-        1px solid rgba(255,170,0,.30);
+    display: flex;
 
-    border-radius: 11px;
+    align-items: center;
 
-    background:
-        rgba(10, 14, 21, .55);
+    justify-content: space-between;
 
-    color:
-        rgba(255,255,255,.75);
+    padding: 0 13px;
+
+    border: 0;
+
+    background: transparent;
+
+    color: var(--gold);
+
+    cursor: pointer;
+}
+
+
+.tools-left {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
 
     font-family:
-        Orbitron,
+        "Orbitron",
         sans-serif;
 
     font-size: 9px;
 
-    letter-spacing: 1.5px;
+    font-weight: 700;
 
-    cursor: pointer;
+    letter-spacing: 2px;
+}
+
+
+.tools-arrow {
+
+    color: var(--gold);
+
+    font-size: 18px;
 
     transition:
-        .25s ease;
+        transform 0.25s ease;
 }
 
 
-.glass-button:hover {
+.tools-section.open
+.tools-arrow {
 
-    color: white;
+    transform:
+        rotate(90deg);
+}
 
-    border-color:
-        rgba(255,183,45,.65);
+
+.tools-content {
+
+    max-height: 0;
+
+    overflow: hidden;
+
+    padding: 0 10px;
+
+    transition:
+        max-height 0.3s ease,
+        padding 0.3s ease;
+}
+
+
+.tools-section.open
+.tools-content {
+
+    max-height: 220px;
+
+    padding:
+        0 10px 10px;
+}
+
+
+.tool-item {
+
+    width: 100%;
+
+    height: 34px;
+
+    margin-top: 5px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 0 10px;
+
+    border:
+        1px solid rgba(255, 170, 0, 0.2);
+
+    border-radius: 5px;
 
     background:
-        rgba(255,170,0,.08);
+        rgba(255, 170, 0, 0.025);
 
-    box-shadow:
-        0 0 20px rgba(255,170,0,.08);
+    color: #b5bdc6;
+
+    font-family:
+        "Rajdhani",
+        sans-serif;
+
+    cursor: pointer;
 }
 
 
-/* =========================================================
-   USER
-   ========================================================= */
+.tool-item:hover {
+
+    color: var(--gold-light);
+
+    border-color:
+        rgba(255, 170, 0, 0.55);
+
+    background:
+        rgba(255, 170, 0, 0.08);
+}
+
+
+/* ============================================================
+   USER / LOGIN
+============================================================ */
 
 .user-section {
 
     flex-shrink: 0;
 
-    padding-top: 12px;
-
-    border-top:
-        1px solid rgba(255,255,255,.07);
+    padding: 12px;
 }
 
 
@@ -521,346 +1071,213 @@ body {
 
     align-items: center;
 
-    gap: 10px;
-
-    margin-bottom: 10px;
+    gap: 9px;
 }
 
 
-.status-dot {
+.user-core {
 
-    width: 9px;
-    height: 9px;
+    width: 27px;
+    height: 27px;
+
+    flex-shrink: 0;
+
+    border:
+        1px solid var(--gold);
 
     border-radius: 50%;
 
     background:
-        var(--gold);
-
-    box-shadow:
-        0 0 12px rgba(255,183,45,.65);
-}
-
-
-.user-status strong {
-
-    display: block;
-
-    color: white;
-
-    font-family:
-        Orbitron,
-        sans-serif;
-
-    font-size: 9px;
-
-    letter-spacing: 1px;
-}
-
-
-.user-status small {
-
-    display: block;
-
-    margin-top: 3px;
-
-    color:
-        var(--muted);
-
-    font-size: 9px;
-}
-
-
-/* =========================================================
-   LOGIN METHODS
-   ========================================================= */
-
-.login-methods {
-
-    display: flex;
-
-    gap: 7px;
-}
-
-
-.login-method {
-
-    width: 38px;
-    height: 34px;
-
-    border:
-        1px solid rgba(255,255,255,.10);
-
-    border-radius: 9px;
-
-    background:
-        rgba(255,255,255,.035);
-
-    color:
-        rgba(255,255,255,.75);
-
-    font-family:
-        Arial,
-        sans-serif;
-
-    font-size: 15px;
-
-    cursor: pointer;
-
-    transition:
-        .25s ease;
-}
-
-
-.login-method:hover {
-
-    transform:
-        translateY(-2px);
-
-    border-color:
-        rgba(255,183,45,.55);
-
-    color:
-        white;
-
-    box-shadow:
-        0 0 15px rgba(255,170,0,.10);
-}
-
-
-/* =========================================================
-   MAIN
-   ========================================================= */
-
-#main-interface {
-
-    position: relative;
-
-    flex: 1;
-
-    min-width: 0;
-
-    height: 100%;
-}
-
-
-/* =========================================================
-   TOPBAR
-   ========================================================= */
-
-#topbar {
-
-    position: relative;
-
-    height: 92px;
-
-    display: grid;
-
-    grid-template-columns:
-        1fr auto 1fr;
-
-    align-items: center;
-
-    padding:
-        0 30px;
-
-    border-bottom:
-        1px solid rgba(255,170,0,.22);
-
-    background:
-        linear-gradient(
-            180deg,
-            rgba(2,4,7,.76),
-            rgba(2,4,7,.25)
+        radial-gradient(
+            circle,
+            var(--gold),
+            rgba(255, 170, 0, 0.08) 42%,
+            transparent 70%
         );
 
-    backdrop-filter:
-        blur(10px);
+    box-shadow:
+        0 0 12px rgba(255, 170, 0, 0.5);
 }
 
 
-.jarvis-brand {
+.user-name {
 
-    justify-self: start;
-}
-
-
-.jarvis-name {
-
-    color:
-        #ffffff;
+    color: #e3e6ea;
 
     font-family:
-        Orbitron,
-        sans-serif;
-
-    font-size: 23px;
-
-    font-weight: 600;
-
-    letter-spacing: 5px;
-
-    text-shadow:
-        0 0 20px rgba(255,255,255,.12);
-}
-
-
-.jarvis-subtitle {
-
-    margin-top: 5px;
-
-    color:
-        var(--gold);
-
-    font-family:
-        Orbitron,
+        "Orbitron",
         sans-serif;
 
     font-size: 8px;
 
-    letter-spacing: 3px;
+    letter-spacing: 1.5px;
 }
 
 
-#system-clock {
+.user-state {
 
-    color:
-        rgba(255,255,255,.82);
+    margin-top: 3px;
+
+    color: #69747f;
 
     font-family:
         "Share Tech Mono",
         monospace;
 
-    font-size: 19px;
+    font-size: 7px;
 
-    letter-spacing: 3px;
-
-    text-shadow:
-        0 0 15px rgba(255,183,45,.18);
+    letter-spacing: 1px;
 }
 
 
-.stark-brand {
+.google-login {
 
-    justify-self: end;
+    width: 100%;
+
+    height: 36px;
+
+    margin-top: 10px;
 
     display: flex;
 
     align-items: center;
 
-    gap: 10px;
+    justify-content: center;
 
-    color: white;
+    gap: 9px;
+
+    border:
+        1px solid rgba(255, 170, 0, 0.5);
+
+    border-radius: 5px;
+
+    background:
+        rgba(255, 170, 0, 0.045);
+
+    color: var(--gold-light);
+
+    font-family:
+        "Orbitron",
+        sans-serif;
+
+    font-size: 8px;
+
+    letter-spacing: 1.5px;
+
+    cursor: pointer;
+
+    transition:
+        0.2s ease;
 }
 
 
-.stark-mark {
+.google-login:hover {
 
-    width: 38px;
-    height: 38px;
+    background:
+        rgba(255, 170, 0, 0.12);
 
-    display: grid;
+    border-color:
+        var(--gold);
 
-    place-items: center;
+    box-shadow:
+        0 0 14px rgba(255, 170, 0, 0.2);
+}
 
-    border:
-        1px solid rgba(255,183,45,.45);
 
-    border-radius: 50%;
+.google-icon {
 
-    color:
-        var(--gold-bright);
+    font-family: Arial, sans-serif;
 
-    font-family:
-        Orbitron,
-        sans-serif;
+    font-size: 16px;
 
     font-weight: 700;
 
-    box-shadow:
-        0 0 18px rgba(255,170,0,.10);
+    color: #ffffff;
 }
 
 
-.stark-brand strong {
-
-    display: block;
-
-    font-family:
-        Orbitron,
-        sans-serif;
-
-    font-size: 11px;
-
-    letter-spacing: 2px;
-}
-
-
-.stark-brand span {
-
-    display: block;
-
-    margin-top: 2px;
-
-    color:
-        var(--gold);
-
-    font-size: 7px;
-
-    letter-spacing: 2px;
-}
-
-
-/* =========================================================
-   CHAT
-   ========================================================= */
+/* ============================================================
+   CHAT CONTAINER
+============================================================ */
 
 #chat-container {
 
     position: relative;
 
-    width: 100%;
-
-    height:
-        calc(100% - 92px);
+    min-width: 0;
+    min-height: 0;
 
     overflow: hidden;
+
+    background:
+        radial-gradient(
+            ellipse at center,
+            rgba(255, 170, 0, 0.025),
+            transparent 55%
+        );
 }
 
 
-/* =========================================================
-   3D CORE
-   ========================================================= */
+/* ============================================================
+   THREE.JS CORE STAGE
+============================================================ */
 
-#jarvis-core-stage {
+#jarvis-visual {
 
     position: absolute;
 
     inset: 0;
 
-    z-index: 2;
+    display: grid;
+
+    place-items: center;
 
     pointer-events: none;
+
+    z-index: 0;
+
+    opacity: 0.82;
 }
 
 
-/* =========================================================
+#jarvis-core-stage {
+
+    position: relative;
+
+    width: min(620px, 70vw);
+
+    height: min(620px, 70vh);
+
+    filter:
+        drop-shadow(
+            0 0 25px
+            rgba(255, 170, 0, 0.12)
+        );
+}
+
+
+#jarvis-core-stage canvas {
+
+    width: 100% !important;
+
+    height: 100% !important;
+
+    display: block;
+}
+
+
+/* ============================================================
    MESSAGES
-   ========================================================= */
+============================================================ */
 
 #messages {
 
     position: relative;
 
-    z-index: 5;
+    z-index: 10;
 
     width: 100%;
     height: 100%;
-
-    overflow-y: auto;
-
-    padding:
-        30px 34px 125px;
 
     display: flex;
 
@@ -868,13 +1285,35 @@ body {
 
     gap: 20px;
 
-    pointer-events: auto;
+    overflow-y: auto;
+
+    padding:
+        30px
+        34px
+        140px;
+
+    scroll-behavior: smooth;
 }
 
 
-/* =========================================================
+#messages::-webkit-scrollbar {
+
+    width: 4px;
+}
+
+
+#messages::-webkit-scrollbar-thumb {
+
+    background:
+        rgba(255, 170, 0, 0.28);
+
+    border-radius: 10px;
+}
+
+
+/* ============================================================
    FLOATING COMPOSER
-   ========================================================= */
+============================================================ */
 
 #console {
 
@@ -884,7 +1323,7 @@ body {
     right: 0;
     bottom: 22px;
 
-    z-index: 20;
+    z-index: 30;
 
     display: flex;
 
@@ -900,26 +1339,35 @@ body {
 .console-wrapper {
 
     width:
-        min(780px, 90%);
+        min(820px, 92%);
 
-    height: 58px;
+    min-height: 58px;
 
     display: flex;
 
     align-items: center;
 
-    gap: 7px;
+    gap: 8px;
 
     padding:
-        6px 7px 6px 19px;
-
-    border:
-        1px solid rgba(255,170,0,.36);
-
-    border-radius: 999px;
+        7px 8px 7px 18px;
 
     background:
-        rgba(7, 11, 18, .72);
+        linear-gradient(
+            135deg,
+            rgba(12, 17, 24, 0.86),
+            rgba(4, 8, 13, 0.72)
+        );
+
+    border:
+        1px solid rgba(255, 170, 0, 0.7);
+
+    border-radius:
+        32px;
+
+    box-shadow:
+        0 0 20px rgba(255, 170, 0, 0.12),
+        inset 0 0 15px rgba(255, 170, 0, 0.055);
 
     backdrop-filter:
         blur(18px);
@@ -927,185 +1375,474 @@ body {
     -webkit-backdrop-filter:
         blur(18px);
 
-    box-shadow:
-        0 12px 45px rgba(0,0,0,.45),
-        0 0 25px rgba(255,170,0,.08),
-        inset 0 0 20px rgba(255,255,255,.015);
-
     pointer-events: auto;
+}
+
+
+.console-wrapper::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 0;
+    height: 0;
+
+    pointer-events: none;
+}
+
+
+.console-input-area {
+
+    flex: 1;
+
+    min-width: 0;
 }
 
 
 #messageInput {
 
-    flex: 1;
-
-    min-width: 0;
-
-    height: 100%;
+    width: 100%;
 
     border: 0;
     outline: 0;
 
     background: transparent;
 
-    color:
-        white;
+    color: #f4f5f7;
 
     font-family:
-        "Share Tech Mono",
-        monospace;
+        "Rajdhani",
+        sans-serif;
 
-    font-size: 13px;
+    font-size: 15px;
+
+    letter-spacing: 0.3px;
 }
 
 
 #messageInput::placeholder {
 
-    color:
-        rgba(255,255,255,.38);
+    color: #727c86;
 }
 
 
-/* =========================================================
-   CONTROLS
-   ========================================================= */
+/* ============================================================
+   COMPOSER BUTTONS
+============================================================ */
 
-#voiceButton,
-#cognitiveButton,
-#sendButton {
+.console-button {
 
-    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
 
-    width: 42px;
-    height: 42px;
+    flex:
+        0 0 40px;
 
     display: grid;
 
     place-items: center;
 
     border:
-        1px solid rgba(255,183,45,.30);
+        1px solid rgba(255, 170, 0, 0.48);
 
     border-radius: 50%;
 
     background:
-        rgba(255,255,255,.035);
-
-    color:
-        rgba(255,255,255,.75);
-
-    cursor: pointer;
-
-    transition:
-        transform .2s ease,
-        border-color .2s ease,
-        background .2s ease,
-        box-shadow .2s ease;
-}
-
-
-#voiceButton:hover,
-#cognitiveButton:hover,
-#sendButton:hover {
-
-    transform:
-        translateY(-1px);
-
-    border-color:
-        rgba(255,205,95,.80);
-
-    background:
-        rgba(255,170,0,.10);
-
-    color:
-        white;
-
-    box-shadow:
-        0 0 18px rgba(255,170,0,.13);
-}
-
-
-#sendButton {
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(255,185,50,.22),
-            rgba(255,145,0,.07)
-        );
+        rgba(255, 170, 0, 0.045);
 
     color:
         var(--gold-bright);
 
-    font-size: 17px;
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 
-.mic-icon {
+.console-button:hover {
 
-    font-size: 12px;
+    transform:
+        translateY(-1px);
+
+    background:
+        rgba(255, 170, 0, 0.13);
+
+    box-shadow:
+        0 0 14px rgba(255, 170, 0, 0.3);
+}
+
+
+.send-button {
+
+    font-size: 19px;
+
+    text-shadow:
+        0 0 8px rgba(255, 170, 0, 0.7);
+}
+
+
+.cognitive-button {
+
+    width: 36px;
+    height: 36px;
+
+    flex-basis: 36px;
 }
 
 
 .cognitive-dots {
 
-    color:
-        var(--gold);
+    width: 17px;
+    height: 17px;
 
-    font-size: 10px;
+    display: grid;
 
-    line-height: 8px;
+    grid-template-columns:
+        repeat(3, 1fr);
 
-    text-align: center;
+    grid-template-rows:
+        repeat(2, 1fr);
+
+    gap: 3px;
 }
 
 
-/* =========================================================
-   SCROLLBAR
-   ========================================================= */
+.cognitive-dots i {
 
-::-webkit-scrollbar {
+    width: 3px;
+    height: 3px;
 
-    width: 4px;
-}
-
-
-::-webkit-scrollbar-track {
-
-    background: transparent;
-}
-
-
-::-webkit-scrollbar-thumb {
+    border-radius: 50%;
 
     background:
-        rgba(255,183,45,.25);
+        var(--gold);
 
-    border-radius: 99px;
+    box-shadow:
+        0 0 5px rgba(255, 170, 0, 0.8);
 }
 
 
-/* =========================================================
-   RESPONSIVE
-   ========================================================= */
+/* ============================================================
+   PROCESSING
+============================================================ */
 
-@media(max-width: 800px) {
+.jarvis-processing {
+
+    position: absolute;
+
+    left: 50%;
+
+    bottom: 91px;
+
+    transform:
+        translateX(-50%);
+
+    z-index: 35;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding:
+        6px 12px;
+
+    border:
+        1px solid rgba(255, 170, 0, 0.3);
+
+    border-radius: 20px;
+
+    background:
+        rgba(3, 5, 7, 0.65);
+
+    color:
+        rgba(255, 210, 120, 0.85);
+
+    font-family:
+        "Share Tech Mono",
+        monospace;
+
+    font-size: 8px;
+
+    letter-spacing: 2px;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition:
+        opacity 0.2s ease;
+
+    backdrop-filter:
+        blur(8px);
+}
+
+
+.jarvis-processing.active {
+
+    opacity: 1;
+}
+
+
+.processing-core {
+
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background:
+        var(--gold);
+
+    box-shadow:
+        0 0 9px var(--gold);
+}
+
+
+.processing-dots {
+
+    display: flex;
+
+    gap: 3px;
+}
+
+
+.processing-dots i {
+
+    width: 3px;
+    height: 3px;
+
+    border-radius: 50%;
+
+    background:
+        var(--gold);
+}
+
+
+/* ============================================================
+   FOOTER
+============================================================ */
+
+#system-footer {
+
+    height: 24px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    border-top:
+        1px solid rgba(255, 170, 0, 0.15);
+
+    background:
+        rgba(2, 4, 6, 0.8);
+
+    color:
+        #555f69;
+
+    font-family:
+        "Share Tech Mono",
+        monospace;
+
+    font-size: 7px;
+
+    letter-spacing: 2px;
+}
+
+
+.footer-separator {
+
+    color:
+        rgba(255, 170, 0, 0.5);
+}
+
+
+.footer-status {
+
+    color:
+        rgba(255, 170, 0, 0.7);
+}
+
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+
+@media (max-width: 900px) {
+
+    #interface {
+
+        grid-template-columns:
+            230px
+            minmax(0, 1fr);
+    }
+
 
     #sidebar {
-        width: 230px;
+
+        padding:
+            10px;
     }
 
-    .jarvis-name {
-        font-size: 18px;
-        letter-spacing: 3px;
+
+    .jarvis-title {
+
+        font-size: 20px;
+
+        letter-spacing: 5px;
     }
 
-    #system-clock {
+
+    .stark-text {
+
         font-size: 14px;
     }
 
-    .console-wrapper {
-        width: 94%;
+}
+
+
+@media (max-width: 700px) {
+
+    #topbar {
+
+        height: 75px;
+        min-height: 75px;
+
+        padding:
+            0 16px;
     }
+
+
+    .system-clock {
+
+        display: none;
+    }
+
+
+    .jarvis-title {
+
+        font-size: 18px;
+    }
+
+
+    .jarvis-subtitle {
+
+        font-size: 7px;
+
+        letter-spacing: 2px;
+    }
+
+
+    .stark-text {
+
+        font-size: 10px;
+
+        letter-spacing: 2px;
+    }
+
+
+    #interface {
+
+        grid-template-columns:
+            1fr;
+    }
+
+
+    #sidebar {
+
+        display: none;
+    }
+
+
+    #messages {
+
+        padding:
+            20px
+            16px
+            125px;
+    }
+
+
+    .console-wrapper {
+
+        width:
+            96%;
+
+        min-height:
+            54px;
+    }
+
+
+    #console {
+
+        bottom:
+            14px;
+
+        padding:
+            0 8px;
+    }
+
+
+    #jarvis-core-stage {
+
+        width:
+            420px;
+
+        height:
+            420px;
+    }
+
+}
+
+
+@media (max-width: 420px) {
+
+    .jarvis-title {
+
+        font-size: 15px;
+
+        letter-spacing: 3px;
+    }
+
+
+    .stark-logo {
+
+        display: none;
+    }
+
+
+    .console-button {
+
+        width: 36px;
+        height: 36px;
+
+        flex-basis: 36px;
+    }
+
+
+    .cognitive-button {
+
+        width: 32px;
+        height: 32px;
+
+        flex-basis: 32px;
+    }
+
+
+    #messageInput {
+
+        font-size: 13px;
+    }
+
 }
