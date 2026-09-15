@@ -1,10 +1,8 @@
-/* =========================================================
+/* ============================================================
    J.A.R.V.I.S.
-   STARK HOLOGRAPHIC CORE
-   THREE.JS + WEBGL2 + UNREAL BLOOM
-   ========================================================= */
-
-"use strict";
+   STARK COGNITIVE CORE
+   THREE.JS / WEBGL / EFFECT COMPOSER
+============================================================ */
 
 import * as THREE from "three";
 
@@ -21,366 +19,760 @@ import {
 } from "three/addons/postprocessing/UnrealBloomPass.js";
 
 
-/* =========================================================
-   CONFIGURACIÓN
-   ========================================================= */
+/* ============================================================
+   CONFIGURATION
+============================================================ */
 
 const CONFIG = {
 
-    colors: {
+    gold: 0xffaa00,
+    goldBright: 0xffc43d,
+    goldLight: 0xffe7a3,
 
-        gold: 0xffb52e,
+    particleCount: 2600,
+    nodeCount: 720,
 
-        goldBright: 0xffd76a,
+    innerRadius: 1.65,
 
-        amber: 0xff7a00,
-
-        cyan: 0x00bfff,
-
-        dark: 0x020407
-
-    },
-
-    bloom: {
-
-        strength: 1.65,
-
-        radius: 0.75,
-
-        threshold: 0.05
-
+    rotation: {
+        inner: 0.0009,
+        ringA: 0.0018,
+        ringB: -0.0011,
+        ringC: 0.0024,
+        circuitA: -0.0017,
+        circuitB: 0.0021
     }
 
 };
 
 
-/* =========================================================
-   VARIABLES PRINCIPALES
-   ========================================================= */
+/* ============================================================
+   DOM
+============================================================ */
 
-let scene;
-let camera;
-let renderer;
-let composer;
+const stage =
+    document.getElementById("jarvis-core-stage");
 
-let coreGroup;
+if (!stage) {
 
-let particleCore;
-let innerShell;
+    console.error(
+        "[JARVIS CORE] No se encontró #jarvis-core-stage."
+    );
 
-let ringGroup;
-let outerGroup;
-
-let clock;
-
-let mouse = {
-    x: 0,
-    y: 0
-};
+    throw new Error(
+        "JARVIS Core Stage missing."
+    );
+}
 
 
-/* =========================================================
-   INICIALIZACIÓN
-   ========================================================= */
+/* ============================================================
+   SCENE
+============================================================ */
 
-function init() {
-
-    const container =
-        document.getElementById(
-            "three-background"
-        );
-
-    if (!container) {
-
-        console.error(
-            "[JARVIS 3D] No existe #three-background"
-        );
-
-        return;
-    }
+const scene =
+    new THREE.Scene();
 
 
-    /* =====================================================
-       ESCENA
-    ====================================================== */
+/* ============================================================
+   CAMERA
+============================================================ */
 
-    scene =
-        new THREE.Scene();
+const camera =
+    new THREE.PerspectiveCamera(
+        42,
+        1,
+        0.1,
+        100
+    );
 
-    scene.background =
-        new THREE.Color(
-            CONFIG.colors.dark
-        );
+camera.position.set(
+    0,
+    0,
+    7.8
+);
 
 
-    /* =====================================================
-       CÁMARA
-    ====================================================== */
+/* ============================================================
+   RENDERER
+============================================================ */
 
-    camera =
-        new THREE.PerspectiveCamera(
+const renderer =
+    new THREE.WebGLRenderer({
+        antialias: true,
+        alpha: true,
+        powerPreference: "high-performance"
+    });
 
-            45,
 
-            window.innerWidth /
-            window.innerHeight,
+renderer.setPixelRatio(
+    Math.min(
+        window.devicePixelRatio,
+        2
+    )
+);
 
-            0.1,
 
-            100
-        );
+renderer.setSize(
+    stage.clientWidth || 600,
+    stage.clientHeight || 600,
+    false
+);
 
-    camera.position.set(
-        0,
-        0,
+
+renderer.outputColorSpace =
+    THREE.SRGBColorSpace;
+
+
+renderer.toneMapping =
+    THREE.ACESFilmicToneMapping;
+
+
+renderer.toneMappingExposure =
+    1.05;
+
+
+renderer.setClearColor(
+    0x000000,
+    0
+);
+
+
+stage.appendChild(
+    renderer.domElement
+);
+
+
+/* ============================================================
+   BLOOM
+============================================================ */
+
+const renderPass =
+    new RenderPass(
+        scene,
+        camera
+    );
+
+
+const bloomPass =
+    new UnrealBloomPass(
+
+        new THREE.Vector2(
+            stage.clientWidth || 600,
+            stage.clientHeight || 600
+        ),
+
+        1.2,   // strength
+        0.3,   // radius
+        0.25   // threshold
+
+    );
+
+
+const composer =
+    new EffectComposer(
+        renderer
+    );
+
+
+composer.addPass(
+    renderPass
+);
+
+
+composer.addPass(
+    bloomPass
+);
+
+
+/* ============================================================
+   LIGHTING
+============================================================ */
+
+const ambientLight =
+    new THREE.AmbientLight(
+        CONFIG.gold,
+        0.22
+    );
+
+scene.add(
+    ambientLight
+);
+
+
+const pointLight =
+    new THREE.PointLight(
+        CONFIG.goldBright,
+        3.2,
         10
     );
 
+pointLight.position.set(
+    0,
+    0,
+    1.5
+);
 
-    /* =====================================================
-       RENDERER WEBGL2
-    ====================================================== */
-
-    renderer =
-        new THREE.WebGLRenderer({
-
-            antialias: true,
-
-            alpha: true,
-
-            powerPreference:
-                "high-performance"
-        });
+scene.add(
+    pointLight
+);
 
 
-    renderer.setPixelRatio(
-        Math.min(
-            window.devicePixelRatio,
-            1.75
-        )
+/* ============================================================
+   MAIN CORE GROUP
+============================================================ */
+
+const coreGroup =
+    new THREE.Group();
+
+scene.add(
+    coreGroup
+);
+
+
+/* ============================================================
+   MATERIALS
+============================================================ */
+
+const goldBasicMaterial =
+    new THREE.MeshBasicMaterial({
+        color: CONFIG.gold,
+        transparent: true,
+        opacity: 0.48,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+        side: THREE.DoubleSide
+    });
+
+
+const goldWireMaterial =
+    new THREE.MeshBasicMaterial({
+        color: CONFIG.goldBright,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.34,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
+    });
+
+
+const darkWireMaterial =
+    new THREE.MeshBasicMaterial({
+        color: CONFIG.gold,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.17,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
+    });
+
+
+/* ============================================================
+   INNER HIGH-DENSITY POINT NETWORK
+============================================================ */
+
+const innerGeometry =
+    new THREE.IcosahedronGeometry(
+        CONFIG.innerRadius,
+        5
     );
 
 
-    renderer.setSize(
-        window.innerWidth,
-        window.innerHeight
+const innerPositions =
+    innerGeometry.attributes.position.array;
+
+
+const innerParticleGeometry =
+    new THREE.BufferGeometry();
+
+
+const innerParticlePositions =
+    new Float32Array(
+        innerPositions.length
     );
 
 
-    renderer.outputColorSpace =
+for (
+    let i = 0;
+    i < innerPositions.length;
+    i += 3
+) {
+
+    const x =
+        innerPositions[i];
+
+    const y =
+        innerPositions[i + 1];
+
+    const z =
+        innerPositions[i + 2];
+
+
+    const randomScale =
+        0.94 +
+        Math.random() * 0.12;
+
+
+    innerParticlePositions[i] =
+        x * randomScale;
+
+    innerParticlePositions[i + 1] =
+        y * randomScale;
+
+    innerParticlePositions[i + 2] =
+        z * randomScale;
+}
+
+
+innerParticleGeometry.setAttribute(
+    "position",
+    new THREE.Float32BufferAttribute(
+        innerParticlePositions,
+        3
+    )
+);
+
+
+const innerParticleMaterial =
+    new THREE.PointsMaterial({
+
+        color:
+            CONFIG.goldLight,
+
+        size:
+            0.018,
+
+        transparent:
+            true,
+
+        opacity:
+            0.9,
+
+        blending:
+            THREE.AdditiveBlending,
+
+        depthWrite:
+            false
+    });
+
+
+const innerPoints =
+    new THREE.Points(
+        innerParticleGeometry,
+        innerParticleMaterial
+    );
+
+
+coreGroup.add(
+    innerPoints
+);
+
+
+/* ============================================================
+   INNER WIREFRAME SPHERE
+============================================================ */
+
+const innerShell =
+    new THREE.Mesh(
+        new THREE.IcosahedronGeometry(
+            CONFIG.innerRadius * 0.96,
+            3
+        ),
+        darkWireMaterial
+    );
+
+
+coreGroup.add(
+    innerShell
+);
+
+
+/* ============================================================
+   SECOND NODE NETWORK
+============================================================ */
+
+const nodeGeometry =
+    new THREE.IcosahedronGeometry(
+        2.0,
+        4
+    );
+
+
+const nodeSource =
+    nodeGeometry.attributes.position;
+
+
+const nodePositions =
+    new Float32Array(
+        CONFIG.nodeCount * 3
+    );
+
+
+for (
+    let i = 0;
+    i < CONFIG.nodeCount;
+    i++
+) {
+
+    const index =
+        Math.floor(
+            Math.random() *
+            (nodeSource.count - 1)
+        );
+
+
+    const x =
+        nodeSource.getX(index);
+
+    const y =
+        nodeSource.getY(index);
+
+    const z =
+        nodeSource.getZ(index);
+
+
+    const scale =
+        0.85 +
+        Math.random() * 0.4;
+
+
+    nodePositions[i * 3] =
+        x * scale;
+
+    nodePositions[i * 3 + 1] =
+        y * scale;
+
+    nodePositions[i * 3 + 2] =
+        z * scale;
+}
+
+
+const nodeBuffer =
+    new THREE.BufferGeometry();
+
+
+nodeBuffer.setAttribute(
+    "position",
+    new THREE.BufferAttribute(
+        nodePositions,
+        3
+    )
+);
+
+
+const nodeMaterial =
+    new THREE.PointsMaterial({
+
+        color:
+            CONFIG.goldBright,
+
+        size:
+            0.024,
+
+        transparent:
+            true,
+
+        opacity:
+            0.75,
+
+        blending:
+            THREE.AdditiveBlending,
+
+        depthWrite:
+            false
+    });
+
+
+const nodePoints =
+    new THREE.Points(
+        nodeBuffer,
+        nodeMaterial
+    );
+
+
+coreGroup.add(
+    nodePoints
+);
+
+
+/* ============================================================
+   NODE CONNECTION LINES
+============================================================ */
+
+const connectionPositions =
+    [];
+
+
+const maxConnections =
+    150;
+
+
+for (
+    let i = 0;
+    i < maxConnections;
+    i++
+) {
+
+    const a =
+        Math.floor(
+            Math.random() *
+            CONFIG.nodeCount
+        );
+
+
+    const b =
+        Math.floor(
+            Math.random() *
+            CONFIG.nodeCount
+        );
+
+
+    const ax =
+        nodePositions[a * 3];
+
+    const ay =
+        nodePositions[a * 3 + 1];
+
+    const az =
+        nodePositions[a * 3 + 2];
+
+
+    const bx =
+        nodePositions[b * 3];
+
+    const by =
+        nodePositions[b * 3 + 1];
+
+    const bz =
+        nodePositions[b * 3 + 2];
+
+
+    connectionPositions.push(
+        ax, ay, az,
+        bx, by, bz
+    );
+}
+
+
+const connectionGeometry =
+    new THREE.BufferGeometry();
+
+
+connectionGeometry.setAttribute(
+    "position",
+    new THREE.Float32BufferAttribute(
+        connectionPositions,
+        3
+    )
+);
+
+
+const connectionMaterial =
+    new THREE.LineBasicMaterial({
+
+        color:
+            CONFIG.gold,
+
+        transparent:
+            true,
+
+        opacity:
+            0.18,
+
+        blending:
+            THREE.AdditiveBlending,
+
+        depthWrite:
+            false
+    });
+
+
+const connectionLines =
+    new THREE.LineSegments(
+        connectionGeometry,
+        connectionMaterial
+    );
+
+
+coreGroup.add(
+    connectionLines
+);
+
+
+/* ============================================================
+   TECHNOLOGICAL DATA TEXTURE
+   NO CANVAS 2D
+============================================================ */
+
+function createTechTexture() {
+
+    const width = 256;
+    const height = 8;
+
+    const data =
+        new Uint8Array(
+            width * height * 4
+        );
+
+
+    for (
+        let y = 0;
+        y < height;
+        y++
+    ) {
+
+        for (
+            let x = 0;
+            x < width;
+            x++
+        ) {
+
+            const index =
+                (y * width + x) * 4;
+
+
+            let alpha = 0;
+
+
+            /*
+             * Segmentos principales
+             */
+
+            if (
+                x % 32 === 0 ||
+                x % 32 === 1
+            ) {
+
+                alpha = 230;
+
+            }
+
+
+            /*
+             * Micro segmentos
+             */
+
+            else if (
+                x % 8 === 0 &&
+                y < 4
+            ) {
+
+                alpha = 145;
+
+            }
+
+
+            /*
+             * Fragmentos intermitentes
+             */
+
+            else if (
+                (
+                    x * 7 +
+                    y * 13
+                ) % 37 === 0
+            ) {
+
+                alpha = 210;
+
+            }
+
+
+            data[index] =
+                255;
+
+            data[index + 1] =
+                170;
+
+            data[index + 2] =
+                0;
+
+            data[index + 3] =
+                alpha;
+        }
+    }
+
+
+    const texture =
+        new THREE.DataTexture(
+            data,
+            width,
+            height,
+            THREE.RGBAFormat
+        );
+
+
+    texture.needsUpdate =
+        true;
+
+
+    texture.wrapS =
+        THREE.RepeatWrapping;
+
+
+    texture.wrapT =
+        THREE.ClampToEdgeWrapping;
+
+
+    texture.colorSpace =
         THREE.SRGBColorSpace;
 
 
-    /*
-       Tone mapping es importante para obtener un resultado
-       correcto con UnrealBloomPass.
-    */
-    renderer.toneMapping =
-        THREE.ACESFilmicToneMapping;
-
-    renderer.toneMappingExposure =
-        1.15;
-
-
-    container.appendChild(
-        renderer.domElement
-    );
-
-
-    /* =====================================================
-       COMPOSITOR
-    ====================================================== */
-
-    composer =
-        new EffectComposer(
-            renderer
-        );
-
-
-    const renderPass =
-        new RenderPass(
-            scene,
-            camera
-        );
-
-
-    composer.addPass(
-        renderPass
-    );
-
-
-    /* =====================================================
-       BLOOM
-    ====================================================== */
-
-    const bloomPass =
-        new UnrealBloomPass(
-
-            new THREE.Vector2(
-                window.innerWidth,
-                window.innerHeight
-            ),
-
-            CONFIG.bloom.strength,
-
-            CONFIG.bloom.radius,
-
-            CONFIG.bloom.threshold
-        );
-
-
-    composer.addPass(
-        bloomPass
-    );
-
-
-    /* =====================================================
-       RELOJ
-    ====================================================== */
-
-    clock =
-        new THREE.Clock();
-
-
-    /* =====================================================
-       CORE
-    ====================================================== */
-
-    createCore();
-
-
-    /* =====================================================
-       EVENTOS
-    ====================================================== */
-
-    window.addEventListener(
-        "resize",
-        onResize
-    );
-
-
-    window.addEventListener(
-        "pointermove",
-        onPointerMove,
-        { passive: true }
-    );
-
-
-    /* =====================================================
-       START
-    ====================================================== */
-
-    animate();
+    return texture;
 }
 
 
-/* =========================================================
-   CREAR CORE
-   ========================================================= */
-
-function createCore() {
-
-    coreGroup =
-        new THREE.Group();
+const techTexture =
+    createTechTexture();
 
 
-    scene.add(
-        coreGroup
-    );
+/* ============================================================
+   FLAT CYBER DISCS
+============================================================ */
+
+const discGroup =
+    new THREE.Group();
 
 
-    /*
-       Escalamos ligeramente el núcleo para que no domine
-       toda la interfaz.
-    */
-
-    coreGroup.scale.setScalar(
-        1.35
-    );
+coreGroup.add(
+    discGroup
+);
 
 
-    /* =====================================================
-       CAPA 1
-       NÚCLEO DENSO DE PARTÍCULAS
-    ====================================================== */
+function createCyberDisc(
+    radius,
+    segments,
+    opacity,
+    rotationSpeed
+) {
 
-    const particleGeometry =
-        new THREE.SphereGeometry(
-
-            1.55,
-
-            72,
-
-            72
+    const geometry =
+        new THREE.RingGeometry(
+            radius * 0.70,
+            radius,
+            segments
         );
 
 
-    const particleMaterial =
-        new THREE.PointsMaterial({
-
-            color:
-                CONFIG.colors.goldBright,
-
-            size:
-                0.045,
-
-            transparent:
-                true,
-
-            opacity:
-                0.82,
-
-            blending:
-                THREE.AdditiveBlending,
-
-            depthWrite:
-                false,
-
-            sizeAttenuation:
-                true
-        });
-
-
-    particleCore =
-        new THREE.Points(
-
-            particleGeometry,
-
-            particleMaterial
-        );
-
-
-    coreGroup.add(
-        particleCore
-    );
-
-
-    /* =====================================================
-       ESFERA INTERIOR
-    ====================================================== */
-
-    const shellGeometry =
-        new THREE.SphereGeometry(
-
-            1.32,
-
-            64,
-
-            64
-        );
-
-
-    const shellMaterial =
+    const material =
         new THREE.MeshBasicMaterial({
 
             color:
-                CONFIG.colors.amber,
+                CONFIG.gold,
+
+            map:
+                techTexture,
+
+            alphaMap:
+                techTexture,
 
             transparent:
                 true,
 
             opacity:
-                0.09,
+                opacity,
+
+            side:
+                THREE.DoubleSide,
 
             blending:
                 THREE.AdditiveBlending,
@@ -390,152 +782,92 @@ function createCore() {
         });
 
 
-    innerShell =
+    const mesh =
         new THREE.Mesh(
-
-            shellGeometry,
-
-            shellMaterial
+            geometry,
+            material
         );
 
 
-    coreGroup.add(
-        innerShell
+    mesh.rotation.x =
+        Math.PI / 2;
+
+
+    mesh.userData.rotationSpeed =
+        rotationSpeed;
+
+
+    discGroup.add(
+        mesh
     );
 
 
-    /* =====================================================
-       CAPA 2
-       ANILLOS TORUS
-    ====================================================== */
-
-    ringGroup =
-        new THREE.Group();
+    return mesh;
+}
 
 
-    coreGroup.add(
-        ringGroup
+const discA =
+    createCyberDisc(
+        2.15,
+        96,
+        0.42,
+        0.0015
     );
 
 
-    const ringMaterial =
-        new THREE.MeshBasicMaterial({
-
-            color:
-                CONFIG.colors.gold,
-
-            transparent:
-                true,
-
-            opacity:
-                0.68,
-
-            wireframe:
-                true,
-
-            blending:
-                THREE.AdditiveBlending,
-
-            depthWrite:
-                false
-        });
-
-
-    const ringConfigurations = [
-
-        {
-            radius: 1.85,
-            tube: 0.018,
-            rotation: [0, 0, 0],
-            speed: 0.30
-        },
-
-        {
-            radius: 2.05,
-            tube: 0.014,
-            rotation: [Math.PI / 2, 0, 0],
-            speed: -0.22
-        },
-
-        {
-            radius: 2.25,
-            tube: 0.012,
-            rotation: [0, Math.PI / 2, 0],
-            speed: 0.17
-        }
-
-    ];
-
-
-    ringConfigurations.forEach(
-        config => {
-
-            const geometry =
-                new THREE.TorusGeometry(
-
-                    config.radius,
-
-                    config.tube,
-
-                    10,
-
-                    128
-                );
-
-
-            const ring =
-                new THREE.Mesh(
-
-                    geometry,
-
-                    ringMaterial.clone()
-                );
-
-
-            ring.rotation.set(
-                ...config.rotation
-            );
-
-
-            ring.userData.speed =
-                config.speed;
-
-
-            ringGroup.add(
-                ring
-            );
-        }
+const discB =
+    createCyberDisc(
+        2.42,
+        128,
+        0.28,
+        -0.002
     );
 
 
-    /* =====================================================
-       CAPA 3
-       ICOSAEDRO EXTERIOR
-    ====================================================== */
-
-    outerGroup =
-        new THREE.Group();
-
-
-    coreGroup.add(
-        outerGroup
+const discC =
+    createCyberDisc(
+        2.75,
+        160,
+        0.20,
+        0.001
     );
 
 
-    const icoGeometry =
-        new THREE.IcosahedronGeometry(
+/* ============================================================
+   SEGMENTED DASHBOARD RINGS
+============================================================ */
 
-            2.55,
+const dashboardGroup =
+    new THREE.Group();
 
-            2
+
+coreGroup.add(
+    dashboardGroup
+);
+
+
+function createDashboardRing(
+    radius,
+    tube,
+    radialSegments,
+    tubularSegments,
+    rotation
+) {
+
+    const geometry =
+        new THREE.TorusGeometry(
+            radius,
+            tube,
+            radialSegments,
+            tubularSegments
         );
 
 
-    const icoMaterial =
+    const material =
         new THREE.MeshBasicMaterial({
 
             color:
-                CONFIG.colors.goldBright,
+                CONFIG.goldBright,
 
             wireframe:
                 true,
@@ -544,7 +876,7 @@ function createCore() {
                 true,
 
             opacity:
-                0.26,
+                0.28,
 
             blending:
                 THREE.AdditiveBlending,
@@ -554,115 +886,248 @@ function createCore() {
         });
 
 
-    const icosahedron =
+    const mesh =
         new THREE.Mesh(
-
-            icoGeometry,
-
-            icoMaterial
+            geometry,
+            material
         );
 
 
-    outerGroup.add(
-        icosahedron
+    mesh.rotation.set(
+        rotation.x,
+        rotation.y,
+        rotation.z
     );
 
 
-    /* =====================================================
-       AROS EXTERIORES ADICIONALES
-    ====================================================== */
-
-    const outerRingData = [
-
-        {
-            radius: 2.75,
-            rotation: [0.4, 0.1, 0],
-            speed: 0.11
-        },
-
-        {
-            radius: 2.95,
-            rotation: [1.2, 0.6, 0.7],
-            speed: -0.08
-        }
-
-    ];
-
-
-    outerRingData.forEach(
-        config => {
-
-            const geometry =
-                new THREE.TorusGeometry(
-
-                    config.radius,
-
-                    0.010,
-
-                    8,
-
-                    160
-                );
-
-
-            const material =
-                new THREE.MeshBasicMaterial({
-
-                    color:
-                        CONFIG.colors.goldBright,
-
-                    transparent:
-                        true,
-
-                    opacity:
-                        0.38,
-
-                    blending:
-                        THREE.AdditiveBlending,
-
-                    depthWrite:
-                        false
-                });
-
-
-            const ring =
-                new THREE.Mesh(
-                    geometry,
-                    material
-                );
-
-
-            ring.rotation.set(
-                ...config.rotation
-            );
-
-
-            ring.userData.speed =
-                config.speed;
-
-
-            outerGroup.add(
-                ring
-            );
-        }
+    dashboardGroup.add(
+        mesh
     );
 
 
-    /* =====================================================
-       PARTÍCULAS ORBITALES
-    ====================================================== */
-
-    createOrbitalParticles();
+    return mesh;
 }
 
 
-/* =========================================================
-   PARTÍCULAS ORBITALES
-   ========================================================= */
+const ringX =
+    createDashboardRing(
+        2.3,
+        0.012,
+        6,
+        96,
+        {
+            x: Math.PI / 2,
+            y: 0,
+            z: 0
+        }
+    );
 
-function createOrbitalParticles() {
 
-    const count = 900;
+const ringY =
+    createDashboardRing(
+        2.55,
+        0.009,
+        5,
+        128,
+        {
+            x: 0,
+            y: Math.PI / 2,
+            z: 0.4
+        }
+    );
+
+
+const ringZ =
+    createDashboardRing(
+        2.82,
+        0.008,
+        5,
+        144,
+        {
+            x: 0.5,
+            y: 0.2,
+            z: 0
+        }
+    );
+
+
+/* ============================================================
+   RADIAL CIRCUIT TRACES
+============================================================ */
+
+const circuitGroup =
+    new THREE.Group();
+
+
+coreGroup.add(
+    circuitGroup
+);
+
+
+function createRadialCircuit(
+    index,
+    total
+) {
+
+    const points =
+        [];
+
+
+    const baseAngle =
+        (
+            index /
+            total
+        ) *
+        Math.PI *
+        2;
+
+
+    const radiusStart =
+        1.75;
+
+
+    const radiusEnd =
+        3.05;
+
+
+    const segments =
+        7;
+
+
+    for (
+        let i = 0;
+        i <= segments;
+        i++
+    ) {
+
+        const progress =
+            i /
+            segments;
+
+
+        const radius =
+            THREE.MathUtils.lerp(
+                radiusStart,
+                radiusEnd,
+                progress
+            );
+
+
+        let angle =
+            baseAngle;
+
+
+        /*
+         * Pequeñas desviaciones
+         * para que parezca un circuito
+         * y no un simple rayo.
+         */
+
+        if (
+            i > 1 &&
+            i < segments
+        ) {
+
+            angle +=
+                (
+                    Math.random() -
+                    0.5
+                ) *
+                0.025;
+        }
+
+
+        points.push(
+            new THREE.Vector3(
+                Math.cos(angle) * radius,
+                Math.sin(angle) * radius,
+                (
+                    Math.random() -
+                    0.5
+                ) * 0.18
+            )
+        );
+    }
+
+
+    const geometry =
+        new THREE.BufferGeometry()
+            .setFromPoints(
+                points
+            );
+
+
+    const material =
+        new THREE.LineBasicMaterial({
+
+            color:
+                index % 3 === 0
+                    ? CONFIG.goldBright
+                    : CONFIG.gold,
+
+            transparent:
+                true,
+
+            opacity:
+                0.28 +
+                Math.random() * 0.2,
+
+            blending:
+                THREE.AdditiveBlending,
+
+            depthWrite:
+                false
+        });
+
+
+    const line =
+        new THREE.Line(
+            geometry,
+            material
+        );
+
+
+    circuitGroup.add(
+        line
+    );
+}
+
+
+for (
+    let i = 0;
+    i < 36;
+    i++
+) {
+
+    createRadialCircuit(
+        i,
+        36
+    );
+}
+
+
+/* ============================================================
+   ORBITING DATA PARTICLES
+============================================================ */
+
+const orbitGroup =
+    new THREE.Group();
+
+
+coreGroup.add(
+    orbitGroup
+);
+
+
+function createOrbitParticles(
+    radius,
+    count,
+    opacity
+) {
+
+    const geometry =
+        new THREE.BufferGeometry();
+
 
     const positions =
         new Float32Array(
@@ -676,48 +1141,42 @@ function createOrbitalParticles() {
         i++
     ) {
 
-        const radius =
-            2.2 +
-            Math.random() * 2.7;
-
-
-        const theta =
+        const angle =
             Math.random() *
-            Math.PI * 2;
+            Math.PI *
+            2;
 
 
-        const phi =
-            Math.acos(
-                2 * Math.random() - 1
-            );
+        const radiusOffset =
+            (
+                Math.random() -
+                0.5
+            ) *
+            0.10;
+
+
+        const r =
+            radius +
+            radiusOffset;
 
 
         positions[i * 3] =
-            radius *
-            Math.sin(phi) *
-            Math.cos(theta);
-
+            Math.cos(angle) * r;
 
         positions[i * 3 + 1] =
-            radius *
-            Math.sin(phi) *
-            Math.sin(theta);
-
+            Math.sin(angle) * r;
 
         positions[i * 3 + 2] =
-            radius *
-            Math.cos(phi);
+            (
+                Math.random() -
+                0.5
+            ) *
+            0.25;
     }
 
 
-    const geometry =
-        new THREE.BufferGeometry();
-
-
     geometry.setAttribute(
-
         "position",
-
         new THREE.BufferAttribute(
             positions,
             3
@@ -729,16 +1188,16 @@ function createOrbitalParticles() {
         new THREE.PointsMaterial({
 
             color:
-                CONFIG.colors.cyan,
+                CONFIG.goldLight,
 
             size:
-                0.018,
+                0.025,
 
             transparent:
                 true,
 
             opacity:
-                0.48,
+                opacity,
 
             blending:
                 THREE.AdditiveBlending,
@@ -748,26 +1207,502 @@ function createOrbitalParticles() {
         });
 
 
-    const particles =
+    const points =
         new THREE.Points(
             geometry,
             material
         );
 
 
-    particles.userData.speed =
-        0.025;
+    orbitGroup.add(
+        points
+    );
 
 
-    outerGroup.add(
-        particles
+    return points;
+}
+
+
+const orbitA =
+    createOrbitParticles(
+        2.5,
+        420,
+        0.8
+    );
+
+
+const orbitB =
+    createOrbitParticles(
+        2.9,
+        320,
+        0.6
+    );
+
+
+/* ============================================================
+   CENTRAL ENERGY CORE
+============================================================ */
+
+const coreSphere =
+    new THREE.Mesh(
+
+        new THREE.SphereGeometry(
+            0.42,
+            32,
+            32
+        ),
+
+        new THREE.MeshBasicMaterial({
+
+            color:
+                CONFIG.goldLight,
+
+            transparent:
+                true,
+
+            opacity:
+                0.75,
+
+            blending:
+                THREE.AdditiveBlending,
+
+            depthWrite:
+                false
+        })
+    );
+
+
+coreGroup.add(
+    coreSphere
+);
+
+
+/* ============================================================
+   CORE INNER RING
+============================================================ */
+
+const innerRing =
+    new THREE.Mesh(
+
+        new THREE.RingGeometry(
+            0.48,
+            0.52,
+            96
+        ),
+
+        new THREE.MeshBasicMaterial({
+
+            color:
+                CONFIG.goldBright,
+
+            transparent:
+                true,
+
+            opacity:
+                0.65,
+
+            side:
+                THREE.DoubleSide,
+
+            blending:
+                THREE.AdditiveBlending,
+
+            depthWrite:
+                false
+        })
+    );
+
+
+innerRing.rotation.x =
+    Math.PI / 2;
+
+
+coreGroup.add(
+    innerRing
+);
+
+
+/* ============================================================
+   OUTER ORBITAL RINGS
+============================================================ */
+
+const orbitalGroup =
+    new THREE.Group();
+
+
+coreGroup.add(
+    orbitalGroup
+);
+
+
+function createOrbitalRing(
+    radius,
+    rotation,
+    opacity
+) {
+
+    const geometry =
+        new THREE.TorusGeometry(
+            radius,
+            0.012,
+            5,
+            160
+        );
+
+
+    const material =
+        new THREE.MeshBasicMaterial({
+
+            color:
+                CONFIG.goldBright,
+
+            transparent:
+                true,
+
+            opacity:
+                opacity,
+
+            blending:
+                THREE.AdditiveBlending,
+
+            depthWrite:
+                false
+        });
+
+
+    const ring =
+        new THREE.Mesh(
+            geometry,
+            material
+        );
+
+
+    ring.rotation.set(
+        rotation.x,
+        rotation.y,
+        rotation.z
+    );
+
+
+    orbitalGroup.add(
+        ring
+    );
+
+
+    return ring;
+}
+
+
+const orbitRingX =
+    createOrbitalRing(
+        3.15,
+        {
+            x: 0,
+            y: Math.PI / 2,
+            z: 0
+        },
+        0.5
+    );
+
+
+const orbitRingY =
+    createOrbitalRing(
+        3.28,
+        {
+            x: Math.PI / 2,
+            y: 0,
+            z: 0.4
+        },
+        0.38
+    );
+
+
+const orbitRingZ =
+    createOrbitalRing(
+        3.42,
+        {
+            x: 0.6,
+            y: 0.4,
+            z: 0
+        },
+        0.28
+    );
+
+
+/* ============================================================
+   RANDOM MICRO NODES
+============================================================ */
+
+const microNodeGroup =
+    new THREE.Group();
+
+
+coreGroup.add(
+    microNodeGroup
+);
+
+
+for (
+    let i = 0;
+    i < 90;
+    i++
+) {
+
+    const angle =
+        Math.random() *
+        Math.PI *
+        2;
+
+
+    const radius =
+        1.7 +
+        Math.random() *
+        1.5;
+
+
+    const node =
+        new THREE.Mesh(
+
+            new THREE.SphereGeometry(
+                0.018 +
+                Math.random() * 0.018,
+                8,
+                8
+            ),
+
+            new THREE.MeshBasicMaterial({
+
+                color:
+                    i % 5 === 0
+                        ? CONFIG.goldLight
+                        : CONFIG.gold,
+
+                transparent:
+                    true,
+
+                opacity:
+                    0.55 +
+                    Math.random() * 0.4,
+
+                blending:
+                    THREE.AdditiveBlending,
+
+                depthWrite:
+                    false
+            })
+        );
+
+
+    node.position.set(
+
+        Math.cos(angle) * radius,
+
+        Math.sin(angle) * radius,
+
+        (
+            Math.random() -
+            0.5
+        ) *
+        0.5
+    );
+
+
+    microNodeGroup.add(
+        node
     );
 }
 
 
-/* =========================================================
-   ANIMACIÓN
-   ========================================================= */
+/* ============================================================
+   POINTER INTERACTION
+============================================================ */
+
+const pointer =
+    new THREE.Vector2(
+        0,
+        0
+    );
+
+
+window.addEventListener(
+    "pointermove",
+    (event) => {
+
+        pointer.x =
+            (
+                event.clientX /
+                window.innerWidth
+            ) *
+            2 -
+            1;
+
+
+        pointer.y =
+            -(
+                event.clientY /
+                window.innerHeight
+            ) *
+            2 +
+            1;
+
+    },
+    {
+        passive: true
+    }
+);
+
+
+/* ============================================================
+   RESIZE
+============================================================ */
+
+function resize() {
+
+    const width =
+        stage.clientWidth ||
+        600;
+
+
+    const height =
+        stage.clientHeight ||
+        600;
+
+
+    camera.aspect =
+        width /
+        height;
+
+
+    camera.updateProjectionMatrix();
+
+
+    renderer.setSize(
+        width,
+        height,
+        false
+    );
+
+
+    composer.setSize(
+        width,
+        height
+    );
+
+}
+
+
+window.addEventListener(
+    "resize",
+    resize
+);
+
+
+resize();
+
+
+/* ============================================================
+   CLOCK
+============================================================ */
+
+function updateClock() {
+
+    const clockElement =
+        document.getElementById(
+            "clock"
+        );
+
+
+    if (!clockElement) {
+        return;
+    }
+
+
+    const now =
+        new Date();
+
+
+    const hours =
+        String(
+            now.getHours()
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    const minutes =
+        String(
+            now.getMinutes()
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    const seconds =
+        String(
+            now.getSeconds()
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    clockElement.textContent =
+        `${hours}:${minutes}:${seconds}`;
+}
+
+
+updateClock();
+
+
+setInterval(
+    updateClock,
+    1000
+);
+
+
+/* ============================================================
+   TOOLS TOGGLE
+============================================================ */
+
+const toolsToggle =
+    document.getElementById(
+        "toolsToggle"
+    );
+
+
+const toolsSection =
+    document.querySelector(
+        ".tools-section"
+    );
+
+
+if (
+    toolsToggle &&
+    toolsSection
+) {
+
+    toolsToggle.addEventListener(
+        "click",
+        () => {
+
+            toolsSection.classList.toggle(
+                "open"
+            );
+
+        }
+    );
+}
+
+
+/* ============================================================
+   ANIMATION
+============================================================ */
+
+const clock =
+    new THREE.Clock();
+
 
 function animate() {
 
@@ -780,176 +1715,215 @@ function animate() {
         clock.getElapsedTime();
 
 
-    /* =====================================================
-       NÚCLEO
-    ====================================================== */
+    /* --------------------------------
+       Core
+    -------------------------------- */
 
-    if (particleCore) {
-
-        particleCore.rotation.x =
-            elapsed * 0.045;
-
-        particleCore.rotation.y =
-            elapsed * 0.065;
-
-        particleCore.rotation.z =
-            elapsed * 0.025;
-    }
+    innerPoints.rotation.y +=
+        CONFIG.rotation.inner;
 
 
-    /* =====================================================
-       SHELL
-    ====================================================== */
-
-    if (innerShell) {
-
-        const pulse =
-            1 +
-            Math.sin(elapsed * 2.2)
-            * 0.025;
+    innerPoints.rotation.x +=
+        CONFIG.rotation.inner * 0.35;
 
 
-        innerShell.scale.setScalar(
-            pulse
-        );
-    }
+    innerShell.rotation.y -=
+        CONFIG.rotation.inner * 0.6;
 
 
-    /* =====================================================
-       ANILLOS
-    ====================================================== */
-
-    if (ringGroup) {
-
-        ringGroup.children
-            .forEach(ring => {
-
-                ring.rotation.x +=
-                    ring.userData.speed *
-                    0.002;
-
-                ring.rotation.y +=
-                    ring.userData.speed *
-                    0.003;
-            });
-    }
+    nodePoints.rotation.y +=
+        0.0007;
 
 
-    /* =====================================================
-       ICOSAEDRO / EXTERIOR
-    ====================================================== */
-
-    if (outerGroup) {
-
-        outerGroup.rotation.x =
-            elapsed * 0.045;
-
-        outerGroup.rotation.y =
-            elapsed * 0.065;
-
-        outerGroup.rotation.z =
-            elapsed * 0.025;
-    }
+    nodePoints.rotation.z -=
+        0.0004;
 
 
-    /* =====================================================
-       MOVIMIENTO DE CÁMARA
-       RESPUESTA AL CURSOR
-    ====================================================== */
-
-    camera.position.x +=
-        (
-            mouse.x * 0.65 -
-            camera.position.x
-        ) * 0.025;
+    connectionLines.rotation.y +=
+        0.0007;
 
 
-    camera.position.y +=
-        (
-            mouse.y * 0.35 -
-            camera.position.y
-        ) * 0.025;
+    connectionLines.rotation.x +=
+        0.00025;
 
 
-    camera.lookAt(
-        0,
-        0,
-        0
+    /* --------------------------------
+       Dashboard discs
+    -------------------------------- */
+
+    discA.rotation.z +=
+        CONFIG.rotation.ringA;
+
+
+    discB.rotation.z +=
+        CONFIG.rotation.ringB;
+
+
+    discC.rotation.z +=
+        CONFIG.rotation.ringC;
+
+
+    /* --------------------------------
+       Dashboard rings
+    -------------------------------- */
+
+    ringX.rotation.z +=
+        0.0009;
+
+
+    ringY.rotation.x -=
+        0.00065;
+
+
+    ringZ.rotation.y +=
+        0.00075;
+
+
+    /* --------------------------------
+       Circuit traces
+    -------------------------------- */
+
+    circuitGroup.rotation.z +=
+        CONFIG.rotation.circuitA;
+
+
+    circuitGroup.rotation.x +=
+        0.00025;
+
+
+    /* --------------------------------
+       Orbital particles
+    -------------------------------- */
+
+    orbitA.rotation.z +=
+        0.0012;
+
+
+    orbitB.rotation.z -=
+        0.0008;
+
+
+    orbitB.rotation.x +=
+        0.00035;
+
+
+    /* --------------------------------
+       Outer rings
+    -------------------------------- */
+
+    orbitRingX.rotation.z +=
+        0.0008;
+
+
+    orbitRingY.rotation.y -=
+        0.00065;
+
+
+    orbitRingZ.rotation.x +=
+        0.0005;
+
+
+    /* --------------------------------
+       Micro nodes
+    -------------------------------- */
+
+    microNodeGroup.rotation.y +=
+        0.0006;
+
+
+    microNodeGroup.rotation.z -=
+        0.00025;
+
+
+    /* --------------------------------
+       Central energy pulse
+    -------------------------------- */
+
+    const pulse =
+        1 +
+        Math.sin(
+            elapsed * 2.5
+        ) *
+        0.055;
+
+
+    coreSphere.scale.setScalar(
+        pulse
     );
 
 
-    /* =====================================================
-       RENDER
-    ====================================================== */
+    innerRing.rotation.z +=
+        0.0025;
+
+
+    /* --------------------------------
+       Pointer parallax
+    -------------------------------- */
+
+    const targetRotationY =
+        pointer.x *
+        0.10;
+
+
+    const targetRotationX =
+        pointer.y *
+        0.06;
+
+
+    coreGroup.rotation.y +=
+        (
+            targetRotationY -
+            coreGroup.rotation.y
+        ) *
+        0.025;
+
+
+    coreGroup.rotation.x +=
+        (
+            targetRotationX -
+            coreGroup.rotation.x
+        ) *
+        0.025;
+
+
+    /* --------------------------------
+       Subtle vertical breathing
+    -------------------------------- */
+
+    coreGroup.position.y =
+        Math.sin(
+            elapsed * 0.7
+        ) *
+        0.025;
+
+
+    /* --------------------------------
+       Render
+    -------------------------------- */
 
     composer.render();
+
 }
 
 
-/* =========================================================
-   RESIZE
-   ========================================================= */
-
-function onResize() {
-
-    const width =
-        window.innerWidth;
-
-    const height =
-        window.innerHeight;
+animate();
 
 
-    camera.aspect =
-        width / height;
+/* ============================================================
+   FINAL STATUS
+============================================================ */
 
+console.log(
+    "%cJ.A.R.V.I.S. COGNITIVE CORE ONLINE",
+    "color:#ffaa00;font-weight:bold;font-size:14px;"
+);
 
-    camera.updateProjectionMatrix();
+console.log(
+    "%cThree.js + WebGL + UnrealBloomPass",
+    "color:#ffda7a;"
+);
 
-
-    renderer.setSize(
-        width,
-        height
-    );
-
-
-    composer.setSize(
-        width,
-        height
-    );
-
-
-    renderer.setPixelRatio(
-        Math.min(
-            window.devicePixelRatio,
-            1.75
-        )
-    );
-}
-
-
-/* =========================================================
-   MOUSE / TOUCH
-   ========================================================= */
-
-function onPointerMove(event) {
-
-    mouse.x =
-        (
-            event.clientX /
-            window.innerWidth
-        ) * 2 - 1;
-
-
-    mouse.y =
-        -(
-            event.clientY /
-            window.innerHeight
-        ) * 2 + 1;
-}
-
-
-/* =========================================================
-   ARRANQUE
-   ========================================================= */
-
-init();
+console.log(
+    "%cComplex geometric network initialized.",
+    "color:#d7dbe0;"
+);
