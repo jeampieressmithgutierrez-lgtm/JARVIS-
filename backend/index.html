@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
 
@@ -9,633 +8,254 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <meta
-        name="theme-color"
-        content="#05070b"
-    >
-
-    <meta
-        name="description"
-        content="J.A.R.V.I.S. — Stark Industries"
-    >
-
-    <title>J.A.R.V.I.S. • Stark Industries</title>
-
+    <title>J.A.R.V.I.S. — Stark Interface</title>
 
     <!-- =====================================================
          FUENTES
     ====================================================== -->
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-
     <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin
-    >
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Share+Tech+Mono&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Share+Tech+Mono&display=swap"
         rel="stylesheet"
     >
-
 
     <!-- =====================================================
-         CSS
+         ESTILOS
     ====================================================== -->
+    <link rel="stylesheet" href="/css/styles.css">
 
-    <link
-        rel="stylesheet"
-        href="css/styles.css"
-    >
-
-    <link
-        rel="stylesheet"
-        href="css/hud.css"
-    >
-
-    <link
-        rel="stylesheet"
-        href="css/chat.css"
-    >
-
-    <link
-        rel="stylesheet"
-        href="css/animations.css"
-    >
-
-    <link
-        rel="stylesheet"
-        href="css/responsive.css"
-    >
-
-    <link
-        rel="stylesheet"
-        href="css/jarvis-intro.css"
-    >
-
+    <!-- =====================================================
+         THREE.JS IMPORT MAP
+         
+         Three.js recomienda importar el núcleo y los addons
+         desde la misma versión y CDN.
+    ====================================================== -->
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
+        }
+    }
+    </script>
 </head>
-
 
 <body>
 
+    <!-- =====================================================
+         ESCENA 3D
+         Este canvas queda detrás de toda la interfaz.
+    ====================================================== -->
+    <div id="three-background" aria-hidden="true"></div>
 
     <!-- =====================================================
-         INTRO CINEMÁTICA
+         CAPA HUD
     ====================================================== -->
-
-    <div
-        id="jarvis-intro"
-        aria-hidden="true"
-    >
-
-        <div class="intro-cinema">
-
-            <div
-                class="intro-logo"
-                aria-label="J.A.R.V.I.S."
-            >
-
-                <span class="intro-j-space">J</span>
-
-                <span class="intro-letter intro-j">J</span>
-
-                <span class="intro-letter intro-dot">.</span>
-
-                <span class="intro-letter intro-a">A</span>
-
-                <span class="intro-letter intro-dot">.</span>
-
-                <span class="intro-letter intro-r">R</span>
-
-                <span class="intro-letter intro-dot">.</span>
-
-                <span class="intro-letter intro-v">V</span>
-
-                <span class="intro-letter intro-dot">.</span>
-
-                <span class="intro-letter intro-i">I</span>
-
-                <span class="intro-letter intro-dot">.</span>
-
-                <span class="intro-letter intro-s">S</span>
-
-            </div>
-
-
-            <div class="intro-subtitle">
-                ARTIFICIAL INTELLIGENCE
-            </div>
-
-
-            <div class="intro-status">
-
-                <span class="intro-status-dot"></span>
-
-                <span>STARK INDUSTRIES</span>
-
-                <span class="intro-status-separator">
-                    •
-                </span>
-
-                <span>COGNITIVE SYSTEM</span>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- =====================================================
-         FONDO
-    ====================================================== -->
-
-    <div id="background-container">
-
-        <canvas id="particles-canvas"></canvas>
-
-        <div id="grid-overlay"></div>
-
-        <div id="scan-overlay"></div>
-
-    </div>
-
-
-    <!-- =====================================================
-         HUD
-    ====================================================== -->
-
     <div id="hud">
 
-
         <!-- =================================================
-             CABECERA
+             SIDEBAR
         ================================================== -->
+        <aside id="sidebar" class="glass-panel">
 
-        <header id="topbar">
-
-
-            <!-- =================================================
-                 J.A.R.V.I.S.
-            ================================================== -->
-
-            <div class="top-brand">
-
-                <div class="jarvis-header-logo">
-                    J.A.R.V.I.S.
-                </div>
-
-                <div class="jarvis-header-subtitle">
-                    ARTIFICIAL INTELLIGENCE
-                </div>
-
+            <div class="sidebar-search">
+                <span class="ui-icon">⌕</span>
+                <input
+                    id="chatSearch"
+                    type="text"
+                    placeholder="Buscar chats..."
+                    autocomplete="off"
+                >
             </div>
 
+            <section class="history-section">
 
-            <!-- =================================================
-                 RELOJ
-            ================================================== -->
+                <div class="section-heading">
+                    <span>HISTORIAL</span>
 
-            <div class="top-center">
+                    <button
+                        id="newChatButton"
+                        type="button"
+                        aria-label="Nuevo chat"
+                    >
+                        +
+                    </button>
+                </div>
 
-                <div
-                    id="clock"
-                    aria-label="Hora del sistema"
+                <div id="chat-history"></div>
+
+            </section>
+
+            <section class="tools-section">
+
+                <button
+                    id="toolsButton"
+                    class="glass-button"
+                    type="button"
                 >
+                    ✦ HERRAMIENTAS
+                </button>
+
+            </section>
+
+            <section class="user-section">
+
+                <div class="user-status">
+                    <span class="status-dot"></span>
+
+                    <div>
+                        <strong>USUARIO</strong>
+                        <small id="userStatus">
+                            INVITADO
+                        </small>
+                    </div>
+                </div>
+
+                <div class="login-methods">
+
+                    <button
+                        class="login-method"
+                        type="button"
+                        aria-label="Google"
+                    >
+                        G
+                    </button>
+
+                    <button
+                        class="login-method"
+                        type="button"
+                        aria-label="Apple"
+                    >
+                        
+                    </button>
+
+                    <button
+                        class="login-method"
+                        type="button"
+                        aria-label="Facebook"
+                    >
+                        f
+                    </button>
+
+                </div>
+
+            </section>
+
+        </aside>
+
+        <!-- =================================================
+             ÁREA PRINCIPAL
+        ================================================== -->
+        <main id="main-interface">
+
+            <!-- =============================================
+                 TOPBAR
+            ============================================== -->
+            <header id="topbar">
+
+                <div class="jarvis-brand">
+                    <div class="jarvis-name">
+                        J.A.R.V.I.S.
+                    </div>
+
+                    <div class="jarvis-subtitle">
+                        ARTIFICIAL INTELLIGENCE
+                    </div>
+                </div>
+
+                <div id="system-clock">
                     00:00:00
                 </div>
 
-                <div class="system-line"></div>
+                <div class="stark-brand">
+                    <div class="stark-mark">
+                        S
+                    </div>
 
-            </div>
-
-
-            <!-- =================================================
-                 STARK INDUSTRIES
-            ================================================== -->
-
-            <div class="stark-brand">
-
-                <div class="stark-logo-mark">
-
-                    <span class="stark-logo-text">
-                        STARK INDUSTRIES
-                    </span>
-
-                    <span class="stark-logo-arrow">
-                        ◢
-                    </span>
-
+                    <div>
+                        <strong>STARK</strong>
+                        <span>INDUSTRIES</span>
+                    </div>
                 </div>
 
+            </header>
 
-                <div class="system-state">
-
-                    <span id="status-light"></span>
-
-                    <span>
-                        ONLINE
-                    </span>
-
-                </div>
-
-            </div>
-
-        </header>
-
-
-        <!-- =================================================
-             CUERPO
-        ================================================== -->
-
-        <div id="main-layout">
-
-
-            <!-- =================================================
-                 SIDEBAR
-            ================================================== -->
-
-            <aside id="sidebar">
-
-
-                <!-- =================================================
-                     BUSCADOR
-                ================================================== -->
-
-                <section class="sidebar-section search-section">
-
-                    <div class="chat-search">
-
-                        <span
-                            class="search-icon"
-                            aria-hidden="true"
-                        >
-                            ⌕
-                        </span>
-
-                        <input
-                            id="chatSearchInput"
-                            type="text"
-                            placeholder="Buscar Chat..."
-                            autocomplete="off"
-                            aria-label="Buscar conversaciones"
-                        >
-
-                    </div>
-
-                </section>
-
-
-                <!-- =================================================
-                     HISTORIAL
-                ================================================== -->
-
-                <section class="sidebar-section history-section">
-
-                    <div class="history-header">
-
-                        <div class="section-label">
-                            HISTORIAL
-                        </div>
-
-                        <button
-                            id="newChatButton"
-                            type="button"
-                            aria-label="Nueva conversación"
-                            title="Nueva conversación"
-                        >
-                            +
-                        </button>
-
-                    </div>
-
-
-                    <div id="chat-history">
-
-                        <!-- chat.js genera aquí las conversaciones -->
-
-                    </div>
-
-                </section>
-
-
-                <!-- =================================================
-                     HERRAMIENTAS
-                ================================================== -->
-
-                <section class="sidebar-section tools-section">
-
-                    <div class="tools-header">
-
-                        <div class="section-label">
-                            HERRAMIENTAS
-                        </div>
-
-                    </div>
-
-
-                    <button
-                        id="toolsButton"
-                        class="tools-bubble"
-                        type="button"
-                        aria-label="Herramientas"
-                        title="Herramientas"
-                    >
-
-                        <span class="tools-bubble-icon">
-                            ◉
-                        </span>
-
-                        <span class="tools-bubble-text">
-                            HERRAMIENTAS
-                        </span>
-
-                    </button>
-
-                </section>
-
-
-                <!-- =================================================
-                     USUARIO
-                ================================================== -->
-
-                <section class="sidebar-section user-section">
-
-
-                    <div class="section-label">
-                        USUARIO
-                    </div>
-
-
-                    <div class="user-account">
-
-                        <div
-                            class="user-avatar"
-                            aria-hidden="true"
-                        >
-                            ◉
-                        </div>
-
-
-                        <div class="user-info">
-
-                            <div
-                                id="user-name"
-                                class="user-name"
-                            >
-                                Invitado
-                            </div>
-
-                            <div class="user-status">
-                                SESIÓN TEMPORAL
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- =================================================
-                         LOGIN
-                    ================================================== -->
-
-                    <a
-                        href="/auth/google"
-                        id="google-login"
-                        class="google-login"
-                    >
-
-                        <span class="google-symbol">
-                            G
-                        </span>
-
-                        <span>
-                            INICIAR CON GOOGLE
-                        </span>
-
-                    </a>
-
-
-                    <!-- =================================================
-                         ACCESOS
-                    ================================================== -->
-
-                    <div class="login-options">
-
-                        <button
-                            class="login-option"
-                            type="button"
-                            title="Apple"
-                        >
-                            
-                            <span>Apple</span>
-                        </button>
-
-
-                        <button
-                            class="login-option"
-                            type="button"
-                            title="Facebook"
-                        >
-                            f
-                            <span>Facebook</span>
-                        </button>
-
-
-                        <button
-                            class="login-option"
-                            type="button"
-                            title="Webcam"
-                        >
-                            ◉
-                            <span>Webcam</span>
-                        </button>
-
-
-                        <button
-                            class="login-option"
-                            type="button"
-                            title="Otros"
-                        >
-                            +
-                            <span>Otros</span>
-                        </button>
-
-                    </div>
-
-                </section>
-
-            </aside>
-
-
-            <!-- =================================================
+            <!-- =============================================
                  CHAT
-            ================================================== -->
+            ============================================== -->
+            <section id="chat-container">
 
-            <main
-                id="chat-container"
-                aria-label="Consola de J.A.R.V.I.S."
-            >
-
-
-                <!-- =================================================
-                     VISUAL CENTRAL
-                     AQUÍ SE COLOCARÁ LA IMAGEN DE REFERENCIA
-                ================================================== -->
-
+                <!-- =========================================
+                     ORBE 3D
+                     ====================================== -->
                 <div
-                    id="jarvis-visual"
+                    id="jarvis-core-stage"
                     aria-hidden="true"
-                >
+                ></div>
 
-                    <div id="jarvis-visual-aura"></div>
-
-                    <div id="jarvis-visual-frame">
-
-                        <div id="jarvis-visual-placeholder"></div>
-
-                    </div>
-
-                </div>
-
-
-                <!-- =================================================
+                <!-- =========================================
                      MENSAJES
-                ================================================== -->
+                     ====================================== -->
+                <div id="messages"></div>
 
-                <div
-                    id="messages"
-                    aria-live="polite"
-                    aria-label="Conversación"
-                >
-
-                    <!-- chat.js genera los mensajes -->
-
-                </div>
-
-
-                <!-- =================================================
-                     CONSOLA DEL CHAT
-                     IMPORTANTE:
-                     ESTÁ DENTRO DE #chat-container
-                     Y NO EN LA BARRA LATERAL
-                ================================================== -->
-
-                <footer id="console">
+                <!-- =========================================
+                     COMPOSER FLOTANTE
+                     ====================================== -->
+                <div id="console">
 
                     <div class="console-wrapper">
 
-
-                        <!-- =================================================
-                             CAMPO
-                        ================================================== -->
-
                         <input
-                            type="text"
                             id="messageInput"
-                            placeholder="Ingrese su solicitud..."
+                            type="text"
+                            placeholder="Escriba una instrucción..."
                             autocomplete="off"
-                            aria-label="Escribir mensaje"
                         >
-
-
-                        <!-- =================================================
-                             BOTÓN COGNITIVO
-                             SOLO VISUAL POR AHORA
-                        ================================================== -->
-
-                        <button
-                            id="cognitiveButton"
-                            class="console-icon-button cognitive-button"
-                            type="button"
-                            aria-label="Núcleo cognitivo"
-                            title="Núcleo cognitivo"
-                        >
-
-                            <span class="six-dot-core">
-
-                                <i></i>
-                                <i></i>
-                                <i></i>
-                                <i></i>
-                                <i></i>
-                                <i></i>
-
-                            </span>
-
-                        </button>
-
-
-                        <!-- =================================================
-                             MICRÓFONO
-                        ================================================== -->
 
                         <button
                             id="voiceButton"
-                            class="console-icon-button"
                             type="button"
-                            aria-label="Entrada de voz"
-                            title="Entrada de voz"
+                            aria-label="Micrófono"
                         >
-                            🎙
+                            <span class="mic-icon">◉</span>
                         </button>
 
-
-                        <!-- =================================================
-                             ENVIAR
-                             CONSERVA ID sendButton PARA NO ROMPER chat.js
-                        ================================================== -->
+                        <button
+                            id="cognitiveButton"
+                            type="button"
+                            aria-label="Funciones cognitivas"
+                        >
+                            <span class="cognitive-dots">
+                                • •
+                                <br>
+                                • •
+                            </span>
+                        </button>
 
                         <button
                             id="sendButton"
-                            class="console-send-button"
                             type="button"
                             aria-label="Enviar mensaje"
-                            title="Enviar mensaje"
                         >
-
-                            <span class="send-plane">
-                                ➤
-                            </span>
-
+                            ➤
                         </button>
-
 
                     </div>
 
-                </footer>
+                </div>
 
-            </main>
+            </section>
 
-        </div>
+        </main>
 
     </div>
 
-
     <!-- =====================================================
-         JAVASCRIPT
+         LÓGICA 3D
     ====================================================== -->
-
-    <script src="js/core.js"></script>
-
-    <script src="js/jarvis-intro.js"></script>
-
-    <script src="js/background.js"></script>
-
-    <script src="js/particles.js"></script>
-
-    <script src="js/effects.js"></script>
-
-    <script src="js/ui.js"></script>
-
-    <script src="js/chat.js"></script>
-
-    <script src="js/api.js"></script>
-
-    <script src="js/main.js"></script>
-
+    <script
+        type="module"
+        src="/js/script.js"
+    ></script>
 
 </body>
-
 </html>
