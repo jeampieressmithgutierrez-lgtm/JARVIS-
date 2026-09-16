@@ -176,7 +176,10 @@
 
             <!-- RELOJ -->
 
-            <div class="top-center">
+            <div
+                class="top-center"
+                aria-label="Reloj del sistema"
+            >
 
                 <div
                     id="clock"
@@ -185,7 +188,10 @@
                     00:00:00
                 </div>
 
-                <div class="system-line"></div>
+                <div
+                    class="system-line"
+                    aria-hidden="true"
+                ></div>
 
             </div>
 
@@ -204,7 +210,10 @@
 
                 <div class="system-state">
 
-                    <span id="status-light"></span>
+                    <span
+                        id="status-light"
+                        aria-hidden="true"
+                    ></span>
 
                     <span>
                         ONLINE
@@ -467,7 +476,10 @@
              COMPOSER
         ====================================================== -->
 
-        <footer id="console">
+        <footer
+            id="console"
+            aria-label="Entrada de mensajes"
+        >
 
             <div class="console-wrapper">
 
@@ -486,28 +498,15 @@
 
 
                 <!-- =================================================
-                     MICRÓFONO
-                     AHORA A LA DERECHA DEL INPUT
+                     ESTADO / ECUALIZADOR
                 ================================================== -->
 
-                <button
-                    id="voiceButton"
-                    class="console-icon-button"
-                    type="button"
-                    aria-label="Entrada de voz"
-                    title="Entrada de voz"
+                <div
+                    class="console-status"
+                    aria-label="Estado del sistema"
                 >
-                    🎙
-                </button>
 
-
-                <!-- =================================================
-                     ESTADO
-                ================================================== -->
-
-                <div class="console-status">
-
-                    <span></span>
+                    <span aria-hidden="true"></span>
 
                     READY
 
@@ -533,6 +532,21 @@
                     <span></span>
                     <span></span>
 
+                </button>
+
+
+                <!-- =================================================
+                     MICRÓFONO
+                ================================================== -->
+
+                <button
+                    id="voiceButton"
+                    class="console-icon-button"
+                    type="button"
+                    aria-label="Entrada de voz"
+                    title="Entrada de voz"
+                >
+                    🎙
                 </button>
 
 
@@ -625,6 +639,7 @@
 
     </script>
 
+
 </body>
 
-</html>VV
+</html>
