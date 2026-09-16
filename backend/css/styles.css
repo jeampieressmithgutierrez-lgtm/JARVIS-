@@ -403,6 +403,9 @@ body {
     font-size:
         19px;
 
+    font-weight:
+        500;
+
     letter-spacing:
         3px;
 
@@ -1507,6 +1510,9 @@ body {
     height:
         100%;
 
+    min-width:
+        0;
+
     overflow-y:
         auto;
 
@@ -1515,6 +1521,9 @@ body {
 
     scroll-behavior:
         smooth;
+
+    scroll-padding-bottom:
+        145px;
 
 }
 
@@ -1559,6 +1568,9 @@ body {
     bottom:
         17px;
 
+    width:
+        100%;
+
     display:
         flex;
 
@@ -1588,11 +1600,17 @@ body {
     align-items:
         center;
 
+    justify-content:
+        center;
+
     gap:
         10px;
 
     padding:
         10px 14px;
+
+    margin:
+        0 auto;
 
     border:
         1px solid rgba(255, 170, 0, 0.65);
@@ -1678,6 +1696,12 @@ body {
         grid;
 
     place-items:
+        center;
+
+    align-items:
+        center;
+
+    justify-content:
         center;
 
     border:
@@ -1782,6 +1806,12 @@ body {
         0;
 
     place-items:
+        center;
+
+    align-items:
+        center;
+
+    justify-content:
         center;
 
 }
@@ -1956,6 +1986,9 @@ body {
         padding:
             22px 15px 130px;
 
+        scroll-padding-bottom:
+            130px;
+
     }
 
     .console-wrapper {
@@ -2057,6 +2090,8 @@ body {
     }
 
 }
+
+
 /* =========================================================
    J.A.R.V.I.S. — UI POLISH PATCH
    PRESERVA EL LAYOUT EXISTENTE
@@ -2104,6 +2139,9 @@ body {
     width:
         100%;
 
+    min-width:
+        0;
+
     margin:
         4px 0 20px;
 
@@ -2118,6 +2156,9 @@ body {
 
     max-width:
         min(78%, 820px);
+
+    min-width:
+        0;
 
     padding:
         14px 18px;
@@ -2156,6 +2197,23 @@ body {
 
     letter-spacing:
         0.2px;
+
+    overflow-wrap:
+        anywhere;
+
+    word-break:
+        normal;
+
+}
+
+
+.jarvis-message .message-content p,
+.jarvis-content p,
+.jarvis-message .message-content li,
+.jarvis-content li {
+
+    overflow-wrap:
+        anywhere;
 
 }
 
@@ -2255,6 +2313,9 @@ body {
     width:
         100%;
 
+    min-width:
+        0;
+
     margin:
         4px 0 20px;
 
@@ -2265,6 +2326,9 @@ body {
 
     max-width:
         min(68%, 720px);
+
+    min-width:
+        0;
 
     padding:
         12px 16px;
@@ -2290,6 +2354,12 @@ body {
 
     line-height:
         1.65;
+
+    overflow-wrap:
+        anywhere;
+
+    word-break:
+        normal;
 
 }
 
@@ -2423,6 +2493,15 @@ body {
     bottom:
         17px;
 
+    width:
+        100%;
+
+    display:
+        flex;
+
+    justify-content:
+        center;
+
     pointer-events:
         none;
 
@@ -2430,6 +2509,9 @@ body {
 
 
 .console-wrapper {
+
+    width:
+        min(820px, 88%);
 
     display:
         flex;
@@ -2448,6 +2530,9 @@ body {
 
     padding:
         10px 14px;
+
+    margin:
+        0 auto;
 
 }
 
@@ -2523,6 +2608,12 @@ body {
     place-items:
         center;
 
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
     border-radius:
         50% !important;
 
@@ -2552,6 +2643,12 @@ body {
         grid;
 
     place-items:
+        center;
+
+    align-items:
+        center;
+
+    justify-content:
         center;
 
     border-radius:
@@ -2672,6 +2769,12 @@ body {
         "Share Tech Mono",
         "Orbitron",
         monospace;
+
+    font-size:
+        19px;
+
+    font-weight:
+        500;
 
     font-variant-numeric:
         tabular-nums;
