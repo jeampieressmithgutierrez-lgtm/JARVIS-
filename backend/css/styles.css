@@ -277,7 +277,9 @@ body {
         grid;
 
     grid-template-columns:
-        1fr auto 1fr;
+        minmax(0, 1fr)
+        auto
+        minmax(0, 1fr);
 
     align-items:
         center;
@@ -387,10 +389,25 @@ body {
     justify-content:
         center;
 
+    justify-self:
+        center;
+
+    text-align:
+        center;
+
 }
 
 
 #clock {
+
+    display:
+        block;
+
+    min-width:
+        92px;
+
+    text-align:
+        center;
 
     color:
         var(--gold-bright);
@@ -409,14 +426,17 @@ body {
     letter-spacing:
         3px;
 
-    text-shadow:
-        0 0 9px rgba(255, 204, 0, 0.4);
+    line-height:
+        1;
 
     font-variant-numeric:
         tabular-nums;
 
     white-space:
         nowrap;
+
+    text-shadow:
+        0 0 9px rgba(255, 204, 0, 0.4);
 
 }
 
@@ -464,6 +484,12 @@ body {
     align-items:
         flex-end;
 
+    min-width:
+        0;
+
+    text-align:
+        right;
+
 }
 
 
@@ -487,6 +513,9 @@ body {
 
     letter-spacing:
         3px;
+
+    white-space:
+        nowrap;
 
     text-shadow:
         0 0 9px rgba(255, 204, 0, 0.42);
@@ -514,6 +543,9 @@ body {
 
     letter-spacing:
         2.8px;
+
+    white-space:
+        nowrap;
 
 }
 
@@ -1022,6 +1054,9 @@ body {
 
 .chat-history-title {
 
+    flex:
+        1;
+
     width:
         100%;
 
@@ -1040,6 +1075,68 @@ body {
 
     font-size:
         13px;
+
+}
+
+
+/* =========================================================
+   HISTORIAL — INDICADORES
+========================================================= */
+
+#chat-history .chat-history-count,
+#chat-history .history-count,
+#chat-history .chat-count,
+#chat-history .history-number,
+#chat-history .chat-history-number,
+#chat-history .history-index,
+#chat-history .chat-index,
+#chat-history .conversation-count,
+#chat-history .conversation-number {
+
+    display:
+        none !important;
+
+}
+
+
+#chat-history .chat-history-item > small,
+#chat-history .chat-history-item > .count,
+#chat-history .chat-history-item > .number {
+
+    display:
+        none !important;
+
+}
+
+
+#chat-history .chat-history-title::before {
+
+    content:
+        "#";
+
+    display:
+        inline-block;
+
+    margin-right:
+        7px;
+
+    color:
+        #ffcc00;
+
+    font-family:
+        "Share Tech Mono",
+        monospace;
+
+    opacity:
+        0.8;
+
+}
+
+
+#chat-history .chat-history-title[data-has-hash="true"]::before {
+
+    display:
+        none;
 
 }
 
@@ -1516,6 +1613,9 @@ body {
     overflow-y:
         auto;
 
+    overflow-x:
+        hidden;
+
     padding:
         28px 34px 145px;
 
@@ -1523,7 +1623,7 @@ body {
         smooth;
 
     scroll-padding-bottom:
-        145px;
+        160px;
 
 }
 
@@ -1543,6 +1643,253 @@ body {
 
     border-radius:
         10px;
+
+}
+
+
+/* =========================================================
+   MENSAJES J.A.R.V.I.S.
+========================================================= */
+
+.jarvis-message {
+
+    display:
+        flex;
+
+    align-items:
+        flex-start;
+
+    gap:
+        11px;
+
+    width:
+        100%;
+
+    min-width:
+        0;
+
+    margin:
+        4px 0 20px;
+
+}
+
+
+.jarvis-message .message-content,
+.jarvis-content {
+
+    position:
+        relative;
+
+    flex:
+        0 1 auto;
+
+    min-width:
+        0;
+
+    max-width:
+        min(78%, 820px);
+
+    padding:
+        14px 18px;
+
+    background:
+        rgba(10, 15, 25, 0.58) !important;
+
+    border:
+        1px solid rgba(255, 170, 0, 0.4) !important;
+
+    border-radius:
+        10px;
+
+    box-shadow:
+        0 0 12px rgba(255, 170, 0, 0.07),
+        inset 0 0 8px rgba(255, 170, 0, 0.035);
+
+    backdrop-filter:
+        blur(10px);
+
+    -webkit-backdrop-filter:
+        blur(10px);
+
+    color:
+        #e5e9ee;
+
+    font-family:
+        "Share Tech Mono",
+        monospace;
+
+    font-size:
+        13px;
+
+    line-height:
+        1.72;
+
+    letter-spacing:
+        0.2px;
+
+    overflow-wrap:
+        anywhere;
+
+    word-break:
+        break-word;
+
+}
+
+
+.jarvis-message .message-content p,
+.jarvis-content p {
+
+    margin:
+        0 0 10px;
+
+}
+
+
+.jarvis-message .message-content p:last-child,
+.jarvis-content p:last-child {
+
+    margin-bottom:
+        0;
+
+}
+
+
+.jarvis-message .message-content strong,
+.jarvis-content strong {
+
+    color:
+        #ffcc00;
+
+    font-weight:
+        600;
+
+}
+
+
+/* =========================================================
+   AVATAR / CORE
+========================================================= */
+
+.jarvis-message .jarvis-core {
+
+    flex:
+        0 0 34px;
+
+    width:
+        34px;
+
+    height:
+        34px;
+
+    display:
+        grid;
+
+    place-items:
+        center;
+
+    margin-top:
+        4px;
+
+    border:
+        1px solid rgba(255, 170, 0, 0.65);
+
+    border-radius:
+        50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255, 204, 0, 0.38),
+            rgba(255, 170, 0, 0.08) 48%,
+            rgba(255, 170, 0, 0.015) 72%
+        );
+
+    box-shadow:
+        0 0 12px rgba(255, 170, 0, 0.3),
+        inset 0 0 8px rgba(255, 170, 0, 0.2);
+
+}
+
+
+/* =========================================================
+   OCULTAR IDENTIDAD / FOOTER
+========================================================= */
+
+.jarvis-message-header .jarvis-identity,
+.jarvis-message-header .jarvis-identity *,
+.jarvis-message-footer,
+.jarvis-message .jarvis-message-footer,
+.jarvis-message .system-response,
+.jarvis-message .system-response-label {
+
+    display:
+        none !important;
+
+}
+
+
+/* =========================================================
+   USUARIO
+========================================================= */
+
+.user-message {
+
+    display:
+        flex;
+
+    justify-content:
+        flex-end;
+
+    width:
+        100%;
+
+    min-width:
+        0;
+
+    margin:
+        4px 0 20px;
+
+}
+
+
+.user-message .message-content {
+
+    min-width:
+        0;
+
+    max-width:
+        min(68%, 720px);
+
+    padding:
+        12px 16px;
+
+    background:
+        rgba(255, 170, 0, 0.075);
+
+    border:
+        1px solid rgba(255, 170, 0, 0.28);
+
+    border-radius:
+        10px;
+
+    color:
+        #e8edf3;
+
+    font-family:
+        "Share Tech Mono",
+        monospace;
+
+    font-size:
+        12px;
+
+    line-height:
+        1.65;
+
+    overflow-wrap:
+        anywhere;
+
+    word-break:
+        break-word;
 
 }
 
@@ -1597,6 +1944,9 @@ body {
     display:
         flex;
 
+    flex-direction:
+        row;
+
     align-items:
         center;
 
@@ -1608,9 +1958,6 @@ body {
 
     padding:
         10px 14px;
-
-    margin:
-        0 auto;
 
     border:
         1px solid rgba(255, 170, 0, 0.65);
@@ -1637,19 +1984,29 @@ body {
 }
 
 
+/* =========================================================
+   CAMPO DE MENSAJE
+========================================================= */
+
 #messageInput {
 
-    flex:
+    order:
         1;
+
+    flex:
+        1 1 auto;
 
     min-width:
         0;
+
+    width:
+        100%;
 
     height:
         43px;
 
     padding:
-        0 4px;
+        0 6px;
 
     border:
         0;
@@ -1682,7 +2039,76 @@ body {
 
 
 /* =========================================================
-   CONSOLE BUTTONS
+   ESTADO
+========================================================= */
+
+.console-status {
+
+    order:
+        2;
+
+    flex:
+        0 0 auto;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    gap:
+        5px;
+
+    padding:
+        0 5px;
+
+    color:
+        #777f89;
+
+    font-family:
+        "Share Tech Mono",
+        monospace;
+
+    font-size:
+        8px;
+
+    letter-spacing:
+        1px;
+
+    white-space:
+        nowrap;
+
+}
+
+
+.console-status span {
+
+    width:
+        5px;
+
+    height:
+        5px;
+
+    flex:
+        0 0 5px;
+
+    border-radius:
+        50%;
+
+    background:
+        #ffcc00;
+
+    box-shadow:
+        0 0 6px #ffcc00;
+
+}
+
+
+/* =========================================================
+   BOTONES DE CONSOLA
 ========================================================= */
 
 .console-icon-button,
@@ -1696,12 +2122,6 @@ body {
         grid;
 
     place-items:
-        center;
-
-    align-items:
-        center;
-
-    justify-content:
         center;
 
     border:
@@ -1722,24 +2142,10 @@ body {
 }
 
 
-.console-icon-button {
-
-    width:
-        42px;
-
-    height:
-        42px;
-
-    border-radius:
-        50%;
-
-    font-size:
-        17px;
-
-}
-
-
 .cognitive-button {
+
+    order:
+        3;
 
     position:
         relative;
@@ -1785,7 +2191,59 @@ body {
 }
 
 
+/* =========================================================
+   MICRO
+========================================================= */
+
+#voiceButton {
+
+    order:
+        4;
+
+    flex:
+        0 0 42px;
+
+    width:
+        42px;
+
+    height:
+        42px;
+
+    display:
+        grid;
+
+    place-items:
+        center;
+
+    margin:
+        0;
+
+    padding:
+        0;
+
+    border-radius:
+        50% !important;
+
+    line-height:
+        1;
+
+    font-size:
+        17px;
+
+}
+
+
+/* =========================================================
+   ENVIAR
+========================================================= */
+
 #sendButton {
+
+    order:
+        5;
+
+    flex:
+        0 0 43px;
 
     width:
         43px;
@@ -1793,8 +2251,20 @@ body {
     height:
         43px;
 
+    display:
+        grid;
+
+    place-items:
+        center;
+
+    margin:
+        0;
+
+    padding:
+        0;
+
     border-radius:
-        50%;
+        50% !important;
 
     font-size:
         0;
@@ -1802,20 +2272,52 @@ body {
     line-height:
         1;
 
-    padding:
-        0;
+}
+
+
+/*
+   Avión de papel visual.
+*/
+
+#sendButton::before {
+
+    content:
+        "➤";
+
+    display:
+        block;
+
+    width:
+        100%;
+
+    height:
+        100%;
+
+    display:
+        grid;
 
     place-items:
         center;
 
-    align-items:
-        center;
+    font-family:
+        Arial,
+        sans-serif;
 
-    justify-content:
-        center;
+    font-size:
+        19px;
+
+    line-height:
+        1;
+
+    transform:
+        translate(0, 0);
 
 }
 
+
+/* =========================================================
+   HOVER
+========================================================= */
 
 .console-icon-button:hover,
 #sendButton:hover,
@@ -1837,58 +2339,19 @@ body {
 
 
 /* =========================================================
-   READY
+   PROCESSING
 ========================================================= */
 
-.console-status {
+#jarvisProcessing {
 
-    display:
-        flex;
+    position:
+        absolute;
 
-    align-items:
-        center;
+    z-index:
+        35;
 
-    gap:
-        5px;
-
-    padding:
-        0 5px;
-
-    color:
-        #777f89;
-
-    font-family:
-        "Share Tech Mono",
-        monospace;
-
-    font-size:
-        8px;
-
-    letter-spacing:
-        1px;
-
-    white-space:
-        nowrap;
-
-}
-
-
-.console-status span {
-
-    width:
-        5px;
-
-    height:
-        5px;
-
-    border-radius:
-        50%;
-
-    background:
-        #ffcc00;
-
-    box-shadow:
-        0 0 6px #ffcc00;
+    pointer-events:
+        none;
 
 }
 
@@ -1986,8 +2449,27 @@ body {
         padding:
             22px 15px 130px;
 
-        scroll-padding-bottom:
-            130px;
+    }
+
+    .jarvis-message {
+
+        gap:
+            9px;
+
+    }
+
+    .jarvis-message .message-content,
+    .jarvis-content {
+
+        max-width:
+            calc(100% - 45px);
+
+    }
+
+    .user-message .message-content {
+
+        max-width:
+            82%;
 
     }
 
@@ -1996,15 +2478,11 @@ body {
         width:
             calc(100% - 12px);
 
+        gap:
+            8px;
+
         padding:
             9px 11px;
-
-    }
-
-    .console-status {
-
-        display:
-            none;
 
     }
 
@@ -2053,6 +2531,23 @@ body {
 
     }
 
+    #messageInput {
+
+        font-size:
+            14px;
+
+        padding:
+            0 4px;
+
+    }
+
+    .console-status {
+
+        display:
+            none;
+
+    }
+
     .console-icon-button {
 
         width:
@@ -2060,6 +2555,22 @@ body {
 
         height:
             38px;
+
+        flex:
+            0 0 38px;
+
+    }
+
+    #voiceButton {
+
+        width:
+            38px;
+
+        height:
+            38px;
+
+        flex:
+            0 0 38px;
 
     }
 
@@ -2070,6 +2581,9 @@ body {
 
         height:
             40px;
+
+        flex:
+            0 0 40px;
 
         display:
             grid;
@@ -2089,738 +2603,6 @@ body {
 
     }
 
-}
-
-
-/* =========================================================
-   J.A.R.V.I.S. — UI POLISH PATCH
-   PRESERVA EL LAYOUT EXISTENTE
-========================================================= */
-
-
-/* =========================================================
-   MENSAJES J.A.R.V.I.S.
-   OCULTAR IDENTIDAD / HEADER / FOOTER SOBRANTES
-========================================================= */
-
-/*
-   El avatar/core permanece visible.
-   Solamente eliminamos los textos de identidad.
-*/
-
-.jarvis-message-header .jarvis-identity,
-.jarvis-message-header .jarvis-identity *,
-.jarvis-message-footer,
-.jarvis-message .jarvis-message-footer,
-.jarvis-message .system-response,
-.jarvis-message .system-response-label {
-
-    display:
-        none !important;
-
-}
-
-
-/* =========================================================
-   GLOBO DE RESPUESTA
-========================================================= */
-
-.jarvis-message {
-
-    display:
-        flex;
-
-    align-items:
-        flex-start;
-
-    gap:
-        11px;
-
-    width:
-        100%;
-
-    min-width:
-        0;
-
-    margin:
-        4px 0 20px;
-
-}
-
-
-.jarvis-message .message-content,
-.jarvis-content {
-
-    position:
-        relative;
-
-    max-width:
-        min(78%, 820px);
-
-    min-width:
-        0;
-
-    padding:
-        14px 18px;
-
-    background:
-        rgba(10, 15, 25, 0.58) !important;
-
-    border:
-        1px solid rgba(255, 170, 0, 0.4) !important;
-
-    border-radius:
-        10px;
-
-    box-shadow:
-        0 0 12px rgba(255, 170, 0, 0.07),
-        inset 0 0 8px rgba(255, 170, 0, 0.035);
-
-    backdrop-filter:
-        blur(10px);
-
-    -webkit-backdrop-filter:
-        blur(10px);
-
-    color:
-        #e5e9ee;
-
-    font-family:
-        "Share Tech Mono",
-        monospace;
-
-    font-size:
-        13px;
-
-    line-height:
-        1.72;
-
-    letter-spacing:
-        0.2px;
-
-    overflow-wrap:
-        anywhere;
-
-    word-break:
-        normal;
-
-}
-
-
-.jarvis-message .message-content p,
-.jarvis-content p,
-.jarvis-message .message-content li,
-.jarvis-content li {
-
-    overflow-wrap:
-        anywhere;
-
-}
-
-
-/* =========================================================
-   AVATAR / CORE
-   SOLO ICONO, SIN TEXTO
-========================================================= */
-
-.jarvis-message .jarvis-core {
-
-    flex:
-        0 0 auto;
-
-    width:
-        34px;
-
-    height:
-        34px;
-
-    display:
-        grid;
-
-    place-items:
-        center;
-
-    margin-top:
-        4px;
-
-    border:
-        1px solid rgba(255, 170, 0, 0.65);
-
-    border-radius:
-        50%;
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(255, 204, 0, 0.38),
-            rgba(255, 170, 0, 0.08) 48%,
-            rgba(255, 170, 0, 0.015) 72%
-        );
-
-    box-shadow:
-        0 0 12px rgba(255, 170, 0, 0.3),
-        inset 0 0 8px rgba(255, 170, 0, 0.2);
-
-}
-
-
-/* =========================================================
-   TEXTO
-========================================================= */
-
-.jarvis-message .message-content p,
-.jarvis-content p {
-
-    margin:
-        0 0 10px;
-
-}
-
-
-.jarvis-message .message-content p:last-child,
-.jarvis-content p:last-child {
-
-    margin-bottom:
-        0;
-
-}
-
-
-.jarvis-message .message-content strong,
-.jarvis-content strong {
-
-    color:
-        #ffcc00;
-
-    font-weight:
-        600;
-
-}
-
-
-/* =========================================================
-   USUARIO
-========================================================= */
-
-.user-message {
-
-    display:
-        flex;
-
-    justify-content:
-        flex-end;
-
-    width:
-        100%;
-
-    min-width:
-        0;
-
-    margin:
-        4px 0 20px;
-
-}
-
-
-.user-message .message-content {
-
-    max-width:
-        min(68%, 720px);
-
-    min-width:
-        0;
-
-    padding:
-        12px 16px;
-
-    background:
-        rgba(255, 170, 0, 0.075);
-
-    border:
-        1px solid rgba(255, 170, 0, 0.28);
-
-    border-radius:
-        10px;
-
-    color:
-        #e8edf3;
-
-    font-family:
-        "Share Tech Mono",
-        monospace;
-
-    font-size:
-        12px;
-
-    line-height:
-        1.65;
-
-    overflow-wrap:
-        anywhere;
-
-    word-break:
-        normal;
-
-}
-
-
-/* =========================================================
-   HISTORIAL
-   SOLO ICONO # + NOMBRE
-========================================================= */
-
-/*
-   Estos selectores cubren los indicadores de conteo
-   sin modificar la lógica de chat.js.
-*/
-
-#chat-history .chat-history-count,
-#chat-history .history-count,
-#chat-history .chat-count,
-#chat-history .history-number,
-#chat-history .chat-history-number,
-#chat-history .history-index,
-#chat-history .chat-index,
-#chat-history .conversation-count,
-#chat-history .conversation-number {
-
-    display:
-        none !important;
-
-}
-
-
-/*
-   El título ocupa todo el espacio disponible.
-*/
-
-#chat-history .chat-history-title {
-
-    flex:
-        1;
-
-    width:
-        100%;
-
-    overflow:
-        hidden;
-
-    text-overflow:
-        ellipsis;
-
-    white-space:
-        nowrap;
-
-}
-
-
-/*
-   Si el elemento de historial contiene un número
-   como texto secundario, reducimos visualmente
-   cualquier elemento auxiliar.
-*/
-
-#chat-history .chat-history-item > small,
-#chat-history .chat-history-item > .count,
-#chat-history .chat-history-item > .number {
-
-    display:
-        none !important;
-
-}
-
-
-/* =========================================================
-   ICONO # DEL HISTORIAL
-========================================================= */
-
-#chat-history .chat-history-title::before {
-
-    content:
-        "#";
-
-    display:
-        inline-block;
-
-    margin-right:
-        7px;
-
-    color:
-        #ffcc00;
-
-    font-family:
-        "Share Tech Mono",
-        monospace;
-
-    opacity:
-        0.8;
-
-}
-
-
-/*
-   Evita duplicarlo si el título ya empieza
-   literalmente con #.
-*/
-
-#chat-history .chat-history-title[data-has-hash="true"]::before {
-
-    display:
-        none;
-
-}
-
-
-/* =========================================================
-   COMPOSER
-   NO CAMBIA SU POSICIÓN GENERAL
-========================================================= */
-
-#console {
-
-    position:
-        absolute;
-
-    z-index:
-        40;
-
-    left:
-        0;
-
-    right:
-        0;
-
-    bottom:
-        17px;
-
-    width:
-        100%;
-
-    display:
-        flex;
-
-    justify-content:
-        center;
-
-    pointer-events:
-        none;
-
-}
-
-
-.console-wrapper {
-
-    width:
-        min(820px, 88%);
-
-    display:
-        flex;
-
-    flex-direction:
-        row;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    gap:
-        10px;
-
-    padding:
-        10px 14px;
-
-    margin:
-        0 auto;
-
-}
-
-
-/*
-   El input ocupa el espacio principal.
-*/
-
-#messageInput {
-
-    order:
-        1;
-
-    flex:
-        1 1 auto;
-
-    min-width:
-        0;
-
-}
-
-
-/*
-   ESTADO / ECUALIZADOR
-   Queda antes de los controles finales.
-*/
-
-.console-status {
-
-    order:
-        2;
-
-    flex:
-        0 0 auto;
-
-}
-
-
-/*
-   COGNITIVE
-*/
-
-#cognitiveButton {
-
-    order:
-        3;
-
-    flex:
-        0 0 auto;
-
-}
-
-
-/* MIC */
-
-#voiceButton {
-
-    order:
-        4;
-
-    flex:
-        0 0 42px;
-
-    width:
-        42px;
-
-    height:
-        42px;
-
-    display:
-        grid;
-
-    place-items:
-        center;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    border-radius:
-        50% !important;
-
-    margin:
-        0;
-
-}
-
-
-/* SEND */
-
-#sendButton {
-
-    order:
-        5;
-
-    flex:
-        0 0 43px;
-
-    width:
-        43px;
-
-    height:
-        43px;
-
-    display:
-        grid;
-
-    place-items:
-        center;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    border-radius:
-        50% !important;
-
-    font-size:
-        0;
-
-    line-height:
-        1;
-
-    padding:
-        0;
-
-    margin:
-        0;
-
-}
-
-
-/*
-   Conservamos el botón funcional pero usamos
-   un avión de papel visual.
-*/
-
-#sendButton::before {
-
-    content:
-        "➤";
-
-    display:
-        block;
-
-    font-size:
-        19px;
-
-    line-height:
-        1;
-
-    transform:
-        translate(0, 0);
-
-}
-
-
-/* =========================================================
-   TOPBAR
-   SOLO PULIDO DE ALINEACIÓN
-========================================================= */
-
-#topbar {
-
-    grid-template-columns:
-        minmax(0, 1fr)
-        auto
-        minmax(0, 1fr);
-
-}
-
-
-.top-center {
-
-    justify-self:
-        center;
-
-    text-align:
-        center;
-
-}
-
-
-.stark-header {
-
-    justify-self:
-        end;
-
-    text-align:
-        right;
-
-    min-width:
-        0;
-
-}
-
-
-.stark-title {
-
-    white-space:
-        nowrap;
-
-}
-
-
-.stark-badge {
-
-    white-space:
-        nowrap;
-
-}
-
-
-/* =========================================================
-   RELOJ
-========================================================= */
-
-#clock {
-
-    display:
-        block;
-
-    min-width:
-        92px;
-
-    text-align:
-        center;
-
-    font-family:
-        "Share Tech Mono",
-        "Orbitron",
-        monospace;
-
-    font-size:
-        19px;
-
-    font-weight:
-        500;
-
-    font-variant-numeric:
-        tabular-nums;
-
-    letter-spacing:
-        3px;
-
-    text-shadow:
-        0 0 9px rgba(255, 204, 0, 0.4);
-
-}
-
-
-/* =========================================================
-   RESPONSIVE
-========================================================= */
-
-@media (max-width: 700px) {
-
-    .jarvis-message .message-content,
-    .jarvis-content {
-
-        max-width:
-            calc(100% - 45px);
-
-    }
-
-    .user-message .message-content {
-
-        max-width:
-            82%;
-
-    }
-
-    .console-wrapper {
-
-        gap:
-            8px;
-
-    }
-
-}
-
-
-@media (max-width: 430px) {
-
     .jarvis-message .message-content,
     .jarvis-content {
 
@@ -2832,32 +2614,6 @@ body {
 
         font-size:
             12px;
-
-    }
-
-    #voiceButton {
-
-        flex:
-            0 0 38px;
-
-        width:
-            38px;
-
-        height:
-            38px;
-
-    }
-
-    #sendButton {
-
-        flex:
-            0 0 40px;
-
-        width:
-            40px;
-
-        height:
-            40px;
 
     }
 
