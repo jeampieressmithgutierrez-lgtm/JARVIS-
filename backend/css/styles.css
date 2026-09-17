@@ -2626,3 +2626,453 @@ body {
 #sendButton {
     transform: scale(1.5) !important;
 }
+/* =========================================================
+   J.A.R.V.I.S. — FINAL CHAT VISUAL OVERRIDE
+   Esta sección tiene prioridad sobre los estilos anteriores.
+========================================================= */
+
+/* =========================
+   CHAT — FLUJO PRINCIPAL
+========================= */
+
+#chat-container {
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+#messages {
+    position: absolute !important;
+    inset: 0 !important;
+
+    width: 100% !important;
+    height: 100% !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+
+    padding: 32px 44px 150px !important;
+
+    gap: 0 !important;
+
+    scroll-behavior: smooth !important;
+    scroll-padding-bottom: 150px !important;
+
+    box-sizing: border-box !important;
+}
+
+
+/* =========================
+   MENSAJE DEL USUARIO
+========================= */
+
+.user-message {
+    width: 100% !important;
+
+    display: flex !important;
+    justify-content: flex-end !important;
+
+    margin: 8px 0 18px !important;
+
+    padding: 0 !important;
+}
+
+.user-message .message-content {
+    max-width: min(70%, 760px) !important;
+
+    padding: 12px 16px !important;
+
+    border-radius: 16px !important;
+
+    background: rgba(255, 170, 0, 0.08) !important;
+
+    border: 1px solid rgba(255, 170, 0, 0.28) !important;
+
+    box-shadow:
+        0 5px 22px rgba(0, 0, 0, 0.20) !important;
+
+    color: #f1f1f1 !important;
+
+    line-height: 1.6 !important;
+
+    overflow-wrap: anywhere !important;
+}
+
+
+/* =========================
+   JARVIS — SIN BURBUJA
+========================= */
+
+.jarvis-message {
+    width: 100% !important;
+
+    display: flex !important;
+    align-items: flex-start !important;
+
+    gap: 13px !important;
+
+    margin: 8px 0 28px !important;
+
+    padding: 0 !important;
+
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+
+/* El contenido ocupa el espacio natural del chat */
+
+.jarvis-message .message-content,
+.jarvis-message .jarvis-content {
+    width: auto !important;
+    max-width: min(900px, 82%) !important;
+
+    padding: 2px 0 !important;
+
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+
+    box-shadow: none !important;
+
+    backdrop-filter: none !important;
+
+    color: #e7eaee !important;
+
+    font-family: "Rajdhani", "Share Tech Mono", sans-serif !important;
+
+    font-size: 15px !important;
+
+    line-height: 1.78 !important;
+
+    letter-spacing: 0.15px !important;
+
+    overflow-wrap: anywhere !important;
+}
+
+
+/* =========================
+   IDENTIDAD DE JARVIS
+========================= */
+
+.jarvis-identity {
+    flex-shrink: 0 !important;
+
+    margin-top: 2px !important;
+}
+
+
+/* =========================
+   FOOTER JARVIS
+========================= */
+
+.jarvis-message-footer {
+    margin-top: 7px !important;
+
+    opacity: 0.55 !important;
+
+    font-size: 9px !important;
+
+    letter-spacing: 1.4px !important;
+}
+
+
+/* =========================
+   PROCESANDO
+========================= */
+
+#jarvisProcessing {
+    position: absolute !important;
+
+    left: 44px !important;
+    right: 44px !important;
+
+    bottom: 112px !important;
+
+    top: auto !important;
+
+    z-index: 35 !important;
+
+    pointer-events: none !important;
+}
+
+
+/* =========================
+   CONSOLA FLOTANTE
+========================= */
+
+#console {
+    position: absolute !important;
+
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 18px !important;
+
+    z-index: 50 !important;
+
+    display: flex !important;
+    justify-content: center !important;
+
+    padding: 0 30px !important;
+
+    pointer-events: none !important;
+}
+
+
+.console-wrapper {
+    width: min(900px, 88%) !important;
+
+    min-height: 62px !important;
+
+    display: flex !important;
+    align-items: center !important;
+
+    gap: 9px !important;
+
+    padding: 8px 10px 8px 17px !important;
+
+    box-sizing: border-box !important;
+
+    border: 1px solid rgba(255, 174, 0, 0.62) !important;
+
+    border-radius: 34px !important;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(12, 17, 25, 0.88),
+            rgba(6, 10, 16, 0.92)
+        ) !important;
+
+    box-shadow:
+        0 0 0 1px rgba(255, 174, 0, 0.04),
+        0 8px 30px rgba(0, 0, 0, 0.45),
+        0 0 24px rgba(255, 174, 0, 0.10) !important;
+
+    backdrop-filter: blur(18px) !important;
+
+    pointer-events: auto !important;
+}
+
+
+/* =========================
+   INPUT
+========================= */
+
+#messageInput {
+    flex: 1 1 auto !important;
+
+    min-width: 0 !important;
+
+    height: 43px !important;
+
+    padding: 0 4px !important;
+
+    border: none !important;
+    outline: none !important;
+
+    background: transparent !important;
+
+    color: #e8eaed !important;
+
+    font-family:
+        "Rajdhani",
+        "Share Tech Mono",
+        sans-serif !important;
+
+    font-size: 15px !important;
+
+    letter-spacing: 0.3px !important;
+}
+
+#messageInput::placeholder {
+    color: rgba(185, 193, 203, 0.55) !important;
+
+    letter-spacing: 0.5px !important;
+}
+
+
+/* =========================
+   BOTONES
+========================= */
+
+#voiceButton,
+#cognitiveButton,
+#sendButton {
+    flex: 0 0 43px !important;
+
+    width: 43px !important;
+    height: 43px !important;
+
+    min-width: 43px !important;
+    min-height: 43px !important;
+
+    padding: 0 !important;
+
+    display: grid !important;
+    place-items: center !important;
+
+    border-radius: 50% !important;
+
+    box-sizing: border-box !important;
+
+    transition:
+        transform 0.18s ease,
+        background 0.18s ease,
+        box-shadow 0.18s ease,
+        border-color 0.18s ease !important;
+}
+
+
+/* Micrófono */
+
+#voiceButton {
+    border: 1px solid rgba(255, 174, 0, 0.48) !important;
+
+    background: rgba(255, 174, 0, 0.035) !important;
+}
+
+
+/* Cognitivo */
+
+#cognitiveButton {
+    border: 1px solid rgba(255, 174, 0, 0.48) !important;
+
+    background: rgba(255, 174, 0, 0.035) !important;
+}
+
+
+/* Enviar */
+
+#sendButton {
+    border: 1px solid rgba(255, 174, 0, 0.80) !important;
+
+    background:
+        radial-gradient(
+            circle at 35% 30%,
+            rgba(255, 205, 80, 0.20),
+            rgba(255, 174, 0, 0.05) 60%,
+            transparent 70%
+        ) !important;
+
+    box-shadow:
+        0 0 14px rgba(255, 174, 0, 0.12) !important;
+
+    font-size: 0 !important;
+}
+
+
+/* Avión de enviar */
+
+#sendButton::before {
+    content: "➤" !important;
+
+    display: block !important;
+
+    font-family: Arial, sans-serif !important;
+
+    font-size: 19px !important;
+
+    line-height: 1 !important;
+
+    color: #ffc229 !important;
+
+    transform: translateX(1px) !important;
+}
+
+
+/* =========================
+   HOVER
+========================= */
+
+#voiceButton:hover,
+#cognitiveButton:hover,
+#sendButton:hover {
+    transform: scale(1.06) !important;
+
+    border-color: rgba(255, 194, 41, 0.95) !important;
+
+    background: rgba(255, 174, 0, 0.10) !important;
+
+    box-shadow:
+        0 0 18px rgba(255, 174, 0, 0.16) !important;
+}
+
+
+/* =========================
+   STATUS
+========================= */
+
+.console-status {
+    flex: 0 0 auto !important;
+
+    white-space: nowrap !important;
+
+    font-family:
+        "Share Tech Mono",
+        monospace !important;
+
+    font-size: 8px !important;
+
+    letter-spacing: 0.7px !important;
+}
+
+
+/* =========================
+   SCROLLBAR
+========================= */
+
+#messages::-webkit-scrollbar {
+    width: 5px !important;
+}
+
+#messages::-webkit-scrollbar-track {
+    background: transparent !important;
+}
+
+#messages::-webkit-scrollbar-thumb {
+    background: rgba(255, 174, 0, 0.20) !important;
+
+    border-radius: 10px !important;
+}
+
+#messages::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 174, 0, 0.42) !important;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 800px) {
+
+    #messages {
+        padding:
+            25px
+            20px
+            140px !important;
+    }
+
+    #jarvisProcessing {
+        left: 20px !important;
+        right: 20px !important;
+        bottom: 105px !important;
+    }
+
+    #console {
+        padding: 0 12px !important;
+    }
+
+    .console-wrapper {
+        width: 100% !important;
+    }
+
+    .jarvis-message .message-content,
+    .jarvis-message .jarvis-content {
+        max-width: 88% !important;
+    }
+}
