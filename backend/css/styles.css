@@ -2618,3 +2618,11 @@ body {
     }
 
 }
+/* ===== PRUEBA DE CONEXIÓN CSS ===== */
+body {
+    outline: 10px solid red !important;
+}
+
+#sendButton {
+    transform: scale(1.5) !important;
+}
