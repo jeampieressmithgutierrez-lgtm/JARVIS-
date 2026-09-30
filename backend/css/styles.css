@@ -2618,14 +2618,7 @@ body {
     }
 
 }
-/* ===== PRUEBA DE CONEXIÓN CSS ===== */
-body {
-    outline: 10px solid red !important;
-}
 
-#sendButton {
-    transform: scale(1.5) !important;
-}
 /* =========================================================
    J.A.R.V.I.S. — FINAL CHAT VISUAL OVERRIDE
    Esta sección tiene prioridad sobre los estilos anteriores.
