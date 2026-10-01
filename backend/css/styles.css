@@ -1,3071 +1,2234 @@
-/* =========================================================
-   J.A.R.V.I.S. — STARK HUD
-   GLASS / GOLD / TECHNOLOGICAL INTERFACE
-========================================================= */
+/* ============================================================
+   J.A.R.V.I.S. — STYLES.CSS
+   STARK INDUSTRIES
+   INTERFAZ HUD / CHAT / COMPOSER / 3D CORE
+   ============================================================ */
+
+/* ============================================================
+   1. VARIABLES
+   ============================================================ */
 
 :root {
 
-    --bg:
-        #030507;
+    --bg-main: #05070b;
+    --bg-deep: #020306;
+    --bg-panel: rgba(8, 11, 16, 0.72);
+    --bg-panel-soft: rgba(12, 15, 21, 0.55);
 
-    --bg-soft:
-        rgba(10, 15, 25, 0.65);
+    --amber: #ffb000;
+    --amber-light: #ffd36a;
+    --amber-soft: rgba(255, 176, 0, 0.18);
+    --amber-faint: rgba(255, 176, 0, 0.07);
 
-    --bg-panel:
-        rgba(10, 15, 25, 0.72);
+    --white: #f5f7fa;
+    --white-soft: rgba(245, 247, 250, 0.78);
 
-    --gold:
-        #ffaa00;
+    --gray: #8d96a3;
+    --gray-soft: rgba(141, 150, 163, 0.55);
 
-    --gold-bright:
-        #ffcc00;
+    --green: #69ff9d;
 
-    --gold-soft:
-        #ffb700;
+    --border: rgba(255, 176, 0, 0.24);
+    --border-strong: rgba(255, 176, 0, 0.48);
 
-    --gold-dim:
-        rgba(255, 170, 0, 0.25);
+    --shadow:
+        0 0 25px rgba(255, 176, 0, 0.08);
 
-    --white:
-        #f4f7fb;
+    --shadow-strong:
+        0 0 35px rgba(255, 176, 0, 0.16);
 
-    --text:
-        #d7dce3;
+    --radius-small: 8px;
+    --radius-medium: 14px;
+    --radius-large: 22px;
 
-    --muted:
-        #737b86;
+    --sidebar-width: 265px;
+    --topbar-height: 72px;
 
-    --line:
-        rgba(255, 170, 0, 0.34);
-
-    --glass:
-        blur(10px);
-
-    --sidebar-width:
-        300px;
-
-    --topbar-height:
-        94px;
-
-    --composer-height:
-        64px;
-
+    --font-ui: "Rajdhani", sans-serif;
+    --font-tech: "Orbitron", sans-serif;
+    --font-mono: "Share Tech Mono", monospace;
 }
 
 
-/* =========================================================
-   RESET
-========================================================= */
+/* ============================================================
+   2. RESET
+   ============================================================ */
 
-* {
-
-    box-sizing:
-        border-box;
-
-    margin:
-        0;
-
-    padding:
-        0;
-
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
 }
-
 
 html,
 body {
-
-    width:
-        100%;
-
-    height:
-        100%;
-
-    overflow:
-        hidden;
-
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
+html {
+    background: var(--bg-main);
+    color-scheme: dark;
+}
 
 body {
 
+    position: relative;
+
+    overflow: hidden;
+
     background:
         radial-gradient(
-            circle at 70% 50%,
-            rgba(255, 170, 0, 0.055),
-            transparent 35%
+            circle at 50% 45%,
+            rgba(255, 176, 0, 0.045),
+            transparent 34%
         ),
-        #030507;
+        radial-gradient(
+            circle at 50% 100%,
+            rgba(255, 176, 0, 0.025),
+            transparent 45%
+        ),
+        var(--bg-main);
 
-    color:
-        var(--text);
+    color: var(--white);
 
-    font-family:
-        "Rajdhani",
-        sans-serif;
+    font-family: var(--font-ui);
 
-    letter-spacing:
-        0.35px;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
 
+button,
+input,
+textarea {
+    font: inherit;
+}
+
+button {
+    border: 0;
+    outline: none;
+}
+
+input {
+    outline: none;
+}
+
+button,
+a {
+    -webkit-tap-highlight-color: transparent;
 }
 
 
-/* =========================================================
-   FONDO
-========================================================= */
+/* ============================================================
+   3. BACKGROUND
+   ============================================================ */
 
 #background-container {
 
-    position:
-        fixed;
+    position: fixed;
 
-    inset:
-        0;
+    inset: 0;
 
-    z-index:
-        0;
+    z-index: 0;
 
-    pointer-events:
-        none;
+    overflow: hidden;
 
-    overflow:
-        hidden;
+    pointer-events: none;
 
+    background:
+        radial-gradient(
+            circle at 50% 50%,
+            rgba(255, 170, 0, 0.035),
+            transparent 38%
+        );
 }
 
+
+/* Particle canvas */
 
 #particles-canvas {
 
-    position:
-        absolute;
+    position: absolute;
 
-    inset:
-        0;
+    inset: 0;
 
-    width:
-        100%;
+    width: 100%;
+    height: 100%;
 
-    height:
-        100%;
+    opacity: 0.5;
 
-    opacity:
-        0.42;
-
+    pointer-events: none;
 }
 
 
+/* Technical grid */
+
 #grid-overlay {
 
-    position:
-        absolute;
+    position: absolute;
 
-    inset:
-        0;
+    inset: 0;
+
+    pointer-events: none;
+
+    opacity: 0.18;
 
     background-image:
         linear-gradient(
-            rgba(255, 170, 0, 0.025) 1px,
+            rgba(255, 176, 0, 0.035) 1px,
             transparent 1px
         ),
         linear-gradient(
             90deg,
-            rgba(255, 170, 0, 0.025) 1px,
+            rgba(255, 176, 0, 0.035) 1px,
             transparent 1px
         );
 
     background-size:
-        48px 48px;
+        42px 42px;
 
+    mask-image:
+        radial-gradient(
+            ellipse at center,
+            black 25%,
+            transparent 82%
+        );
+
+    -webkit-mask-image:
+        radial-gradient(
+            ellipse at center,
+            black 25%,
+            transparent 82%
+        );
 }
 
+
+/* Scan effect */
 
 #scan-overlay {
 
-    position:
-        absolute;
+    position: absolute;
 
-    inset:
-        0;
+    inset: 0;
+
+    pointer-events: none;
+
+    opacity: 0.16;
 
     background:
         repeating-linear-gradient(
-            0deg,
-            transparent 0,
+            to bottom,
+            transparent 0px,
             transparent 3px,
-            rgba(255, 255, 255, 0.012) 4px
+            rgba(255, 255, 255, 0.012) 4px,
+            transparent 5px
         );
-
-    opacity:
-        0.35;
-
 }
 
 
-/* =========================================================
-   HUD
-========================================================= */
+/* ============================================================
+   4. HUD PRINCIPAL
+   ============================================================ */
 
 #hud {
 
-    position:
-        relative;
+    position: relative;
 
-    z-index:
-        5;
+    z-index: 5;
 
-    width:
-        100%;
+    width: 100%;
+    height: 100%;
 
-    height:
-        100vh;
+    display: flex;
 
-    display:
-        flex;
+    flex-direction: column;
 
-    flex-direction:
-        column;
-
-    overflow:
-        hidden;
-
+    overflow: hidden;
 }
 
 
-/* =========================================================
-   GLASS PANEL
-========================================================= */
-
-.hud-card {
-
-    background:
-        rgba(8, 12, 20, 0.65) !important;
-
-    border:
-        1px solid #ffaa00 !important;
-
-    border-radius:
-        10px;
-
-    box-shadow:
-        0 0 12px rgba(255, 170, 0, 0.30),
-        inset 0 0 8px rgba(255, 170, 0, 0.15) !important;
-
-    backdrop-filter:
-        blur(10px) !important;
-
-    -webkit-backdrop-filter:
-        blur(10px) !important;
-
-}
-
-
-/* =========================================================
-   TOPBAR
-========================================================= */
+/* ============================================================
+   5. TOPBAR
+   ============================================================ */
 
 #topbar {
 
-    position:
-        relative;
+    position: relative;
 
-    height:
-        var(--topbar-height);
+    z-index: 50;
 
-    min-height:
-        var(--topbar-height);
+    width: 100%;
+    height: var(--topbar-height);
 
-    display:
-        grid;
+    flex: 0 0 var(--topbar-height);
 
-    grid-template-columns:
-        minmax(0, 1fr)
-        auto
-        minmax(0, 1fr);
+    display: grid;
 
-    align-items:
-        center;
+    grid-template-columns: 1fr auto 1fr;
 
-    padding:
-        0 28px;
+    align-items: center;
+
+    padding: 0 24px;
 
     border-bottom:
-        1px solid rgba(255, 170, 0, 0.32);
+        1px solid rgba(255, 176, 0, 0.16);
 
     background:
-        rgba(3, 5, 8, 0.68);
+        linear-gradient(
+            180deg,
+            rgba(4, 6, 10, 0.94),
+            rgba(4, 6, 10, 0.68)
+        );
 
-    backdrop-filter:
-        blur(12px);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
 
-    -webkit-backdrop-filter:
-        blur(12px);
-
+    box-shadow:
+        0 8px 30px rgba(0, 0, 0, 0.35);
 }
 
 
-/* =========================================================
-   JARVIS HEADER
-========================================================= */
+/* ============================================================
+   6. JARVIS BRAND
+   ============================================================ */
 
-.top-brand {
+.top-brand,
+.jarvis-brand {
 
-    display:
-        flex;
+    min-width: 0;
 
-    flex-direction:
-        column;
+    display: flex;
 
-    justify-content:
-        center;
+    flex-direction: column;
 
+    justify-content: center;
+
+    align-items: flex-start;
 }
-
 
 .jarvis-title {
 
-    color:
-        #ffffff;
+    font-family: var(--font-tech);
 
-    font-family:
-        "Orbitron",
-        sans-serif;
+    font-size: 19px;
 
-    font-size:
-        clamp(19px, 2vw, 27px);
+    font-weight: 600;
 
-    font-weight:
-        700;
+    letter-spacing: 6px;
 
-    letter-spacing:
-        5px;
+    color: var(--white);
 
     text-shadow:
         0 0 12px rgba(255, 255, 255, 0.18);
-
 }
-
 
 .jarvis-subtitle {
 
-    margin-top:
-        4px;
+    margin-top: 3px;
 
-    color:
-        var(--gold-bright);
+    font-family: var(--font-mono);
 
-    font-family:
-        "Orbitron",
-        sans-serif;
+    font-size: 8px;
 
-    font-size:
-        8px;
+    letter-spacing: 3px;
 
-    font-weight:
-        600;
+    color: var(--amber);
 
-    letter-spacing:
-        3px;
-
-    text-shadow:
-        0 0 8px rgba(255, 204, 0, 0.45);
-
+    opacity: 0.88;
 }
 
 
-/* =========================================================
-   CLOCK
-========================================================= */
+/* 3D brand compatibility */
+
+.jarvis-3d-brand {
+
+    position: relative;
+
+    min-height: 44px;
+}
+
+#jarvis3d-stage {
+
+    position: absolute;
+
+    width: 1px;
+    height: 1px;
+
+    opacity: 0;
+
+    pointer-events: none;
+}
+
+.jarvis3d-accessibility {
+
+    font-family: var(--font-tech);
+
+    font-size: 18px;
+
+    letter-spacing: 4px;
+
+    color: var(--white);
+
+    opacity: 0.95;
+}
+
+
+/* ============================================================
+   7. CLOCK
+   ============================================================ */
 
 .top-center {
 
-    display:
-        flex;
+    display: flex;
 
-    flex-direction:
-        column;
+    flex-direction: column;
 
-    align-items:
-        center;
+    align-items: center;
 
-    justify-content:
-        center;
-
-    justify-self:
-        center;
-
-    text-align:
-        center;
-
+    justify-content: center;
 }
-
 
 #clock {
 
-    display:
-        block;
+    font-family: var(--font-mono);
 
-    min-width:
-        92px;
+    font-size: 13px;
 
-    text-align:
-        center;
+    letter-spacing: 3px;
 
-    color:
-        var(--gold-bright);
-
-    font-family:
-        "Share Tech Mono",
-        "Orbitron",
-        monospace;
-
-    font-size:
-        19px;
-
-    font-weight:
-        500;
-
-    letter-spacing:
-        3px;
-
-    line-height:
-        1;
-
-    font-variant-numeric:
-        tabular-nums;
-
-    white-space:
-        nowrap;
+    color: var(--amber-light);
 
     text-shadow:
-        0 0 9px rgba(255, 204, 0, 0.4);
-
+        0 0 12px rgba(255, 176, 0, 0.25);
 }
-
 
 .system-line {
 
-    width:
-        90px;
+    width: 90px;
 
-    height:
-        1px;
+    height: 1px;
 
-    margin-top:
-        7px;
+    margin-top: 6px;
 
     background:
         linear-gradient(
             90deg,
             transparent,
-            var(--gold),
+            var(--amber),
             transparent
         );
 
-    box-shadow:
-        0 0 8px rgba(255, 170, 0, 0.4);
-
+    opacity: 0.55;
 }
 
 
-/* =========================================================
-   STARK
-========================================================= */
+/* ============================================================
+   8. STARK HEADER
+   ============================================================ */
 
 .stark-header {
 
-    justify-self:
-        end;
+    display: flex;
 
-    display:
-        flex;
+    flex-direction: column;
 
-    flex-direction:
-        column;
+    align-items: flex-end;
 
-    align-items:
-        flex-end;
+    justify-content: center;
 
-    min-width:
-        0;
-
-    text-align:
-        right;
-
+    min-width: 0;
 }
-
 
 .stark-title {
 
-    color:
-        #ffcc00;
+    font-family: var(--font-tech);
 
-    font-family:
-        "Orbitron",
-        sans-serif;
+    font-size: 13px;
 
-    font-size:
-        clamp(15px, 1.5vw, 22px);
+    font-weight: 600;
 
-    font-style:
-        italic;
+    letter-spacing: 3px;
 
-    font-weight:
-        900;
+    color: var(--white);
 
-    letter-spacing:
-        3px;
-
-    white-space:
-        nowrap;
-
-    text-shadow:
-        0 0 9px rgba(255, 204, 0, 0.42);
-
+    white-space: nowrap;
 }
-
 
 .stark-badge {
 
-    margin-top:
-        3px;
+    margin-top: 3px;
 
-    color:
-        #c99728;
+    font-family: var(--font-mono);
 
-    font-family:
-        "Rajdhani",
-        sans-serif;
+    font-size: 7px;
 
-    font-size:
-        9px;
+    letter-spacing: 2px;
 
-    font-weight:
-        600;
+    color: var(--amber);
 
-    letter-spacing:
-        2.8px;
+    opacity: 0.78;
 
-    white-space:
-        nowrap;
-
+    white-space: nowrap;
 }
-
 
 .system-state {
 
-    display:
-        flex;
+    display: flex;
 
-    align-items:
-        center;
+    align-items: center;
 
-    gap:
-        7px;
+    gap: 7px;
 
-    margin-top:
-        5px;
+    margin-top: 4px;
 
-    color:
-        #a7adb5;
+    font-family: var(--font-mono);
 
-    font-family:
-        "Share Tech Mono",
-        monospace;
+    font-size: 7px;
 
-    font-size:
-        9px;
+    letter-spacing: 2px;
 
-    letter-spacing:
-        1.5px;
-
+    color: var(--gray);
 }
-
 
 #status-light {
 
-    width:
-        6px;
+    width: 6px;
+    height: 6px;
 
-    height:
-        6px;
+    border-radius: 50%;
 
-    border-radius:
-        50%;
-
-    background:
-        #ffcc00;
+    background: var(--green);
 
     box-shadow:
-        0 0 7px #ffcc00;
+        0 0 8px rgba(105, 255, 157, 0.7);
 
+    animation:
+        statusPulse 2s ease-in-out infinite;
+}
+
+@keyframes statusPulse {
+
+    0%,
+    100% {
+        opacity: 0.55;
+    }
+
+    50% {
+        opacity: 1;
+    }
 }
 
 
-/* =========================================================
-   MAIN LAYOUT
-========================================================= */
+/* ============================================================
+   9. MAIN LAYOUT
+   ============================================================ */
 
 #main-layout {
 
-    position:
-        relative;
+    position: relative;
 
-    flex:
-        1;
+    flex: 1;
 
-    min-height:
-        0;
+    min-height: 0;
 
-    display:
-        grid;
+    width: 100%;
 
-    grid-template-columns:
-        var(--sidebar-width) minmax(0, 1fr);
+    display: grid;
 
+    grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+
+    overflow: hidden;
 }
 
 
-/* =========================================================
-   SIDEBAR
-========================================================= */
+/* ============================================================
+   10. SIDEBAR
+   ============================================================ */
 
 #sidebar {
 
-    position:
-        relative;
+    position: relative;
 
-    z-index:
-        30;
+    z-index: 30;
 
-    min-width:
-        0;
+    min-width: 0;
 
-    display:
-        flex;
+    height: 100%;
 
-    flex-direction:
-        column;
+    display: flex;
 
-    padding:
-        18px 14px;
+    flex-direction: column;
+
+    overflow-y: auto;
+
+    overflow-x: hidden;
+
+    padding: 20px 16px;
 
     border-right:
-        1px solid rgba(255, 170, 0, 0.28);
+        1px solid rgba(255, 176, 0, 0.12);
 
     background:
-        rgba(5, 8, 12, 0.74);
+        linear-gradient(
+            180deg,
+            rgba(5, 7, 11, 0.94),
+            rgba(3, 5, 8, 0.82)
+        );
 
-    backdrop-filter:
-        blur(14px);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
 
-    -webkit-backdrop-filter:
-        blur(14px);
+    scrollbar-width: thin;
 
+    scrollbar-color:
+        rgba(255, 176, 0, 0.35)
+        transparent;
+}
+
+#sidebar::-webkit-scrollbar {
+    width: 4px;
+}
+
+#sidebar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#sidebar::-webkit-scrollbar-thumb {
+
+    background:
+        rgba(255, 176, 0, 0.35);
+
+    border-radius: 10px;
 }
 
 
-/* =========================================================
-   SIDEBAR SECTIONS
-========================================================= */
+/* Sidebar sections */
 
 .sidebar-section {
 
-    width:
-        100%;
+    width: 100%;
 
+    margin-bottom: 22px;
 }
-
-
-.search-section {
-
-    order:
-        1;
-
-    flex:
-        0 0 auto;
-
-}
-
-
-.history-section {
-
-    order:
-        2;
-
-    flex:
-        1 1 auto;
-
-    min-height:
-        0;
-
-    display:
-        flex;
-
-    flex-direction:
-        column;
-
-    margin-top:
-        17px;
-
-}
-
-
-.tools-section {
-
-    order:
-        3;
-
-    flex:
-        0 0 auto;
-
-    margin-top:
-        12px;
-
-}
-
-
-.user-section {
-
-    order:
-        4;
-
-    flex:
-        0 0 auto;
-
-    margin-top:
-        14px;
-
-    padding-top:
-        14px;
-
-    border-top:
-        1px solid rgba(255, 170, 0, 0.2);
-
-}
-
-
-/* =========================================================
-   LABELS
-========================================================= */
 
 .section-label {
 
-    margin-bottom:
-        8px;
+    margin-bottom: 9px;
 
-    color:
-        #dcae35;
+    font-family: var(--font-tech);
 
-    font-family:
-        "Orbitron",
-        sans-serif;
+    font-size: 8px;
 
-    font-size:
-        9px;
+    font-weight: 600;
 
-    font-weight:
-        600;
+    letter-spacing: 2px;
 
-    letter-spacing:
-        2px;
+    color: var(--gray);
 
+    text-transform: uppercase;
 }
 
 
-/* =========================================================
-   SEARCH
-========================================================= */
+/* ============================================================
+   11. CHAT SEARCH
+   ============================================================ */
 
 .chat-search {
 
-    height:
-        42px;
+    position: relative;
 
-    display:
-        flex;
+    width: 100%;
 
-    align-items:
-        center;
+    height: 38px;
 
-    gap:
-        9px;
+    display: flex;
 
-    padding:
-        0 12px;
-
-    background:
-        rgba(10, 15, 25, 0.65);
+    align-items: center;
 
     border:
-        1px solid #ffaa00;
+        1px solid rgba(255, 176, 0, 0.14);
 
-    border-radius:
-        8px;
+    border-radius: 10px;
 
-    box-shadow:
-        0 0 12px rgba(255, 170, 0, 0.16),
-        inset 0 0 8px rgba(255, 170, 0, 0.08);
+    background:
+        rgba(255, 255, 255, 0.025);
 
-    backdrop-filter:
-        blur(10px);
-
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
+.chat-search:focus-within {
+
+    border-color:
+        rgba(255, 176, 0, 0.4);
+
+    background:
+        rgba(255, 176, 0, 0.035);
+
+    box-shadow:
+        0 0 18px rgba(255, 176, 0, 0.06);
+}
 
 .search-icon {
 
-    color:
-        var(--gold-bright);
+    flex: 0 0 auto;
 
-    font-size:
-        20px;
+    margin-left: 11px;
 
+    color: var(--amber);
+
+    font-size: 17px;
+
+    opacity: 0.65;
+}
+
+#chatSearchInput {
+
+    width: 100%;
+    height: 100%;
+
+    min-width: 0;
+
+    border: 0;
+    outline: 0;
+
+    padding: 0 10px;
+
+    background: transparent;
+
+    color: var(--white);
+
+    font-family: var(--font-ui);
+
+    font-size: 12px;
+}
+
+#chatSearchInput::placeholder {
+
+    color: var(--gray);
+
+    opacity: 0.65;
 }
 
 
-.chat-search input {
+/* ============================================================
+   12. CHAT HISTORY
+   ============================================================ */
 
-    width:
-        100%;
+.history-section {
 
-    border:
-        0;
-
-    outline:
-        none;
-
-    background:
-        transparent;
-
-    color:
-        #e8edf4;
-
-    font-family:
-        "Rajdhani",
-        sans-serif;
-
-    font-size:
-        14px;
-
+    min-height: 0;
 }
 
+#chatHistory {
 
-.chat-search input::placeholder {
-
-    color:
-        #69717c;
-
+    width: 100%;
 }
-
-
-/* =========================================================
-   HISTORY HEADER
-========================================================= */
-
-.history-header {
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        space-between;
-
-}
-
-
-.history-header .section-label {
-
-    margin:
-        0;
-
-}
-
-
-#newChatButton {
-
-    width:
-        28px;
-
-    height:
-        28px;
-
-    border:
-        1px solid rgba(255, 170, 0, 0.7);
-
-    border-radius:
-        7px;
-
-    background:
-        rgba(255, 170, 0, 0.07);
-
-    color:
-        var(--gold-bright);
-
-    font-family:
-        "Orbitron",
-        sans-serif;
-
-    font-size:
-        17px;
-
-    cursor:
-        pointer;
-
-    transition:
-        0.2s ease;
-
-}
-
-
-#newChatButton:hover {
-
-    background:
-        rgba(255, 170, 0, 0.16);
-
-    box-shadow:
-        0 0 12px rgba(255, 170, 0, 0.3);
-
-    transform:
-        translateY(-1px);
-
-}
-
-
-/* =========================================================
-   HISTORY
-========================================================= */
-
-#chat-history {
-
-    flex:
-        1;
-
-    min-height:
-        0;
-
-    overflow-y:
-        auto;
-
-    margin-top:
-        10px;
-
-    padding:
-        3px;
-
-}
-
-
-#chat-history::-webkit-scrollbar {
-
-    width:
-        4px;
-
-}
-
-
-#chat-history::-webkit-scrollbar-thumb {
-
-    background:
-        rgba(255, 170, 0, 0.35);
-
-    border-radius:
-        5px;
-
-}
-
 
 .chat-history-item {
 
-    position:
-        relative;
+    width: 100%;
 
-    width:
-        100%;
+    padding: 10px 11px;
 
-    min-height:
-        45px;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    margin-bottom:
-        7px;
-
-    padding:
-        9px 11px;
+    margin-bottom: 5px;
 
     border:
-        1px solid rgba(255, 170, 0, 0.18);
+        1px solid transparent;
 
-    border-radius:
-        7px;
+    border-radius: 9px;
 
-    background:
-        rgba(10, 15, 25, 0.55);
+    background: transparent;
 
-    color:
-        #9ea6b0;
+    color: var(--gray);
 
-    cursor:
-        pointer;
+    cursor: pointer;
 
     transition:
-        0.2s ease;
-
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease;
 }
-
 
 .chat-history-item:hover {
 
-    border-color:
-        rgba(255, 170, 0, 0.5);
+    color: var(--white);
 
     background:
-        rgba(255, 170, 0, 0.055);
+        rgba(255, 176, 0, 0.045);
 
-    color:
-        #e8edf4;
-
+    border-color:
+        rgba(255, 176, 0, 0.12);
 }
-
 
 .chat-history-item.active {
 
-    border-color:
-        rgba(255, 170, 0, 0.85);
+    color: var(--amber-light);
 
     background:
-        rgba(255, 170, 0, 0.09);
+        rgba(255, 176, 0, 0.07);
 
-    color:
-        var(--gold-bright);
+    border-color:
+        rgba(255, 176, 0, 0.2);
 
     box-shadow:
-        inset 2px 0 0 #ffaa00,
-        0 0 12px rgba(255, 170, 0, 0.08);
-
+        inset 2px 0 0 var(--amber);
 }
-
 
 .chat-history-title {
 
-    flex:
-        1;
+    overflow: hidden;
 
-    width:
-        100%;
+    white-space: nowrap;
 
-    overflow:
-        hidden;
+    text-overflow: ellipsis;
 
-    text-overflow:
-        ellipsis;
+    font-family: var(--font-ui);
 
-    white-space:
-        nowrap;
+    font-size: 12px;
 
-    font-family:
-        "Rajdhani",
-        sans-serif;
-
-    font-size:
-        13px;
-
+    letter-spacing: 0.3px;
 }
 
 
-/* =========================================================
-   HISTORIAL — INDICADORES
-========================================================= */
+/* ============================================================
+   13. TOOLS
+   ============================================================ */
 
-#chat-history .chat-history-count,
-#chat-history .history-count,
-#chat-history .chat-count,
-#chat-history .history-number,
-#chat-history .chat-history-number,
-#chat-history .history-index,
-#chat-history .chat-index,
-#chat-history .conversation-count,
-#chat-history .conversation-number {
+.tools-section {
 
-    display:
-        none !important;
-
+    position: relative;
 }
 
+.tools-toggle {
 
-#chat-history .chat-history-item > small,
-#chat-history .chat-history-item > .count,
-#chat-history .chat-history-item > .number {
+    width: 100%;
 
-    display:
-        none !important;
+    min-height: 40px;
 
-}
+    display: flex;
 
+    align-items: center;
 
-#chat-history .chat-history-title::before {
+    justify-content: space-between;
 
-    content:
-        "#";
-
-    display:
-        inline-block;
-
-    margin-right:
-        7px;
-
-    color:
-        #ffcc00;
-
-    font-family:
-        "Share Tech Mono",
-        monospace;
-
-    opacity:
-        0.8;
-
-}
-
-
-#chat-history .chat-history-title[data-has-hash="true"]::before {
-
-    display:
-        none;
-
-}
-
-
-/* =========================================================
-   TOOLS
-========================================================= */
-
-.tools-header {
-
-    width:
-        100%;
-
-    height:
-        43px;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    gap:
-        10px;
-
-    padding:
-        0 12px;
+    padding: 0 12px;
 
     border:
-        1px solid rgba(255, 170, 0, 0.55);
+        1px solid rgba(255, 176, 0, 0.13);
 
-    border-radius:
-        8px;
+    border-radius: 10px;
 
     background:
-        rgba(10, 15, 25, 0.65);
+        rgba(255, 255, 255, 0.02);
 
-    color:
-        var(--gold-bright);
+    color: var(--gray);
 
-    font-family:
-        "Orbitron",
-        sans-serif;
-
-    font-size:
-        9px;
-
-    font-weight:
-        600;
-
-    letter-spacing:
-        1.8px;
-
-    cursor:
-        pointer;
-
-    box-shadow:
-        0 0 12px rgba(255, 170, 0, 0.12),
-        inset 0 0 8px rgba(255, 170, 0, 0.08);
-
-    backdrop-filter:
-        blur(10px);
-
-}
-
-
-.tools-symbol {
-
-    font-size:
-        15px;
-
-}
-
-
-.tools-arrow {
-
-    margin-left:
-        auto;
-
-    font-size:
-        19px;
+    cursor: pointer;
 
     transition:
-        transform 0.25s ease;
-
+        color 0.2s ease,
+        border-color 0.2s ease,
+        background 0.2s ease;
 }
 
+.tools-toggle:hover {
 
-.tools-header[aria-expanded="true"] .tools-arrow {
+    color: var(--amber-light);
 
-    transform:
-        rotate(90deg);
+    border-color:
+        rgba(255, 176, 0, 0.3);
 
+    background:
+        rgba(255, 176, 0, 0.04);
 }
-
 
 .tools-panel {
 
-    display:
-        flex;
+    display: none;
 
-    flex-direction:
-        column;
+    margin-top: 7px;
 
-    gap:
-        5px;
+    padding: 10px;
 
-    max-height:
-        0;
+    border:
+        1px solid rgba(255, 176, 0, 0.12);
 
-    overflow:
-        hidden;
+    border-radius: 10px;
 
-    opacity:
-        0;
-
-    transition:
-        max-height 0.25s ease,
-        opacity 0.2s ease;
-
+    background:
+        rgba(5, 7, 11, 0.88);
 }
-
 
 .tools-panel.tools-open {
 
-    max-height:
-        160px;
-
-    opacity:
-        1;
-
-    margin-top:
-        6px;
-
+    display: block;
 }
 
 
-.tool-item {
+/* ============================================================
+   14. USER / LOGIN
+   ============================================================ */
 
-    height:
-        34px;
+.user-section {
 
-    display:
-        flex;
+    margin-top: auto;
 
-    align-items:
-        center;
+    margin-bottom: 0;
 
-    gap:
-        9px;
+    padding-top: 18px;
 
-    padding:
-        0 12px;
+    border-top:
+        1px solid rgba(255, 176, 0, 0.1);
+}
+
+.user-card {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 10px;
 
     border:
-        1px solid rgba(255, 170, 0, 0.17);
+        1px solid rgba(255, 176, 0, 0.1);
 
-    border-radius:
-        6px;
+    border-radius: 10px;
 
     background:
-        rgba(10, 15, 25, 0.45);
-
-    color:
-        #9da5ae;
-
-    font-family:
-        "Rajdhani",
-        sans-serif;
-
-    cursor:
-        pointer;
-
+        rgba(255, 255, 255, 0.018);
 }
-
-
-/* =========================================================
-   USER
-========================================================= */
-
-.user-account {
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    gap:
-        10px;
-
-    margin-bottom:
-        10px;
-
-}
-
 
 .user-avatar {
 
-    width:
-        35px;
+    width: 34px;
+    height: 34px;
 
-    height:
-        35px;
+    flex: 0 0 34px;
 
-    display:
-        grid;
+    display: flex;
 
-    place-items:
-        center;
+    align-items: center;
+    justify-content: center;
 
     border:
-        1px solid rgba(255, 170, 0, 0.7);
+        1px solid rgba(255, 176, 0, 0.25);
 
-    border-radius:
-        50%;
+    border-radius: 50%;
 
-    color:
-        var(--gold-bright);
+    color: var(--amber);
 
     background:
-        rgba(255, 170, 0, 0.06);
+        rgba(255, 176, 0, 0.045);
 
-    box-shadow:
-        0 0 12px rgba(255, 170, 0, 0.14);
+    font-family: var(--font-tech);
 
+    font-size: 11px;
 }
 
+.user-info {
+
+    min-width: 0;
+}
 
 .user-name {
 
-    color:
-        #e8edf4;
+    color: var(--white);
 
-    font-family:
-        "Orbitron",
-        sans-serif;
+    font-family: var(--font-ui);
 
-    font-size:
-        10px;
+    font-size: 12px;
 
-    letter-spacing:
-        1px;
-
+    font-weight: 600;
 }
-
 
 .user-status {
 
-    margin-top:
-        3px;
+    margin-top: 2px;
 
-    color:
-        #6e7680;
+    color: var(--gray);
 
-    font-family:
-        "Share Tech Mono",
-        monospace;
+    font-family: var(--font-mono);
 
-    font-size:
-        8px;
+    font-size: 7px;
 
-    letter-spacing:
-        1px;
-
+    letter-spacing: 1px;
 }
-
-
-/* =========================================================
-   GOOGLE
-========================================================= */
 
 .google-login {
 
-    width:
-        100%;
+    width: 100%;
 
-    min-height:
-        39px;
+    min-height: 36px;
 
-    display:
-        flex;
+    display: flex;
 
-    align-items:
-        center;
+    align-items: center;
 
-    justify-content:
-        center;
+    justify-content: center;
 
-    gap:
-        9px;
+    gap: 8px;
+
+    margin-top: 8px;
 
     border:
-        1px solid rgba(255, 170, 0, 0.45);
+        1px solid rgba(255, 255, 255, 0.08);
 
-    border-radius:
-        7px;
+    border-radius: 9px;
+
+    color: var(--gray);
 
     background:
-        rgba(255, 255, 255, 0.035);
+        rgba(255, 255, 255, 0.025);
 
-    color:
-        #d7dce3;
-
-    text-decoration:
-        none;
-
-    font-family:
-        "Rajdhani",
-        sans-serif;
-
-    font-size:
-        11px;
-
-    font-weight:
-        600;
-
-    letter-spacing:
-        1.2px;
+    text-decoration: none;
 
     transition:
-        0.2s ease;
-
+        color 0.2s ease,
+        border-color 0.2s ease,
+        background 0.2s ease;
 }
-
 
 .google-login:hover {
 
+    color: var(--white);
+
     border-color:
-        #ffaa00;
+        rgba(255, 176, 0, 0.22);
 
     background:
-        rgba(255, 170, 0, 0.07);
-
+        rgba(255, 176, 0, 0.04);
 }
-
 
 .google-icon {
 
-    font-family:
-        Arial,
-        sans-serif;
+    font-family: var(--font-tech);
 
-    font-size:
-        17px;
+    font-size: 12px;
 
-    font-weight:
-        700;
+    color: var(--amber);
+}
 
-    color:
-        #4285f4;
+.google-text {
 
+    font-family: var(--font-mono);
+
+    font-size: 8px;
+
+    letter-spacing: 1px;
 }
 
 
-/* =========================================================
-   CHAT
-========================================================= */
+/* ============================================================
+   15. CHAT CONTAINER
+   ============================================================ */
 
 #chat-container {
 
-    position:
-        relative;
+    position: relative;
 
-    min-width:
-        0;
+    min-width: 0;
+    min-height: 0;
 
-    min-height:
-        0;
+    width: 100%;
+    height: 100%;
 
-    overflow:
-        hidden;
+    overflow: hidden;
 
     background:
-        rgba(2, 4, 7, 0.32);
-
+        radial-gradient(
+            ellipse at center,
+            rgba(255, 176, 0, 0.018),
+            transparent 58%
+        );
 }
 
 
-/* =========================================================
-   3D VISUAL
-========================================================= */
+/* ============================================================
+   16. 3D VISUAL
+   ============================================================ */
 
 #jarvis-visual {
 
-    position:
-        absolute;
+    position: absolute;
 
-    inset:
-        0;
+    inset: 0;
 
-    z-index:
-        1;
+    z-index: 1;
 
-    pointer-events:
-        none;
+    overflow: hidden;
 
-    display:
-        flex;
+    pointer-events: none;
 
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    overflow:
-        hidden;
-
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(255, 176, 0, 0.035),
+            transparent 42%
+        );
 }
-
 
 #jarvis-core-stage {
 
-    width:
-        min(650px, 78vw);
+    position: absolute;
 
-    height:
-        min(650px, 78vh);
+    inset: 0;
 
-    position:
-        relative;
+    width: 100%;
+    height: 100%;
 
+    pointer-events: none;
 }
-
 
 #jarvis-core-stage canvas {
 
-    display:
-        block;
+    position: absolute;
 
-    width:
-        100% !important;
+    inset: 0;
 
-    height:
-        100% !important;
+    width: 100% !important;
+    height: 100% !important;
 
+    display: block;
+
+    pointer-events: none;
 }
 
 
-/* =========================================================
-   OCULTAR ANTIGUO NÚCLEO
-========================================================= */
+/* Old compatibility layer */
 
 #jarvis-interface {
 
-    display:
-        none !important;
+    position: absolute;
 
+    inset: 0;
+
+    z-index: 2;
+
+    pointer-events: none;
 }
 
 
-/* =========================================================
-   MENSAJES
-========================================================= */
+/* ============================================================
+   17. MESSAGES
+   ============================================================ */
 
 #messages {
 
-    position:
-        relative;
+    position: absolute;
 
-    z-index:
-        8;
+    inset: 0;
 
-    width:
-        100%;
+    z-index: 8;
 
-    height:
-        100%;
+    width: 100%;
+    height: 100%;
 
-    min-width:
-        0;
+    display: flex;
 
-    overflow-y:
-        auto;
+    flex-direction: column;
 
-    overflow-x:
-        hidden;
+    align-items: stretch;
+
+    gap: 14px;
+
+    overflow-y: auto;
+
+    overflow-x: hidden;
 
     padding:
-        28px 34px 145px;
+        28px
+        34px
+        150px;
 
-    scroll-behavior:
-        smooth;
+    scroll-behavior: smooth;
 
-    scroll-padding-bottom:
-        160px;
+    scrollbar-width: thin;
 
+    scrollbar-color:
+        rgba(255, 176, 0, 0.28)
+        transparent;
 }
-
 
 #messages::-webkit-scrollbar {
-
-    width:
-        5px;
-
+    width: 5px;
 }
 
+#messages::-webkit-scrollbar-track {
+    background: transparent;
+}
 
 #messages::-webkit-scrollbar-thumb {
 
     background:
-        rgba(255, 170, 0, 0.25);
+        rgba(255, 176, 0, 0.25);
 
-    border-radius:
-        10px;
-
+    border-radius: 10px;
 }
 
 
-/* =========================================================
-   MENSAJES J.A.R.V.I.S.
-========================================================= */
+/* ============================================================
+   18. BASE MESSAGE
+   ============================================================ */
+
+.message {
+
+    position: relative;
+
+    width: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    flex-shrink: 0;
+
+    animation:
+        messageAppear 0.22s ease both;
+}
+
+@keyframes messageAppear {
+
+    from {
+        opacity: 0;
+        transform: translateY(7px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* ============================================================
+   19. USER MESSAGE
+   ============================================================ */
+
+.user-message {
+
+    align-items: flex-end;
+
+    padding-left: 18%;
+}
+
+.user-message .message-content {
+
+    max-width: min(72%, 720px);
+
+    padding:
+        11px
+        15px;
+
+    border:
+        1px solid rgba(255, 176, 0, 0.2);
+
+    border-radius:
+        14px
+        14px
+        4px
+        14px;
+
+    background:
+        rgba(255, 176, 0, 0.075);
+
+    color: var(--white);
+
+    font-family: var(--font-ui);
+
+    font-size: 13px;
+
+    line-height: 1.55;
+
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.15);
+
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+
+    word-wrap: break-word;
+}
+
+
+/* ============================================================
+   20. JARVIS MESSAGE
+   ============================================================ */
 
 .jarvis-message {
 
-    display:
-        flex;
+    align-items: flex-start;
 
-    align-items:
-        flex-start;
+    padding-right: 12%;
 
-    gap:
-        11px;
-
-    width:
-        100%;
-
-    min-width:
-        0;
-
-    margin:
-        4px 0 20px;
-
+    min-height: 30px;
 }
 
+
+/*
+   El mensaje de JARVIS no utiliza una burbuja pesada.
+   El texto queda integrado directamente en el HUD.
+*/
 
 .jarvis-message .message-content,
-.jarvis-content {
+.jarvis-message .jarvis-content {
 
-    position:
-        relative;
-
-    flex:
-        0 1 auto;
-
-    min-width:
-        0;
-
-    max-width:
-        min(78%, 820px);
+    max-width: min(82%, 860px);
 
     padding:
-        14px 18px;
-
-    background:
-        rgba(10, 15, 25, 0.58) !important;
-
-    border:
-        1px solid rgba(255, 170, 0, 0.4) !important;
-
-    border-radius:
-        10px;
-
-    box-shadow:
-        0 0 12px rgba(255, 170, 0, 0.07),
-        inset 0 0 8px rgba(255, 170, 0, 0.035);
-
-    backdrop-filter:
-        blur(10px);
-
-    -webkit-backdrop-filter:
-        blur(10px);
-
-    color:
-        #e5e9ee;
-
-    font-family:
-        "Share Tech Mono",
-        monospace;
-
-    font-size:
-        13px;
-
-    line-height:
-        1.72;
-
-    letter-spacing:
-        0.2px;
-
-    overflow-wrap:
-        anywhere;
-
-    word-break:
-        break-word;
-
-}
-
-
-.jarvis-message .message-content p,
-.jarvis-content p {
-
-    margin:
-        0 0 10px;
-
-}
-
-
-.jarvis-message .message-content p:last-child,
-.jarvis-content p:last-child {
-
-    margin-bottom:
+        2px
         0;
 
+    margin: 0;
+
+    border: 0;
+
+    border-radius: 0;
+
+    background: transparent;
+
+    box-shadow: none;
+
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+
+    color: var(--white-soft);
+
+    font-family: var(--font-mono);
+
+    font-size: 13px;
+
+    line-height: 1.72;
+
+    word-wrap: break-word;
 }
 
 
-.jarvis-message .message-content strong,
-.jarvis-content strong {
+/* ============================================================
+   21. JARVIS HEADER
+   ============================================================ */
 
-    color:
-        #ffcc00;
+.jarvis-message-header {
 
-    font-weight:
-        600;
+    display: flex;
 
+    align-items: center;
+
+    gap: 9px;
+
+    margin-bottom: 5px;
+
+    min-height: 20px;
 }
 
+.jarvis-core {
 
-/* =========================================================
-   AVATAR / CORE
-========================================================= */
+    position: relative;
 
-.jarvis-message .jarvis-core {
+    width: 15px;
+    height: 15px;
 
-    flex:
-        0 0 34px;
-
-    width:
-        34px;
-
-    height:
-        34px;
-
-    display:
-        grid;
-
-    place-items:
-        center;
-
-    margin-top:
-        4px;
+    flex: 0 0 15px;
 
     border:
-        1px solid rgba(255, 170, 0, 0.65);
+        1px solid rgba(255, 176, 0, 0.62);
 
-    border-radius:
-        50%;
+    border-radius: 50%;
 
     background:
         radial-gradient(
             circle,
-            rgba(255, 204, 0, 0.38),
-            rgba(255, 170, 0, 0.08) 48%,
-            rgba(255, 170, 0, 0.015) 72%
+            #fff6d6 0%,
+            #ffd36a 25%,
+            #ffb000 48%,
+            rgba(255, 176, 0, 0.08) 72%,
+            transparent 74%
         );
 
     box-shadow:
-        0 0 12px rgba(255, 170, 0, 0.3),
-        inset 0 0 8px rgba(255, 170, 0, 0.2);
+        0 0 8px rgba(255, 176, 0, 0.55);
 
+    animation:
+        jarvisCorePulse 2.2s ease-in-out infinite;
+}
+
+@keyframes jarvisCorePulse {
+
+    0%,
+    100% {
+        box-shadow:
+            0 0 7px rgba(255, 176, 0, 0.4);
+    }
+
+    50% {
+        box-shadow:
+            0 0 13px rgba(255, 176, 0, 0.75);
+    }
 }
 
 
-/* =========================================================
-   OCULTAR IDENTIDAD / FOOTER
-========================================================= */
+/*
+   IMPORTANTE:
+   No ocultamos .jarvis-identity.
+*/
 
-.jarvis-message-header .jarvis-identity,
-.jarvis-message-header .jarvis-identity *,
-.jarvis-message-footer,
-.jarvis-message .jarvis-message-footer,
+.jarvis-identity {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    flex-shrink: 0;
+
+    margin-top: 1px;
+
+    color: var(--amber-light);
+
+    font-family: var(--font-tech);
+
+    font-size: 9px;
+
+    font-weight: 600;
+
+    letter-spacing: 2px;
+
+    line-height: 1;
+}
+
+
+/* ============================================================
+   22. JARVIS FOOTER
+   ============================================================ */
+
+.jarvis-message-footer {
+
+    display: block;
+
+    margin-top: 7px;
+
+    color: var(--gray);
+
+    opacity: 0.52;
+
+    font-family: var(--font-mono);
+
+    font-size: 8px;
+
+    letter-spacing: 1.4px;
+
+    line-height: 1.2;
+}
+
+
+/* ============================================================
+   23. SYSTEM RESPONSE LABEL
+   ============================================================ */
+
 .jarvis-message .system-response,
 .jarvis-message .system-response-label {
 
-    display:
-        none !important;
+    display: block;
 
+    margin-top: 3px;
+
+    color: var(--amber);
+
+    opacity: 0.7;
+
+    font-family: var(--font-mono);
+
+    font-size: 8px;
+
+    letter-spacing: 1.5px;
 }
 
 
-/* =========================================================
-   USUARIO
-========================================================= */
+/* ============================================================
+   24. PROCESSING
+   ============================================================ */
 
-.user-message {
+#jarvisProcessing {
 
-    display:
-        flex;
+    position: absolute;
 
-    justify-content:
-        flex-end;
+    left: 34px;
 
-    width:
-        100%;
+    bottom: 116px;
 
-    min-width:
-        0;
+    z-index: 35;
 
-    margin:
-        4px 0 20px;
+    pointer-events: none;
+}
 
+.processing-message {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    color: var(--amber-light);
+
+    font-family: var(--font-mono);
+
+    font-size: 10px;
+
+    letter-spacing: 1.5px;
+
+    opacity: 0.75;
+}
+
+.processing-message::before {
+
+    content: "";
+
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+
+    background: var(--amber);
+
+    box-shadow:
+        0 0 10px rgba(255, 176, 0, 0.75);
+
+    animation:
+        processingPulse 1s ease-in-out infinite;
+}
+
+@keyframes processingPulse {
+
+    0%,
+    100% {
+        opacity: 0.3;
+        transform: scale(0.8);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.15);
+    }
 }
 
 
-.user-message .message-content {
-
-    min-width:
-        0;
-
-    max-width:
-        min(68%, 720px);
-
-    padding:
-        12px 16px;
-
-    background:
-        rgba(255, 170, 0, 0.075);
-
-    border:
-        1px solid rgba(255, 170, 0, 0.28);
-
-    border-radius:
-        10px;
-
-    color:
-        #e8edf3;
-
-    font-family:
-        "Share Tech Mono",
-        monospace;
-
-    font-size:
-        12px;
-
-    line-height:
-        1.65;
-
-    overflow-wrap:
-        anywhere;
-
-    word-break:
-        break-word;
-
-}
-
-
-/* =========================================================
-   COMPOSER
-========================================================= */
+/* ============================================================
+   25. COMPOSER
+   ============================================================ */
 
 #console {
 
-    position:
-        absolute;
+    position: absolute;
 
-    z-index:
-        40;
+    left: 0;
+    right: 0;
+    bottom: 17px;
 
-    left:
-        0;
+    z-index: 40;
 
-    right:
-        0;
+    width: 100%;
 
-    bottom:
-        17px;
+    display: flex;
 
-    width:
-        100%;
-
-    display:
-        flex;
-
-    justify-content:
-        center;
+    justify-content: center;
 
     padding:
-        0 20px;
+        0
+        20px;
 
-    pointer-events:
-        none;
-
+    pointer-events: none;
 }
-
 
 .console-wrapper {
 
-    width:
-        min(820px, 88%);
+    position: relative;
 
-    min-height:
-        var(--composer-height);
+    width: min(900px, 88%);
 
-    display:
-        flex;
+    min-height: 64px;
 
-    flex-direction:
-        row;
+    display: flex;
 
-    align-items:
-        center;
+    align-items: center;
 
-    justify-content:
-        center;
-
-    gap:
-        10px;
+    gap: 8px;
 
     padding:
-        10px 14px;
+        8px
+        9px
+        8px
+        18px;
 
     border:
-        1px solid rgba(255, 170, 0, 0.65);
+        1px solid rgba(255, 176, 0, 0.3);
 
-    border-radius:
-        32px;
+    border-radius: 34px;
 
     background:
-        rgba(10, 15, 25, 0.72);
+        rgba(5, 7, 11, 0.78);
 
     box-shadow:
-        0 0 18px rgba(255, 170, 0, 0.17),
-        inset 0 0 12px rgba(255, 170, 0, 0.07);
+        0 12px 40px rgba(0, 0, 0, 0.38),
+        0 0 25px rgba(255, 176, 0, 0.06);
 
-    backdrop-filter:
-        blur(16px);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
 
-    -webkit-backdrop-filter:
-        blur(16px);
+    pointer-events: auto;
 
-    pointer-events:
-        auto;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
 
+.console-wrapper:focus-within {
+
+    border-color:
+        rgba(255, 176, 0, 0.5);
+
+    box-shadow:
+        0 12px 40px rgba(0, 0, 0, 0.42),
+        0 0 30px rgba(255, 176, 0, 0.1);
 }
 
 
-/* =========================================================
-   CAMPO DE MENSAJE
-========================================================= */
+/* ============================================================
+   26. MESSAGE INPUT
+   ============================================================ */
 
 #messageInput {
 
-    order:
-        1;
+    flex: 1;
 
-    flex:
-        1 1 auto;
+    min-width: 0;
 
-    min-width:
-        0;
+    height: 44px;
 
-    width:
-        100%;
-
-    height:
-        43px;
+    border: 0;
+    outline: 0;
 
     padding:
-        0 6px;
+        0
+        5px;
 
-    border:
-        0;
+    background: transparent;
 
-    outline:
-        none;
+    color: var(--white);
 
-    background:
-        transparent;
+    font-family: var(--font-ui);
 
-    color:
-        #edf1f6;
+    font-size: 14px;
 
-    font-family:
-        "Rajdhani",
-        sans-serif;
+    font-weight: 500;
 
-    font-size:
-        15px;
-
+    letter-spacing: 0.25px;
 }
-
 
 #messageInput::placeholder {
 
-    color:
-        #707883;
+    color: var(--gray);
 
+    opacity: 0.65;
+}
+
+#messageInput:disabled {
+
+    opacity: 0.45;
+
+    cursor: not-allowed;
 }
 
 
-/* =========================================================
-   ESTADO
-========================================================= */
+/* ============================================================
+   27. CONSOLE STATUS
+   ============================================================ */
 
 .console-status {
 
-    order:
-        2;
+    flex: 0 0 auto;
 
-    flex:
-        0 0 auto;
+    color: var(--gray);
 
-    display:
-        flex;
+    font-family: var(--font-mono);
 
-    align-items:
-        center;
+    font-size: 7px;
 
-    justify-content:
-        center;
+    letter-spacing: 1px;
 
-    gap:
-        5px;
+    opacity: 0.6;
 
-    padding:
-        0 5px;
-
-    color:
-        #777f89;
-
-    font-family:
-        "Share Tech Mono",
-        monospace;
-
-    font-size:
-        8px;
-
-    letter-spacing:
-        1px;
-
-    white-space:
-        nowrap;
-
+    white-space: nowrap;
 }
 
 
-.console-status span {
-
-    width:
-        5px;
-
-    height:
-        5px;
-
-    flex:
-        0 0 5px;
-
-    border-radius:
-        50%;
-
-    background:
-        #ffcc00;
-
-    box-shadow:
-        0 0 6px #ffcc00;
-
-}
-
-
-/* =========================================================
-   BOTONES DE CONSOLA
-========================================================= */
+/* ============================================================
+   28. CONSOLE BUTTONS
+   ============================================================ */
 
 .console-icon-button,
 #sendButton,
 .cognitive-button {
 
-    flex:
-        0 0 auto;
+    position: relative;
 
-    display:
-        grid;
+    width: 43px;
+    height: 43px;
 
-    place-items:
-        center;
+    min-width: 43px;
+    min-height: 43px;
+
+    flex: 0 0 43px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
 
     border:
-        1px solid rgba(255, 170, 0, 0.58);
+        1px solid rgba(255, 176, 0, 0.23);
+
+    border-radius: 50%;
 
     background:
-        rgba(255, 170, 0, 0.055);
+        rgba(255, 255, 255, 0.025);
 
-    color:
-        var(--gold-bright);
+    color: var(--amber-light);
 
-    cursor:
-        pointer;
+    cursor: pointer;
+
+    overflow: hidden;
 
     transition:
-        0.2s ease;
-
+        transform 0.18s ease,
+        border-color 0.18s ease,
+        background 0.18s ease,
+        box-shadow 0.18s ease,
+        color 0.18s ease;
 }
-
-
-.cognitive-button {
-
-    order:
-        3;
-
-    position:
-        relative;
-
-    width:
-        36px;
-
-    height:
-        36px;
-
-    border-radius:
-        50%;
-
-    grid-template-columns:
-        repeat(3, 4px);
-
-    grid-template-rows:
-        repeat(2, 4px);
-
-    gap:
-        3px;
-
-}
-
-
-.cognitive-button span {
-
-    width:
-        4px;
-
-    height:
-        4px;
-
-    border-radius:
-        50%;
-
-    background:
-        #ffcc00;
-
-    box-shadow:
-        0 0 5px rgba(255, 204, 0, 0.65);
-
-}
-
-
-/* =========================================================
-   MICRO
-========================================================= */
-
-#voiceButton {
-
-    order:
-        4;
-
-    flex:
-        0 0 42px;
-
-    width:
-        42px;
-
-    height:
-        42px;
-
-    display:
-        grid;
-
-    place-items:
-        center;
-
-    margin:
-        0;
-
-    padding:
-        0;
-
-    border-radius:
-        50% !important;
-
-    line-height:
-        1;
-
-    font-size:
-        17px;
-
-}
-
-
-/* =========================================================
-   ENVIAR
-========================================================= */
-
-#sendButton {
-
-    order:
-        5;
-
-    flex:
-        0 0 43px;
-
-    width:
-        43px;
-
-    height:
-        43px;
-
-    display:
-        grid;
-
-    place-items:
-        center;
-
-    margin:
-        0;
-
-    padding:
-        0;
-
-    border-radius:
-        50% !important;
-
-    font-size:
-        0;
-
-    line-height:
-        1;
-
-}
-
-
-/*
-   Avión de papel visual.
-*/
-
-#sendButton::before {
-
-    content:
-        "➤";
-
-    display:
-        block;
-
-    width:
-        100%;
-
-    height:
-        100%;
-
-    display:
-        grid;
-
-    place-items:
-        center;
-
-    font-family:
-        Arial,
-        sans-serif;
-
-    font-size:
-        19px;
-
-    line-height:
-        1;
-
-    transform:
-        translate(0, 0);
-
-}
-
-
-/* =========================================================
-   HOVER
-========================================================= */
 
 .console-icon-button:hover,
 #sendButton:hover,
 .cognitive-button:hover {
 
     border-color:
-        #ffcc00;
+        rgba(255, 176, 0, 0.58);
 
     background:
-        rgba(255, 170, 0, 0.13);
+        rgba(255, 176, 0, 0.075);
+
+    color: #fff1bd;
 
     box-shadow:
-        0 0 13px rgba(255, 170, 0, 0.25);
+        0 0 18px rgba(255, 176, 0, 0.13);
 
-    transform:
-        translateY(-1px);
+    transform: scale(1.06);
+}
 
+.console-icon-button:active,
+#sendButton:active,
+.cognitive-button:active {
+
+    transform: scale(0.94);
 }
 
 
-/* =========================================================
-   PROCESSING
-========================================================= */
-
-#jarvisProcessing {
-
-    position:
-        absolute;
-
-    z-index:
-        35;
-
-    pointer-events:
-        none;
-
-}
-
-
-/* =========================================================
-   RESPONSIVE
-========================================================= */
-
-@media (max-width: 900px) {
-
-    :root {
-
-        --sidebar-width:
-            240px;
-
-    }
-
-    #topbar {
-
-        padding:
-            0 18px;
-
-    }
-
-    .stark-title {
-
-        font-size:
-            14px;
-
-    }
-
-    .console-wrapper {
-
-        width:
-            min(760px, 94%);
-
-    }
-
-}
-
-
-@media (max-width: 700px) {
-
-    #main-layout {
-
-        grid-template-columns:
-            1fr;
-
-    }
-
-    #sidebar {
-
-        display:
-            none;
-
-    }
-
-    #topbar {
-
-        grid-template-columns:
-            1fr auto;
-
-    }
-
-    .top-center {
-
-        display:
-            none;
-
-    }
-
-    .jarvis-title {
-
-        font-size:
-            18px;
-
-    }
-
-    .stark-title {
-
-        font-size:
-            12px;
-
-    }
-
-    .stark-badge {
-
-        font-size:
-            7px;
-
-    }
-
-    #messages {
-
-        padding:
-            22px 15px 130px;
-
-    }
-
-    .jarvis-message {
-
-        gap:
-            9px;
-
-    }
-
-    .jarvis-message .message-content,
-    .jarvis-content {
-
-        max-width:
-            calc(100% - 45px);
-
-    }
-
-    .user-message .message-content {
-
-        max-width:
-            82%;
-
-    }
-
-    .console-wrapper {
-
-        width:
-            calc(100% - 12px);
-
-        gap:
-            8px;
-
-        padding:
-            9px 11px;
-
-    }
-
-}
-
-
-@media (max-width: 430px) {
-
-    .jarvis-subtitle {
-
-        font-size:
-            6px;
-
-        letter-spacing:
-            1.5px;
-
-    }
-
-    .stark-header {
-
-        display:
-            none;
-
-    }
-
-    #console {
-
-        bottom:
-            10px;
-
-        padding:
-            0 6px;
-
-    }
-
-    .console-wrapper {
-
-        min-height:
-            57px;
-
-        padding:
-            7px 8px;
-
-        gap:
-            7px;
-
-    }
-
-    #messageInput {
-
-        font-size:
-            14px;
-
-        padding:
-            0 4px;
-
-    }
-
-    .console-status {
-
-        display:
-            none;
-
-    }
-
-    .console-icon-button {
-
-        width:
-            38px;
-
-        height:
-            38px;
-
-        flex:
-            0 0 38px;
-
-    }
-
-    #voiceButton {
-
-        width:
-            38px;
-
-        height:
-            38px;
-
-        flex:
-            0 0 38px;
-
-    }
-
-    #sendButton {
-
-        width:
-            40px;
-
-        height:
-            40px;
-
-        flex:
-            0 0 40px;
-
-        display:
-            grid;
-
-        place-items:
-            center;
-
-    }
-
-    .cognitive-button {
-
-        width:
-            33px;
-
-        height:
-            33px;
-
-    }
-
-    .jarvis-message .message-content,
-    .jarvis-content {
-
-        max-width:
-            calc(100% - 42px);
-
-        padding:
-            12px 14px;
-
-        font-size:
-            12px;
-
-    }
-
-}
-
-/* =========================================================
-   J.A.R.V.I.S. — FINAL CHAT VISUAL OVERRIDE
-   Esta sección tiene prioridad sobre los estilos anteriores.
-========================================================= */
-
-/* =========================
-   CHAT — FLUJO PRINCIPAL
-========================= */
-
-#chat-container {
-    position: relative !important;
-    overflow: hidden !important;
-}
-
-#messages {
-    position: absolute !important;
-    inset: 0 !important;
-
-    width: 100% !important;
-    height: 100% !important;
-
-    display: flex !important;
-    flex-direction: column !important;
-
-    overflow-y: auto !important;
-    overflow-x: hidden !important;
-
-    padding: 32px 44px 150px !important;
-
-    gap: 0 !important;
-
-    scroll-behavior: smooth !important;
-    scroll-padding-bottom: 150px !important;
-
-    box-sizing: border-box !important;
-}
-
-
-/* =========================
-   MENSAJE DEL USUARIO
-========================= */
-
-.user-message {
-    width: 100% !important;
-
-    display: flex !important;
-    justify-content: flex-end !important;
-
-    margin: 8px 0 18px !important;
-
-    padding: 0 !important;
-}
-
-.user-message .message-content {
-    max-width: min(70%, 760px) !important;
-
-    padding: 12px 16px !important;
-
-    border-radius: 16px !important;
-
-    background: rgba(255, 170, 0, 0.08) !important;
-
-    border: 1px solid rgba(255, 170, 0, 0.28) !important;
-
-    box-shadow:
-        0 5px 22px rgba(0, 0, 0, 0.20) !important;
-
-    color: #f1f1f1 !important;
-
-    line-height: 1.6 !important;
-
-    overflow-wrap: anywhere !important;
-}
-
-
-/* =========================
-   JARVIS — SIN BURBUJA
-========================= */
-
-.jarvis-message {
-    width: 100% !important;
-
-    display: flex !important;
-    align-items: flex-start !important;
-
-    gap: 13px !important;
-
-    margin: 8px 0 28px !important;
-
-    padding: 0 !important;
-
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-}
-
-
-/* El contenido ocupa el espacio natural del chat */
-
-.jarvis-message .message-content,
-.jarvis-message .jarvis-content {
-    width: auto !important;
-    max-width: min(900px, 82%) !important;
-
-    padding: 2px 0 !important;
-
-    background: transparent !important;
-    border: none !important;
-    border-radius: 0 !important;
-
-    box-shadow: none !important;
-
-    backdrop-filter: none !important;
-
-    color: #e7eaee !important;
-
-    font-family: "Rajdhani", "Share Tech Mono", sans-serif !important;
-
-    font-size: 15px !important;
-
-    line-height: 1.78 !important;
-
-    letter-spacing: 0.15px !important;
-
-    overflow-wrap: anywhere !important;
-}
-
-
-/* =========================
-   IDENTIDAD DE JARVIS
-========================= */
-
-.jarvis-identity {
-    flex-shrink: 0 !important;
-
-    margin-top: 2px !important;
-}
-
-
-/* =========================
-   FOOTER JARVIS
-========================= */
-
-.jarvis-message-footer {
-    margin-top: 7px !important;
-
-    opacity: 0.55 !important;
-
-    font-size: 9px !important;
-
-    letter-spacing: 1.4px !important;
-}
-
-
-/* =========================
-   PROCESANDO
-========================= */
-
-#jarvisProcessing {
-    position: absolute !important;
-
-    left: 44px !important;
-    right: 44px !important;
-
-    bottom: 112px !important;
-
-    top: auto !important;
-
-    z-index: 35 !important;
-
-    pointer-events: none !important;
-}
-
-
-/* =========================
-   CONSOLA FLOTANTE
-========================= */
-
-#console {
-    position: absolute !important;
-
-    left: 0 !important;
-    right: 0 !important;
-    bottom: 18px !important;
-
-    z-index: 50 !important;
-
-    display: flex !important;
-    justify-content: center !important;
-
-    padding: 0 30px !important;
-
-    pointer-events: none !important;
-}
-
-
-.console-wrapper {
-    width: min(900px, 88%) !important;
-
-    min-height: 62px !important;
-
-    display: flex !important;
-    align-items: center !important;
-
-    gap: 9px !important;
-
-    padding: 8px 10px 8px 17px !important;
-
-    box-sizing: border-box !important;
-
-    border: 1px solid rgba(255, 174, 0, 0.62) !important;
-
-    border-radius: 34px !important;
-
-    background:
-        linear-gradient(
-            180deg,
-            rgba(12, 17, 25, 0.88),
-            rgba(6, 10, 16, 0.92)
-        ) !important;
-
-    box-shadow:
-        0 0 0 1px rgba(255, 174, 0, 0.04),
-        0 8px 30px rgba(0, 0, 0, 0.45),
-        0 0 24px rgba(255, 174, 0, 0.10) !important;
-
-    backdrop-filter: blur(18px) !important;
-
-    pointer-events: auto !important;
-}
-
-
-/* =========================
-   INPUT
-========================= */
-
-#messageInput {
-    flex: 1 1 auto !important;
-
-    min-width: 0 !important;
-
-    height: 43px !important;
-
-    padding: 0 4px !important;
-
-    border: none !important;
-    outline: none !important;
-
-    background: transparent !important;
-
-    color: #e8eaed !important;
-
-    font-family:
-        "Rajdhani",
-        "Share Tech Mono",
-        sans-serif !important;
-
-    font-size: 15px !important;
-
-    letter-spacing: 0.3px !important;
-}
-
-#messageInput::placeholder {
-    color: rgba(185, 193, 203, 0.55) !important;
-
-    letter-spacing: 0.5px !important;
-}
-
-
-/* =========================
-   BOTONES
-========================= */
-
-#voiceButton,
-#cognitiveButton,
-#sendButton {
-    flex: 0 0 43px !important;
-
-    width: 43px !important;
-    height: 43px !important;
-
-    min-width: 43px !important;
-    min-height: 43px !important;
-
-    padding: 0 !important;
-
-    display: grid !important;
-    place-items: center !important;
-
-    border-radius: 50% !important;
-
-    box-sizing: border-box !important;
-
-    transition:
-        transform 0.18s ease,
-        background 0.18s ease,
-        box-shadow 0.18s ease,
-        border-color 0.18s ease !important;
-}
-
-
-/* Micrófono */
+/* ============================================================
+   29. MICROPHONE
+   ============================================================ */
 
 #voiceButton {
-    border: 1px solid rgba(255, 174, 0, 0.48) !important;
 
-    background: rgba(255, 174, 0, 0.035) !important;
+    font-size: 15px;
+
+    line-height: 1;
 }
 
 
-/* Cognitivo */
+/* ============================================================
+   30. COGNITIVE BUTTON
+   ============================================================ */
 
-#cognitiveButton {
-    border: 1px solid rgba(255, 174, 0, 0.48) !important;
+.cognitive-button {
 
-    background: rgba(255, 174, 0, 0.035) !important;
+    gap: 3px;
 }
 
 
-/* Enviar */
+/* Cognitive six-dot indicator */
+
+.cognitive-button::before {
+
+    content: "";
+
+    width: 15px;
+    height: 15px;
+
+    background:
+        radial-gradient(
+            circle at 2px 2px,
+            var(--amber-light) 1.2px,
+            transparent 1.8px
+        );
+
+    background-size: 5px 5px;
+
+    opacity: 0.85;
+
+    filter:
+        drop-shadow(
+            0 0 3px
+            rgba(255, 176, 0, 0.6)
+        );
+}
+
+
+/* ============================================================
+   31. SEND BUTTON
+   ============================================================ */
 
 #sendButton {
-    border: 1px solid rgba(255, 174, 0, 0.80) !important;
 
     background:
         radial-gradient(
             circle at 35% 30%,
-            rgba(255, 205, 80, 0.20),
-            rgba(255, 174, 0, 0.05) 60%,
-            transparent 70%
-        ) !important;
-
-    box-shadow:
-        0 0 14px rgba(255, 174, 0, 0.12) !important;
-
-    font-size: 0 !important;
+            rgba(255, 211, 106, 0.12),
+            rgba(255, 176, 0, 0.025) 65%
+        );
 }
-
-
-/* Avión de enviar */
 
 #sendButton::before {
-    content: "➤" !important;
 
-    display: block !important;
+    content: "➤";
 
-    font-family: Arial, sans-serif !important;
+    display: block;
 
-    font-size: 19px !important;
+    font-size: 18px;
 
-    line-height: 1 !important;
+    line-height: 1;
 
-    color: #ffc229 !important;
+    transform:
+        translateX(1px);
 
-    transform: translateX(1px) !important;
+    color: var(--amber-light);
+
+    text-shadow:
+        0 0 8px rgba(255, 176, 0, 0.28);
 }
 
 
-/* =========================
-   HOVER
-========================= */
+/*
+   Ocultamos únicamente el carácter HTML original del botón.
+   El icono visible lo genera ::before.
+*/
 
-#voiceButton:hover,
-#cognitiveButton:hover,
-#sendButton:hover {
-    transform: scale(1.06) !important;
+#sendButton {
 
-    border-color: rgba(255, 194, 41, 0.95) !important;
-
-    background: rgba(255, 174, 0, 0.10) !important;
-
-    box-shadow:
-        0 0 18px rgba(255, 174, 0, 0.16) !important;
+    font-size: 0;
 }
 
 
-/* =========================
-   STATUS
-========================= */
+/* ============================================================
+   32. FOCUS ACCESSIBILITY
+   ============================================================ */
 
-.console-status {
-    flex: 0 0 auto !important;
+#messageInput:focus-visible,
+#chatSearchInput:focus-visible,
+button:focus-visible,
+a:focus-visible {
 
-    white-space: nowrap !important;
+    outline:
+        1px solid rgba(255, 176, 0, 0.55);
 
-    font-family:
-        "Share Tech Mono",
-        monospace !important;
-
-    font-size: 8px !important;
-
-    letter-spacing: 0.7px !important;
+    outline-offset: 2px;
 }
 
 
-/* =========================
-   SCROLLBAR
-========================= */
+/* ============================================================
+   33. SELECTION
+   ============================================================ */
 
-#messages::-webkit-scrollbar {
-    width: 5px !important;
-}
+::selection {
 
-#messages::-webkit-scrollbar-track {
-    background: transparent !important;
-}
+    color: #fff8dc;
 
-#messages::-webkit-scrollbar-thumb {
-    background: rgba(255, 174, 0, 0.20) !important;
-
-    border-radius: 10px !important;
-}
-
-#messages::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 174, 0, 0.42) !important;
+    background:
+        rgba(255, 176, 0, 0.28);
 }
 
 
-/* =========================
-   RESPONSIVE
-========================= */
+/* ============================================================
+   34. SCROLLBAR GLOBAL
+   ============================================================ */
 
-@media (max-width: 800px) {
+.custom-scrollbar {
+    scrollbar-width: thin;
+
+    scrollbar-color:
+        rgba(255, 176, 0, 0.25)
+        transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+
+    background:
+        rgba(255, 176, 0, 0.25);
+
+    border-radius: 10px;
+}
+
+
+/* ============================================================
+   35. RESPONSIVE — TABLET
+   ============================================================ */
+
+@media (max-width: 1000px) {
+
+    :root {
+        --sidebar-width: 225px;
+    }
+
+    #topbar {
+        padding: 0 18px;
+    }
+
+    .jarvis3d-accessibility {
+        font-size: 15px;
+        letter-spacing: 3px;
+    }
+
+    .stark-title {
+        font-size: 11px;
+    }
+
+    .stark-badge {
+        font-size: 6px;
+    }
 
     #messages {
-        padding:
-            25px
-            20px
-            140px !important;
-    }
-
-    #jarvisProcessing {
-        left: 20px !important;
-        right: 20px !important;
-        bottom: 105px !important;
-    }
-
-    #console {
-        padding: 0 12px !important;
+        padding-left: 25px;
+        padding-right: 25px;
     }
 
     .console-wrapper {
-        width: 100% !important;
+        width: min(850px, 92%);
+    }
+}
+
+
+/* ============================================================
+   36. RESPONSIVE — MOBILE
+   ============================================================ */
+
+@media (max-width: 760px) {
+
+    :root {
+        --topbar-height: 62px;
+    }
+
+    #topbar {
+
+        grid-template-columns:
+            1fr
+            auto;
+
+        height: var(--topbar-height);
+
+        padding:
+            0
+            14px;
+    }
+
+    .top-center {
+
+        display: none;
+    }
+
+    .stark-header {
+
+        align-items: flex-end;
+    }
+
+    .jarvis3d-accessibility {
+
+        font-size: 12px;
+
+        letter-spacing: 2px;
+    }
+
+    .stark-title {
+
+        font-size: 9px;
+
+        letter-spacing: 2px;
+    }
+
+    .stark-badge {
+
+        display: none;
+    }
+
+    #main-layout {
+
+        grid-template-columns: 1fr;
+    }
+
+    #sidebar {
+
+        position: absolute;
+
+        left: 0;
+        top: 0;
+        bottom: 0;
+
+        width: min(285px, 82vw);
+
+        z-index: 70;
+
+        transform:
+            translateX(-100%);
+
+        transition:
+            transform 0.25s ease;
+
+        box-shadow:
+            20px 0 50px rgba(0, 0, 0, 0.4);
+    }
+
+    #chat-container {
+
+        width: 100%;
+    }
+
+    #messages {
+
+        padding:
+            20px
+            17px
+            130px;
+    }
+
+    .jarvis-message {
+
+        padding-right: 5%;
     }
 
     .jarvis-message .message-content,
     .jarvis-message .jarvis-content {
-        max-width: 88% !important;
+
+        max-width: 94%;
+
+        font-size: 12px;
+
+        line-height: 1.65;
+    }
+
+    .user-message {
+
+        padding-left: 8%;
+    }
+
+    .user-message .message-content {
+
+        max-width: 84%;
+
+        font-size: 12px;
+    }
+
+    #console {
+
+        bottom: 10px;
+
+        padding:
+            0
+            10px;
+    }
+
+    .console-wrapper {
+
+        width: 96%;
+
+        min-height: 58px;
+
+        padding:
+            7px
+            7px
+            7px
+            13px;
+
+        gap: 5px;
+    }
+
+    #messageInput {
+
+        height: 40px;
+
+        font-size: 13px;
+    }
+
+    .console-status {
+
+        display: none;
+    }
+
+    .console-icon-button,
+    #sendButton,
+    .cognitive-button {
+
+        width: 40px;
+        height: 40px;
+
+        min-width: 40px;
+        min-height: 40px;
+
+        flex-basis: 40px;
+    }
+
+    #sendButton::before {
+
+        font-size: 16px;
+    }
+
+    #jarvisProcessing {
+
+        left: 20px;
+
+        bottom: 88px;
     }
 }
+
+
+/* ============================================================
+   37. RESPONSIVE — SMALL MOBILE
+   ============================================================ */
+
+@media (max-width: 430px) {
+
+    .jarvis3d-accessibility {
+
+        font-size: 10px;
+
+        letter-spacing: 1.5px;
+    }
+
+    .stark-title {
+
+        font-size: 8px;
+    }
+
+    #messages {
+
+        gap: 12px;
+
+        padding:
+            16px
+            12px
+            122px;
+    }
+
+    .jarvis-message .message-content,
+    .jarvis-message .jarvis-content {
+
+        max-width: 98%;
+
+        font-size: 11.5px;
+    }
+
+    .jarvis-message-header {
+
+        gap: 7px;
+    }
+
+    .jarvis-identity {
+
+        font-size: 8px;
+
+        letter-spacing: 1.5px;
+    }
+
+    .user-message {
+
+        padding-left: 4%;
+    }
+
+    .user-message .message-content {
+
+        max-width: 90%;
+    }
+
+    #console {
+
+        bottom: 8px;
+
+        padding:
+            0
+            7px;
+    }
+
+    .console-wrapper {
+
+        width: 98%;
+
+        min-height: 55px;
+
+        border-radius: 29px;
+
+        padding-left: 11px;
+    }
+
+    #messageInput {
+
+        font-size: 12px;
+    }
+
+    .console-icon-button,
+    #sendButton,
+    .cognitive-button {
+
+        width: 38px;
+        height: 38px;
+
+        min-width: 38px;
+        min-height: 38px;
+
+        flex-basis: 38px;
+    }
+}
+
+
+/* ============================================================
+   38. REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+
+        animation-duration: 0.001ms !important;
+
+        animation-iteration-count: 1 !important;
+
+        scroll-behavior: auto !important;
+
+        transition-duration: 0.001ms !important;
+    }
+}
+
+
+/* ============================================================
+   FIN DEL STYLES.CSS
+   ============================================================ */
