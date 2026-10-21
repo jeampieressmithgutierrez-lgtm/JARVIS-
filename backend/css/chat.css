@@ -1,56 +1,52 @@
+
 /* =========================================================
    J.A.R.V.I.S. — CHAT SYSTEM
+   RESPONSABILIDAD: mensajes, texto, identidad e historial
+   La geometría del chat y la consola pertenece a hud.css.
+========================================================= */
+
+/* =========================================================
+   1. CONTENEDOR DE MENSAJES
+   No definir aquí position, inset, height, width, overflow
+   ni padding: hud.css controla esas propiedades.
 ========================================================= */
 
 #messages {
     display: flex;
-
     flex-direction: column;
-
     align-items: stretch;
-
     gap: 20px;
 
-    height: 100%;
-    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
 
-    overflow-y: auto;
-
-    padding:
-        28px 34px 132px;
-
-    font-family:
-        "Share Tech Mono",
-        monospace;
+    font-family: "Share Tech Mono", monospace;
 }
 
-/* =========================================================
-   MENSAJES
-========================================================= */
-
+/* Evitar que los elementos flexibles se desborden */
 .message {
-    width: 100%;
-
     display: flex;
-
     position: relative;
+    align-items: flex-start;
 
-    animation:
-        messageAppear 0.32s ease both;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+
+    animation: messageAppear 0.32s ease both;
 }
 
 .message-content {
+    min-width: 0;
     max-width: 78%;
 
     overflow-wrap: anywhere;
-
-    word-break: break-word;
-
+    word-wrap: break-word;
     white-space: pre-wrap;
 }
 
 /* =========================================================
-   USUARIO
+   2. MENSAJES DEL USUARIO
 ========================================================= */
 
 .user-message {
@@ -58,110 +54,94 @@
 }
 
 .user-message .message-content {
-    max-width:
-        min(68%, 760px);
+    box-sizing: border-box;
+    max-width: min(68%, 760px);
 
-    padding:
-        11px 15px;
+    padding: 11px 15px;
 
-    border:
-        1px solid rgba(255, 189, 50, 0.24);
+    border: 1px solid rgba(255, 189, 50, 0.24);
+    border-radius: 16px 16px 4px 16px;
 
-    border-radius:
-        16px 16px 4px 16px;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255, 189, 50, 0.105),
-            rgba(255, 189, 50, 0.035)
-        );
+    background: linear-gradient(
+        135deg,
+        rgba(255, 189, 50, 0.105),
+        rgba(255, 189, 50, 0.035)
+    );
 
     color: #e9edf1;
 
     font-size: 12px;
-
     line-height: 1.65;
 
-    box-shadow:
-        0 8px 25px rgba(0, 0, 0, 0.18);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.18);
 }
 
 /* =========================================================
-   JARVIS
+   3. RESPUESTAS DE J.A.R.V.I.S.
 ========================================================= */
 
 .jarvis-message {
     justify-content: flex-start;
-
     padding-left: 4px;
 }
 
 .jarvis-message .message-content {
-    max-width:
-        min(82%, 820px);
+    box-sizing: border-box;
+    max-width: min(82%, 820px);
 
-    padding:
-        0 0 0 15px;
+    padding: 0 0 0 15px;
 
-    border-left:
-        1px solid rgba(255, 189, 50, 0.42);
+    border-left: 1px solid rgba(255, 189, 50, 0.42);
 
     color: #dfe4ea;
 
     font-size: 12px;
-
     line-height: 1.78;
 }
 
+/* Línea holográfica de la respuesta */
 .jarvis-message .message-content::before {
     content: "";
 
     position: absolute;
-
     left: 0;
-
     top: 0;
     bottom: 0;
 
     width: 1px;
 
-    background:
-        linear-gradient(
-            var(--gold),
-            rgba(255, 189, 50, 0.1)
-        );
+    pointer-events: none;
+
+    background: linear-gradient(
+        var(--gold, #ffbd32),
+        rgba(255, 189, 50, 0.1)
+    );
 }
 
 /* =========================================================
-   IDENTIDAD JARVIS
+   4. IDENTIDAD DE J.A.R.V.I.S.
 ========================================================= */
 
 .jarvis-message-header {
     display: flex;
-
     align-items: center;
-
     gap: 10px;
 
     margin-bottom: 8px;
-
     padding-left: 2px;
 }
 
 .jarvis-core {
+    display: grid;
+    flex: 0 0 25px;
+    place-items: center;
+
     width: 25px;
     height: 25px;
 
-    flex: 0 0 25px;
+    box-sizing: border-box;
 
-    display: grid;
-
-    place-items: center;
-
-    border:
-        1px solid rgba(255, 189, 50, 0.52);
-
+    border: 1px solid rgba(255, 189, 50, 0.52);
     border-radius: 50%;
 
     background:
@@ -186,51 +166,49 @@
 
     border-radius: 50%;
 
-    background: var(--gold);
+    background: var(--gold, #ffbd32);
 
-    box-shadow:
-        0 0 10px rgba(255, 189, 50, 0.8);
+    box-shadow: 0 0 10px rgba(255, 189, 50, 0.8);
 }
 
 .jarvis-identity {
     display: flex;
-
     flex-direction: column;
-
     gap: 2px;
+
+    min-width: 0;
 }
 
 .jarvis-name {
     color: #f0f2f5;
 
     font-family: Orbitron, sans-serif;
-
     font-size: 9px;
-
     font-weight: 600;
 
     letter-spacing: 0.22em;
 }
 
 .jarvis-role {
-    color: var(--gold);
+    color: var(--gold, #ffbd32);
 
-    font-family:
-        "Share Tech Mono",
-        monospace;
-
+    font-family: "Share Tech Mono", monospace;
     font-size: 7px;
 
     letter-spacing: 0.2em;
 }
 
 /* =========================================================
-   FORMATO DEL TEXTO JARVIS
+   5. FORMATO DEL TEXTO
 ========================================================= */
 
+.jarvis-content {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
 .jarvis-content p {
-    margin:
-        0 0 10px;
+    margin: 0 0 10px;
 }
 
 .jarvis-content p:last-child {
@@ -243,21 +221,17 @@
 
 .jarvis-content h3,
 .jarvis-content h4 {
-    margin:
-        12px 0 7px;
+    margin: 12px 0 7px;
 
-    color: var(--gold2);
+    color: var(--gold2, #ffcf70);
 
     font-family: Orbitron, sans-serif;
-
     font-size: 11px;
 }
 
 .jarvis-content ul,
 .jarvis-content ol {
-    margin:
-        7px 0 10px 18px;
-
+    margin: 7px 0 10px 18px;
     padding: 0;
 }
 
@@ -265,41 +239,47 @@
     margin: 4px 0;
 }
 
+.jarvis-content pre {
+    max-width: 100%;
+    overflow-x: auto;
+    white-space: pre;
+}
+
+.jarvis-content img,
+.jarvis-content video {
+    max-width: 100%;
+    height: auto;
+}
+
 /* =========================================================
-   PIE DEL MENSAJE
+   6. PIE DE RESPUESTA
 ========================================================= */
 
 .jarvis-message-footer {
     margin-top: 8px;
-
     padding-left: 39px;
 
-    color: #4e5864;
+    color: #7b8795;
 
     font-size: 7px;
-
     letter-spacing: 0.17em;
-
     text-transform: uppercase;
 }
 
 /* =========================================================
-   PROCESANDO
+   7. ESTADO DE PROCESAMIENTO
 ========================================================= */
 
 .processing-message .message-content {
-    color: #8e98a4;
-
+    color: #a5afbc;
     font-size: 11px;
 }
 
 .processing-dots {
     display: inline-flex;
-
     gap: 4px;
 
     margin-left: 6px;
-
     vertical-align: middle;
 }
 
@@ -309,10 +289,9 @@
 
     border-radius: 50%;
 
-    background: var(--gold);
+    background: var(--gold, #ffbd32);
 
-    animation:
-        typingDot 1s infinite ease-in-out;
+    animation: typingDot 1s infinite ease-in-out;
 }
 
 .processing-dots span:nth-child(2) {
@@ -324,116 +303,113 @@
 }
 
 /* =========================================================
-   HISTORIAL
+   8. HISTORIAL DE CONVERSACIONES
 ========================================================= */
 
 #chat-history {
     display: flex;
-
     flex-direction: column;
-
     gap: 3px;
+
+    min-width: 0;
 }
 
 .chat-history-item {
-    min-height: 43px;
-
     display: flex;
-
     align-items: center;
+
+    min-height: 43px;
+    min-width: 0;
 }
 
 .chat-history-title {
+    min-width: 0;
     line-height: 1.3;
+
+    overflow-wrap: anywhere;
 }
 
 /* =========================================================
-   INPUT
+   9. CAMPO DE ESCRITURA
+   La distribución y apariencia de la consola pertenecen
+   a hud.css. Aquí solo se define la tipografía.
 ========================================================= */
 
 #messageInput {
-    font-family:
-        "Share Tech Mono",
-        monospace;
+    font-family: "Share Tech Mono", monospace;
 }
 
-/* =========================================================
-   BOTONES CIRCULARES
-========================================================= */
-
-#voiceButton,
-#sendButton {
-    border-radius: 50% !important;
-}
+/* No imponer border-radius a #voiceButton ni #sendButton.
+   hud.css debe poder definir su forma visual. */
 
 /* =========================================================
-   ANIMACIONES
+   10. ANIMACIONES
 ========================================================= */
 
 @keyframes messageAppear {
-
     from {
         opacity: 0;
-
-        transform:
-            translateY(7px);
+        transform: translateY(7px);
     }
 
     to {
         opacity: 1;
-
-        transform:
-            translateY(0);
+        transform: translateY(0);
     }
 }
 
 @keyframes typingDot {
-
     0%,
     60%,
     100% {
         opacity: 0.25;
-
-        transform:
-            translateY(0);
+        transform: translateY(0);
     }
 
     30% {
         opacity: 1;
-
-        transform:
-            translateY(-3px);
+        transform: translateY(-3px);
     }
 }
 
 /* =========================================================
-   MOBILE
+   11. MÓVILES
+   Ajustes tipográficos únicamente.
+   hud.css controla el padding y el desplazamiento.
 ========================================================= */
 
 @media (max-width: 700px) {
-
     #messages {
         gap: 17px;
-
-        padding:
-            20px 14px 118px;
     }
 
     .user-message .message-content {
         max-width: 86%;
-
         font-size: 11px;
     }
 
     .jarvis-message .message-content {
         max-width: 92%;
-
         font-size: 11px;
-
         line-height: 1.7;
     }
 
     .jarvis-message-footer {
         padding-left: 35px;
+    }
+
+    .jarvis-name {
+        font-size: 8px;
+    }
+}
+
+/* =========================================================
+   12. ACCESIBILIDAD
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+    .message,
+    .processing-dots span {
+        animation: none;
     }
 }
