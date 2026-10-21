@@ -1,0 +1,816 @@
+
+/* ==========================================================
+   J.A.R.V.I.S. — VISUAL REDESIGN
+   STARK INDUSTRIES / CINEMATIC COMMAND INTERFACE
+   Capa visual: conserva HTML y funciones existentes.
+   ========================================================== */
+
+:root {
+    --jr-bg: #05070b;
+    --jr-panel: rgba(9, 14, 22, .94);
+    --jr-panel-soft: rgba(13, 21, 31, .78);
+    --jr-gold: #e9b85d;
+    --jr-gold-bright: #ffd991;
+    --jr-blue: #63cfff;
+    --jr-blue-soft: rgba(65, 178, 255, .16);
+    --jr-red: #e45b50;
+    --jr-text: #edf3fa;
+    --jr-muted: #8494a8;
+    --jr-line: rgba(201, 161, 89, .24);
+    --jr-radius: 7px;
+}
+
+/* 01 — BASE */
+
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+    margin: 0;
+    background: var(--jr-bg);
+}
+
+body {
+    color: var(--jr-text);
+    font-family: "Rajdhani", sans-serif;
+    letter-spacing: .025em;
+}
+
+button,
+input {
+    font: inherit;
+}
+
+button {
+    -webkit-tap-highlight-color: transparent;
+}
+
+::selection {
+    color: #05070b;
+    background: var(--jr-gold-bright);
+}
+
+/* 02 — FONDO CINEMATOGRÁFICO */
+
+#background-container {
+    background:
+        radial-gradient(
+            ellipse at 65% 42%,
+            rgba(14, 71, 112, .16),
+            transparent 48%
+        ),
+        radial-gradient(
+            ellipse at 50% 100%,
+            rgba(163, 105, 29, .08),
+            transparent 55%
+        ),
+        #05070b;
+}
+
+#grid-overlay {
+    opacity: .18;
+    background-size: 42px 42px;
+}
+
+#scan-overlay {
+    opacity: .12;
+    pointer-events: none;
+}
+
+/* 03 — ESTRUCTURA PRINCIPAL */
+
+#hud {
+    color: var(--jr-text);
+}
+
+#topbar {
+    min-height: 82px;
+    box-sizing: border-box;
+    padding: 15px 27px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 22px;
+    background:
+        linear-gradient(
+            180deg,
+            rgba(13, 18, 27, .98),
+            rgba(5, 8, 13, .94)
+        );
+    border-bottom: 1px solid var(--jr-line);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, .24);
+}
+
+.jarvis-title {
+    color: var(--jr-gold-bright);
+    font-family: "Orbitron", sans-serif;
+    font-size: clamp(19px, 2vw, 27px);
+    font-weight: 700;
+    letter-spacing: .13em;
+    text-shadow: 0 0 22px rgba(233, 184, 93, .16);
+}
+
+.jarvis-subtitle,
+.stark-badge {
+    margin-top: 5px;
+    color: var(--jr-muted);
+    font-family: "Share Tech Mono", monospace;
+    font-size: 9px;
+    letter-spacing: .17em;
+}
+
+.top-center {
+    text-align: center;
+}
+
+#clock {
+    color: var(--jr-blue);
+    font-family: "Share Tech Mono", monospace;
+    font-size: 19px;
+    letter-spacing: .12em;
+    text-shadow: 0 0 14px rgba(99, 207, 255, .22);
+}
+
+.system-line {
+    width: 70px;
+    height: 1px;
+    margin: 7px auto 0;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        var(--jr-blue),
+        transparent
+    );
+}
+
+.stark-header {
+    text-align: right;
+}
+
+.stark-title {
+    color: #e9edf4;
+    font-family: "Orbitron", sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .12em;
+}
+
+.system-state {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 7px;
+    margin-top: 7px;
+    color: #8eddb4;
+    font-family: "Share Tech Mono", monospace;
+    font-size: 10px;
+    letter-spacing: .12em;
+}
+
+#status-light {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #72e7a4;
+    box-shadow: 0 0 12px rgba(114, 231, 164, .75);
+}
+
+/* 04 — PANEL LATERAL */
+
+#main-layout {
+    min-height: 0;
+}
+
+#sidebar {
+    box-sizing: border-box;
+    padding: 22px 15px;
+    background:
+        linear-gradient(
+            180deg,
+            rgba(11, 16, 24, .97),
+            rgba(6, 9, 15, .96)
+        );
+    border-right: 1px solid var(--jr-line);
+}
+
+.sidebar-section {
+    margin-bottom: 25px;
+}
+
+.section-label {
+    margin-bottom: 11px;
+    color: var(--jr-muted);
+    font-family: "Share Tech Mono", monospace;
+    font-size: 10px;
+    letter-spacing: .16em;
+}
+
+.chat-search {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 10px 11px;
+    background: rgba(255, 255, 255, .025);
+    border: 1px solid rgba(145, 167, 193, .15);
+    border-radius: var(--jr-radius);
+    transition: border-color .2s, background .2s;
+}
+
+.chat-search:focus-within {
+    background: rgba(99, 207, 255, .045);
+    border-color: rgba(99, 207, 255, .48);
+}
+
+.search-icon {
+    color: var(--jr-blue);
+    font-size: 19px;
+}
+
+#chatSearchInput {
+    width: 100%;
+    min-width: 0;
+    color: var(--jr-text);
+    background: transparent;
+    border: 0;
+    outline: none;
+    font-size: 14px;
+}
+
+#chatSearchInput::placeholder {
+    color: #69788a;
+}
+
+.history-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#newChatButton {
+    width: 30px;
+    height: 30px;
+    color: var(--jr-gold-bright);
+    background: rgba(233, 184, 93, .07);
+    border: 1px solid var(--jr-line);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: .2s ease;
+}
+
+#newChatButton:hover {
+    background: rgba(233, 184, 93, .17);
+    border-color: var(--jr-gold);
+    transform: translateY(-1px);
+}
+
+#chat-history {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+#chat-history button,
+#chat-history [role="button"],
+#chat-history .history-item,
+#chat-history .chat-item {
+    max-width: 100%;
+    padding: 10px 11px;
+    color: #aebdce;
+    text-align: left;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: .2s ease;
+}
+
+#chat-history button:hover,
+#chat-history [role="button"]:hover,
+#chat-history .history-item:hover,
+#chat-history .chat-item:hover {
+    color: var(--jr-text);
+    background: rgba(99, 207, 255, .055);
+    border-color: rgba(99, 207, 255, .15);
+}
+
+.tools-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 10px;
+    color: var(--jr-gold-bright);
+    text-align: left;
+    background: rgba(233, 184, 93, .045);
+    border: 1px solid var(--jr-line);
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.tools-arrow {
+    margin-left: auto;
+    transition: transform .2s ease;
+}
+
+#toolsToggle[aria-expanded="true"] .tools-arrow {
+    transform: rotate(90deg);
+}
+
+.tools-panel {
+    padding-top: 7px;
+}
+
+.tool-item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 10px;
+    color: #aab8c9;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    text-align: left;
+    cursor: pointer;
+}
+
+.tool-item span {
+    color: var(--jr-blue);
+}
+
+.tool-item:hover {
+    color: white;
+    background: var(--jr-blue-soft);
+    border-color: rgba(99, 207, 255, .17);
+}
+
+.user-account {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 10px;
+    background: rgba(255, 255, 255, .025);
+    border: 1px solid rgba(145, 167, 193, .12);
+    border-radius: 6px;
+}
+
+.user-avatar {
+    width: 37px;
+    height: 37px;
+    display: grid;
+    place-items: center;
+    color: var(--jr-blue);
+    background: rgba(99, 207, 255, .08);
+    border: 1px solid rgba(99, 207, 255, .3);
+    border-radius: 50%;
+}
+
+.user-name {
+    color: var(--jr-text);
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.user-status {
+    margin-top: 3px;
+    color: var(--jr-muted);
+    font-family: "Share Tech Mono", monospace;
+    font-size: 9px;
+    letter-spacing: .08em;
+}
+
+.google-login {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    margin-top: 10px;
+    padding: 11px;
+    color: #dce6f1;
+    text-decoration: none;
+    background: rgba(255, 255, 255, .025);
+    border: 1px solid rgba(145, 167, 193, .2);
+    border-radius: 5px;
+    font-size: 11px;
+    letter-spacing: .07em;
+    transition: .2s ease;
+}
+
+.google-login:hover {
+    background: rgba(255, 255, 255, .07);
+    border-color: rgba(99, 207, 255, .4);
+}
+
+/* 05 — ÁREA DE CHAT Y REACTOR */
+
+#chat-container {
+    position: relative;
+    isolation: isolate;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+    background:
+        radial-gradient(
+            ellipse at 50% 44%,
+            rgba(17, 74, 111, .12),
+            transparent 54%
+        ),
+        linear-gradient(145deg, #080c12, #040609 70%);
+}
+
+#chat-container::before {
+    content: "";
+    position: absolute;
+    inset: 12px;
+    z-index: 2;
+    pointer-events: none;
+    border: 1px solid rgba(233, 184, 93, .16);
+    clip-path: polygon(
+        0 0, 30px 0, 30px 1px,
+        calc(100% - 30px) 1px, calc(100% - 30px) 0,
+        100% 0, 100% 30px, calc(100% - 1px) 30px,
+        calc(100% - 1px) calc(100% - 30px),
+        100% calc(100% - 30px), 100% 100%,
+        calc(100% - 30px) 100%, calc(100% - 30px) calc(100% - 1px),
+        30px calc(100% - 1px), 30px 100%,
+        0 100%, 0 calc(100% - 30px),
+        1px calc(100% - 30px), 1px 30px,
+        0 30px
+    );
+}
+
+#jarvis-visual {
+    position: absolute !important;
+    inset: 0;
+    z-index: 0 !important;
+    overflow: hidden;
+    opacity: .68;
+    pointer-events: none !important;
+}
+
+#jarvis-core-stage {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+#jarvis-3d-canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+    background: transparent !important;
+    pointer-events: none !important;
+}
+
+/* La conversación queda por delante del reactor. */
+
+#messages {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 17px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    box-sizing: border-box;
+    padding: 32px 34px 150px;
+    background: linear-gradient(
+        180deg,
+        rgba(3, 6, 10, .12),
+        rgba(3, 6, 10, .02) 45%,
+        rgba(3, 6, 10, .2)
+    );
+    scrollbar-width: thin;
+    scrollbar-color: rgba(233, 184, 93, .35) transparent;
+    scroll-behavior: smooth;
+}
+
+#messages::-webkit-scrollbar {
+    width: 5px;
+}
+
+#messages::-webkit-scrollbar-thumb {
+    background: rgba(233, 184, 93, .35);
+    border-radius: 5px;
+}
+
+/* Mensajes: elimina la sensación de cajas enormes. */
+
+#messages .message {
+    max-width: min(820px, 90%);
+    animation: jr-message-in .28s ease both;
+}
+
+#messages .user-message {
+    align-self: flex-end;
+}
+
+#messages .assistant-message {
+    align-self: flex-start;
+}
+
+#messages .message-content {
+    color: var(--jr-text);
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+}
+
+#messages .user-message .message-content {
+    padding: 12px 16px;
+    background: linear-gradient(
+        135deg,
+        rgba(19, 47, 67, .82),
+        rgba(9, 23, 35, .91)
+    );
+    border: 1px solid rgba(99, 207, 255, .25);
+    border-radius: 9px 9px 2px 9px;
+}
+
+#messages .assistant-message .message-content {
+    padding: 4px 0 4px 15px;
+    background: transparent;
+    border: 0;
+    border-left: 2px solid rgba(233, 184, 93, .68);
+}
+
+#messages pre {
+    max-width: 100%;
+    overflow-x: auto;
+    padding: 14px;
+    color: #dceeff;
+    background: rgba(2, 7, 12, .88);
+    border: 1px solid rgba(99, 207, 255, .19);
+    border-radius: 6px;
+}
+
+#messages code {
+    font-family: "Share Tech Mono", monospace;
+    font-size: .92em;
+}
+
+#jarvisProcessing {
+    z-index: 12;
+}
+
+/* 06 — CONSOLA INFERIOR */
+
+#console {
+    position: relative;
+    z-index: 50;
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: 13px 24px 19px;
+    background: linear-gradient(
+        0deg,
+        rgba(4, 7, 12, .98),
+        rgba(4, 7, 12, .72),
+        transparent
+    );
+}
+
+.console-wrapper {
+    width: min(960px, 100%);
+    min-height: 65px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 12px 9px 20px;
+    background: linear-gradient(
+        135deg,
+        rgba(15, 22, 31, .97),
+        rgba(6, 10, 16, .98)
+    );
+    border: 1px solid rgba(233, 184, 93, .52);
+    border-radius: 6px;
+    box-shadow:
+        0 0 0 1px rgba(233, 184, 93, .035),
+        0 10px 38px rgba(0, 0, 0, .42),
+        0 0 28px rgba(44, 124, 171, .07);
+}
+
+#messageInput {
+    flex: 1;
+    width: 0;
+    min-width: 0;
+    padding: 10px 0;
+    color: #f5f8fc;
+    caret-color: var(--jr-gold-bright);
+    background: transparent;
+    border: 0;
+    outline: 0;
+    box-shadow: none;
+    font-size: 17px;
+}
+
+#messageInput::placeholder {
+    color: #78889b;
+}
+
+#messageInput:focus {
+    outline: none;
+}
+
+.console-status {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: #82d9ad;
+    font-family: "Share Tech Mono", monospace;
+    font-size: 10px;
+    letter-spacing: .1em;
+    white-space: nowrap;
+}
+
+.console-status > span {
+    width: 5px;
+    height: 5px;
+    background: #82d9ad;
+    border-radius: 50%;
+    box-shadow: 0 0 9px rgba(130, 217, 173, .7);
+}
+
+#cognitiveButton,
+#voiceButton,
+#sendButton {
+    flex: 0 0 auto;
+    min-width: 42px;
+    height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--jr-gold-bright);
+    background: rgba(233, 184, 93, .06);
+    border: 1px solid rgba(233, 184, 93, .32);
+    border-radius: 5px;
+    cursor: pointer;
+    transition:
+        background .2s ease,
+        border-color .2s ease,
+        color .2s ease,
+        transform .2s ease;
+}
+
+#cognitiveButton:hover,
+#voiceButton:hover,
+#sendButton:hover {
+    color: white;
+    background: rgba(233, 184, 93, .16);
+    border-color: var(--jr-gold);
+    transform: translateY(-1px);
+}
+
+#cognitiveButton:focus-visible,
+#voiceButton:focus-visible,
+#sendButton:focus-visible,
+#newChatButton:focus-visible,
+.tools-header:focus-visible {
+    outline: 2px solid var(--jr-blue);
+    outline-offset: 3px;
+}
+
+#sendButton {
+    color: #071019;
+    background: linear-gradient(135deg, #ffdc9b, #d9a444);
+    border-color: #f2c875;
+    font-size: 18px;
+    box-shadow: 0 0 18px rgba(233, 184, 93, .13);
+}
+
+#sendButton:hover {
+    color: #05070b;
+    background: #ffe5b2;
+}
+
+/* 07 — ENTRADA Y MOVIMIENTO */
+
+@keyframes jr-message-in {
+    from {
+        opacity: 0;
+        transform: translateY(7px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 08 — RESPONSIVE */
+
+@media (max-width: 900px) {
+    #topbar {
+        padding: 13px 17px;
+        gap: 12px;
+    }
+
+    .jarvis-subtitle,
+    .stark-badge {
+        font-size: 8px;
+    }
+
+    #messages {
+        padding-right: 23px;
+        padding-left: 23px;
+    }
+
+    .console-status {
+        display: none;
+    }
+}
+
+@media (max-width: 650px) {
+    #topbar {
+        min-height: 69px;
+        padding: 11px 13px;
+    }
+
+    .jarvis-title {
+        font-size: 17px;
+        letter-spacing: .08em;
+    }
+
+    .jarvis-subtitle {
+        max-width: 150px;
+        font-size: 7px;
+        letter-spacing: .1em;
+    }
+
+    .top-center {
+        display: none;
+    }
+
+    .stark-title {
+        font-size: 9px;
+    }
+
+    .stark-badge {
+        font-size: 7px;
+        letter-spacing: .06em;
+    }
+
+    .system-state {
+        font-size: 9px;
+    }
+
+    #sidebar {
+        padding: 14px 9px;
+    }
+
+    .section-label {
+        font-size: 9px;
+        letter-spacing: .08em;
+    }
+
+    #messages {
+        padding: 22px 15px 132px;
+        gap: 14px;
+    }
+
+    #messages .message {
+        max-width: 96%;
+    }
+
+    #console {
+        padding: 9px 10px 12px;
+    }
+
+    .console-wrapper {
+        min-height: 57px;
+        gap: 7px;
+        padding: 7px;
+    }
+
+    #messageInput {
+        font-size: 15px;
+    }
+
+    #cognitiveButton,
+    #voiceButton,
+    #sendButton {
+        min-width: 36px;
+        height: 38px;
+    }
+
+    #chat-container::before {
+        inset: 6px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #messages .message {
+        animation: none;
+    }
+
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+    }
+}
