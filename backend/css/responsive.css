@@ -247,4 +247,155 @@
     #messageInput {
         font-size: 10px;
     }
-}v
+}
+
+/* ==========================================================
+   J.A.R.V.I.S. — ACABADO VISUAL PREMIUM
+   Selectores adaptados al index.html existente
+   ========================================================== */
+
+:root {
+    --amber: #ffbd4a;
+    --amber-light: #ffe0a0;
+    --amber-soft: rgba(255, 189, 74, 0.16);
+    --blue-hud: #52c9ff;
+    --blue-soft: rgba(52, 169, 230, 0.12);
+}
+
+/* Cabecera */
+#topbar {
+    min-height: 72px;
+    backdrop-filter: blur(14px);
+}
+
+#topbar .logo,
+#topbar .brand,
+#topbar h1 {
+    text-shadow: 0 0 14px rgba(255, 189, 74, 0.16);
+}
+
+/* Buscador del lateral */
+#sidebar .search-section input,
+#sidebar .search-section .search-input,
+#sidebar .search-section {
+    border-color: rgba(255, 189, 74, 0.24);
+}
+
+#sidebar .search-section input,
+#sidebar .search-section .search-input {
+    background: rgba(2, 7, 13, 0.72);
+    color: #f5f7fa;
+    border-radius: 4px;
+}
+
+#sidebar .search-section input:focus,
+#sidebar .search-section .search-input:focus {
+    border-color: rgba(82, 201, 255, 0.65);
+    box-shadow: 0 0 12px rgba(82, 201, 255, 0.10);
+    outline: none;
+}
+
+/* Historial: el ID real es chat-history */
+#chat-history {
+    min-height: 30px;
+}
+
+#chat-history .chat-history-item {
+    border: 1px solid transparent;
+    border-radius: 4px;
+    transition: background 160ms ease, border-color 160ms ease;
+}
+
+#chat-history .chat-history-item:hover {
+    background: rgba(255, 189, 74, 0.08);
+    border-color: rgba(255, 189, 74, 0.23);
+}
+
+/* Herramientas: el botón real es tools-header */
+#toolsToggle.tools-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    cursor: pointer;
+    color: #e6edf5;
+    background: transparent;
+    border: 1px solid rgba(255, 189, 74, 0.20);
+    border-radius: 4px;
+    padding: 11px 12px;
+    transition: background 160ms ease, border-color 160ms ease;
+}
+
+#toolsToggle.tools-header:hover {
+    background: rgba(255, 189, 74, 0.08);
+    border-color: rgba(255, 189, 74, 0.55);
+}
+
+#toolsPanel .tool-item {
+    transition: background 160ms ease, color 160ms ease;
+}
+
+#toolsPanel .tool-item:hover {
+    color: var(--amber-light);
+    background: rgba(82, 201, 255, 0.07);
+}
+
+/* Cuenta: la clase real es user-account */
+#sidebar .user-account {
+    border: 1px solid rgba(255, 189, 74, 0.25);
+    border-radius: 5px;
+    background: linear-gradient(
+        135deg,
+        rgba(255, 189, 74, 0.07),
+        rgba(82, 201, 255, 0.035)
+    );
+}
+
+/* Acceso de Google, sin modificar su funcionamiento */
+#google-login {
+    border: 1px solid rgba(255, 189, 74, 0.30);
+    transition: background 160ms ease, border-color 160ms ease;
+}
+
+#google-login:hover {
+    border-color: rgba(82, 201, 255, 0.60);
+    background: rgba(82, 201, 255, 0.08);
+}
+
+/* Mensajes legibles sobre el núcleo */
+#messages .message {
+    position: relative;
+    z-index: 11;
+}
+
+#messages .message-content {
+    overflow-wrap: anywhere;
+    line-height: 1.65;
+}
+
+#messages .message.assistant,
+#messages .message.jarvis {
+    text-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
+}
+
+/* Mantener controles interactivos */
+#console,
+#console button,
+#console input,
+#sidebar button,
+#sidebar input,
+#sidebar a {
+    pointer-events: auto;
+}
+
+/* Móvil */
+@media (max-width: 760px) {
+    #topbar {
+        min-height: 60px;
+    }
+
+    #sidebar {
+        max-width: min(300px, 86vw);
+    }
+}
+
