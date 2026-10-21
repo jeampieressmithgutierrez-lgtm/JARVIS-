@@ -1102,3 +1102,11 @@ button:disabled {
 /* ============================================================
    FIN — BASE VISUAL COMPARTIDA
    ============================================================ */
+/* PRUEBA TEMPORAL — ELIMINAR DESPUÉS */
+html {
+    outline: 6px solid magenta !important;
+}
+
+#topbar {
+    background: #173e65 !important;
+}
