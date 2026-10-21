@@ -1,412 +1,297 @@
+
 /* =========================================================
-   J.A.R.V.I.S. — HUD / CHAT SPACE
+   J.A.R.V.I.S. — HOLOGRAPHIC HUD
+   Capas: fondo 3D → mensajes → controles
 ========================================================= */
 
 #chat-container {
-    position: relative;
-
+    position: relative !important;
     min-width: 0;
     min-height: 0;
-
     isolation: isolate;
+    overflow: hidden;
 }
+
+/* Cuadrícula holográfica ambiental */
 
 #chat-container::before {
     content: "";
-
     position: absolute;
-
     inset: 0;
-
     z-index: 0;
-
     pointer-events: none;
 
     background:
         linear-gradient(
             90deg,
-            rgba(255, 189, 50, 0.018) 1px,
+            rgba(255, 189, 50, 0.025) 1px,
             transparent 1px
         ),
         linear-gradient(
-            rgba(255, 189, 50, 0.012) 1px,
+            rgba(255, 189, 50, 0.018) 1px,
             transparent 1px
         );
 
-    background-size: 96px 96px;
+    background-size: 64px 64px;
 
-    mask-image:
-        radial-gradient(
-            circle at center,
-            #000,
-            transparent 80%
-        );
+    mask-image: radial-gradient(
+        ellipse at 50% 45%,
+        #000 0%,
+        rgba(0, 0, 0, 0.55) 48%,
+        transparent 82%
+    );
 }
 
-/* =========================================================
-   LÍNEA CENTRAL SUPERIOR
-========================================================= */
+/* Línea superior */
 
 #chat-container::after {
     content: "";
-
     position: absolute;
-
     top: 0;
-
-    left: 50%;
-
-    width: 45%;
-
+    left: 15%;
+    right: 15%;
     height: 1px;
-
-    transform:
-        translateX(-50%);
-
-    background:
-        linear-gradient(
-            90deg,
-            transparent,
-            rgba(255, 189, 50, 0.38),
-            transparent
-        );
-
+    z-index: 3;
     pointer-events: none;
 
-    z-index: 2;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 189, 50, 0.42),
+        transparent
+    );
 }
 
 /* =========================================================
-   ANTIGUO NÚCLEO 3D
+   CAPA 1 — ESCENARIO THREE.JS
 ========================================================= */
 
 #jarvis-interface {
     display: none !important;
 }
 
-#jarvis-3d-canvas {
+#jarvis-visual {
     position: absolute;
-
     inset: 0;
-
     z-index: 1;
 
-    pointer-events: none;
+    display: block;
+    width: 100%;
+    height: 100%;
 
-    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+    background: transparent;
+}
+
+#jarvis-core-stage {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+    background: transparent;
+}
+
+#jarvis-3d-canvas {
+    position: absolute !important;
+    inset: 0;
+
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+
+    opacity: 1;
+    background: transparent !important;
+    pointer-events: none !important;
+}
+
+/* Evitar que los elementos 3D intercepten interacciones */
+
+#jarvis-visual,
+#jarvis-visual *,
+#jarvis-core-stage,
+#jarvis-core-stage * {
+    pointer-events: none !important;
 }
 
 /* =========================================================
    AURA AMBIENTAL
+   Se aplica si el elemento existe en el HTML
 ========================================================= */
 
 .jarvis-ambient-aura {
     position: absolute;
-
-    width: 420px;
-    height: 420px;
-
     left: 50%;
-    top: 45%;
+    top: 46%;
 
-    transform:
-        translate(-50%, -50%);
+    width: min(560px, 65vw);
+    aspect-ratio: 1;
 
+    transform: translate(-50%, -50%);
     border-radius: 50%;
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(255, 189, 50, 0.055),
-            rgba(255, 189, 50, 0.018) 38%,
-            transparent 70%
-        );
-
-    filter: blur(8px);
-
     pointer-events: none;
+    z-index: 0;
 
-    z-index: 1;
+    background: radial-gradient(
+        circle,
+        rgba(255, 174, 40, 0.075) 0%,
+        rgba(255, 140, 20, 0.035) 32%,
+        rgba(255, 189, 50, 0.012) 52%,
+        transparent 72%
+    );
+
+    filter: blur(16px);
 }
 
 /* =========================================================
-   MENSAJES
+   CAPA 2 — MENSAJES
 ========================================================= */
 
 #messages {
-    position: relative;
-
-    z-index: 5;
-}
-
-/* =========================================================
-   COMPOSER
-========================================================= */
-
-#console {
-    z-index: 50;
-}
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
-@media (max-width: 700px) {
-
-    .jarvis-ambient-aura {
-        width: 300px;
-        height: 300px;
-    }
-}
-/* =========================================================
-   J.A.R.V.I.S. — 3D CORE / CHAT LAYER SYSTEM
-   ---------------------------------------------------------
-   Núcleo 3D = FONDO
-   Mensajes = PRIMER PLANO
-   Composer = CAPA SUPERIOR
-   ========================================================= */
-
-/* CONTENEDOR PRINCIPAL DEL CHAT */
-#chat-container {
-    position: relative !important;
-    overflow: hidden !important;
-    isolation: isolate !important;
-}
-
-/* =========================================================
-   NÚCLEO 3D — CAPA DE FONDO
-   ========================================================= */
-
-#jarvis-visual {
     position: absolute !important;
-    inset: 0 !important;
+    inset: 0;
 
-    width: 100% !important;
-    height: 100% !important;
+    z-index: 10;
+    display: flex;
 
-    z-index: 1 !important;
+    width: 100%;
+    height: 100%;
 
-    display: block !important;
-
-    pointer-events: none !important;
-
-    opacity: 1 !important;
-
-    overflow: hidden !important;
-}
-
-/* ESCENARIO DEL NÚCLEO */
-
-#jarvis-core-stage {
-    position: absolute !important;
-
-    inset: 0 !important;
-
-    width: 100% !important;
-    height: 100% !important;
-
-    pointer-events: none !important;
-
-    overflow: hidden !important;
-
-    z-index: 1 !important;
-}
-
-/* CANVAS THREE.JS */
-
-#jarvis-3d-canvas {
-    position: absolute !important;
-
-    left: 0 !important;
-    top: 0 !important;
-
-    width: 100% !important;
-    height: 100% !important;
-
-    display: block !important;
-
-    z-index: 1 !important;
-
-    opacity: 1 !important;
-
-    pointer-events: none !important;
-
-    background: transparent !important;
-}
-
-/* =========================================================
-   MENSAJES — DELANTE DEL NÚCLEO
-   ========================================================= */
-
-#messages {
-    position: absolute !important;
-
-    inset: 0 !important;
-
-    z-index: 10 !important;
-
-    width: 100% !important;
-    height: 100% !important;
-
-    overflow-y: auto !important;
-    overflow-x: hidden !important;
+    overflow-x: hidden;
+    overflow-y: auto;
 
     background: transparent !important;
 
-    pointer-events: auto !important;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color:
+        rgba(255, 189, 50, 0.25)
+        transparent;
 }
 
-/* Evita que los mensajes tengan un fondo que tape el núcleo */
+/* Scrollbar en Chromium */
 
-.message {
-    position: relative;
+#messages::-webkit-scrollbar {
+    width: 5px;
+}
 
-    z-index: 11;
-
+#messages::-webkit-scrollbar-track {
     background: transparent;
 }
 
+#messages::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    background: rgba(255, 189, 50, 0.25);
+}
+
+#messages::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 189, 50, 0.48);
+}
+
+/* Las filas no deben tapar todo el fondo */
+
+#messages > .message {
+    position: relative;
+    z-index: 11;
+    flex-shrink: 0;
+    background: transparent;
+}
+
+/* Texto nítido sobre el holograma */
+
+.jarvis-message .message-content {
+    position: relative;
+    z-index: 12;
+
+    text-shadow:
+        0 1px 5px rgba(0, 0, 0, 0.95),
+        0 0 12px rgba(0, 0, 0, 0.55);
+}
+
+.user-message .message-content {
+    position: relative;
+    z-index: 12;
+}
+
 /* =========================================================
-   PROCESANDO — SOBRE EL NÚCLEO
-   ========================================================= */
+   CAPA 3 — ESTADO DE PROCESAMIENTO
+========================================================= */
 
 #jarvisProcessing {
-    position: absolute !important;
+    position: absolute;
+    left: 16px;
+    right: 16px;
+    bottom: 96px;
 
-    left: 0 !important;
-    right: 0 !important;
-
-    bottom: 100px !important;
-
-    z-index: 20 !important;
-
-    pointer-events: none !important;
+    z-index: 25;
+    pointer-events: none;
 }
 
 /* =========================================================
-   COMPOSER — CAPA SUPERIOR
-   ========================================================= */
+   CAPA 4 — COMPOSER Y BOTONES
+========================================================= */
 
 #console {
-    position: absolute !important;
-
-    left: 0 !important;
-    right: 0 !important;
-    bottom: 20px !important;
-
-    z-index: 50 !important;
-
-    pointer-events: none !important;
+    position: absolute;
+    z-index: 50;
+    pointer-events: none;
 }
 
-.console-wrapper {
+#console .console-wrapper {
     position: relative;
-
     z-index: 51;
-
     pointer-events: auto;
 }
 
 /* =========================================================
-   AURA DEL NÚCLEO
-   ========================================================= */
+   CAPA SUPERIOR — MENSAJES INTERACTIVOS
+========================================================= */
 
-.jarvis-ambient-aura {
-    position: absolute;
-
-    left: 50%;
-    top: 47%;
-
-    width: min(620px, 62vw);
-    height: min(620px, 62vw);
-
-    transform: translate(-50%, -50%);
-
-    border-radius: 50%;
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(255, 189, 50, .09) 0%,
-            rgba(255, 189, 50, .045) 24%,
-            rgba(255, 189, 50, .018) 48%,
-            transparent 72%
-        );
-
-    filter: blur(18px);
-
-    pointer-events: none;
-
-    z-index: 0;
-
-    opacity: .9;
+#messages button,
+#messages a,
+#messages input,
+#messages textarea,
+#messages select {
+    pointer-events: auto;
 }
 
 /* =========================================================
-   NO DEJAR QUE EL NÚCLEO INTERFIERA CON LOS CLICS
-   ========================================================= */
-
-#jarvis-visual *,
-#jarvis-core-stage *,
-#jarvis-3d-canvas {
-    pointer-events: none !important;
-}
-
-/* =========================================================
-   MENSAJES LEGIBLES SOBRE EL NÚCLEO
-   ========================================================= */
-
-.jarvis-message,
-.user-message {
-    position: relative;
-
-    z-index: 12;
-}
-
-/* El texto de JARVIS queda limpio sobre el holograma */
-
-.jarvis-message .message-content {
-    position: relative;
-
-    z-index: 13;
-
-    text-shadow:
-        0 1px 8px rgba(0, 0, 0, .85),
-        0 0 2px rgba(0, 0, 0, .9);
-}
-
-/* Mensaje del usuario */
-
-.user-message .message-content {
-    position: relative;
-
-    z-index: 13;
-
-    box-shadow:
-        0 10px 35px rgba(0, 0, 0, .32),
-        inset 0 0 18px rgba(255, 189, 50, .025);
-}
-
-/* =========================================================
-   RESPONSIVE
-   ========================================================= */
+   ADAPTACIÓN A MÓVILES
+========================================================= */
 
 @media (max-width: 700px) {
-
     .jarvis-ambient-aura {
-        width: 360px;
-        height: 360px;
-
+        width: 350px;
+        max-width: 100vw;
         top: 44%;
+        filter: blur(12px);
     }
 
+    #jarvisProcessing {
+        left: 12px;
+        right: 12px;
+        bottom: 84px;
+    }
 }
 
-@media (max-width: 480px) {
-
+@media (max-width: 400px) {
     .jarvis-ambient-aura {
-        width: 300px;
-        height: 300px;
+        width: 290px;
+    }
+}
+
+/* =========================================================
+   ACCESIBILIDAD
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+    .jarvis-ambient-aura {
+        filter: none;
     }
 
+    #messages {
+        scroll-behavior: auto;
+    }
 }
