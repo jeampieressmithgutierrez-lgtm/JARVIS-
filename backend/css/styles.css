@@ -1,57 +1,92 @@
-/* ============================================================
-   J.A.R.V.I.S. — STYLES.CSS
-   STARK INDUSTRIES
-   INTERFAZ HUD / CHAT / COMPOSER / 3D CORE
-   ============================================================ */
 
 /* ============================================================
-   1. VARIABLES
+   J.A.R.V.I.S. — STARK INTERFACE SYSTEM
+   STYLES.CSS · BASE VISUAL COMPARTIDA
+   Compatible con hud.css, chat.css, animations.css,
+   responsive.css y jarvis-intro.css
+   ============================================================ */
+
+
+/* ============================================================
+   01. DESIGN TOKENS
+   Variables compartidas por toda la interfaz
    ============================================================ */
 
 :root {
+    color-scheme: dark;
 
-    --bg-main: #05070b;
-    --bg-deep: #020306;
-    --bg-panel: rgba(8, 11, 16, 0.72);
-    --bg-panel-soft: rgba(12, 15, 21, 0.55);
+    /* Superficies */
+    --bg-main: #05080d;
+    --bg-deep: #020409;
+    --bg-panel: rgba(8, 14, 22, 0.94);
+    --bg-panel-soft: rgba(12, 21, 32, 0.76);
+    --bg-glass: rgba(8, 15, 24, 0.78);
 
-    --amber: #ffb000;
-    --amber-light: #ffd36a;
-    --amber-soft: rgba(255, 176, 0, 0.18);
-    --amber-faint: rgba(255, 176, 0, 0.07);
+    /* Identidad Stark */
+    --amber: #ffbd4a;
+    --amber-light: #ffe0a0;
+    --amber-bright: #ffd16b;
+    --amber-soft: rgba(255, 189, 74, 0.17);
+    --amber-faint: rgba(255, 189, 74, 0.055);
 
-    --white: #f5f7fa;
-    --white-soft: rgba(245, 247, 250, 0.78);
+    /* Acento tecnológico azul */
+    --blue-hud: #59caff;
+    --blue-light: #a6e8ff;
+    --blue-soft: rgba(67, 181, 255, 0.14);
+    --blue-faint: rgba(67, 181, 255, 0.055);
 
-    --gray: #8d96a3;
-    --gray-soft: rgba(141, 150, 163, 0.55);
+    /* Texto */
+    --white: #f4f7fb;
+    --white-soft: rgba(244, 247, 251, 0.80);
+    --gray: #8d9aaa;
+    --gray-soft: rgba(141, 154, 170, 0.58);
+    --green: #69ffad;
+    --red: #ff626c;
 
-    --green: #69ff9d;
+    /* Bordes */
+    --border: rgba(255, 189, 74, 0.20);
+    --border-strong: rgba(255, 189, 74, 0.48);
+    --border-blue: rgba(89, 202, 255, 0.26);
 
-    --border: rgba(255, 176, 0, 0.24);
-    --border-strong: rgba(255, 176, 0, 0.48);
-
+    /* Sombras */
     --shadow:
-        0 0 25px rgba(255, 176, 0, 0.08);
+        0 12px 32px rgba(0, 0, 0, 0.26);
 
-    --shadow-strong:
-        0 0 35px rgba(255, 176, 0, 0.16);
+    --shadow-amber:
+        0 0 24px rgba(255, 189, 74, 0.09);
 
-    --radius-small: 8px;
-    --radius-medium: 14px;
-    --radius-large: 22px;
+    --shadow-blue:
+        0 0 30px rgba(60, 170, 255, 0.09);
 
+    /* Geometría */
+    --radius-small: 5px;
+    --radius-medium: 10px;
+    --radius-large: 16px;
+
+    /* Distribución */
     --sidebar-width: 265px;
-    --topbar-height: 72px;
+    --topbar-height: 78px;
+    --content-max-width: 1440px;
 
+    /* Tipografía */
     --font-ui: "Rajdhani", sans-serif;
     --font-tech: "Orbitron", sans-serif;
     --font-mono: "Share Tech Mono", monospace;
+
+    /* Capas principales */
+    --z-background: 0;
+    --z-hud: 5;
+    --z-core: 1;
+    --z-messages: 10;
+    --z-processing: 25;
+    --z-sidebar: 30;
+    --z-console: 40;
+    --z-header: 50;
 }
 
 
 /* ============================================================
-   2. RESET
+   02. RESET Y NORMALIZACIÓN
    ============================================================ */
 
 *,
@@ -60,1100 +95,767 @@
     box-sizing: border-box;
 }
 
-html,
-body {
+html {
     width: 100%;
     height: 100%;
+    min-height: 100%;
     margin: 0;
     padding: 0;
-}
-
-html {
-    background: var(--bg-main);
-    color-scheme: dark;
+    background: var(--bg-deep);
+    color: var(--white);
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
 }
 
 body {
-
     position: relative;
-
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
     overflow: hidden;
 
-    background:
-        radial-gradient(
-            circle at 50% 45%,
-            rgba(255, 176, 0, 0.045),
-            transparent 34%
-        ),
-        radial-gradient(
-            circle at 50% 100%,
-            rgba(255, 176, 0, 0.025),
-            transparent 45%
-        ),
-        var(--bg-main);
-
     color: var(--white);
+    background: var(--bg-main);
 
     font-family: var(--font-ui);
+    font-size: 14px;
+    line-height: 1.5;
 
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
 }
 
 button,
 input,
-textarea {
+textarea,
+select {
     font: inherit;
 }
 
 button {
-    border: 0;
-    outline: none;
-}
-
-input {
-    outline: none;
-}
-
-button,
-a {
+    color: inherit;
     -webkit-tap-highlight-color: transparent;
+}
+
+input,
+textarea {
+    color: inherit;
+}
+
+button:disabled,
+input:disabled,
+textarea:disabled {
+    cursor: not-allowed;
+}
+
+img,
+canvas,
+svg {
+    max-width: 100%;
+}
+
+a {
+    color: inherit;
+    -webkit-tap-highlight-color: transparent;
+}
+
+::selection {
+    color: #fff9e9;
+    background: rgba(255, 189, 74, 0.30);
 }
 
 
 /* ============================================================
-   3. BACKGROUND
+   03. FONDO GLOBAL
+   Ambiente tecnológico azul y dorado
    ============================================================ */
 
-#background-container {
-
+body::before {
+    content: "";
     position: fixed;
-
     inset: 0;
-
-    z-index: 0;
-
-    overflow: hidden;
-
+    z-index: var(--z-background);
     pointer-events: none;
 
     background:
         radial-gradient(
-            circle at 50% 50%,
-            rgba(255, 170, 0, 0.035),
-            transparent 38%
+            ellipse at 58% 43%,
+            rgba(21, 83, 126, 0.18),
+            transparent 43%
+        ),
+        radial-gradient(
+            ellipse at 88% 12%,
+            rgba(255, 189, 74, 0.055),
+            transparent 30%
+        ),
+        radial-gradient(
+            ellipse at 8% 92%,
+            rgba(35, 110, 165, 0.10),
+            transparent 32%
+        ),
+        linear-gradient(
+            135deg,
+            #070c13 0%,
+            #03060b 52%,
+            #080b10 100%
         );
 }
 
+/* Contenedor del sistema de partículas existente */
 
-/* Particle canvas */
-
-#particles-canvas {
-
-    position: absolute;
-
+#background-container {
+    position: fixed;
     inset: 0;
-
-    width: 100%;
-    height: 100%;
-
-    opacity: 0.5;
-
+    z-index: var(--z-background);
+    overflow: hidden;
     pointer-events: none;
+
+    background:
+        radial-gradient(
+            ellipse at 50% 46%,
+            rgba(15, 66, 102, 0.13),
+            transparent 56%
+        );
 }
 
+/* No se cambian los scripts que dibujan las partículas */
 
-/* Technical grid */
+#particles-canvas {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0.42;
+}
+
+/* Rejilla técnica */
 
 #grid-overlay {
-
     position: absolute;
-
     inset: 0;
-
     pointer-events: none;
-
-    opacity: 0.18;
+    opacity: 0.16;
 
     background-image:
         linear-gradient(
-            rgba(255, 176, 0, 0.035) 1px,
+            rgba(89, 202, 255, 0.075) 1px,
             transparent 1px
         ),
         linear-gradient(
             90deg,
-            rgba(255, 176, 0, 0.035) 1px,
+            rgba(89, 202, 255, 0.075) 1px,
             transparent 1px
         );
 
-    background-size:
-        42px 42px;
-
-    mask-image:
-        radial-gradient(
-            ellipse at center,
-            black 25%,
-            transparent 82%
-        );
+    background-size: 44px 44px;
 
     -webkit-mask-image:
         radial-gradient(
-            ellipse at center,
-            black 25%,
+            ellipse at 56% 45%,
+            #000 10%,
+            transparent 82%
+        );
+
+    mask-image:
+        radial-gradient(
+            ellipse at 56% 45%,
+            #000 10%,
             transparent 82%
         );
 }
 
-
-/* Scan effect */
+/* Líneas de escaneo */
 
 #scan-overlay {
-
     position: absolute;
-
     inset: 0;
-
     pointer-events: none;
+    opacity: 0.10;
 
-    opacity: 0.16;
-
-    background:
-        repeating-linear-gradient(
-            to bottom,
-            transparent 0px,
-            transparent 3px,
-            rgba(255, 255, 255, 0.012) 4px,
-            transparent 5px
-        );
+    background: repeating-linear-gradient(
+        to bottom,
+        transparent 0,
+        transparent 4px,
+        rgba(220, 237, 255, 0.055) 5px,
+        transparent 6px
+    );
 }
 
 
 /* ============================================================
-   4. HUD PRINCIPAL
+   04. APLICACIÓN PRINCIPAL
    ============================================================ */
 
 #hud {
-
     position: relative;
+    z-index: var(--z-hud);
 
-    z-index: 5;
+    display: flex;
+    flex-direction: column;
 
     width: 100%;
     height: 100%;
-
-    display: flex;
-
-    flex-direction: column;
+    min-height: 0;
 
     overflow: hidden;
+    isolation: isolate;
 }
 
 
 /* ============================================================
-   5. TOPBAR
+   05. CABECERA
    ============================================================ */
 
 #topbar {
-
     position: relative;
-
-    z-index: 50;
-
-    width: 100%;
-    height: var(--topbar-height);
-
-    flex: 0 0 var(--topbar-height);
+    z-index: var(--z-header);
 
     display: grid;
-
-    grid-template-columns: 1fr auto 1fr;
-
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
     align-items: center;
 
-    padding: 0 24px;
+    flex: 0 0 var(--topbar-height);
+    width: 100%;
+    height: var(--topbar-height);
+    min-width: 0;
 
-    border-bottom:
-        1px solid rgba(255, 176, 0, 0.16);
+    padding: 0 28px;
+
+    border-bottom: 1px solid var(--border);
 
     background:
         linear-gradient(
-            180deg,
-            rgba(4, 6, 10, 0.94),
-            rgba(4, 6, 10, 0.68)
+            100deg,
+            rgba(7, 12, 19, 0.98),
+            rgba(12, 22, 33, 0.96) 48%,
+            rgba(6, 11, 18, 0.98)
         );
 
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-
     box-shadow:
-        0 8px 30px rgba(0, 0, 0, 0.35);
+        0 8px 32px rgba(0, 0, 0, 0.25),
+        inset 0 -1px rgba(89, 202, 255, 0.045);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
 }
 
+/* Detalle luminoso superior */
 
-/* ============================================================
-   6. JARVIS BRAND
-   ============================================================ */
+#topbar::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 8%;
+    right: 8%;
+    height: 1px;
+    pointer-events: none;
+
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(89, 202, 255, 0.40),
+        rgba(255, 189, 74, 0.58),
+        transparent
+    );
+}
 
 .top-brand,
 .jarvis-brand {
-
-    min-width: 0;
-
     display: flex;
-
     flex-direction: column;
-
-    justify-content: center;
-
     align-items: flex-start;
+    justify-content: center;
+    min-width: 0;
 }
 
 .jarvis-title {
-
-    font-family: var(--font-tech);
-
-    font-size: 19px;
-
-    font-weight: 600;
-
-    letter-spacing: 6px;
-
+    margin: 0;
     color: var(--white);
+    font-family: var(--font-tech);
+    font-size: clamp(15px, 1.5vw, 21px);
+    font-weight: 600;
+    letter-spacing: 0.28em;
+    line-height: 1.3;
 
     text-shadow:
-        0 0 12px rgba(255, 255, 255, 0.18);
+        0 0 18px rgba(89, 202, 255, 0.13);
 }
 
 .jarvis-subtitle {
-
-    margin-top: 3px;
-
-    font-family: var(--font-mono);
-
-    font-size: 8px;
-
-    letter-spacing: 3px;
-
+    margin-top: 4px;
     color: var(--amber);
-
-    opacity: 0.88;
+    font-family: var(--font-mono);
+    font-size: 8px;
+    letter-spacing: 0.24em;
+    line-height: 1.5;
 }
 
-
-/* 3D brand compatibility */
-
 .jarvis-3d-brand {
-
     position: relative;
-
+    min-width: 0;
     min-height: 44px;
 }
 
 #jarvis3d-stage {
-
     position: absolute;
-
     width: 1px;
     height: 1px;
-
     opacity: 0;
-
     pointer-events: none;
 }
 
 .jarvis3d-accessibility {
-
-    font-family: var(--font-tech);
-
-    font-size: 18px;
-
-    letter-spacing: 4px;
-
     color: var(--white);
-
-    opacity: 0.95;
+    font-family: var(--font-tech);
+    font-size: 17px;
+    letter-spacing: 0.22em;
 }
 
-
-/* ============================================================
-   7. CLOCK
-   ============================================================ */
+/* Reloj central */
 
 .top-center {
-
     display: flex;
-
     flex-direction: column;
-
     align-items: center;
-
     justify-content: center;
+    min-width: 100px;
 }
 
 #clock {
-
-    font-family: var(--font-mono);
-
-    font-size: 13px;
-
-    letter-spacing: 3px;
-
     color: var(--amber-light);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0.20em;
+    font-variant-numeric: tabular-nums;
 
     text-shadow:
-        0 0 12px rgba(255, 176, 0, 0.25);
+        0 0 14px rgba(255, 189, 74, 0.16);
 }
 
 .system-line {
-
-    width: 90px;
-
+    width: 88px;
     height: 1px;
-
     margin-top: 6px;
 
-    background:
-        linear-gradient(
-            90deg,
-            transparent,
-            var(--amber),
-            transparent
-        );
+    background: linear-gradient(
+        90deg,
+        transparent,
+        var(--blue-hud),
+        var(--amber),
+        transparent
+    );
 
     opacity: 0.55;
 }
 
-
-/* ============================================================
-   8. STARK HEADER
-   ============================================================ */
+/* Identidad Stark */
 
 .stark-header {
-
     display: flex;
-
     flex-direction: column;
-
     align-items: flex-end;
-
     justify-content: center;
-
     min-width: 0;
 }
 
 .stark-title {
-
-    font-family: var(--font-tech);
-
-    font-size: 13px;
-
-    font-weight: 600;
-
-    letter-spacing: 3px;
-
     color: var(--white);
-
+    font-family: var(--font-tech);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.19em;
     white-space: nowrap;
 }
 
 .stark-badge {
-
-    margin-top: 3px;
-
-    font-family: var(--font-mono);
-
-    font-size: 7px;
-
-    letter-spacing: 2px;
-
+    margin-top: 4px;
     color: var(--amber);
-
-    opacity: 0.78;
-
+    font-family: var(--font-mono);
+    font-size: 8px;
+    letter-spacing: 0.15em;
+    opacity: 0.8;
     white-space: nowrap;
 }
 
 .system-state {
-
     display: flex;
-
     align-items: center;
-
     gap: 7px;
-
     margin-top: 4px;
 
-    font-family: var(--font-mono);
-
-    font-size: 7px;
-
-    letter-spacing: 2px;
-
     color: var(--gray);
+    font-family: var(--font-mono);
+    font-size: 8px;
+    letter-spacing: 0.12em;
 }
 
 #status-light {
-
     width: 6px;
     height: 6px;
-
+    flex: 0 0 6px;
     border-radius: 50%;
-
     background: var(--green);
-
-    box-shadow:
-        0 0 8px rgba(105, 255, 157, 0.7);
-
-    animation:
-        statusPulse 2s ease-in-out infinite;
-}
-
-@keyframes statusPulse {
-
-    0%,
-    100% {
-        opacity: 0.55;
-    }
-
-    50% {
-        opacity: 1;
-    }
+    box-shadow: 0 0 9px rgba(105, 255, 173, 0.65);
 }
 
 
 /* ============================================================
-   9. MAIN LAYOUT
+   06. DISTRIBUCIÓN CENTRAL
    ============================================================ */
 
 #main-layout {
-
     position: relative;
-
-    flex: 1;
-
-    min-height: 0;
-
-    width: 100%;
-
     display: grid;
 
-    grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+    grid-template-columns:
+        var(--sidebar-width)
+        minmax(0, 1fr);
+
+    flex: 1 1 auto;
+    width: 100%;
+    min-width: 0;
+    min-height: 0;
 
     overflow: hidden;
 }
 
 
 /* ============================================================
-   10. SIDEBAR
+   07. PANEL LATERAL
    ============================================================ */
 
 #sidebar {
-
     position: relative;
-
-    z-index: 30;
-
-    min-width: 0;
-
-    height: 100%;
+    z-index: var(--z-sidebar);
 
     display: flex;
-
     flex-direction: column;
 
-    overflow-y: auto;
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+
+    padding: 22px 16px;
 
     overflow-x: hidden;
+    overflow-y: auto;
 
-    padding: 20px 16px;
-
-    border-right:
-        1px solid rgba(255, 176, 0, 0.12);
+    border-right: 1px solid var(--border);
 
     background:
         linear-gradient(
             180deg,
-            rgba(5, 7, 11, 0.94),
-            rgba(3, 5, 8, 0.82)
+            rgba(9, 16, 25, 0.97),
+            rgba(4, 8, 14, 0.98)
         );
 
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
+    box-shadow:
+        9px 0 28px rgba(0, 0, 0, 0.17);
+
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
 
     scrollbar-width: thin;
-
-    scrollbar-color:
-        rgba(255, 176, 0, 0.35)
-        transparent;
+    scrollbar-color: rgba(255, 189, 74, 0.30) transparent;
 }
 
 #sidebar::-webkit-scrollbar {
     width: 4px;
 }
 
-#sidebar::-webkit-scrollbar-track {
-    background: transparent;
-}
-
 #sidebar::-webkit-scrollbar-thumb {
-
-    background:
-        rgba(255, 176, 0, 0.35);
-
-    border-radius: 10px;
+    border-radius: 8px;
+    background: rgba(255, 189, 74, 0.30);
 }
 
-
-/* Sidebar sections */
-
-.sidebar-section {
-
+.sidebar-section,
+.search-section,
+.history-section,
+.tools-section,
+.user-section {
     width: 100%;
-
-    margin-bottom: 22px;
+    min-width: 0;
+    margin-bottom: 21px;
 }
 
 .section-label {
-
-    margin-bottom: 9px;
-
-    font-family: var(--font-tech);
-
-    font-size: 8px;
-
-    font-weight: 600;
-
-    letter-spacing: 2px;
-
+    margin-bottom: 10px;
     color: var(--gray);
-
+    font-family: var(--font-tech);
+    font-size: 8px;
+    font-weight: 600;
+    letter-spacing: 0.17em;
     text-transform: uppercase;
 }
 
-
-/* ============================================================
-   11. CHAT SEARCH
-   ============================================================ */
+/* Buscador */
 
 .chat-search {
-
     position: relative;
-
-    width: 100%;
-
-    height: 38px;
-
     display: flex;
-
     align-items: center;
+    width: 100%;
+    min-height: 39px;
 
-    border:
-        1px solid rgba(255, 176, 0, 0.14);
-
-    border-radius: 10px;
-
-    background:
-        rgba(255, 255, 255, 0.025);
+    border: 1px solid rgba(89, 202, 255, 0.17);
+    border-radius: var(--radius-small);
+    background: rgba(2, 7, 13, 0.70);
 
     transition:
-        border-color 0.2s ease,
-        background 0.2s ease,
-        box-shadow 0.2s ease;
+        border-color 180ms ease,
+        box-shadow 180ms ease,
+        background 180ms ease;
 }
 
 .chat-search:focus-within {
-
-    border-color:
-        rgba(255, 176, 0, 0.4);
-
-    background:
-        rgba(255, 176, 0, 0.035);
-
-    box-shadow:
-        0 0 18px rgba(255, 176, 0, 0.06);
+    border-color: rgba(89, 202, 255, 0.56);
+    background: rgba(8, 20, 31, 0.92);
+    box-shadow: 0 0 16px rgba(89, 202, 255, 0.08);
 }
 
 .search-icon {
-
     flex: 0 0 auto;
-
-    margin-left: 11px;
-
-    color: var(--amber);
-
-    font-size: 17px;
-
-    opacity: 0.65;
+    margin-left: 12px;
+    color: var(--blue-hud);
+    font-size: 16px;
+    opacity: 0.8;
 }
 
 #chatSearchInput {
-
     width: 100%;
-    height: 100%;
-
     min-width: 0;
-
-    border: 0;
-    outline: 0;
-
+    height: 37px;
     padding: 0 10px;
 
+    border: 0;
+    outline: none;
     background: transparent;
 
     color: var(--white);
-
     font-family: var(--font-ui);
-
     font-size: 12px;
 }
 
 #chatSearchInput::placeholder {
-
     color: var(--gray);
-
-    opacity: 0.65;
+    opacity: 0.72;
 }
 
+/* Historial: se conserva el ID original */
 
-/* ============================================================
-   12. CHAT HISTORY
-   ============================================================ */
-
-.history-section {
-
-    min-height: 0;
-}
-
+#chat-history,
 #chatHistory {
-
     width: 100%;
+    min-width: 0;
 }
 
 .chat-history-item {
-
-    width: 100%;
-
-    padding: 10px 11px;
-
-    margin-bottom: 5px;
-
-    border:
-        1px solid transparent;
-
-    border-radius: 9px;
-
-    background: transparent;
-
+    max-width: 100%;
     color: var(--gray);
-
-    cursor: pointer;
-
     transition:
-        background 0.2s ease,
-        border-color 0.2s ease,
-        color 0.2s ease;
+        color 160ms ease,
+        background 160ms ease,
+        border-color 160ms ease;
 }
 
 .chat-history-item:hover {
-
     color: var(--white);
-
-    background:
-        rgba(255, 176, 0, 0.045);
-
-    border-color:
-        rgba(255, 176, 0, 0.12);
+    background: var(--amber-faint);
 }
 
 .chat-history-item.active {
-
     color: var(--amber-light);
-
-    background:
-        rgba(255, 176, 0, 0.07);
-
-    border-color:
-        rgba(255, 176, 0, 0.2);
-
-    box-shadow:
-        inset 2px 0 0 var(--amber);
+    background: var(--amber-soft);
+    border-color: var(--border);
 }
 
 .chat-history-title {
-
     overflow: hidden;
-
-    white-space: nowrap;
-
     text-overflow: ellipsis;
-
-    font-family: var(--font-ui);
-
-    font-size: 12px;
-
-    letter-spacing: 0.3px;
+    white-space: nowrap;
 }
 
+/* Botón de herramientas: admite ambos selectores existentes */
 
-/* ============================================================
-   13. TOOLS
-   ============================================================ */
-
-.tools-section {
-
-    position: relative;
-}
-
-.tools-toggle {
-
-    width: 100%;
-
-    min-height: 40px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    padding: 0 12px;
-
-    border:
-        1px solid rgba(255, 176, 0, 0.13);
-
-    border-radius: 10px;
-
-    background:
-        rgba(255, 255, 255, 0.02);
-
-    color: var(--gray);
-
-    cursor: pointer;
-
+.tools-toggle,
+#toolsToggle.tools-header {
+    color: var(--white-soft);
     transition:
-        color 0.2s ease,
-        border-color 0.2s ease,
-        background 0.2s ease;
+        color 160ms ease,
+        border-color 160ms ease,
+        background 160ms ease;
 }
 
-.tools-toggle:hover {
-
+.tools-toggle:hover,
+#toolsToggle.tools-header:hover {
     color: var(--amber-light);
-
-    border-color:
-        rgba(255, 176, 0, 0.3);
-
-    background:
-        rgba(255, 176, 0, 0.04);
+    border-color: var(--border-strong);
+    background: var(--amber-faint);
 }
 
 .tools-panel {
-
-    display: none;
-
-    margin-top: 7px;
-
-    padding: 10px;
-
-    border:
-        1px solid rgba(255, 176, 0, 0.12);
-
-    border-radius: 10px;
-
-    background:
-        rgba(5, 7, 11, 0.88);
+    min-width: 0;
 }
 
-.tools-panel.tools-open {
-
-    display: block;
+.tools-panel .tool-item {
+    color: var(--white-soft);
+    transition:
+        color 160ms ease,
+        background 160ms ease;
 }
 
+.tools-panel .tool-item:hover {
+    color: var(--blue-light);
+    background: var(--blue-faint);
+}
 
-/* ============================================================
-   14. USER / LOGIN
-   ============================================================ */
+/* Usuario e inicio de sesión */
 
 .user-section {
-
     margin-top: auto;
-
     margin-bottom: 0;
-
     padding-top: 18px;
-
-    border-top:
-        1px solid rgba(255, 176, 0, 0.1);
+    border-top: 1px solid rgba(255, 189, 74, 0.14);
 }
 
-.user-card {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 10px;
-
-    padding: 10px;
-
-    border:
-        1px solid rgba(255, 176, 0, 0.1);
-
-    border-radius: 10px;
-
-    background:
-        rgba(255, 255, 255, 0.018);
+.user-card,
+.user-account {
+    min-width: 0;
 }
 
 .user-avatar {
-
-    width: 34px;
-    height: 34px;
-
-    flex: 0 0 34px;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    border:
-        1px solid rgba(255, 176, 0, 0.25);
-
-    border-radius: 50%;
-
-    color: var(--amber);
-
-    background:
-        rgba(255, 176, 0, 0.045);
-
-    font-family: var(--font-tech);
-
-    font-size: 11px;
-}
-
-.user-info {
-
-    min-width: 0;
+    flex-shrink: 0;
+    color: var(--amber-light);
+    border-color: var(--border);
+    background: var(--amber-faint);
 }
 
 .user-name {
-
     color: var(--white);
-
-    font-family: var(--font-ui);
-
-    font-size: 12px;
-
-    font-weight: 600;
 }
 
 .user-status {
-
-    margin-top: 2px;
-
     color: var(--gray);
-
-    font-family: var(--font-mono);
-
-    font-size: 7px;
-
-    letter-spacing: 1px;
 }
 
-.google-login {
+/* Se mantiene el estilo tanto si el acceso es un botón como un enlace */
 
-    width: 100%;
-
-    min-height: 36px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    gap: 8px;
-
-    margin-top: 8px;
-
-    border:
-        1px solid rgba(255, 255, 255, 0.08);
-
-    border-radius: 9px;
-
-    color: var(--gray);
-
-    background:
-        rgba(255, 255, 255, 0.025);
-
-    text-decoration: none;
-
+.google-login,
+#google-login {
     transition:
-        color 0.2s ease,
-        border-color 0.2s ease,
-        background 0.2s ease;
+        color 160ms ease,
+        border-color 160ms ease,
+        background 160ms ease;
 }
 
-.google-login:hover {
-
-    color: var(--white);
-
-    border-color:
-        rgba(255, 176, 0, 0.22);
-
-    background:
-        rgba(255, 176, 0, 0.04);
-}
-
-.google-icon {
-
-    font-family: var(--font-tech);
-
-    font-size: 12px;
-
-    color: var(--amber);
-}
-
-.google-text {
-
-    font-family: var(--font-mono);
-
-    font-size: 8px;
-
-    letter-spacing: 1px;
+.google-login:hover,
+#google-login:hover {
+    border-color: var(--border-blue);
+    background: var(--blue-faint);
 }
 
 
 /* ============================================================
-   15. CHAT CONTAINER
+   08. ÁREA DE CHAT
+   El detalle de mensajes lo administra chat.css
    ============================================================ */
 
 #chat-container {
-
     position: relative;
-
-    min-width: 0;
-    min-height: 0;
 
     width: 100%;
     height: 100%;
+    min-width: 0;
+    min-height: 0;
 
     overflow: hidden;
+    isolation: isolate;
 
     background:
         radial-gradient(
-            ellipse at center,
-            rgba(255, 176, 0, 0.018),
-            transparent 58%
+            ellipse at 52% 42%,
+            rgba(15, 65, 98, 0.12),
+            transparent 48%
+        ),
+        linear-gradient(
+            135deg,
+            rgba(5, 10, 17, 0.65),
+            rgba(2, 5, 10, 0.86)
         );
 }
 
-
 /* ============================================================
-   16. 3D VISUAL
+   09. NÚCLEO 3D
+   Fondo decorativo. No debe interceptar clics.
    ============================================================ */
 
 #jarvis-visual {
-
     position: absolute;
-
     inset: 0;
-
-    z-index: 1;
+    z-index: var(--z-core);
 
     overflow: hidden;
-
     pointer-events: none;
 
     background:
         radial-gradient(
-            circle at center,
-            rgba(255, 176, 0, 0.035),
+            circle at 50% 46%,
+            rgba(255, 189, 74, 0.035),
             transparent 42%
         );
 }
 
 #jarvis-core-stage {
-
     position: absolute;
-
     inset: 0;
-
     width: 100%;
     height: 100%;
-
+    overflow: hidden;
     pointer-events: none;
 }
 
+#jarvis-3d-canvas,
 #jarvis-core-stage canvas {
-
-    position: absolute;
-
-    inset: 0;
-
+    display: block;
     width: 100% !important;
     height: 100% !important;
-
-    display: block;
-
     pointer-events: none;
+    background: transparent !important;
 }
 
-
-/* Old compatibility layer */
+/* Compatibilidad con la interfaz antigua */
 
 #jarvis-interface {
-
     position: absolute;
-
     inset: 0;
-
     z-index: 2;
-
     pointer-events: none;
 }
 
 
 /* ============================================================
-   17. MESSAGES
+   10. ÁREA DE MENSAJES
+   chat.css conserva el diseño específico de cada mensaje.
    ============================================================ */
 
 #messages {
-
     position: absolute;
-
     inset: 0;
+    z-index: var(--z-messages);
 
-    z-index: 8;
-
-    width: 100%;
-    height: 100%;
-
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: stretch;
-
-    gap: 14px;
-
+    min-width: 0;
+    min-height: 0;
+    overflow-x: hidden;
     overflow-y: auto;
 
-    overflow-x: hidden;
-
-    padding:
-        28px
-        34px
-        150px;
-
-    scroll-behavior: smooth;
-
     scrollbar-width: thin;
-
-    scrollbar-color:
-        rgba(255, 176, 0, 0.28)
-        transparent;
+    scrollbar-color: rgba(255, 189, 74, 0.30) transparent;
 }
 
 #messages::-webkit-scrollbar {
@@ -1165,1070 +867,238 @@ a {
 }
 
 #messages::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    background: rgba(255, 189, 74, 0.30);
+}
 
-    background:
-        rgba(255, 176, 0, 0.25);
+/* El fondo del núcleo nunca debe bloquear la conversación */
 
-    border-radius: 10px;
+#messages,
+#messages * {
+    overflow-wrap: anywhere;
 }
 
 
 /* ============================================================
-   18. BASE MESSAGE
-   ============================================================ */
-
-.message {
-
-    position: relative;
-
-    width: 100%;
-
-    display: flex;
-
-    flex-direction: column;
-
-    flex-shrink: 0;
-
-    animation:
-        messageAppear 0.22s ease both;
-}
-
-@keyframes messageAppear {
-
-    from {
-        opacity: 0;
-        transform: translateY(7px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-
-/* ============================================================
-   19. USER MESSAGE
-   ============================================================ */
-
-.user-message {
-
-    align-items: flex-end;
-
-    padding-left: 18%;
-}
-
-.user-message .message-content {
-
-    max-width: min(72%, 720px);
-
-    padding:
-        11px
-        15px;
-
-    border:
-        1px solid rgba(255, 176, 0, 0.2);
-
-    border-radius:
-        14px
-        14px
-        4px
-        14px;
-
-    background:
-        rgba(255, 176, 0, 0.075);
-
-    color: var(--white);
-
-    font-family: var(--font-ui);
-
-    font-size: 13px;
-
-    line-height: 1.55;
-
-    box-shadow:
-        0 8px 25px rgba(0, 0, 0, 0.15);
-
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-
-    word-wrap: break-word;
-}
-
-
-/* ============================================================
-   20. JARVIS MESSAGE
-   ============================================================ */
-
-.jarvis-message {
-
-    align-items: flex-start;
-
-    padding-right: 12%;
-
-    min-height: 30px;
-}
-
-
-/*
-   El mensaje de JARVIS no utiliza una burbuja pesada.
-   El texto queda integrado directamente en el HUD.
-*/
-
-.jarvis-message .message-content,
-.jarvis-message .jarvis-content {
-
-    max-width: min(82%, 860px);
-
-    padding:
-        2px
-        0;
-
-    margin: 0;
-
-    border: 0;
-
-    border-radius: 0;
-
-    background: transparent;
-
-    box-shadow: none;
-
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-
-    color: var(--white-soft);
-
-    font-family: var(--font-mono);
-
-    font-size: 13px;
-
-    line-height: 1.72;
-
-    word-wrap: break-word;
-}
-
-
-/* ============================================================
-   21. JARVIS HEADER
-   ============================================================ */
-
-.jarvis-message-header {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 9px;
-
-    margin-bottom: 5px;
-
-    min-height: 20px;
-}
-
-.jarvis-core {
-
-    position: relative;
-
-    width: 15px;
-    height: 15px;
-
-    flex: 0 0 15px;
-
-    border:
-        1px solid rgba(255, 176, 0, 0.62);
-
-    border-radius: 50%;
-
-    background:
-        radial-gradient(
-            circle,
-            #fff6d6 0%,
-            #ffd36a 25%,
-            #ffb000 48%,
-            rgba(255, 176, 0, 0.08) 72%,
-            transparent 74%
-        );
-
-    box-shadow:
-        0 0 8px rgba(255, 176, 0, 0.55);
-
-    animation:
-        jarvisCorePulse 2.2s ease-in-out infinite;
-}
-
-@keyframes jarvisCorePulse {
-
-    0%,
-    100% {
-        box-shadow:
-            0 0 7px rgba(255, 176, 0, 0.4);
-    }
-
-    50% {
-        box-shadow:
-            0 0 13px rgba(255, 176, 0, 0.75);
-    }
-}
-
-
-/*
-   IMPORTANTE:
-   No ocultamos .jarvis-identity.
-*/
-
-.jarvis-identity {
-
-    display: inline-flex;
-
-    align-items: center;
-
-    flex-shrink: 0;
-
-    margin-top: 1px;
-
-    color: var(--amber-light);
-
-    font-family: var(--font-tech);
-
-    font-size: 9px;
-
-    font-weight: 600;
-
-    letter-spacing: 2px;
-
-    line-height: 1;
-}
-
-
-/* ============================================================
-   22. JARVIS FOOTER
-   ============================================================ */
-
-.jarvis-message-footer {
-
-    display: block;
-
-    margin-top: 7px;
-
-    color: var(--gray);
-
-    opacity: 0.52;
-
-    font-family: var(--font-mono);
-
-    font-size: 8px;
-
-    letter-spacing: 1.4px;
-
-    line-height: 1.2;
-}
-
-
-/* ============================================================
-   23. SYSTEM RESPONSE LABEL
-   ============================================================ */
-
-.jarvis-message .system-response,
-.jarvis-message .system-response-label {
-
-    display: block;
-
-    margin-top: 3px;
-
-    color: var(--amber);
-
-    opacity: 0.7;
-
-    font-family: var(--font-mono);
-
-    font-size: 8px;
-
-    letter-spacing: 1.5px;
-}
-
-
-/* ============================================================
-   24. PROCESSING
+   11. ESTADO DE PROCESAMIENTO
    ============================================================ */
 
 #jarvisProcessing {
-
     position: absolute;
-
-    left: 34px;
-
-    bottom: 116px;
-
-    z-index: 35;
-
+    z-index: var(--z-processing);
     pointer-events: none;
-}
-
-.processing-message {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 9px;
-
-    color: var(--amber-light);
-
-    font-family: var(--font-mono);
-
-    font-size: 10px;
-
-    letter-spacing: 1.5px;
-
-    opacity: 0.75;
-}
-
-.processing-message::before {
-
-    content: "";
-
-    width: 6px;
-    height: 6px;
-
-    border-radius: 50%;
-
-    background: var(--amber);
-
-    box-shadow:
-        0 0 10px rgba(255, 176, 0, 0.75);
-
-    animation:
-        processingPulse 1s ease-in-out infinite;
-}
-
-@keyframes processingPulse {
-
-    0%,
-    100% {
-        opacity: 0.3;
-        transform: scale(0.8);
-    }
-
-    50% {
-        opacity: 1;
-        transform: scale(1.15);
-    }
 }
 
 
 /* ============================================================
-   25. COMPOSER
+   12. CONSOLA
+   chat.css y hud.css pueden personalizar sus controles.
    ============================================================ */
 
 #console {
-
     position: absolute;
+    z-index: var(--z-console);
 
     left: 0;
     right: 0;
-    bottom: 17px;
-
-    z-index: 40;
-
-    width: 100%;
+    bottom: 0;
 
     display: flex;
-
     justify-content: center;
 
-    padding:
-        0
-        20px;
+    width: 100%;
+    min-width: 0;
 
     pointer-events: none;
 }
 
-.console-wrapper {
-
+#console .console-wrapper {
     position: relative;
-
-    width: min(900px, 88%);
-
-    min-height: 64px;
-
     display: flex;
-
     align-items: center;
 
-    gap: 8px;
-
-    padding:
-        8px
-        9px
-        8px
-        18px;
-
-    border:
-        1px solid rgba(255, 176, 0, 0.3);
-
-    border-radius: 34px;
-
-    background:
-        rgba(5, 7, 11, 0.78);
-
-    box-shadow:
-        0 12px 40px rgba(0, 0, 0, 0.38),
-        0 0 25px rgba(255, 176, 0, 0.06);
-
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
+    min-width: 0;
+    max-width: 100%;
 
     pointer-events: auto;
-
-    transition:
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
 }
-
-.console-wrapper:focus-within {
-
-    border-color:
-        rgba(255, 176, 0, 0.5);
-
-    box-shadow:
-        0 12px 40px rgba(0, 0, 0, 0.42),
-        0 0 30px rgba(255, 176, 0, 0.1);
-}
-
-
-/* ============================================================
-   26. MESSAGE INPUT
-   ============================================================ */
 
 #messageInput {
-
-    flex: 1;
-
     min-width: 0;
-
-    height: 44px;
-
-    border: 0;
-    outline: 0;
-
-    padding:
-        0
-        5px;
-
-    background: transparent;
-
     color: var(--white);
-
-    font-family: var(--font-ui);
-
-    font-size: 14px;
-
-    font-weight: 500;
-
-    letter-spacing: 0.25px;
+    caret-color: var(--amber-light);
+    background: transparent;
 }
 
 #messageInput::placeholder {
-
     color: var(--gray);
-
-    opacity: 0.65;
+    opacity: 0.75;
 }
 
-#messageInput:disabled {
-
-    opacity: 0.45;
-
-    cursor: not-allowed;
-}
-
-
-/* ============================================================
-   27. CONSOLE STATUS
-   ============================================================ */
-
-.console-status {
-
-    flex: 0 0 auto;
-
-    color: var(--gray);
-
-    font-family: var(--font-mono);
-
-    font-size: 7px;
-
-    letter-spacing: 1px;
-
-    opacity: 0.6;
-
-    white-space: nowrap;
-}
-
-
-/* ============================================================
-   28. CONSOLE BUTTONS
-   ============================================================ */
-
-.console-icon-button,
-#sendButton,
-.cognitive-button {
-
-    position: relative;
-
-    width: 43px;
-    height: 43px;
-
-    min-width: 43px;
-    min-height: 43px;
-
-    flex: 0 0 43px;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    border:
-        1px solid rgba(255, 176, 0, 0.23);
-
-    border-radius: 50%;
-
-    background:
-        rgba(255, 255, 255, 0.025);
-
-    color: var(--amber-light);
-
+#cognitiveButton,
+#voiceButton,
+#sendButton {
+    flex-shrink: 0;
     cursor: pointer;
 
-    overflow: hidden;
-
     transition:
-        transform 0.18s ease,
-        border-color 0.18s ease,
-        background 0.18s ease,
-        box-shadow 0.18s ease,
-        color 0.18s ease;
+        color 160ms ease,
+        background 160ms ease,
+        border-color 160ms ease,
+        box-shadow 160ms ease;
 }
 
-.console-icon-button:hover,
-#sendButton:hover,
-.cognitive-button:hover {
-
-    border-color:
-        rgba(255, 176, 0, 0.58);
-
-    background:
-        rgba(255, 176, 0, 0.075);
-
-    color: #fff1bd;
-
-    box-shadow:
-        0 0 18px rgba(255, 176, 0, 0.13);
-
-    transform: scale(1.06);
-}
-
-.console-icon-button:active,
-#sendButton:active,
-.cognitive-button:active {
-
-    transform: scale(0.94);
-}
-
-
-/* ============================================================
-   29. MICROPHONE
-   ============================================================ */
-
-#voiceButton {
-
-    font-size: 15px;
-
-    line-height: 1;
-}
-
-
-/* ============================================================
-   30. COGNITIVE BUTTON
-   ============================================================ */
-
-.cognitive-button {
-
-    gap: 3px;
-}
-
-
-/* Cognitive six-dot indicator */
-
-.cognitive-button::before {
-
-    content: "";
-
-    width: 15px;
-    height: 15px;
-
-    background:
-        radial-gradient(
-            circle at 2px 2px,
-            var(--amber-light) 1.2px,
-            transparent 1.8px
-        );
-
-    background-size: 5px 5px;
-
-    opacity: 0.85;
-
-    filter:
-        drop-shadow(
-            0 0 3px
-            rgba(255, 176, 0, 0.6)
-        );
-}
-
-
-/* ============================================================
-   31. SEND BUTTON
-   ============================================================ */
-
-#sendButton {
-
-    background:
-        radial-gradient(
-            circle at 35% 30%,
-            rgba(255, 211, 106, 0.12),
-            rgba(255, 176, 0, 0.025) 65%
-        );
-}
-
-#sendButton::before {
-
-    content: "➤";
-
-    display: block;
-
-    font-size: 18px;
-
-    line-height: 1;
-
-    transform:
-        translateX(1px);
-
+#cognitiveButton:hover,
+#voiceButton:hover,
+#sendButton:hover {
     color: var(--amber-light);
-
-    text-shadow:
-        0 0 8px rgba(255, 176, 0, 0.28);
+    border-color: var(--border-strong);
 }
 
-
-/*
-   Ocultamos únicamente el carácter HTML original del botón.
-   El icono visible lo genera ::before.
-*/
-
-#sendButton {
-
-    font-size: 0;
+#cognitiveButton:focus-visible,
+#voiceButton:focus-visible,
+#sendButton:focus-visible {
+    outline: 2px solid var(--blue-hud);
+    outline-offset: 3px;
 }
 
 
 /* ============================================================
-   32. FOCUS ACCESSIBILITY
+   13. FOCUS Y ACCESIBILIDAD
    ============================================================ */
 
-#messageInput:focus-visible,
-#chatSearchInput:focus-visible,
 button:focus-visible,
-a:focus-visible {
-
-    outline:
-        1px solid rgba(255, 176, 0, 0.55);
-
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+    outline: 2px solid rgba(89, 202, 255, 0.72);
     outline-offset: 2px;
 }
 
-
-/* ============================================================
-   33. SELECTION
-   ============================================================ */
-
-::selection {
-
-    color: #fff8dc;
-
-    background:
-        rgba(255, 176, 0, 0.28);
+button:disabled {
+    opacity: 0.5;
 }
 
 
 /* ============================================================
-   34. SCROLLBAR GLOBAL
-   ============================================================ */
-
-.custom-scrollbar {
-    scrollbar-width: thin;
-
-    scrollbar-color:
-        rgba(255, 176, 0, 0.25)
-        transparent;
-}
-
-.custom-scrollbar::-webkit-scrollbar {
-    width: 5px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb {
-
-    background:
-        rgba(255, 176, 0, 0.25);
-
-    border-radius: 10px;
-}
-
-
-/* ============================================================
-   35. RESPONSIVE — TABLET
+   14. TABLET
    ============================================================ */
 
 @media (max-width: 1000px) {
-
     :root {
-        --sidebar-width: 225px;
+        --sidebar-width: 230px;
+        --topbar-height: 72px;
     }
 
     #topbar {
-        padding: 0 18px;
+        padding-left: 20px;
+        padding-right: 20px;
     }
 
-    .jarvis3d-accessibility {
-        font-size: 15px;
-        letter-spacing: 3px;
+    .jarvis-title {
+        letter-spacing: 0.20em;
     }
 
     .stark-title {
-        font-size: 11px;
-    }
-
-    .stark-badge {
-        font-size: 6px;
-    }
-
-    #messages {
-        padding-left: 25px;
-        padding-right: 25px;
-    }
-
-    .console-wrapper {
-        width: min(850px, 92%);
+        font-size: 10px;
     }
 }
 
 
 /* ============================================================
-   36. RESPONSIVE — MOBILE
+   15. MÓVIL
+   responsive.css administra los comportamientos específicos.
    ============================================================ */
 
 @media (max-width: 760px) {
-
     :root {
         --topbar-height: 62px;
     }
 
     #topbar {
-
-        grid-template-columns:
-            1fr
-            auto;
-
-        height: var(--topbar-height);
-
-        padding:
-            0
-            14px;
+        grid-template-columns: minmax(0, 1fr) auto;
+        padding-left: 14px;
+        padding-right: 14px;
     }
 
     .top-center {
-
         display: none;
     }
 
-    .stark-header {
-
-        align-items: flex-end;
+    .jarvis-title {
+        font-size: 15px;
+        letter-spacing: 0.15em;
     }
 
-    .jarvis3d-accessibility {
-
-        font-size: 12px;
-
-        letter-spacing: 2px;
+    .jarvis-subtitle {
+        font-size: 7px;
+        letter-spacing: 0.15em;
     }
 
     .stark-title {
-
         font-size: 9px;
-
-        letter-spacing: 2px;
+        letter-spacing: 0.10em;
     }
 
     .stark-badge {
-
-        display: none;
+        font-size: 7px;
     }
 
     #main-layout {
-
-        grid-template-columns: 1fr;
-    }
-
-    #sidebar {
-
-        position: absolute;
-
-        left: 0;
-        top: 0;
-        bottom: 0;
-
-        width: min(285px, 82vw);
-
-        z-index: 70;
-
-        transform:
-            translateX(-100%);
-
-        transition:
-            transform 0.25s ease;
-
-        box-shadow:
-            20px 0 50px rgba(0, 0, 0, 0.4);
+        grid-template-columns: minmax(0, 1fr);
     }
 
     #chat-container {
-
-        width: 100%;
+        min-width: 0;
     }
 
-    #messages {
-
-        padding:
-            20px
-            17px
-            130px;
-    }
-
-    .jarvis-message {
-
-        padding-right: 5%;
-    }
-
-    .jarvis-message .message-content,
-    .jarvis-message .jarvis-content {
-
-        max-width: 94%;
-
-        font-size: 12px;
-
-        line-height: 1.65;
-    }
-
-    .user-message {
-
-        padding-left: 8%;
-    }
-
-    .user-message .message-content {
-
-        max-width: 84%;
-
-        font-size: 12px;
-    }
-
-    #console {
-
-        bottom: 10px;
-
-        padding:
-            0
-            10px;
-    }
-
-    .console-wrapper {
-
-        width: 96%;
-
-        min-height: 58px;
-
-        padding:
-            7px
-            7px
-            7px
-            13px;
-
-        gap: 5px;
-    }
-
-    #messageInput {
-
-        height: 40px;
-
-        font-size: 13px;
-    }
-
-    .console-status {
-
-        display: none;
-    }
-
-    .console-icon-button,
-    #sendButton,
-    .cognitive-button {
-
-        width: 40px;
-        height: 40px;
-
-        min-width: 40px;
-        min-height: 40px;
-
-        flex-basis: 40px;
-    }
-
-    #sendButton::before {
-
-        font-size: 16px;
-    }
-
-    #jarvisProcessing {
-
-        left: 20px;
-
-        bottom: 88px;
+    #sidebar {
+        max-width: min(285px, 85vw);
     }
 }
 
 
 /* ============================================================
-   37. RESPONSIVE — SMALL MOBILE
+   16. MÓVIL PEQUEÑO
    ============================================================ */
 
 @media (max-width: 430px) {
+    .jarvis-title {
+        font-size: 13px;
+        letter-spacing: 0.12em;
+    }
 
-    .jarvis3d-accessibility {
-
-        font-size: 10px;
-
-        letter-spacing: 1.5px;
+    .jarvis-subtitle {
+        font-size: 6px;
     }
 
     .stark-title {
-
         font-size: 8px;
     }
 
-    #messages {
-
-        gap: 12px;
-
-        padding:
-            16px
-            12px
-            122px;
-    }
-
-    .jarvis-message .message-content,
-    .jarvis-message .jarvis-content {
-
-        max-width: 98%;
-
-        font-size: 11.5px;
-    }
-
-    .jarvis-message-header {
-
-        gap: 7px;
-    }
-
-    .jarvis-identity {
-
-        font-size: 8px;
-
-        letter-spacing: 1.5px;
-    }
-
-    .user-message {
-
-        padding-left: 4%;
-    }
-
-    .user-message .message-content {
-
-        max-width: 90%;
-    }
-
-    #console {
-
-        bottom: 8px;
-
-        padding:
-            0
-            7px;
-    }
-
-    .console-wrapper {
-
-        width: 98%;
-
-        min-height: 55px;
-
-        border-radius: 29px;
-
-        padding-left: 11px;
-    }
-
-    #messageInput {
-
-        font-size: 12px;
-    }
-
-    .console-icon-button,
-    #sendButton,
-    .cognitive-button {
-
-        width: 38px;
-        height: 38px;
-
-        min-width: 38px;
-        min-height: 38px;
-
-        flex-basis: 38px;
+    .stark-badge {
+        display: none;
     }
 }
 
 
 /* ============================================================
-   38. REDUCED MOTION
+   17. MOVIMIENTO REDUCIDO
    ============================================================ */
 
 @media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
 
     *,
     *::before,
     *::after {
-
-        animation-duration: 0.001ms !important;
-
-        animation-iteration-count: 1 !important;
-
         scroll-behavior: auto !important;
-
-        transition-duration: 0.001ms !important;
     }
 }
 
 
 /* ============================================================
-   FIN DEL STYLES.CSS
+   FIN — BASE VISUAL COMPARTIDA
    ============================================================ */
