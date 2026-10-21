@@ -1,452 +1,274 @@
 
-/* =========================================================
-   J.A.R.V.I.S. — HOLOGRAPHIC HUD
-   Capas: fondo 3D → mensajes → controles
-========================================================= */
+/* ==========================================================
+   J.A.R.V.I.S. — HUD PRINCIPAL
+   Núcleo 3D detrás del chat | Mensajes y controles por encima
+   ========================================================== */
 
 #chat-container {
-    position: relative !important;
-    min-width: 0;
-    min-height: 0;
+    position: relative;
     isolation: isolate;
     overflow: hidden;
+    min-width: 0;
+    background:
+        radial-gradient(ellipse at 50% 42%, rgba(10, 49, 77, 0.20), transparent 48%),
+        linear-gradient(135deg, rgba(5, 9, 15, 0.97), rgba(2, 4, 8, 0.98));
 }
 
-/* Cuadrícula holográfica ambiental */
-
+/* Marco tecnológico */
 #chat-container::before {
     content: "";
     position: absolute;
-    inset: 0;
-    z-index: 0;
+    inset: 12px;
+    z-index: 2;
     pointer-events: none;
-
-    background:
-        linear-gradient(
-            90deg,
-            rgba(255, 189, 50, 0.025) 1px,
-            transparent 1px
-        ),
-        linear-gradient(
-            rgba(255, 189, 50, 0.018) 1px,
-            transparent 1px
-        );
-
-    background-size: 64px 64px;
-
-    mask-image: radial-gradient(
-        ellipse at 50% 45%,
-        #000 0%,
-        rgba(0, 0, 0, 0.55) 48%,
-        transparent 82%
+    border: 1px solid rgba(255, 184, 54, 0.24);
+    clip-path: polygon(
+        0 0, 24px 0, 24px 2px, calc(100% - 24px) 2px,
+        calc(100% - 24px) 0, 100% 0, 100% 24px,
+        calc(100% - 2px) 24px, calc(100% - 2px) calc(100% - 24px),
+        100% calc(100% - 24px), 100% 100%,
+        calc(100% - 24px) 100%, calc(100% - 24px) calc(100% - 2px),
+        24px calc(100% - 2px), 24px 100%, 0 100%,
+        0 calc(100% - 24px), 2px calc(100% - 24px),
+        2px 24px, 0 24px
     );
+    opacity: 0.9;
 }
-
-/* Línea superior */
 
 #chat-container::after {
     content: "";
     position: absolute;
-    top: 0;
-    left: 15%;
-    right: 15%;
+    top: 12px;
+    left: 12px;
+    right: 12px;
     height: 1px;
     z-index: 3;
     pointer-events: none;
-
     background: linear-gradient(
         90deg,
         transparent,
-        rgba(255, 189, 50, 0.42),
+        rgba(255, 185, 55, 0.65) 20%,
+        rgba(255, 216, 126, 0.18) 50%,
+        rgba(255, 185, 55, 0.65) 80%,
         transparent
     );
+    box-shadow: 0 0 12px rgba(255, 176, 0, 0.16);
 }
 
-/* =========================================================
-   CAPA 1 — ESCENARIO THREE.JS
-========================================================= */
-
-#jarvis-interface {
-    display: none !important;
-}
-
+/* El núcleo ocupa el fondo y no captura clics */
 #jarvis-visual {
-    position: absolute;
+    position: absolute !important;
     inset: 0;
-    z-index: 1;
-
-    display: block;
-    width: 100%;
-    height: 100%;
-
+    z-index: 0 !important;
     overflow: hidden;
-    pointer-events: none;
-    background: transparent;
+    pointer-events: none !important;
+    opacity: 0.78;
 }
 
 #jarvis-core-stage {
     position: absolute;
     inset: 0;
-    width: 100%;
-    height: 100%;
+    display: grid;
+    place-items: center;
     overflow: hidden;
     pointer-events: none;
-    background: transparent;
 }
 
 #jarvis-3d-canvas {
-    position: absolute !important;
-    inset: 0;
-
     display: block;
     width: 100% !important;
     height: 100% !important;
-
-    opacity: 1;
     background: transparent !important;
     pointer-events: none !important;
 }
 
-/* Evitar que los elementos 3D intercepten interacciones */
-
-#jarvis-visual,
-#jarvis-visual *,
-#jarvis-core-stage,
-#jarvis-core-stage * {
-    pointer-events: none !important;
-}
-
-/* =========================================================
-   AURA AMBIENTAL
-   Se aplica si el elemento existe en el HTML
-========================================================= */
-
-.jarvis-ambient-aura {
-    position: absolute;
-    left: 50%;
-    top: 46%;
-
-    width: min(560px, 65vw);
-    aspect-ratio: 1;
-
-    transform: translate(-50%, -50%);
-    border-radius: 50%;
+/* Capa tenue para que los mensajes se lean */
+#chat-container .chat-background,
+#chat-container .chat-overlay {
     pointer-events: none;
-    z-index: 0;
-
-    background: radial-gradient(
-        circle,
-        rgba(255, 174, 40, 0.075) 0%,
-        rgba(255, 140, 20, 0.035) 32%,
-        rgba(255, 189, 50, 0.012) 52%,
-        transparent 72%
-    );
-
-    filter: blur(16px);
 }
 
-/* =========================================================
-   CAPA 2 — MENSAJES
-========================================================= */
-
+/* Los mensajes siempre quedan por encima del núcleo */
 #messages {
-    position: absolute !important;
+    position: absolute;
     inset: 0;
-
-    z-index: 10;
+    z-index: 10 !important;
     display: flex;
-
-    width: 100%;
-    height: 100%;
-
-    overflow-x: hidden;
+    flex-direction: column;
     overflow-y: auto;
-
-    background: transparent !important;
-
-    overscroll-behavior: contain;
+    overflow-x: hidden;
+    padding: 32px 36px 155px;
+    scroll-behavior: smooth;
+    background: linear-gradient(
+        180deg,
+        rgba(2, 5, 9, 0.10),
+        rgba(2, 5, 9, 0.02) 45%,
+        rgba(2, 5, 9, 0.26)
+    );
     scrollbar-width: thin;
-    scrollbar-color:
-        rgba(255, 189, 50, 0.25)
-        transparent;
+    scrollbar-color: rgba(255, 176, 0, 0.38) transparent;
 }
-
-/* Scrollbar en Chromium */
 
 #messages::-webkit-scrollbar {
     width: 5px;
 }
 
-#messages::-webkit-scrollbar-track {
-    background: transparent;
-}
-
 #messages::-webkit-scrollbar-thumb {
+    background: rgba(255, 176, 0, 0.38);
     border-radius: 8px;
-    background: rgba(255, 189, 50, 0.25);
 }
 
-#messages::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 189, 50, 0.48);
-}
-
-/* Las filas no deben tapar todo el fondo */
-
-#messages > .message {
-    position: relative;
-    z-index: 11;
-    flex-shrink: 0;
-    background: transparent;
-}
-
-/* Texto nítido sobre el holograma */
-
-.jarvis-message .message-content {
-    position: relative;
-    z-index: 12;
-
-    text-shadow:
-        0 1px 5px rgba(0, 0, 0, 0.95),
-        0 0 12px rgba(0, 0, 0, 0.55);
-}
-
-.user-message .message-content {
-    position: relative;
-    z-index: 12;
-}
-
-/* =========================================================
-   CAPA 3 — ESTADO DE PROCESAMIENTO
-========================================================= */
-
+/* Estado de procesamiento sobre los mensajes */
 #jarvisProcessing {
     position: absolute;
-    left: 16px;
-    right: 16px;
-    bottom: 96px;
-
-    z-index: 25;
+    z-index: 25 !important;
+    left: 30px;
+    bottom: 105px;
     pointer-events: none;
 }
 
-/* =========================================================
-   CAPA 4 — COMPOSER Y BOTONES
-========================================================= */
-
+/* Consola por encima de todas las capas visuales */
 #console {
     position: absolute;
-    z-index: 50;
+    z-index: 50 !important;
+    left: 0;
+    right: 0;
+    bottom: 18px;
+    display: flex;
+    justify-content: center;
+    padding: 0 22px;
     pointer-events: none;
 }
 
 #console .console-wrapper {
     position: relative;
-    z-index: 51;
+    width: min(960px, 100%);
+    min-height: 64px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 13px 9px 22px;
     pointer-events: auto;
-}
-
-/* =========================================================
-   CAPA SUPERIOR — MENSAJES INTERACTIVOS
-========================================================= */
-
-#messages button,
-#messages a,
-#messages input,
-#messages textarea,
-#messages select {
-    pointer-events: auto;
-}
-
-/* =========================================================
-   ADAPTACIÓN A MÓVILES
-========================================================= */
-
-@media (max-width: 700px) {
-    .jarvis-ambient-aura {
-        width: 350px;
-        max-width: 100vw;
-        top: 44%;
-        filter: blur(12px);
-    }
-
-    #jarvisProcessing {
-        left: 12px;
-        right: 12px;
-        bottom: 84px;
-    }
-}
-
-@media (max-width: 400px) {
-    .jarvis-ambient-aura {
-        width: 290px;
-    }
-}
-
-/* =========================================================
-   ACCESIBILIDAD
-========================================================= */
-
-@media (prefers-reduced-motion: reduce) {
-    .jarvis-ambient-aura {
-        filter: none;
-    }
-
-    #messages {
-        scroll-behavior: auto;
-    }
-}
-
-/* =========================================================
-   J.A.R.V.I.S. — HUD PREMIUM
-   Mejora visual incremental: conserva chat y núcleo 3D.
-   ========================================================= */
-
-#chat-container {
-    --jarvis-gold: #ffbd45;
-    --jarvis-gold-soft: rgba(255, 189, 69, 0.16);
-    --jarvis-cyan-soft: rgba(68, 196, 255, 0.10);
-
-    background:
-        radial-gradient(
-            ellipse at 50% 44%,
-            rgba(255, 157, 32, 0.055),
-            transparent 48%
-        ),
-        radial-gradient(
-            ellipse at 50% 100%,
-            rgba(34, 151, 222, 0.045),
-            transparent 55%
-        ),
-        #05070b;
-}
-
-/* Rejilla tecnológica sutil detrás del núcleo */
-#chat-container::before {
-    background-image:
-        linear-gradient(
-            rgba(100, 169, 200, 0.035) 1px,
-            transparent 1px
-        ),
-        linear-gradient(
-            90deg,
-            rgba(100, 169, 200, 0.035) 1px,
-            transparent 1px
-        );
-
-    background-size: 38px 38px;
-    opacity: 0.45;
-    pointer-events: none;
-}
-
-/* Contorno luminoso discreto del área de trabajo */
-#chat-container::after {
-    border: 1px solid rgba(255, 189, 69, 0.09);
+    border: 1px solid rgba(255, 184, 54, 0.70);
+    border-radius: 5px;
+    background: linear-gradient(
+        110deg,
+        rgba(7, 12, 19, 0.97),
+        rgba(14, 17, 22, 0.95)
+    );
     box-shadow:
-        inset 0 0 35px rgba(255, 153, 35, 0.025),
-        inset 0 0 90px rgba(35, 115, 180, 0.025);
-
-    pointer-events: none;
+        0 0 0 3px rgba(255, 176, 0, 0.035),
+        0 0 22px rgba(255, 176, 0, 0.09),
+        inset 0 0 22px rgba(40, 105, 145, 0.07);
+    clip-path: polygon(
+        0 0, calc(100% - 17px) 0, 100% 17px,
+        100% 100%, 17px 100%, 0 calc(100% - 17px)
+    );
 }
 
-/* El núcleo continúa detrás de los mensajes */
-#jarvis-visual {
-    opacity: 1;
-    pointer-events: none;
-}
-
-#jarvis-core-stage,
-#jarvis-3d-canvas {
-    pointer-events: none;
-}
-
-/* Lectura clara, sin cubrir el núcleo con paneles opacos */
-#messages {
+#messageInput {
+    flex: 1;
+    min-width: 0;
+    color: #f5f7fa;
+    caret-color: #ffc04d;
     background: transparent;
-    scrollbar-width: thin;
-    scrollbar-color:
-        rgba(255, 189, 69, 0.35)
-        transparent;
+    border: none;
+    outline: none;
+    box-shadow: none;
 }
 
-/* Mensajes del usuario: cristal ámbar */
-#messages .user-message .message-content {
-    background: linear-gradient(
-        135deg,
-        rgba(255, 189, 69, 0.105),
-        rgba(255, 139, 35, 0.045)
-    );
-
-    border: 1px solid rgba(255, 189, 69, 0.24);
-    box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.035),
-        0 5px 22px rgba(0, 0, 0, 0.12);
-
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
+#messageInput::placeholder {
+    color: rgba(210, 218, 228, 0.52);
 }
 
-/* Respuestas de J.A.R.V.I.S.: texto limpio y legible */
-#messages .jarvis-message .message-content {
-    text-shadow: 0 0 14px rgba(180, 209, 230, 0.045);
+#messageInput:focus {
+    outline: none;
+    box-shadow: none;
 }
 
-/* Entrada de mensajes sin modificar su funcionamiento */
-#console {
-    background: linear-gradient(
-        180deg,
-        rgba(5, 7, 11, 0),
-        rgba(5, 7, 11, 0.16)
-    );
-}
-
-/* Foco visible al escribir */
-#messageInput:focus-visible {
-    outline: 1px solid rgba(255, 189, 69, 0.48);
-    outline-offset: 3px;
-}
-
-/* Transiciones suaves para los botones existentes */
-#voiceButton,
-#sendButton,
-#cognitiveButton {
+/* Botones de consola */
+#console button {
+    position: relative;
+    flex-shrink: 0;
     transition:
         border-color 180ms ease,
+        background 180ms ease,
         box-shadow 180ms ease,
-        background-color 180ms ease,
         transform 180ms ease;
 }
 
-#voiceButton:hover,
-#sendButton:hover,
-#cognitiveButton:hover {
-    border-color: rgba(255, 189, 69, 0.72);
-    box-shadow: 0 0 18px rgba(255, 169, 51, 0.14);
+#cognitiveButton,
+#voiceButton,
+#sendButton {
+    border: 1px solid rgba(255, 184, 54, 0.48);
+    color: #ffd078;
+    background: rgba(255, 176, 0, 0.07);
 }
 
-#voiceButton:active,
-#sendButton:active,
-#cognitiveButton:active {
+#cognitiveButton:hover,
+#voiceButton:hover,
+#sendButton:hover {
+    border-color: #ffd078;
+    background: rgba(255, 176, 0, 0.17);
+    box-shadow: 0 0 14px rgba(255, 176, 0, 0.16);
+}
+
+#console button:active {
     transform: scale(0.96);
 }
 
-/* Evitar efectos molestos en pantallas pequeñas */
-@media (max-width: 700px) {
-    #chat-container::before {
-        background-size: 30px 30px;
-        opacity: 0.28;
+/* Paneles de la interfaz */
+#sidebar {
+    position: relative;
+    z-index: 30;
+    background:
+        linear-gradient(180deg, rgba(12, 18, 26, 0.97), rgba(4, 7, 12, 0.98));
+    border-right: 1px solid rgba(255, 184, 54, 0.25);
+    box-shadow: 10px 0 35px rgba(0, 0, 0, 0.20);
+}
+
+#topbar {
+    position: relative;
+    z-index: 50;
+    background: linear-gradient(
+        90deg,
+        rgba(7, 11, 17, 0.98),
+        rgba(12, 17, 24, 0.96),
+        rgba(7, 11, 17, 0.98)
+    );
+    border-bottom: 1px solid rgba(255, 184, 54, 0.36);
+    box-shadow: 0 5px 24px rgba(0, 0, 0, 0.24);
+}
+
+/* Reducir efectos en pantallas pequeñas */
+@media (max-width: 760px) {
+    #messages {
+        padding: 22px 16px 140px;
     }
 
-    #messages .user-message .message-content {
-        backdrop-filter: none;
-        -webkit-backdrop-filter: none;
+    #console {
+        bottom: 10px;
+        padding: 0 10px;
+    }
+
+    #console .console-wrapper {
+        min-height: 56px;
+        gap: 7px;
+        padding: 7px 9px 7px 13px;
+    }
+
+    #jarvisProcessing {
+        left: 16px;
+        bottom: 90px;
+    }
+
+    #chat-container::before {
+        inset: 5px;
     }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    #voiceButton,
-    #sendButton,
-    #cognitiveButton {
+    #console button {
         transition: none;
     }
 }
-
